@@ -9,7 +9,7 @@ const { checkIfElementExists } = require("../lib/checkIfElementExists")
  * @param  {String}   selector Element selector
  */
 const clickElement = (action, type, selector) => {
-  const selector = type === 'link'
+  selector = type === 'link'
     ? "=".concat(selector)
     : selector
 

@@ -2,17 +2,17 @@
 const R_NEWLINE = /\r?\n/g
 const R_TAG = /^\s*@(.*)$/
 const R_COMMENT = /^\s*#(.*)$/
-const R_FEATURE = /^\s*Feature:(.*)$/;
-const R_AS = /^\s*As (.*)$/;
-const R_I_WANT = /^\s*I want (.*)$/;
-const R_SO_THAT = /^\s*So that (.*)$/;
-const R_IN_ORDER = /^\s*In order (.*)$/;
-const R_SCENARIO = /^\s*Scenario:(.*)$/;
-const R_GIVEN = /^\s*Given (.*)$/;
-const R_WHEN = /^\s*When(.*)$/;
-const R_THEN = /^\s*Then (.*)$/;
-const R_AND = /^\s*And (.*)$/;
-const R_BUT = /^\s*But (.*)$/;
+const R_FEATURE = /^\s*Feature:(.*)$/
+const R_AS = /^\s*As (.*)$/
+const R_I_WANT = /^\s*I want (.*)$/
+const R_SO_THAT = /^\s*So that (.*)$/
+const R_IN_ORDER = /^\s*In order (.*)$/
+const R_SCENARIO = /^\s*Scenario:(.*)$/
+const R_GIVEN = /^\s*Given (.*)$/
+const R_WHEN = /^\s*When(.*)$/
+const R_THEN = /^\s*Then (.*)$/
+const R_AND = /^\s*And (.*)$/
+const R_BUT = /^\s*But (.*)$/
 
 const extract = (line, regex, index) => {
   return line.match(regex)[index].trim()
@@ -49,16 +49,16 @@ const parseFeature = text => {
       else feature = featureFactory(extract(line, R_FEATURE, 1))
     }
     else if (R_AS.test(line)) {
-      feature.perspective = extract(line, R_AS, 1);
+      feature.perspective = extract(line, R_AS, 1)
     }
     else if (R_I_WANT.test(line)) {
-      feature.desire = extract(line, R_I_WANT, 1);
+      feature.desire = extract(line, R_I_WANT, 1)
     }
     else if (R_SO_THAT.test(line)) {
-      feature.reason = extract(line, R_SO_THAT, 1);
+      feature.reason = extract(line, R_SO_THAT, 1)
     }
     else if (R_IN_ORDER.test(line)) {
-      feature.reason = extract(line, R_IN_ORDER, 1);
+      feature.reason = extract(line, R_IN_ORDER, 1)
     }
     else if (R_SCENARIO.test(line)) {
       if(!scenario.scenario) scenario.scenario = extract(line, R_SCENARIO, 1)

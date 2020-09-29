@@ -5,7 +5,7 @@
  *                                    the URL path or not
  * @param  {String}   expectedUrlPart The string to check for
  */
-const checkInURLPath(falseCase, expectedUrlPart) => {
+const checkInURLPath = (falseCase, expectedUrlPart) => {
   const currentUrl = browser.getUrl()
   falseCase
     ? expect(currentUrl).not.toContain(

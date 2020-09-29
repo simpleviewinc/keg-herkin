@@ -29,7 +29,7 @@
     "keg": "cd node_modules/keg-core; yarn",
     "start": "cd node_modules/keg-core; expo start",
     "postinstall": "node scripts/postinstall.js",
-    "api": "nodemon --watch ./server --watch ./shared --watch ./config --exec 'node ./server/index.js'",
+    "api": "nodemon --watch ./tests --watch ./server --watch ./shared --watch ./config --exec 'node ./server/index.js'",
     "build:web": "cd node_modules/keg-core; yarn build:web",
     "dev": "run-p web api",
     "setup": "yarn install --ignore-engines; cd node_modules/keg-core; yarn postinstall --ignore-engines",

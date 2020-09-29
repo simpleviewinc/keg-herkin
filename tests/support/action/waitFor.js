@@ -18,9 +18,10 @@ const waitFor = (selector, ms, falseState, state) => {
       ? state.split(/\s/)[state.split(/\s/).length - 1]
       : state
 
-    if (parsedState)
+    if (parsedState){
       const upperCase = parsedState[0].toUpperCase()
       command = "waitFor".concat(upperCase) + "".concat(parsedState.slice(1))
+    }
   }
 
   if (typeof falseState === 'undefined') boolFalseState = false

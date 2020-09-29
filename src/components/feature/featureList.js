@@ -3,6 +3,8 @@ import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'
 import { getRemoteFeatures, setFeatureActive } from 'SVActions/features'
+import { getRemoteSteps } from 'SVActions/steps'
+
 import {
   View,
   SimpleList,
@@ -35,7 +37,10 @@ export const FeatureList = props => {
   ), shallowEqual)
 
   const theme = useTheme()
-  useEffect(() => { getRemoteFeatures() }, [])
+  useEffect(() => {
+    getRemoteSteps()
+    getRemoteFeatures()
+  }, [])
 
   const onItemPress = useCallback((event, item) => {
     const match = features.find(feature => feature.feature === item.title)
