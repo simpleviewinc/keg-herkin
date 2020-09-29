@@ -1,0 +1,56 @@
+{
+  "name": "@keg-hub/tap-release-client",
+  "version": "1.0.1",
+  "description": "Tap Release Client",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "url": "git+https://github.com/simpleviewinc/keg-hub.git",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/simpleviewinc/keg-hub/issues"
+  },
+  "author": "Lance Tipton <lancetipton04@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "android": "cd node_modules/keg-core; yarn android",
+    "build:android": "cd node_modules/keg-core; yarn build:android",
+    "build:ios": "cd node_modules/keg-core; yarn build:ios",
+    "clean": "cd node_modules/keg-core; yarn clean",
+    "clean:install": "yarn clean:full; yarn install",
+    "clean:full": "yarn clean; yarn clean:nm; yarn install",
+    "clean:nm": "rimraf ./yarn.lock; rimraf ./package.lock; rimraf node_modules",
+    "clean:rn": "yarn keg clean:rn",
+    "ios": "cd node_modules/keg-core; yarn ios",
+    "keg": "cd node_modules/keg-core; yarn",
+    "start": "cd node_modules/keg-core; expo start",
+    "postinstall": "node scripts/postinstall.js",
+    "api": "nodemon --watch ./server --watch ./shared --watch ./config --exec 'node ./server/index.js'",
+    "build:web": "cd node_modules/keg-core; yarn build:web",
+    "dev": "run-p web api",
+    "setup": "yarn install --ignore-engines; cd node_modules/keg-core; yarn postinstall --ignore-engines",
+    "web": "nodemon --watch node_modules/keg-core/core/base/configs --watch package.json --watch node_modules/keg-core/app.json --watch node_modules/keg-core/package.json --watch configs --exec 'cd node_modules/keg-core && yarn web'"
+  },
+  "dependencies": {
+    "gherkin-parser": "^1.0.1",
+    "keg-core": "npm:@keg-hub/keg-core@6.0.0",
+    "react-native-elements": "^2.3.2"
+  },
+  "devDependencies": {
+    "@keg-hub/jsutils": "0.0.1",
+    "@keg-hub/spawn-cmd": "0.0.1",
+    "axios": "0.19.2",
+    "body-parser": "1.10.2",
+    "dotenv": "8.0.0",
+    "express": "4.11.1",
+    "module-alias": "2.2.2",
+    "nodemon": "2.0.4",
+    "npm-run-all": "4.1.5",
+    "rimraf": "3.0.2",
+    "socket.io": "2.3.0"
+  }
+}
