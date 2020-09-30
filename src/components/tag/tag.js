@@ -1,9 +1,10 @@
 import React from 'react'
+import { Row, Text } from 'SVComponents'
 
-export const Tag = props => {
+export const Tag = ({ tag }) => {
   return (
-    <div>
-      Tag
-    </div>
+    <Text>
+      { `${ tag } ` }
+    </Text>
   )
 }

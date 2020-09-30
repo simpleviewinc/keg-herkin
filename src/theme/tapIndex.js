@@ -6,6 +6,7 @@ import { transition } from './transition'
 import { tapColors } from './tapColors'
 import { kegComponentsTheme } from 'SVTheme/kegComponentsTheme'
 import * as components from './components'
+import * as screens from './screens'
 
 export const theme = deepMerge(
   kegComponentsTheme,
@@ -14,6 +15,7 @@ export const theme = deepMerge(
   {
     app,
     appHeader,
+    screens,
     transition,
     tapColors
   },

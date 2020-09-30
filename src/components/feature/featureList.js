@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'

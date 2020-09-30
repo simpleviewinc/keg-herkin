@@ -37,8 +37,8 @@ keg_run_the_tap(){
 
   # Check if no exect command exists, or if it's set to web
   # Then default it to run the re-theme app
-  if [[ -z "$KEG_EXEC_CMD" ]]; then
-    KEG_EXEC_CMD="web"
+  if [[ -z "$KEG_EXEC_CMD" ]] || [[ "$KEG_EXEC_CMD" == 'web' ]]; then
+    KEG_EXEC_CMD="dev"
   fi
 
   keg_message "Running command 'yarn $KEG_EXEC_CMD'"

@@ -12,17 +12,7 @@ import { ContainerRoutes } from 'SVNavigation/containerRoutes'
 import { keg } from 'SVConfig'
 import { getHistory } from 'SVNavigation'
 import { isNative } from 'SVUtils/platform'
-import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 
-const paperTheme = {
-  ...DefaultTheme,
-  roundness: 2,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: '#3498db',
-    accent: '#f1c40f',
-  },
-};
 
 setDefaultTheme(theme)
 
@@ -53,11 +43,9 @@ const App = props => {
         <SafeAreaView>
           <Provider store={getStore()}>
             <ReThemeProvider theme={ activeTheme } >
-              <PaperProvider theme={paperTheme} >
-                <View style={activeTheme.app.main} >
-                  <ContainerRoutes navigationConfigs={keg.routes}/>
-                </View>
-              </PaperProvider>
+              <View style={activeTheme.app.main} >
+                <ContainerRoutes navigationConfigs={keg.routes}/>
+              </View>
             </ReThemeProvider>
           </Provider>
         </SafeAreaView>

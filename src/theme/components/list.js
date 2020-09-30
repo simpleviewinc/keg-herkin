@@ -21,7 +21,6 @@ const shared = {
   },
   active: {
     main: {
-      // borderBottomColor: tapColors.primary,
     },
     title: {
       color: tapColors.primary,
@@ -29,7 +28,6 @@ const shared = {
   },
   hover: {
     main: {
-      // borderBottomColor: tapColors.primary,
     },
     title: {
       color: tapColors.primary,

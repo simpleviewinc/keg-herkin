@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import {
   View,
@@ -8,19 +8,18 @@ import {
   withAppHeader
 } from 'SVComponents'
 
+import { Screen } from './screens/screen'
+
 export const RootContainer = withAppHeader('KeGherkin Editor', props => {
   const theme = useTheme()
   const containerStyles =  theme.containers.root
 
   return (
-    <View style={containerStyles.main}>
+    <View className={`tap-main`} style={containerStyles.main}>
       <Sidebar style={ theme?.sideBar?.main } >
         <FeatureList />
       </Sidebar>
-      <View style={ containerStyles.screen } >
-        <Row>
-        </Row>
-      </View>
+      <Screen />
     </View>
   )
 })
