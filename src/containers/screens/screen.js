@@ -10,13 +10,13 @@ const { CATEGORIES } = Values
 
 export const Screen = props => {
   const theme = useTheme()
-  const { activeFeature } = useSelector(({ items }) => pickKeys(
+  const { activeFeature, features } = useSelector(({ items }) => pickKeys(
     items,
-    [ CATEGORIES.ACTIVE_FEATURE ]
+    [ CATEGORIES.ACTIVE_FEATURE, CATEGORIES.FEATURES ]
   ), shallowEqual)
 
   const screenProps = {
-    feature: activeFeature,
+    feature: features && features[activeFeature?.index],
     // Add more screen props here
   }
 

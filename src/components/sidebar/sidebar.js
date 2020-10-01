@@ -3,17 +3,10 @@ import { View } from 'SVComponents'
 
 
 export const Sidebar = props => {
-  const {
-    children,
-    style
-  } = props
-
+  const { children, style } = props
 
   return (
-    <View 
-      className='sidebar-main'
-      style={style}
-    >
+    <View  className='sidebar-main' style={style}>
       { children }
     </View>
   )

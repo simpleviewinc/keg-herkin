@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react'
-import { pickKeys } from '@keg-hub/jsutils'
+import { pickKeys, exists } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'
 import { getRemoteFeatures, setFeatureActive } from 'SVActions/features'
@@ -22,7 +22,7 @@ const builtFeatureList = (features, activeFeature={}) => {
       group: 'Features',
       items: features.map(feature => ({
         title: feature.feature,
-        active: activeFeature.feature === feature.feature
+        active: feature.feature === activeFeature.feature
       }))
     }
   }
@@ -31,16 +31,18 @@ const builtFeatureList = (features, activeFeature={}) => {
 const drawerProps = { variant: 'sideBar' }
 export const FeatureList = props => {
 
-  const { features, activeFeature } = useSelector(({ items }) => pickKeys(
-    items,
-    [ CATEGORIES.FEATURES, CATEGORIES.ACTIVE_FEATURE ]
-  ), shallowEqual)
-
   const theme = useTheme()
+
   useEffect(() => {
     getRemoteSteps()
     getRemoteFeatures()
   }, [])
+
+
+  const { features, activeFeature } = useSelector(({ items }) => pickKeys(
+    items,
+    [ CATEGORIES.FEATURES, CATEGORIES.ACTIVE_FEATURE ]
+  ), shallowEqual)
 
   const onItemPress = useCallback((event, item) => {
     const match = features.find(feature => feature.feature === item.title)
@@ -48,12 +50,15 @@ export const FeatureList = props => {
     
   }, [ features ])
 
+
+  const feature = exists(activeFeature?.index) && features[activeFeature?.index]
+
   return !features
     ? (<Loading />)
     : (
         <View style={theme?.features?.list?.main}>
           <SimpleList
-            items={ builtFeatureList(features, activeFeature) }
+            items={ builtFeatureList(features, feature) }
             onHeaderPress={ onHeaderPress }
             onItemPress={ onItemPress }
             drawerProps={ drawerProps }

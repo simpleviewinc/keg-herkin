@@ -58,6 +58,11 @@ actions:
       cmds:
         - yarn dev
   components:
+    att:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
+      privileged: true
+      cmds:
+        - bash
     install:
       location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
       privileged: true
@@ -71,6 +76,5 @@ actions:
     start:
       location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
       privileged: true
-      detach: true
       cmds:
         - yarn dev

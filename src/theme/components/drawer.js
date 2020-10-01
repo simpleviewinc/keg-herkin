@@ -8,9 +8,7 @@ export const drawer = {
     }
   },
   sideBar: {
-    main: {
-      
-    },
+    main: {},
     container: {
       backgroundColor: tapColors.accentBackground,
       paddingTop: 7.5,

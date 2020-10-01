@@ -4,17 +4,19 @@ import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
 const chipDefaults = {
   main: {
-    bgC: tapColors.accentBackground,
-    p: theme.padding.size / 2,
+    bRad: 3,
+    h: `calc( 100% - 6px )`,
+    jtC: 'center',
     mR: theme.margin.size / 2,
-    bRad: 20,
+    pH: theme.padding.size / 1.5,
+    bgC: theme.colors.palette.white01,
     ...theme.transition([ 'backgroundColor' ], 0.5),
   },
   icon: {},
   text: {
-    ftSz: 10,
-    ltrS: 1,
-    ftWt: 'bold'
+    ftSz: 14,
+    ltrS: 0.5,
+    c: tapColors.success,
   }
 }
 
@@ -25,7 +27,7 @@ export const chip = {
       bgC: tapColors.danger,
     },
     text: {
-      color: theme.colors.palette.white01,
+      c: theme.colors.palette.white01,
     }
   }),
 

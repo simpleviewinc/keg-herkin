@@ -41,7 +41,7 @@ const header = {
     ...shared.default,
     main: {
       ...shared.default.main,
-      backgroundColor: tapColors.headerBackground, 
+      backgroundColor: tapColors.headerBackground,
       ...theme.transition([ 'borderBottomColor' ], 0.5),
       // Update to tap colors
       borderBottomColor: tapColors.border,

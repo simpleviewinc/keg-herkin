@@ -1,5 +1,7 @@
 export * from './apiRequest'
 export * from './components'
+export * from './devLog'
+export * from './features'
 export * from './helpers'
 export * from './getConfig'
 export * from './validate'

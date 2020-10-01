@@ -7,7 +7,6 @@ export const Feature = props => {
   const { feature } = props
   if(!feature) return null
 
-
   return (
     <Surface title={feature.feature} >
       <Tags feature={feature} />
