@@ -1,10 +1,11 @@
 import { tapColors } from '../tapColors'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
-const titleSize = 14
+const titleSize = 16
 export const surface = {
   main: {
-
+    borderTopLeftRadius: tapColors.borderRadius,
+    borderTopRightRadius: tapColors.borderRadius,
   },
   header: {
     // Overrides
@@ -14,6 +15,8 @@ export const surface = {
           height: 40,
           borderBottomColor: tapColors.border,
           borderBottomWidth: 1,
+          borderTopLeftRadius: tapColors.borderRadius,
+          borderTopRightRadius: tapColors.borderRadius,
         },
       },
       content: {
