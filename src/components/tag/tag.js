@@ -1,10 +1,7 @@
 import React from 'react'
-import { Row, Text } from 'SVComponents'
+import { Text } from 'SVComponents'
+import { Chip } from '../chip'
 
-export const Tag = ({ tag }) => {
-  return (
-    <Text>
-      { `${ tag } ` }
-    </Text>
-  )
+export const Tag = ({ tag, ...props }) => {
+  return (<Chip {...props} text={tag} />)
 }

@@ -1,18 +1,11 @@
 import React from 'react'
 import { isStr, capitalize } from '@keg-hub/jsutils'
 import { Icon, View, Row, Text, Touchable } from 'SVComponents'
-import { isValidComponent } from 'SVUtils'
+import { renderCustomOrDefault } from 'SVUtils'
 import { useStyles } from 'SVHooks'
 import { useThemeHover, useTheme } from '@keg-hub/re-theme'
 import { ListItemAction } from './listItemAction'
 import { noOpObj } from 'SVUtils/helpers/noop'
-import { ListItem as ListItemRNE } from 'react-native-elements'
-
-const renderCustomOrDefault = (Component, DefComponent, props) => {
-  return isValidComponent(Component)
-    ? (<Component { ...props } />)
-    : (<DefComponent { ...props } />)
-}
 
 const RenderActions = ({ actions, styles, ...props }) => {
   const { actions:actionStyles } = styles
@@ -67,7 +60,7 @@ const buildStyles = (theme, styles) => {
   return theme.get('list.item', styles)
 }
 
-const ListItem = props => {
+export const ListItem = props => {
   const {
     active,
     actions,
@@ -119,9 +112,4 @@ const ListItem = props => {
       </Row>
     </Touchable>
   )
-}
-
-export {
-  ListItem,
-  ListItemRNE
 }

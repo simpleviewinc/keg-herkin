@@ -12,7 +12,7 @@ export const drawer = {
       
     },
     container: {
-      backgroundColor: tapColors.displayBackground,
+      backgroundColor: tapColors.accentBackground,
       paddingTop: 7.5,
       paddingBottom: 7.5,
       borderBottomColor: tapColors.border,

@@ -3,7 +3,7 @@ import { tapColors } from '../../tapColors'
 export const itemHeader = {
   main: {
     $all: {
-      backgroundColor: tapColors.displayBackground,
+      backgroundColor: tapColors.accentBackground,
     },
   },
   content: {

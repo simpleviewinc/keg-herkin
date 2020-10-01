@@ -4,7 +4,7 @@ export const tapColors = {
   link: '#307de5',
   success: '#048851',
   warning: '#fce7eb',
-  error: '#e0faef',
+  danger: '#e63b5a',
   backGround: '#edf2f9',
   sidebarBackground: '#ffffff',
   appBackground: '#edf2f9',
@@ -19,7 +19,7 @@ export const tapColors = {
   headerBackground: '#ffffff',
   shadowColor: '#000',
   inactive: `#a6b0c0`,
-  displayBackground: '#f9fafe',
+  accentBackground: '#f9fafe',
   border: `#ebf3fc`,
 }
 

@@ -1,4 +1,5 @@
 export * from './apiRequest'
+export * from './components'
 export * from './helpers'
 export * from './getConfig'
 export * from './validate'
