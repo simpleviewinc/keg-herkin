@@ -1,12 +1,11 @@
 import React from 'react'
 import { useTheme } from '@keg-hub/re-theme'
-import { Grid, Row, Text, View } from 'SVComponents'
-import { Subheader } from '../subheader'
+import { Row } from 'SVComponents'
 import { AddScenario } from './addScenario'
 import { Scenario } from './scenario'
 import { SubSurface } from '../surface/subsurface'
 
-const BuildScenarios = ({ feature }) => {
+const BuildScenarios = ({ feature, styles }) => {
   const { scenarios } = feature
   return scenarios && scenarios.map(scenario => {
     return (
@@ -14,6 +13,7 @@ const BuildScenarios = ({ feature }) => {
         key={scenario.scenario}
         scenario={scenario}
         feature={feature}
+        styles={styles}
       />
     )
   })
@@ -40,11 +40,11 @@ export const Scenarios = props => {
     >
       { feature.scenarios && feature.scenarios.length && (
         <Row className={`scenarios-list-row`} style={styles.scenariosRow} >
-          <BuildScenarios feature={feature} />
+          <BuildScenarios feature={feature} styles={styles.scenario} />
         </Row>
       )}
       <Row className={`scenarios-add-row`} style={styles.addRow} >
-        <AddScenario feature={feature} style={styles.add} />
+        <AddScenario feature={feature} styles={styles.add} />
       </Row>
     </SubSurface>
   )

@@ -66,7 +66,7 @@ const RenderList = props => {
       />
       <Drawer
         {...drawerProps}
-        className='sub-items-slider'
+        className='sub-items-drawer'
         styles={ styles?.content?.drawer }
         toggled={ toggled }
       >
