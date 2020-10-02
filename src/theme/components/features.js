@@ -1,7 +1,6 @@
 import { kegComponentsTheme } from 'SVTheme/kegComponentsTheme'
 const { colors } = kegComponentsTheme
 
-
 export const features = {
   main: {
   },
