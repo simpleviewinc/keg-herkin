@@ -1,4 +1,4 @@
-import { tapColors } from '../tapColors'
+import { tapColors } from '../../tapColors'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
 const titleSize = 16

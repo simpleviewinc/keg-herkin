@@ -1,7 +1,8 @@
 import React from 'react'
-import { H6, View } from 'SVComponents'
 import { Step } from '../step'
 import { useTheme } from '@keg-hub/re-theme'
+import { SubSurface } from '../surface/subsurface'
+import { wordCaps } from '@keg-hub/jsutils'
 
 const BuildSteps = ({ scenario, feature, styles }) => {
   const { steps } = scenario
@@ -18,21 +19,28 @@ const BuildSteps = ({ scenario, feature, styles }) => {
   })
 }
 
+const classNames = {
+  main: `scenario-main`,
+  headerRow: `scenario-header-row`,
+  header: { main: `scenario-header` },
+  containerRow: `scenario-container-row`,
+  container: `scenario-container`
+}
+
 export const Scenario = props => {
-  const { scenario, feature, styles } = props
+  const { scenario, styles, feature } = props
   const theme = useTheme()
   const scenarioStyles = theme.get(`scenarios.scenario`, styles)
 
-
   return scenario && (
-    <View style={scenarioStyles.main} >
-      <H6 style={scenarioStyles.title} >
-        { scenario.scenario }
-      </H6>
-      <View style={scenarioStyles.container} >
-        <BuildSteps {...props} styles={scenarioStyles.step} />
-      </View>
-    </View>
+    <SubSurface
+      classNames={classNames}
+      styles={scenarioStyles}
+      prefix={`Scenario - `}
+      title={wordCaps(scenario.scenario)}
+    >
+      <BuildSteps {...props} styles={scenarioStyles.step} />
+    </SubSurface>
   ) || null
 
 }

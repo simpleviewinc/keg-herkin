@@ -1,13 +1,9 @@
-import React, { useState, useCallback } from 'react'
-import { Grid, Row, View, Touchable, Text } from '@keg-hub/keg-components'
 import { Drawer } from 'SVComponents'
 import { Subheader } from '../subheader'
 import { useTheme } from '@keg-hub/re-theme'
-import { checkCall } from '@keg-hub/jsutils'
-
-const noOpObj = {}
-const noOpStyles = noOpObj
-const noOpClsNames = noOpObj
+import { noOpObj } from 'SVUtils/helpers'
+import React, { useState, useCallback } from 'react'
+import { Grid, Row, View, Touchable, Text } from '@keg-hub/keg-components'
 
 const DrawerToggle = ({ onPress, toggled }) => {
   // TODO: update to use Icons
@@ -22,7 +18,16 @@ const DrawerToggle = ({ onPress, toggled }) => {
 
 
 export const SubSurface = props => {
-  const { classNames=noOpClsNames, initialToggle, styles=noOpStyles, title, children } = props
+
+  const {
+    title,
+    prefix,
+    children,
+    initialToggle,
+    styles=noOpObj,
+    classNames=noOpObj,
+  } = props
+
   const theme = useTheme()
   const surfaceStyles = theme.get('subsurface', styles)
 
@@ -32,22 +37,40 @@ export const SubSurface = props => {
     setToggled(!toggled)
   }, [ toggled, setToggled ])
 
-
   return (
-    <Grid className={classNames.main} style={surfaceStyles.main} >
-      <Row className={classNames.headerRow} style={surfaceStyles.headerRow} >
-        <Subheader className={classNames.header} style={surfaceStyles.header} >
-          {title}
-          <DrawerToggle onPress={onTogglePress} toggled={toggled} />
+    <Grid
+      className={classNames.main}
+      style={surfaceStyles.main}
+    >
+      <Row
+        className={classNames.headerRow}
+        style={surfaceStyles.headerRow}
+      >
+        <Subheader
+          classNames={classNames.header}
+          styles={surfaceStyles.header}
+          prefix={prefix}
+          title={title}
+        >
+          <DrawerToggle
+            onPress={onTogglePress}
+            toggled={toggled}
+          />
         </Subheader>
       </Row>
       <Drawer
         className='sub-surface-drawer'
-        styles={ surfaceStyles?.drawer }
+        styles={ surfaceStyles.drawer }
         toggled={ toggled }
       >
-        <Row className={classNames.containerRow} style={surfaceStyles.containerRow} >
-          <View className={classNames.container} style={surfaceStyles.container} >
+        <Row
+          className={classNames.containerRow}
+          style={surfaceStyles.containerRow}
+        >
+          <View
+            className={classNames.container}
+            style={surfaceStyles.container}
+          >
             {children}
           </View>
         </Row>

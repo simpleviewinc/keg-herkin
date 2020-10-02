@@ -1,5 +1,5 @@
 import React from 'react'
-import { Section, ItemHeader, Row, View, H3, Text } from 'SVComponents'
+import { Section, ItemHeader, Row, H3, Text } from 'SVComponents'
 import { useTheme } from '@keg-hub/re-theme'
 import { wordCaps } from '@keg-hub/jsutils'
 

@@ -1,8 +1,24 @@
-
+import { tapColors } from '../../tapColors'
+import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
 export const scenario = {
-  main: {
-    p: 15,
-    pB: 0
-  }
+  main: {},
+  headerRow: {},
+  header: {
+    main: {},
+    prefix: {},
+    title: {}
+  },
+  drawer: {
+    default: {
+      main: {}
+    },
+    sideBar: {
+      main: {},
+      container: {}
+    }
+  },
+  containerRow: {},
+  container: {},
+  step: {}
 }

@@ -1,9 +1,8 @@
 import React from 'react'
 import { useTheme } from '@keg-hub/re-theme'
-import { Row } from 'SVComponents'
+import { Row, Grid } from 'SVComponents'
 import { AddScenario } from './addScenario'
 import { Scenario } from './scenario'
-import { SubSurface } from '../surface/subsurface'
 
 const BuildScenarios = ({ feature, styles }) => {
   const { scenarios } = feature
@@ -19,25 +18,13 @@ const BuildScenarios = ({ feature, styles }) => {
   })
 }
 
-const classNames = {
-  main: `scenarios-main`,
-  headerRow: `scenarios-header-row`,
-  header: `scenarios-header`,
-  containerRow: `scenarios-container-row`,
-  container: `scenarios-container`
-}
-
 export const Scenarios = props => {
   const theme = useTheme()
   const styles = theme.scenarios
-  
   const { feature } = props
+
   return (
-    <SubSurface
-      classNames={classNames}
-      styles={styles}
-      title={`Scenarios`}
-    >
+    <Grid className={`scenarios-main`} style={styles.main} >
       { feature.scenarios && feature.scenarios.length && (
         <Row className={`scenarios-list-row`} style={styles.scenariosRow} >
           <BuildScenarios feature={feature} styles={styles.scenario} />
@@ -46,6 +33,6 @@ export const Scenarios = props => {
       <Row className={`scenarios-add-row`} style={styles.addRow} >
         <AddScenario feature={feature} styles={styles.add} />
       </Row>
-    </SubSurface>
+    </Grid>
   )
 }

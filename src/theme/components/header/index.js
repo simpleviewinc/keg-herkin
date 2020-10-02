@@ -1,4 +1,3 @@
 import { itemHeader } from './itemHeader'
-export const header = {
-  itemHeader,
-}
+export * from './subheader'
+export const header = { itemHeader }
