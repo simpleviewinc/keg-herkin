@@ -6,6 +6,36 @@ const subheaderText = {
   ftWt: 'bold'
 }
 
+const toggleState  = {
+  default: {
+    main: {},
+    icon: {
+      fontSize: 10,
+      color: tapColors.success,
+    },
+    text: {
+      ftSz: 12,
+      c: tapColors.success,
+    }
+  },
+  open: {
+    icon: {
+      color: tapColors.danger,
+    },
+    text: {
+      color: tapColors.danger,
+    }
+  },
+  closed: {
+    icon: {
+      
+    },
+    text: {
+      
+    }
+  },
+}
+
 export const subsurface = {
   main: {
     mT: theme.margin.size,
@@ -24,18 +54,15 @@ export const subsurface = {
     },
     title: {
       ...subheaderText,
-      c: tapColors.success
+      c: tapColors.success,
     }
   },
   drawer: {
     default: {
       main: {}
     },
-    sideBar: {
-      main: {},
-      container: {}
-    }
   },
+  toggle: toggleState,
   containerRow: {
     mT: theme.margin.size,
   },

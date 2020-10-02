@@ -18,6 +18,11 @@ export const scenario = {
       container: {}
     }
   },
+  toggle: {
+    main: {},
+    icon: {},
+    text: {}
+  },
   containerRow: {},
   container: {},
   step: {}

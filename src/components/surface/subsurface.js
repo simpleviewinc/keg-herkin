@@ -2,15 +2,50 @@ import { Drawer } from 'SVComponents'
 import { Subheader } from '../subheader'
 import { useTheme } from '@keg-hub/re-theme'
 import { noOpObj } from 'SVUtils/helpers'
-import React, { useState, useCallback } from 'react'
-import { Grid, Row, View, Touchable, Text } from '@keg-hub/keg-components'
+import React, { useState, useCallback, useMemo } from 'react'
+import { Grid, Row, View, Touchable, Text, Icon } from '@keg-hub/keg-components'
+// import { Plus, Minus } from 'SVAssets'
 
-const DrawerToggle = ({ onPress, toggled }) => {
-  // TODO: update to use Icons
+
+const useAnimationStyles = (toggled, styles) => {
+  return useMemo(() => {
+    const toggleStyles = toggled ? styles?.open : styles?.closed
+    return {
+      main: {
+        ...styles?.default?.main,
+        ...toggleStyles?.main
+      },
+    //  icon: {
+    //     icon: {
+    //       transitionProperty: 'transform',
+    //       transitionDuration: '0.8s',
+    //       transform: toggled ? 'rotate(180deg)' : 'rotate(0deg)',
+    //       ...styles?.default?.icon,
+    //       ...toggleStyles?.icon
+    //     }
+    //   },
+      text: {
+        ...styles?.default?.text,
+        ...toggleStyles?.text
+      },
+    }
+  }, [ toggled, styles ])
+}
+
+const DrawerToggle = ({ onPress, toggled, styles }) => {
+  const iconStyles = useAnimationStyles(toggled, styles?.toggle)
+
   return (
-    <Touchable onPress={onPress}>
-      <Text style={{fontSize: 12}} >
-        {toggled ? '- Hide' : '+ Show'}
+    <Touchable
+      className={`toggle-action`}
+      onPress={onPress}
+      style={iconStyles?.main}
+    >
+      <Text
+        className={`toggle-text`}
+        style={iconStyles?.text}
+      >
+        {toggled ? ' Hide' : ' Show'}
       </Text>
     </Touchable>
   )
@@ -55,6 +90,7 @@ export const SubSurface = props => {
           <DrawerToggle
             onPress={onTogglePress}
             toggled={toggled}
+            styles={surfaceStyles}
           />
         </Subheader>
       </Row>
