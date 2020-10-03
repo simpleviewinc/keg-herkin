@@ -4,7 +4,6 @@ import { useTheme } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'
 import { getRemoteFeatures, setFeatureActive } from 'SVActions/features'
 import { getRemoteSteps } from 'SVActions/steps'
-
 import {
   View,
   SimpleList,

@@ -1,3 +1,1 @@
-module.exports = {
-  ...require('./stepParser')
-}
+module.exports = require('./steps')

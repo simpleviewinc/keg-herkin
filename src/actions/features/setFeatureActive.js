@@ -14,10 +14,20 @@ export const setFeatureActive = async feature => {
   if(index === -1) return devLog(`warn`, `Feature does not exist in the items store!`, items)
 
   dispatch({
-    type: ActionTypes.UPSERT_ITEM,
+    type: ActionTypes.SET_ITEM,
     payload: {
-      category: CATEGORIES.ACTIVE_FEATURE,
-      item: { index },
+      category: CATEGORIES.ACTIVE_DATA,
+      key: CATEGORIES.SCREEN,
+      item: CATEGORIES.FEATURES,
+    },
+  })
+
+  dispatch({
+    type: ActionTypes.SET_ITEM,
+    payload: {
+      category: CATEGORIES.ACTIVE_DATA,
+      key: CATEGORIES.FEATURE,
+      item: index,
     },
   })
 

@@ -1,5 +1,5 @@
 const { StepParameter } = require('./stepParameter')
-const { exists } = require('@keg-hub/jsutils')
+const { exists, uuid } = require('@keg-hub/jsutils')
 
 const REGEXP_TESTER = /\(([^\)]+)\)/g
 const REGEXP_DISPLAY_NAME = 'PARAMETER'
@@ -10,6 +10,7 @@ class Step {
   constructor(name='', type='') {
     this.type = type
     this.name = this.sanitizeName(name)
+    this.uuid = uuid()
     this.displayName = this.name.replace(REGEXP_TESTER, REGEXP_DISPLAY_NAME)
     this.parameter = this.toParameters(this.name)
   }

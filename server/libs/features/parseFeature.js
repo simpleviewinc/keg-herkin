@@ -1,3 +1,4 @@
+const { uuid } = require('@keg-hub/jsutils')
 
 const R_NEWLINE = /\r?\n/g
 const R_TAG = /^\s*@(.*)$/
@@ -19,11 +20,27 @@ const extract = (line, regex, index) => {
 }
 
 const featureFactory = feature => {
-  return { feature, tags: [], comments: {}, scenarios: [] }
+  return { feature, uuid: uuid(), tags: [], comments: {}, scenarios: [] }
 }
 
 const scenarioFactory = scenario => {
-  return { scenario, steps: [] }
+  return { scenario, uuid: uuid(), steps: [] }
+}
+
+const stepFactory = (type, step, regEx) => {
+  return {
+    type,
+    uuid: uuid(),
+    step: extract(step, regEx, 1)
+  }
+}
+
+const addReason = (feature, reason) => {
+  reason
+    ? !feature.reason
+      ? (feature.reason = reason)
+      : (feature.reason += `\n${reason}`)
+    : null
 }
 
 const parseFeature = text => {
@@ -49,16 +66,16 @@ const parseFeature = text => {
       else feature = featureFactory(extract(line, R_FEATURE, 1))
     }
     else if (R_AS.test(line)) {
-      feature.perspective = extract(line, R_AS, 1)
+      feature.perspective = extract(line, R_AS, 0)
     }
     else if (R_I_WANT.test(line)) {
-      feature.desire = extract(line, R_I_WANT, 1)
+      feature.desire = extract(line, R_I_WANT, 0)
     }
     else if (R_SO_THAT.test(line)) {
-      feature.reason = extract(line, R_SO_THAT, 1)
+      addReason(feature, extract(line, R_SO_THAT, 0))
     }
     else if (R_IN_ORDER.test(line)) {
-      feature.reason = extract(line, R_IN_ORDER, 1)
+      addReason(feature, extract(line, R_IN_ORDER, 0))
     }
     else if (R_SCENARIO.test(line)) {
       if(!scenario.scenario) scenario.scenario = extract(line, R_SCENARIO, 1)
@@ -67,21 +84,20 @@ const parseFeature = text => {
       if(feature.scenarios.indexOf(scenario) === -1) feature.scenarios.push(scenario)
     }
     else if (R_GIVEN.test(line)) {
-      scenario.steps.push({ type: 'given', step: extract(line, R_GIVEN, 1) })
+      scenario.steps.push(stepFactory('given', line, R_GIVEN))
     }
     else if (R_WHEN.test(line)) {
-      scenario.steps.push({ type: 'when', step: extract(line, R_WHEN, 1) })
+      scenario.steps.push(stepFactory('when', line, R_WHEN))
     }
     else if (R_THEN.test(line)) {
-      scenario.steps.push({ type: 'then', step: extract(line, R_THEN, 1) })
+      scenario.steps.push(stepFactory('then', line, R_THEN))
     }
     else if (R_AND.test(line)) {
-      scenario.steps.push({ type: 'and', step: extract(line, R_AND, 1) })
+      scenario.steps.push(stepFactory('and', line, R_AND))
     }
     else if (R_BUT.test(line)) {
-      scenario.steps.push({ type: 'but', step: extract(line, R_BUT, 1) })
+      scenario.steps.push(stepFactory('but', line, R_BUT))
     }
-
 
     return extra
   }, features)

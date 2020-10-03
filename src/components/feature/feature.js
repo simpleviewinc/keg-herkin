@@ -9,9 +9,8 @@ import {
 
 export const Feature = props => {
   const { feature } = props
-  if(!feature) return null
 
-  return (
+  return feature && (
     <Surface title={feature.feature} >
       <Tags
         parent={feature}
@@ -22,6 +21,6 @@ export const Feature = props => {
       />
       <Scenarios feature={feature} />
     </Surface>
-  )
+  ) || null
 
 }

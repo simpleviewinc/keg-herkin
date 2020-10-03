@@ -1,35 +1,10 @@
-const path = require('path')
-const glob = require('glob')
 const { apiErr, apiResponse } = require('./handler')
-const { FeatureParser } = require('../libs')
-
-const loadFeatureFiles = (featuresFolder) => {
-  return new Promise((res, rej) => {
-    glob(path.join(featuresFolder, '**/*.feature'), {}, async (err, files=[]) => {
-      err || !files
-        ? rej('No feature files found in ' + featuresFolder)
-        : res(files)
-    })
-  })
-}
-
-const parseFeatures = (featureFiles) => {
-  return featureFiles.reduce(async (toResolve, file) => {
-    const loaded = await toResolve
-    if(!file) return loaded
-
-    const features = await FeatureParser.getFeatures(file)
-
-    return loaded.concat(features)
-  }, Promise.resolve([]))
-}
+const { loadFeatures } = require('../libs/features')
 
 const getFeatures = (app, config) => async (req, res) => {
   try {
-    const { featuresFolder } = config.editor
 
-    const featureFiles = featuresFolder && await loadFeatureFiles(featuresFolder)
-    const features = featureFiles && await parseFeatures(featureFiles)
+    const features = await loadFeatures(config)
 
     return apiResponse(req, res, features || [], 200)
   }

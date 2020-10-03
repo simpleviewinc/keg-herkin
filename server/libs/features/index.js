@@ -1,3 +1,1 @@
-module.exports = {
-  FeatureParser: require('./featureParser')
-}
+module.exports = require('./features')
