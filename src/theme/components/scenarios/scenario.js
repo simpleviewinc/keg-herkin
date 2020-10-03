@@ -3,7 +3,6 @@ import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
 export const scenario = {
   main: {
-    display: 'flex',
     flex: 1,
   },
   headerRow: {},

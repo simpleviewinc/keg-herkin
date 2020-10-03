@@ -1,12 +1,23 @@
 import { tapColors } from '../../tapColors'
+import { deepMerge } from '@keg-hub/jsutils'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 const inputHeight = theme?.form?.input?.default?.height ?? 35
 
 const selectWidth = 90
+const editBtn = {
+  main: {
+    height: '100%',
+    borderRadius: 3,
+    borderTopLeftRadius: '0',
+    borderBottomLeftRadius: '0',
+    bgC: tapColors.success,
+  }
+}
+
 
 export const step = {
   main: {
-    mT: theme.margin.size,
+    mT: theme.margin.size * 2,
     pB: 0,
   },
   container: {
@@ -79,5 +90,17 @@ export const step = {
     text: {
       ftSz: 14,
     }
+  },
+  editButton: {
+    default: editBtn,
+    hover: deepMerge(editBtn, {
+      main: { bgC: tapColors.successDark }
+    }),
+    active: deepMerge(editBtn, {
+      main: { bgC: tapColors.successLight }
+    }),
+    disabled: deepMerge(editBtn, {
+      main: { bgC: tapColors.successLight }
+    })
   }
 }

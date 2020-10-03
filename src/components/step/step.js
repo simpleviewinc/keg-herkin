@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import { And } from './and'
 import { Given } from './given'
@@ -6,6 +6,7 @@ import { When } from './when'
 import { Then } from './then'
 import { mapObj, capitalize } from '@keg-hub/jsutils'
 import {
+  Button,
   Input,
   Option,
   Row,
@@ -14,12 +15,12 @@ import {
   View
 } from '@keg-hub/keg-components'
 
-const stepTypes = {
-  and: And,
-  given: Given,
-  when: When,
-  then: Then,
-}
+const stepTypes = [
+  'and',
+  'given',
+  'when',
+  'then',
+]
 
 
 const TypeSelect = ({ styles, step }) => {
@@ -29,7 +30,7 @@ const TypeSelect = ({ styles, step }) => {
       styles={styles}
       value={step.type}
     >
-      {mapObj(stepTypes, (name) => {
+      {stepTypes.map(name => {
         return (
           <Option
             key={name}
@@ -43,9 +44,6 @@ const TypeSelect = ({ styles, step }) => {
 }
 
 const StepText = ({ styles, step }) => {
-  // TODO: build out the select options for the type
-  // Map the current step to the parsed version of it
-  const StepComp = stepTypes[step.type]
   return (
     <View className={`step-text-container`} style={styles.container} >
       <Text className={`step-text-text`} style={styles.text} >
@@ -54,9 +52,11 @@ const StepText = ({ styles, step }) => {
     </View>
   )
 }
- 
+
 export const Step = props => {
   const { step, styles } = props
+  
+  const [ isEditing, setIsEditing ] = useState(false)
   const theme = useTheme()
   const stepStyles = theme.get(`step`, styles)
 
@@ -71,8 +71,14 @@ export const Step = props => {
       >
         <TypeSelect styles={stepStyles.typeSelect} step={step} />
         <StepText styles={stepStyles.text} step={step} />
+        <Button
+          className={`step-is-editing`}
+          styles={stepStyles.editButton}
+          onPress={()=> setIsEditing(!isEditing)}
+        >
+          EDIT
+        </Button>
       </View>
-      
     </View>
   )
 }

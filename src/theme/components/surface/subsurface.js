@@ -43,11 +43,15 @@ export const subsurface = {
     pB: 0,
   },
   headerRow: {
+    fl: 1,
+    maxH: 25,
     borderBottomColor: tapColors.border,
     borderBottomWidth: 1,
   },
   header: {
-    main: {},
+    main: {
+      fl: 1,
+    },
     prefix: {
       ...subheaderText,
       c: tapColors.default
@@ -64,7 +68,6 @@ export const subsurface = {
   },
   toggle: toggleState,
   containerRow: {
-    mT: theme.margin.size,
   },
   container: {},
 }
