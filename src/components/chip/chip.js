@@ -38,8 +38,7 @@ export const Chip = props => {
   const {
     active,
     children,
-    removeTag,
-    addTag,
+    onPress,
     components=noOpObj,
     icon,
     styles=noOpObj,
@@ -55,7 +54,7 @@ export const Chip = props => {
         className='chip'
         touchRef={ chipRef }
         style={[chipStyles?.main, activeStyle?.main]}
-        onPress={removeTag}
+        onPress={onPress}
       >
       { children || ([
         icon && renderCustomOrDefault(
