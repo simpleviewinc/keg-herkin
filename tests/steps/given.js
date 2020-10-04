@@ -31,7 +31,6 @@ module.exports = function () {
   this.Given(/^the element "([^"]*)?" is( not)* displayed$/, isDisplayed)
   this.Given(/^the element "([^"]*)?" is( not)* selected$/, checkSelected)
   this.Given(/^the checkbox "([^"]*)?" is( not)* checked$/, checkSelected)
-  this.Given(/^the element "([^"]*)?" is( not)* displayed$/, isDisplayed)
   this.Given(/^the cookie "([^"]*)?" does( not)* exist$/, checkCookieExists)
   this.Given(/^a (alertbox|confirmbox|prompt) is( not)* opened$/, checkModal)
   this.Given(/^the (button|element) "([^"]*)?" is( not)* empty$/, checkIsEmpty)

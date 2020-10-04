@@ -27,12 +27,11 @@ const scenarioFactory = scenario => {
   return { scenario, uuid: uuid(), steps: [] }
 }
 
-const stepFactory = (type, step, regEx) => {
-  return {
-    type,
-    uuid: uuid(),
-    step: extract(step, regEx, 1)
-  }
+const stepFactory = (type, step, altType) => {
+  const built = { step, type, uuid: uuid() }
+  altType && (built.altType = altType)
+
+  return built
 }
 
 const addReason = (feature, reason) => {
@@ -84,19 +83,19 @@ const parseFeature = text => {
       if(feature.scenarios.indexOf(scenario) === -1) feature.scenarios.push(scenario)
     }
     else if (R_GIVEN.test(line)) {
-      scenario.steps.push(stepFactory('given', line, R_GIVEN))
+      scenario.steps.push(stepFactory('given', extract(line, R_GIVEN, 1)))
     }
     else if (R_WHEN.test(line)) {
-      scenario.steps.push(stepFactory('when', line, R_WHEN))
+      scenario.steps.push(stepFactory('when', extract(line, R_WHEN, 1)))
     }
     else if (R_THEN.test(line)) {
-      scenario.steps.push(stepFactory('then', line, R_THEN))
+      scenario.steps.push(stepFactory('then', extract(line, R_THEN, 1)))
     }
     else if (R_AND.test(line)) {
-      scenario.steps.push(stepFactory('and', line, R_AND))
+      scenario.steps.push(stepFactory('and', extract(line, R_AND, 1), `when`))
     }
     else if (R_BUT.test(line)) {
-      scenario.steps.push(stepFactory('but', line, R_BUT))
+      scenario.steps.push(stepFactory('but', extract(line, R_BUT, 1), `when`))
     }
 
     return extra

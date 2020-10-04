@@ -5,7 +5,9 @@ import { Given } from './given'
 import { When } from './when'
 import { Then } from './then'
 import { saveStep } from 'SVActions'
-import { mapObj, capitalize } from '@keg-hub/jsutils'
+import { Values } from 'SVConstants'
+import { useSelector, shallowEqual } from 'react-redux'
+import { mapObj, capitalize, pickKeys } from '@keg-hub/jsutils'
 import {
   Button,
   Option,
@@ -13,6 +15,8 @@ import {
   Text,
   View
 } from '@keg-hub/keg-components'
+
+const { CATEGORIES } = Values
 
 const stepTypes = {
   and: And,
@@ -42,23 +46,29 @@ const TypeSelect = ({ styles, step, typeAction }) => {
   )
 }
 
-const stepsFromType = []
 const SelectStep = props => {
   const { styles, step, selectAction } = props
+  const { steps } = useSelector(({ items }) => pickKeys(
+    items,
+    [ CATEGORIES.STEPS ]
+  ), shallowEqual)
+
+
+  const stepsFromType = step.type && steps[ step.altType || step.type]
 
   return (
     <Select
       className='select-step-main'
       styles={styles}
-      value={step.type}
+      value={step.definition}
       onValueChange={selectAction}
     >
-      {stepsFromType.map(parsed => {
-        const { name } = parsed
+      {stepsFromType && stepsFromType.map(parsed => {
+        const { name, uuid } = parsed
         return (
           <Option
-            key={name}
-            value={name}
+            key={uuid}
+            value={uuid}
             label={name}
           />
         )
