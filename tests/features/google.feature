@@ -8,4 +8,4 @@ Feature: Google Search
     Given I open the site "https://www.google.com"
     When I set "keg-hub" to the inputfield ".gLFyf"
     And I press "enter"
-    Then the container "#search" contains the text "https://github.com/simpleviewinc/keg-hub"
+    Then I expect that container "#search" does contain the text "https://github.com/simpleviewinc/keg-hub"

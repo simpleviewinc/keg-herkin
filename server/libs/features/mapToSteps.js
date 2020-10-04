@@ -40,8 +40,9 @@ const mapStepToDefinition = (feature, step, definitions) => {
         scenario &&
           scenario.steps && 
           scenario.steps.map(step => {
-            definitions[step.type] &&
-              mapStepToDefinition(feature, step, definitions[step.type])
+            const stepType = step.altType || step.type
+            definitions[stepType] &&
+              mapStepToDefinition(feature, step, definitions[stepType])
           })
       })
 
