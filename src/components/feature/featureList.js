@@ -1,9 +1,8 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { pickKeys, exists } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'
-import { getRemoteFeatures, setFeatureActive } from 'SVActions/features'
-import { getRemoteSteps } from 'SVActions/steps'
+import { setFeatureActive } from 'SVActions/features'
 import {
   View,
   SimpleList,
@@ -31,12 +30,6 @@ const drawerProps = { variant: 'sideBar' }
 export const FeatureList = props => {
 
   const theme = useTheme()
-
-  useEffect(() => {
-    getRemoteSteps()
-    getRemoteFeatures()
-  }, [])
-
 
   const { features, activeFeature } = useSelector(({ items }) => pickKeys(
     items,

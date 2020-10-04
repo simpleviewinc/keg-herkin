@@ -27,7 +27,15 @@ const loadSteps = async config => {
   const { stepsFolder } = config.editor
   const stepFiles = stepsFolder && await loadStepFiles(stepsFolder)
 
-  return parseSteps(stepFiles)
+  const steps = await parseSteps(stepFiles) || []
+
+  return steps.reduce((organized, step) => {
+    const type = step.type.toLowerCase()
+    organized[type] = organized[type] || []
+    organized[type].push(step)
+
+    return organized
+  }, {})
 }
 
 module.exports = {
