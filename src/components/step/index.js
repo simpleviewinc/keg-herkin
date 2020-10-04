@@ -1,4 +1,5 @@
 export * from './and'
+export * from './editStep'
 export * from './given'
 export * from './step'
 export * from './then'

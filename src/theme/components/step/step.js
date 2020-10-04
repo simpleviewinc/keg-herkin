@@ -103,21 +103,37 @@ export const step = {
       main: { bgC: tapColors.linkLight }
     })
   },
-  selectStep: deepMerge(selectStyles, {
-    main: {
-      d: 'flex',
-      fl: 1,
-      flexWrap: 'wrap',
-      jtC: 'center',
-      alI: 'flex-start',
-      w: 'auto',
-      minW: 'auto',
-    },
-    select: {
-      $all: {
-        w: `100%`,
-        ftWt: '500',
+  saveButton: {
+    default: deepMerge(btnStyles, {
+      main: { bgC: tapColors.success }
+    }),
+    hover: deepMerge(btnStyles, {
+      main: { bgC: tapColors.successDark }
+    }),
+    active: deepMerge(btnStyles, {
+      main: { bgC: tapColors.successLight }
+    }),
+    disabled: deepMerge(btnStyles, {
+      main: { bgC: tapColors.successLight }
+    })
+  },
+  edit: {
+    selectStep: deepMerge(selectStyles, {
+      main: {
+        d: 'flex',
+        fl: 1,
+        flexWrap: 'wrap',
+        jtC: 'center',
+        alI: 'flex-start',
+        w: 'auto',
+        minW: 'auto',
+      },
+      select: {
+        $all: {
+          w: `100%`,
+          ftWt: '500',
+        }
       }
-    }
-  })
+    })
+  }
 }

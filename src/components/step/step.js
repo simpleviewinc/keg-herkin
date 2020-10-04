@@ -1,13 +1,8 @@
 import React, { useState, useCallback } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
-import { And } from './and'
-import { Given } from './given'
-import { When } from './when'
-import { Then } from './then'
+import { EditStep } from './editStep'
 import { saveStep } from 'SVActions'
-import { Values } from 'SVConstants'
-import { useSelector, shallowEqual } from 'react-redux'
-import { mapObj, capitalize, pickKeys } from '@keg-hub/jsutils'
+import { mapObj, capitalize } from '@keg-hub/jsutils'
 import {
   Button,
   Option,
@@ -16,13 +11,11 @@ import {
   View
 } from '@keg-hub/keg-components'
 
-const { CATEGORIES } = Values
-
 const stepTypes = {
-  and: And,
-  given: Given,
-  when: When,
-  then: Then,
+  and: 'And',
+  given: 'Given',
+  when: 'When',
+  then: 'Then',
 }
 
 const TypeSelect = ({ styles, step, typeAction }) => {
@@ -46,36 +39,20 @@ const TypeSelect = ({ styles, step, typeAction }) => {
   )
 }
 
-const SelectStep = props => {
-  const { styles, step, selectAction } = props
-  const { steps } = useSelector(({ items }) => pickKeys(
-    items,
-    [ CATEGORIES.STEPS ]
-  ), shallowEqual)
-
-
-  const stepsFromType = step.type && steps[ step.altType || step.type]
+const StepAction = ({ isEditing, saveAction, editAction, styles }) => {
+  const text = isEditing ? `SAVE` : `EDIT`
+  const onPress = isEditing ? saveAction : editAction
+  const buttonStyles = isEditing ? styles.saveButton : styles.editButton
 
   return (
-    <Select
-      className='select-step-main'
-      styles={styles}
-      value={step.definition}
-      onValueChange={selectAction}
+    <Button
+      className={`step-is-editing`}
+      styles={buttonStyles}
+      onPress={onPress}
     >
-      {stepsFromType && stepsFromType.map(parsed => {
-        const { name, uuid } = parsed
-        return (
-          <Option
-            key={uuid}
-            value={uuid}
-            label={name}
-          />
-        )
-      })}
-    </Select>
+      {text}
+    </Button>
   )
-
 }
 
 const StepText = ({ styles, step }) => {
@@ -96,8 +73,7 @@ export const Step = props => {
   const stepStyles = theme.get(`step`, styles)
 
   const [isEditing, setIsEditing] = useState(false)
-  const EditStep = isEditing && stepTypes[step.type]
-
+  
   // Action to enable editing a step
   const editAction = useCallback(()=> setIsEditing(!isEditing), [isEditing])
 
@@ -133,35 +109,24 @@ export const Step = props => {
           step={step}
           typeAction={typeAction}
         />
-        { !isEditing ? (
-          <>
-            <StepText
-              step={step}
-              styles={stepStyles.text}
-            />
-            <Button
-              className={`step-edit-button`}
-              styles={stepStyles.editButton}
-              onPress={editAction}
-            >
-              EDIT
-            </Button>
-          </>
-        ) : (
-          <SelectStep
-            step={step}
-            className={`step-select`}
-            styles={stepStyles.selectStep}
-            selectAction={selectAction}
-          />
-        )}
+        <StepText
+          step={step}
+          styles={stepStyles.text}
+        />
+        <StepAction
+          isEditing={isEditing}
+          className={`step-is-editing`}
+          styles={stepStyles}
+          saveAction={saveAction}
+          editAction={editAction}
+        />
       </View>
       
-      { EditStep && (
+      { isEditing && (
         <EditStep
           {...props}
           saveAction={saveAction}
-          style={stepStyles}
+          styles={stepStyles.edit}
         />
       )}
     </View>
