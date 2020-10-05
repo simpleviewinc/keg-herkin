@@ -39,14 +39,14 @@ const TypeSelect = ({ styles, step, typeAction }) => {
   )
 }
 
-const StepAction = ({ isEditing, saveAction, editAction, styles }) => {
-  const text = isEditing ? `SAVE` : `EDIT`
-  const onPress = isEditing ? saveAction : editAction
-  const buttonStyles = isEditing ? styles.saveButton : styles.editButton
+const StepAction = ({ isEditing, cancelAction, editAction, styles }) => {
+  const text = isEditing ? `CANCEL` : `EDIT`
+  const onPress = isEditing ? cancelAction : editAction
+  const buttonStyles = isEditing ? styles.cancelButton : styles.editButton
 
   return (
     <Button
-      className={`step-is-editing`}
+      className={`step-edit-action`}
       styles={buttonStyles}
       onPress={onPress}
     >
@@ -78,9 +78,10 @@ export const Step = props => {
   const editAction = useCallback(()=> setIsEditing(!isEditing), [isEditing])
 
   // Action for saving the step to the feature / scenario
-  const saveAction = useCallback(()=> {
+  const cancelAction = useCallback(()=> {
     // Update the store with the new step information
-    saveStep(feature, scenario, step)
+    // TODO: Add code to reset the step to original state
+    
     // Set editing to false
     setIsEditing(false)
   }, [isEditing, step, feature, scenario])
@@ -117,7 +118,7 @@ export const Step = props => {
           isEditing={isEditing}
           className={`step-is-editing`}
           styles={stepStyles}
-          saveAction={saveAction}
+          cancelAction={cancelAction}
           editAction={editAction}
         />
       </View>
@@ -125,7 +126,7 @@ export const Step = props => {
       { isEditing && (
         <EditStep
           {...props}
-          saveAction={saveAction}
+          cancelAction={cancelAction}
           styles={stepStyles.edit}
         />
       )}

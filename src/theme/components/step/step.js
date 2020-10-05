@@ -88,7 +88,7 @@ export const step = {
       alI: 'flex-start',
     },
     text: {
-      ftSz: 14,
+      ftSz: 12,
     }
   },
   editButton: {
@@ -103,37 +103,19 @@ export const step = {
       main: { bgC: tapColors.linkLight }
     })
   },
-  saveButton: {
+  cancelButton: {
     default: deepMerge(btnStyles, {
-      main: { bgC: tapColors.success }
+      main: { bgC: tapColors.danger }
     }),
     hover: deepMerge(btnStyles, {
-      main: { bgC: tapColors.successDark }
+      main: { bgC: tapColors.dangerDark }
     }),
     active: deepMerge(btnStyles, {
-      main: { bgC: tapColors.successLight }
+      main: { bgC: tapColors.dangerLight }
     }),
     disabled: deepMerge(btnStyles, {
-      main: { bgC: tapColors.successLight }
+      main: { bgC: tapColors.dangerLight }
     })
   },
-  edit: {
-    selectStep: deepMerge(selectStyles, {
-      main: {
-        d: 'flex',
-        fl: 1,
-        flexWrap: 'wrap',
-        jtC: 'center',
-        alI: 'flex-start',
-        w: 'auto',
-        minW: 'auto',
-      },
-      select: {
-        $all: {
-          w: `100%`,
-          ftWt: '500',
-        }
-      }
-    })
-  }
+  edit: {}
 }
