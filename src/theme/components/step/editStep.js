@@ -49,14 +49,14 @@ const selectStyles = {
 
 export const editStep = {
   main: {
-    mT: theme?.margin?.size,
-    pH: theme?.padding?.size,
+    p: theme?.padding?.size,
+    bW: 1,
+    borderTopWidth: 0,
+    bC: tapColors.border,
+    bRad: tapColors.borderRadius,
   },
   selectStep: deepMerge(selectStyles, {
-    label: {
-      
-    },
-    
+    label: {},
   }),
   parameters: {
     main: {

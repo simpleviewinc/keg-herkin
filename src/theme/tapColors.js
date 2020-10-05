@@ -19,6 +19,7 @@ export const tapColors = {
   link: '#307de5',
   linkDark: shadeHex('#307de5', -20),
   linkLight: shadeHex('#307de5', 20),
+  buttonText: '#ffffff',
   backGround: '#edf2f9',
   sidebarBackground: '#ffffff',
   appBackground: '#edf2f9',

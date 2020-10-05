@@ -1,7 +1,8 @@
 import { Tag } from './tag'
 import { useTheme } from '@keg-hub/re-theme'
 import React, { useCallback, useRef } from 'react'
-import { Grid, Input, Row, Text, View, Button } from 'SVComponents'
+import { Button, Grid, Icon, Input, Row, Text, View } from 'SVComponents'
+import { PlusCircle } from 'SVAssets'
 import { checkCall, capitalize, get, isFunc, set } from '@keg-hub/jsutils'
 import { noOpObj } from 'SVUtils/helpers/noop'
 
@@ -53,6 +54,8 @@ export const Tags = props => {
 
   }, [ inputRef.current, parent, onAdd ])
 
+  console.log(tagsStyles.buttonContent)
+
 
   return tags && (
     <Grid
@@ -85,11 +88,21 @@ export const Tags = props => {
           />
           { addText && (
             <Button
-              className={`add-tag`}
-              styles={tagsStyles.button}
+              className={`tag-action-add`}
+              styles={tagsStyles?.button?.main}
               onPress={onAddTag}
             >
-              {addText}
+              <Icon
+                className={`tag-action-icon`}
+                styles={tagsStyles?.button?.icon}
+                Element={PlusCircle}
+              />
+              <Text
+                className={`tag-action-text`}
+                style={tagsStyles?.button?.text}
+              >
+                {addText}
+              </Text>
             </Button>
           )}
         </View>

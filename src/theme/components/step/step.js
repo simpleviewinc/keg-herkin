@@ -1,18 +1,11 @@
 import { tapColors } from '../../tapColors'
 import { deepMerge } from '@keg-hub/jsutils'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
+import { sharedButton } from '../shared'
 const inputHeight = theme?.form?.input?.default?.height ?? 35
+const builtBtn = sharedButton({ button: tapColors.link })
 
 const selectWidth = 90
-const btnStyles = {
-  main: {
-    height: '100%',
-    borderRadius: 3,
-    borderTopLeftRadius: '0',
-    borderBottomLeftRadius: '0',
-    bgC: tapColors.link,
-  }
-}
 
 const selectStyles = {
   main: {
@@ -92,30 +85,38 @@ export const step = {
     }
   },
   editButton: {
-    default: btnStyles,
-    hover: deepMerge(btnStyles, {
-      main: { bgC: tapColors.linkDark }
-    }),
-    active: deepMerge(btnStyles, {
-      main: { bgC: tapColors.linkLight }
-    }),
-    disabled: deepMerge(btnStyles, {
-      main: { bgC: tapColors.linkLight }
-    })
+    main: {
+      default: builtBtn.button,
+      hover: deepMerge(builtBtn.button, {
+        main: { bgC: tapColors.linkDark }
+      }),
+      active: deepMerge(builtBtn.button, {
+        main: { bgC: tapColors.linkLight }
+      }),
+      disabled: deepMerge(builtBtn.button, {
+        main: { bgC: tapColors.linkLight }
+      })
+    },
+    icon: builtBtn.icon,
+    text: builtBtn.text
   },
   cancelButton: {
-    default: deepMerge(btnStyles, {
-      main: { bgC: tapColors.danger }
-    }),
-    hover: deepMerge(btnStyles, {
-      main: { bgC: tapColors.dangerDark }
-    }),
-    active: deepMerge(btnStyles, {
-      main: { bgC: tapColors.dangerLight }
-    }),
-    disabled: deepMerge(btnStyles, {
-      main: { bgC: tapColors.dangerLight }
-    })
+    main: {
+      default: deepMerge(builtBtn.button, {
+        main: { bgC: tapColors.danger }
+      }),
+      hover: deepMerge(builtBtn.button, {
+        main: { bgC: tapColors.dangerDark }
+      }),
+      active: deepMerge(builtBtn.button, {
+        main: { bgC: tapColors.dangerLight }
+      }),
+      disabled: deepMerge(builtBtn.button, {
+        main: { bgC: tapColors.dangerLight }
+      })
+    },
+    icon: builtBtn.icon,
+    text: builtBtn.text
   },
   edit: {}
 }

@@ -102,7 +102,6 @@ const Parameters = props => {
       </View>
     </>
   )
-  
 }
 
 export const EditStep = props => {
@@ -122,7 +121,6 @@ export const EditStep = props => {
       className={`step-edit-main`}
       style={editStyles.main}
     >
-      <EditActions {...props} />
       <SelectStep
         step={step}
         className={`step-select`}
@@ -135,6 +133,7 @@ export const EditStep = props => {
         styles={editStyles.parameters}
         parameterAction={parameterAction}
       />
+      <EditActions {...props} />
     </Form>
   )
 }

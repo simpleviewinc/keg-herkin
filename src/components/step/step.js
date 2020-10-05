@@ -2,9 +2,12 @@ import React, { useState, useCallback } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import { EditStep } from './editStep'
 import { saveStep } from 'SVActions'
+import { Edit, Times } from 'SVAssets'
 import { mapObj, capitalize } from '@keg-hub/jsutils'
+import { Drawer } from 'SVComponents'
 import {
   Button,
+  Icon,
   Option,
   Select,
   Text,
@@ -43,14 +46,25 @@ const StepAction = ({ isEditing, cancelAction, editAction, styles }) => {
   const text = isEditing ? `CANCEL` : `EDIT`
   const onPress = isEditing ? cancelAction : editAction
   const buttonStyles = isEditing ? styles.cancelButton : styles.editButton
+  const Element = isEditing ? Times : Edit
 
   return (
     <Button
       className={`step-edit-action`}
-      styles={buttonStyles}
+      styles={buttonStyles.main}
       onPress={onPress}
     >
-      {text}
+      <Icon
+        className={`step-edit-action-icon`}
+        styles={buttonStyles.icon}
+        Element={Element}
+      />
+      <Text
+        className={`step-edit-action-text`}
+        style={buttonStyles.text}
+      >
+        {text}
+      </Text>
     </Button>
   )
 }
@@ -84,6 +98,12 @@ export const Step = props => {
     
     // Set editing to false
     setIsEditing(false)
+  }, [isEditing, step, feature, scenario])
+
+  // Action for saving the step to the feature / scenario
+  const saveAction = useCallback(()=> {
+    // Update the store with the new step information
+    saveStep(step, feature, scenario)
   }, [isEditing, step, feature, scenario])
 
   // Action for updating the step definition
@@ -122,14 +142,18 @@ export const Step = props => {
           editAction={editAction}
         />
       </View>
-      
-      { isEditing && (
-        <EditStep
+      <Drawer
+        className='step-editing-drawer'
+        styles={ stepStyles.drawer }
+        toggled={ isEditing }
+      >
+       <EditStep
           {...props}
-          cancelAction={cancelAction}
           styles={stepStyles.edit}
+          cancelAction={cancelAction}
+          saveAction={saveAction}
         />
-      )}
+      </Drawer>
     </View>
   )
 }

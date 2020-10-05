@@ -1,17 +1,11 @@
 import { deepMerge } from '@keg-hub/jsutils'
 import { tapColors } from '../tapColors'
+import { sharedButton } from './shared'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
 const inputHeight = theme?.form?.input?.default?.height ?? 35
+const builtBtn = sharedButton({ button: tapColors.success })
 
-const addBtn = {
-  main: {
-    height: '100%',
-    borderTopLeftRadius: '0',
-    borderBottomLeftRadius: '0',
-    bgC: tapColors.link,
-  }
-}
 
 export const tags = {
   main: {
@@ -59,15 +53,19 @@ export const tags = {
     bgC: 'transparent',
   },
   button: {
-    default: addBtn,
-    hover: deepMerge(addBtn, {
-      main: { bgC: tapColors.linkDark }
-    }),
-    active: deepMerge(addBtn, {
-      main: { bgC: tapColors.linkLight }
-    }),
-    disabled: deepMerge(addBtn, {
-      main: { bgC: tapColors.linkLight }
-    })
-  }
+    main: {
+      default: builtBtn.button,
+      hover: deepMerge(builtBtn.button, {
+        main: { bgC: tapColors.successDark }
+      }),
+      active: deepMerge(builtBtn.button, {
+        main: { bgC: tapColors.successLight }
+      }),
+      disabled: deepMerge(builtBtn.button, {
+        main: { bgC: tapColors.successLight }
+      })
+    },
+    icon: builtBtn.icon,
+    text: builtBtn.text
+  },
 }

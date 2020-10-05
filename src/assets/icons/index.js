@@ -1,4 +1,5 @@
 export * from './chevronDown'
+export * from './edit'
 export * from './minus'
 export * from './minusCircle'
 export * from './plus'
