@@ -4,7 +4,7 @@ import { Label, Row, Text, View } from '@keg-hub/keg-components'
 import { Parameter } from './parameter'
 
 export const Parameters = props => {
-  const { styles, step } = props
+  const { definition, step, styles } = props
   const theme = useTheme()
   const paramStyles = theme.get('editStep.parameters', styles)
 

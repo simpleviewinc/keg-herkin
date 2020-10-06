@@ -80,13 +80,18 @@ const useStepActions = (props) => {
   // Action to copy the step text to the clipboard
   const copyAction = useCallback(() => {
     // TODO: add code to copy the step text to the clipboard
-    console.log(`Copy action not implemented!`)
+    console.log(`Copy Action not implemented!`)
   }, [isEditing, step])
 
   // Action to delete a step from the feature scenario
   const deleteAction = useCallback(() => {
     // TODO: add code to delete a step from the feature scenario
-    console.log(`Delete Ation not implemented!`)
+    console.log(`Delete Action not implemented!`)
+  }, [isEditing, step, scenario, feature ])
+
+  const parameterAction = useCallback(() => {
+    // TODO: add code to delete a step from the feature scenario
+    console.log(`Delete Action not implemented!`)
   }, [isEditing, step, scenario, feature ])
 
   return {
@@ -94,6 +99,7 @@ const useStepActions = (props) => {
     copyAction,
     deleteAction,
     editAction,
+    parameterAction,
     saveAction,
     selectAction,
     typeAction,
@@ -105,7 +111,8 @@ export const Step = props => {
   const { styles, feature, scenario } = props
   
   const [step, updateStep] = useState(props.step)
-  const [isEditing, setIsEditing] = useState(false)
+  // TODO: revert this back to false when other steps are added back
+  const [isEditing, setIsEditing] = useState(true)
   const { definitions } = useSelector(CATEGORIES.DEFINITIONS)
   const definition = useDefinition(definitions, step)
 
@@ -114,6 +121,7 @@ export const Step = props => {
     copyAction,
     deleteAction,
     editAction,
+    parameterAction,
     saveAction,
     selectAction,
     typeAction,
@@ -165,10 +173,12 @@ export const Step = props => {
        <EditStep
           {...props}
           step={step}
+          definition={definition}
           styles={stepStyles.edit}
           cancelAction={cancelAction}
           copyAction={copyAction}
           deleteAction={deleteAction}
+          parameterAction={parameterAction}
           saveAction={saveAction}
           selectAction={selectAction}
         />

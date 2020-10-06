@@ -66,6 +66,7 @@ const EditActions = props => {
 
 export const EditStep = props => {
   const {
+    definition,
     parameterAction,
     selectAction,
     step,
@@ -90,6 +91,7 @@ export const EditStep = props => {
       <Row>
         <Parameters
           step={step}
+          definition={definition}
           className={`step-parameters`}
           parameterAction={parameterAction}
         />

@@ -1,3 +1,6 @@
+const { exists } = require('@keg-hub/jsutils')
+const { NOT_PARAMETER, NOT_REPLACE, NOT_INDEX } = require('../../constants')
+
 const addStepError = (feature, step) => {
   feature.errors = feature.errors || {}
   feature.errors.steps = feature.errors.steps || {}
@@ -8,6 +11,31 @@ const addStepError = (feature, step) => {
   )
 }
 
+const mapDynamicIndexes = (step, definition) => {
+  step.definition = definition.uuid
+
+  const stepSplit = step.step.split(' ')
+
+  if(definition.NOT_INDEX && !step.step.includes(` not `))
+    stepSplit.splice(definition.NOT_INDEX, 0, NOT_PARAMETER)
+
+  step.dynamicMap = definition.tokens.reduce((mapped, token) => {
+    if(!token || !token.dynamic || !exists(token.index)){
+      !token &&
+        !exists(token.index) &&
+        console.warn(`Invalid token found in step definition`, token, definition)
+
+      return mapped
+    }
+
+    const value = stepSplit[token.index]
+    mapped[token.index] = value === NOT_PARAMETER ? '' : stepSplit[token.index]
+
+    return mapped
+  }, {})
+
+}
+
 const matchExpressionDefinition = (step, definitions) => {
   
 }
@@ -16,8 +44,9 @@ const matchRegExDefinition = (step, definition) => {
   if(!definition || !definition.name) return
   const regEx = new RegExp(definition.name)
 
+
   const match = regEx.test(step.step)
-  match && (step.definition = definition.uuid)
+  match && mapDynamicIndexes(step, definition)
 
   return match
 }
