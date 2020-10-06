@@ -7,5 +7,12 @@ export const Values = {
     ACTIVE_DATA: 'activeData',
     FEATURE: 'feature',
     SCREEN: 'screen',
-  }
+  },
+  STEP_TYPES: [
+    'and',
+    'given',
+    'when',
+    'then',
+  ],
+  EMPTY_STEP: `None Selected`,
 }

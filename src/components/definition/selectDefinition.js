@@ -1,39 +1,44 @@
 import React from 'react'
 import { Values } from 'SVConstants'
-import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
-import { useSelector, shallowEqual } from 'react-redux'
+import { useSelector } from 'SVHooks'
 import {
   Label,
   Option,
   Select,
 } from '@keg-hub/keg-components'
 
-const { CATEGORIES } = Values
+const { CATEGORIES, EMPTY_STEP } = Values
 
 export const SelectDefinition = props => {
   const { styles, step, selectAction } = props
-  const { definitions } = useSelector(({ items }) => pickKeys(
-    items,
-    [ CATEGORIES.DEFINITIONS ]
-  ), shallowEqual)
-
+  const { definitions } = useSelector(CATEGORIES.DEFINITIONS)
   const definitionsFromType = step.type && definitions[step.altType || step.type]
+
+  const theme = useTheme()
+  const selectStyles = theme.get('definitions.select', styles)
 
   return (
     <>
       <Label
         className={`step-edit-select-label`}
-        style={styles.label}
+        style={selectStyles.label}
       >
         Definition
       </Label>
       <Select
         className='select-step-main'
-        styles={styles}
-        value={step.definition}
+        styles={selectStyles}
+        value={step.definition || EMPTY_STEP}
         onValueChange={selectAction}
       >
+        {!step.definition && (
+          <Option
+            key={EMPTY_STEP}
+            value={EMPTY_STEP}
+            label={EMPTY_STEP}
+          />
+        )}
         {definitionsFromType && definitionsFromType.map(parsed => {
           const { name, uuid } = parsed
           return (

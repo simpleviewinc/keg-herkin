@@ -54,9 +54,6 @@ export const Tags = props => {
 
   }, [ inputRef.current, parent, onAdd ])
 
-  console.log(tagsStyles.buttonContent)
-
-
   return tags && (
     <Grid
     className={`tags-main`}

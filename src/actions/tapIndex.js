@@ -1,3 +1,4 @@
+export * from './definitions'
 export * from './features'
 export * from './init'
 export * from './scenarios'

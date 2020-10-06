@@ -51,11 +51,14 @@ export const tags = {
     bgC: 'transparent',
   },
   button: sharedButton({
-    button: {
-      default: tapColors.success,
-      hover: tapColors.successDark,
-      active: tapColors.successLight,
-      disabled: tapColors.successLight
+    side: 'right',
+    colors: {
+      button: {
+        default: tapColors.success,
+        hover: tapColors.successDark,
+        active: tapColors.successLight,
+        disabled: tapColors.successLight
+      }
     }
   }),
 }

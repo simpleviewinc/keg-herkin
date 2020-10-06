@@ -1,16 +1,27 @@
 import { deepMerge } from '@keg-hub/jsutils'
 import { tapColors } from '../../tapColors'
 
-const defButton = {
+export const defaultButton = {
   height: '100%',
-  bRad: tapColors.borderRadius,
   padding: 10,
-  borderTopLeftRadius: 0,
-  borderBottomLeftRadius: 0,
   flD: 'row',
   jtC: 'center',
   alI: 'center',
 }
+
+const sideButton = {
+  right: {
+    bRad: tapColors.borderRadius,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+  },
+  left: {
+    bRad: tapColors.borderRadius,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+  }
+}
+
 
 const defColors = {
   button: {
@@ -21,15 +32,17 @@ const defColors = {
   }
 }
 
-export const sharedButton = (customColors={}, styles) => {
+export const sharedButton = (styles={}) => {
+  const { side, colors:customColors, ...customStyles } = styles
+  const buttonFrom = { ...defaultButton, ...(sideButton[side] || {}) }
   const { button, ...colors } = deepMerge(defColors, customColors)
 
   return deepMerge({
     main: {
-      default: { main: { ...defButton, bgC: button.default }},
-      hover: { main: { ...defButton, bgC: button.hover || button.default }},
-      active: { main: { bgC: button.active || button.default }},
-      disabled: { main: { bgC: button.disabled || button.default }},
+      default: { main: { ...buttonFrom, bgC: button.default }},
+      hover: { main: { ...buttonFrom, bgC: button.hover || button.default }},
+      active: { main: { ...buttonFrom, bgC: button.active || button.default }},
+      disabled: { main: { ...buttonFrom, bgC: button.disabled || button.default }},
     },
     icon: {
       container: {
@@ -45,6 +58,6 @@ export const sharedButton = (customColors={}, styles) => {
       ftWt: 'bold',
       c: colors.text || tapColors.buttonText,
     }
-  }, styles)
+  }, customStyles)
 
 }

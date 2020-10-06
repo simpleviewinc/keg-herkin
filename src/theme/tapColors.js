@@ -1,5 +1,9 @@
 import { shadeHex } from '@keg-hub/re-theme/colors'
+import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
+const inputHeight = theme?.form?.input?.default?.height ?? 35
+
+// Example : http://snpy.in/EuGKsu
 export const tapColors = {
   default: `#5e6e82`,
   defaultDark: shadeHex('#5e6e82', -20),
@@ -37,21 +41,6 @@ export const tapColors = {
   inactive: `#a6b0c0`,
   accentBackground: '#f9fafe',
   // border: `#ebf3fc`,
-  border: `#e1e7ef`
-}
-
-// Example : http://snpy.in/EuGKsu
-const extracted = {
-  primary: `#3580e6`,
-  default: `#5e6e82`,
-  background: `#edf2f9`,
-  highlight: `#048851`,
-  highlightBg: `#e0faef`,
-  highlightAlt: `#27bcfd`,
-  highlightAltBg: `#e5f7ff`,
-  warn: `#f69158`,
-  warnBg: `#fef0e8`,
-  danger: `#e0faef`,
-  dangerBg: `#fce7eb`,
-  link: `#307de5`,
+  border: `#e1e7ef`,
+  inputHeight,
 }

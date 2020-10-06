@@ -1,5 +1,4 @@
 import React from 'react'
-import { Values } from 'SVConstants'
 import { useTheme } from '@keg-hub/re-theme'
 import { Parameters } from './parameters'
 import { SelectDefinition } from '../definition/selectDefinition'
@@ -7,25 +6,52 @@ import { SelectDefinition } from '../definition/selectDefinition'
 import {
   Button,
   Form,
-  Label,
   Row,
   Text,
+  View,
 } from '@keg-hub/keg-components'
 
-const { CATEGORIES } = Values
 
 const EditActions = props => {
   const { copyAction, deleteAction, saveAction, styles } = props
 
   return (
-    <Row
+    <View
       className={`step-edit-actions-main`}
       style={styles?.actions}
     >
+      { deleteAction && (
+        <Button
+          className='step-delete-action'
+          styles={styles.deleteAction?.main}
+          onPress={deleteAction}
+        >
+          <Text
+            className='step-save-action-text'
+            style={styles?.deleteAction?.text}
+          >
+            Delete
+          </Text>
+        </Button>
+      )}
+      { copyAction && (
+        <Button
+          className='step-copy-action'
+          styles={styles.copyAction?.main}
+          onPress={copyAction}
+        >
+          <Text
+            className='step-copy-action-text'
+            style={styles?.copyAction?.text}
+          >
+            Copy
+          </Text>
+        </Button>
+      )}
       { saveAction && (
         <Button
           className='step-save-action'
-          styles={styles?.saveAction.main}
+          styles={styles?.saveAction?.main}
           onPress={saveAction}
         >
           <Text
@@ -36,25 +62,7 @@ const EditActions = props => {
           </Text>
         </Button>
       )}
-      { copyAction && (
-        <Button
-          className='step-copy-action'
-          styles={styles.copyAction}
-          onPress={copyAction}
-        >
-          Copy to Clipboard
-        </Button>
-      )}
-      { deleteAction && (
-        <Button
-          className='step-delete-action'
-          styles={styles.deleteAction}
-          onPress={deleteAction}
-        >
-          Delete
-        </Button>
-      )}
-    </Row>
+    </View>
   )
 }
 
@@ -78,17 +86,20 @@ export const EditStep = props => {
         <SelectDefinition
           step={step}
           className={`step-select`}
-          styles={editStyles.selectStep}
           selectAction={selectAction}
         />
       </Row>
-      <Parameters
-        step={step}
-        className={`step-parameters`}
-        styles={editStyles.parameters}
-        parameterAction={parameterAction}
-      />
-      <EditActions {...props} styles={editStyles} />
+      <Row>
+        <Parameters
+          step={step}
+          className={`step-parameters`}
+          styles={editStyles.parameters}
+          parameterAction={parameterAction}
+        />
+      </Row>
+      <Row>
+        <EditActions {...props} styles={editStyles} />
+      </Row>
     </Form>
   )
 }

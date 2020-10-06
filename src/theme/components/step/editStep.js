@@ -1,55 +1,33 @@
 import { tapColors } from '../../tapColors'
-import { deepMerge } from '@keg-hub/jsutils'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
-import { sharedButton } from '../shared'
+import { sharedButton, defaultButton } from '../shared'
 
-
-const selectStyles = {
-  main: {
-    bW: 0,
-    bgC: theme.colors.palette.transparent,
-    height: 'auto',
-    minH: 'auto',
-    maxH: 'auto',
-    w: `100%`,
-    borderRadius: tapColors.borderRadius,
-  },
-  select: {
-    $all: {
-      d: 'flex',
-      alignItems: 'center',
-      alignSelf: 'flex-start',
-      pH: theme.padding.size,
-      mR: theme.margin.size / 3,
-      bW: 1,
-      bC: tapColors.border,
-      bgC: tapColors.accentBackground,
-      borderRadius: tapColors.borderRadius,
-      ftSz: 12,
-      height: 'auto',
-      minH: 'auto',
-      maxH: 'auto',
-      w: `100%`,
-    }
-  },
-  icon: {
-    container: {
-      color: tapColors.default,
-      position: 'absolute',
-      zIndex: 1,
-      right: 10,
-      top: 12,
-      pointerEvents: 'none',
-    },
-    icon: {
-      color: tapColors.default,
-      fontSize: 12,
-    }
-  },
+const getColors = type => {
+  return {
+    default: tapColors[type],
+    hover: tapColors[`${type}Dark`],
+    active: tapColors[`${type}Light`],
+    disabled: tapColors[`${type}Light`],
+  }
 }
-const borderRadius = {
-  borderTopLeftRadius: 0,
-  borderBottomLeftRadius: 0,
+
+const buildButton = color => {
+  const colors = getColors(color)
+  const btnObj = {
+    ...defaultButton,
+    bRad: tapColors.borderRadius,
+    marginLeft: theme.margin.size / 3 
+  }
+  
+  return {
+    ...sharedButton(),
+    main: {
+      default: { main: { ...btnObj, backgroundColor: colors.default }},
+      hover: { main: { ...btnObj, backgroundColor: colors.hover }},
+      active: { main: { ...btnObj, backgroundColor: colors.active }},
+      disabled: { main: { ...btnObj, backgroundColor: colors.disabled }},
+    }
+  }
 }
 
 export const editStep = {
@@ -60,9 +38,6 @@ export const editStep = {
     bC: tapColors.border,
     bRad: tapColors.borderRadius,
   },
-  selectStep: deepMerge(selectStyles, {
-    label: {},
-  }),
   parameters: {
     main: {
       flex: 1,
@@ -79,14 +54,9 @@ export const editStep = {
   actions: {
     mT: theme?.margin?.size,
     ...theme.flex.right,
+    flD: 'row',
   },
-  saveAction: {
-    ...sharedButton(),
-    main: {
-      default: { main: { bRad: tapColors.borderRadius, backgroundColor: tapColors.success }},
-      hover: { main: { bRad: tapColors.borderRadius, backgroundColor: tapColors.successDark }},
-      active: { main: { bRad: tapColors.borderRadius, backgroundColor: tapColors.successLight }},
-      disabled: { main: { bRad: tapColors.borderRadius, backgroundColor: tapColors.successLight }},
-    }
-  }
+  copyAction: buildButton('warn'),
+  deleteAction: buildButton('danger'),
+  saveAction: buildButton('success'),
 }

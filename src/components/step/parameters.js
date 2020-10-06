@@ -6,7 +6,7 @@ export const Parameters = props => {
   const { styles, step } = props
 
   return (
-    <Row>
+    <>
       <Label
         className={`step-edit-parameters-label`}
         style={styles?.label}
@@ -21,6 +21,6 @@ export const Parameters = props => {
           All Parameters here
         </Text>
       </View>
-    </Row>
+    </>
   )
 }
