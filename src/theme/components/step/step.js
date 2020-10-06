@@ -1,9 +1,8 @@
 import { tapColors } from '../../tapColors'
-import { deepMerge } from '@keg-hub/jsutils'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 import { sharedButton } from '../shared'
+
 const inputHeight = theme?.form?.input?.default?.height ?? 35
-const builtBtn = sharedButton({ button: tapColors.link })
 
 const selectWidth = 90
 
@@ -84,39 +83,21 @@ export const step = {
       ftSz: 12,
     }
   },
-  editButton: {
-    main: {
-      default: builtBtn.button,
-      hover: deepMerge(builtBtn.button, {
-        main: { bgC: tapColors.linkDark }
-      }),
-      active: deepMerge(builtBtn.button, {
-        main: { bgC: tapColors.linkLight }
-      }),
-      disabled: deepMerge(builtBtn.button, {
-        main: { bgC: tapColors.linkLight }
-      })
-    },
-    icon: builtBtn.icon,
-    text: builtBtn.text
-  },
-  cancelButton: {
-    main: {
-      default: deepMerge(builtBtn.button, {
-        main: { bgC: tapColors.danger }
-      }),
-      hover: deepMerge(builtBtn.button, {
-        main: { bgC: tapColors.dangerDark }
-      }),
-      active: deepMerge(builtBtn.button, {
-        main: { bgC: tapColors.dangerLight }
-      }),
-      disabled: deepMerge(builtBtn.button, {
-        main: { bgC: tapColors.dangerLight }
-      })
-    },
-    icon: builtBtn.icon,
-    text: builtBtn.text
-  },
+  editButton: sharedButton({
+    button: {
+      default: tapColors.link,
+      hover: tapColors.linkDark,
+      active: tapColors.linkLight,
+      disabled: tapColors.linkLight
+    }
+  }),
+  cancelButton: sharedButton({
+    button: {
+      default: tapColors.danger,
+      hover: tapColors.dangerDark,
+      active: tapColors.dangerLight,
+      disabled: tapColors.dangerLight
+    }
+  }),
   edit: {}
 }

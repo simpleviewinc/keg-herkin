@@ -1,6 +1,8 @@
 import { tapColors } from '../../tapColors'
 import { deepMerge } from '@keg-hub/jsutils'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
+import { sharedButton } from '../shared'
+
 
 const selectStyles = {
   main: {
@@ -67,5 +69,13 @@ export const editStep = {
     parameter: {
       
     }
-  }
+  },
+  saveAction: sharedButton({
+    button: {
+      default: tapColors.success,
+      hover: tapColors.successDark,
+      active: tapColors.successLight,
+      disabled: tapColors.successLight
+    }
+  })
 }

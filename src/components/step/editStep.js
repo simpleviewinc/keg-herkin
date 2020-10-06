@@ -47,6 +47,7 @@ const SelectStep = props => {
 
 const EditActions = props => {
   const { copyAction, deleteAction, saveAction, styles } = props
+
   return (
     <View
       className={`step-edit-actions`}
@@ -54,10 +55,15 @@ const EditActions = props => {
       { saveAction && (
         <Button
           className='step-save-action'
-          styles={styles.saveAction}
+          styles={styles?.saveAction?.main}
           onPress={saveAction}
         >
-          Save
+          <Text
+            className='step-save-action-text'
+            style={styles?.saveAction?.text}
+          >
+            Save
+          </Text>
         </Button>
       )}
       { copyAction && (
@@ -133,7 +139,7 @@ export const EditStep = props => {
         styles={editStyles.parameters}
         parameterAction={parameterAction}
       />
-      <EditActions {...props} />
+      <EditActions {...props} styles={editStyles} />
     </Form>
   )
 }
