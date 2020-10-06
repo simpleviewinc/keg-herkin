@@ -80,13 +80,13 @@ const useStepActions = (props) => {
   // Action to copy the step text to the clipboard
   const copyAction = useCallback(() => {
     // TODO: add code to copy the step text to the clipboard
-    console.log(`Not implemented!`)
+    console.log(`Copy action not implemented!`)
   }, [isEditing, step])
 
   // Action to delete a step from the feature scenario
   const deleteAction = useCallback(() => {
     // TODO: add code to delete a step from the feature scenario
-    console.log(`Not implemented!`)
+    console.log(`Delete Ation not implemented!`)
   }, [isEditing, step, scenario, feature ])
 
   return {

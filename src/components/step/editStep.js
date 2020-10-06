@@ -2,7 +2,6 @@ import React from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import { Parameters } from './parameters'
 import { SelectDefinition } from '../definition/selectDefinition'
-
 import {
   Button,
   Form,
@@ -10,7 +9,6 @@ import {
   Text,
   View,
 } from '@keg-hub/keg-components'
-
 
 const EditActions = props => {
   const { copyAction, deleteAction, saveAction, styles } = props
@@ -93,7 +91,6 @@ export const EditStep = props => {
         <Parameters
           step={step}
           className={`step-parameters`}
-          styles={editStyles.parameters}
           parameterAction={parameterAction}
         />
       </Row>

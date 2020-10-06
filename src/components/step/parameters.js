@@ -1,21 +1,24 @@
 import React from 'react'
+import { useTheme } from '@keg-hub/re-theme'
 import { Label, Row, Text, View } from '@keg-hub/keg-components'
 import { Parameter } from './parameter'
 
 export const Parameters = props => {
   const { styles, step } = props
+  const theme = useTheme()
+  const paramStyles = theme.get('editStep.parameters', styles)
 
   return (
     <>
       <Label
         className={`step-edit-parameters-label`}
-        style={styles?.label}
+        style={paramStyles?.label}
       >
         Parameters
       </Label>
       <View
         className={`step-edit-parameters-main`}
-        style={styles?.container}
+        style={paramStyles?.container}
       >
         <Text>
           All Parameters here
