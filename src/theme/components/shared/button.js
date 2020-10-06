@@ -3,8 +3,10 @@ import { tapColors } from '../../tapColors'
 
 const defButton = {
   height: '100%',
-  borderTopLeftRadius: '0',
-  borderBottomLeftRadius: '0',
+  bRad: tapColors.borderRadius,
+  padding: 10,
+  borderTopLeftRadius: 0,
+  borderBottomLeftRadius: 0,
   flD: 'row',
   jtC: 'center',
   alI: 'center',
@@ -25,7 +27,7 @@ export const sharedButton = (customColors={}, styles) => {
   return deepMerge({
     main: {
       default: { main: { ...defButton, bgC: button.default }},
-      hover: { main: { bgC: button.hover || button.default }},
+      hover: { main: { ...defButton, bgC: button.hover || button.default }},
       active: { main: { bgC: button.active || button.default }},
       disabled: { main: { bgC: button.disabled || button.default }},
     },

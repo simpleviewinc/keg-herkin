@@ -2,7 +2,7 @@ const path = require('path')
 const glob = require('glob')
 const { FeatureParser } = require('./featureParser')
 const { mapToSteps } = require('./mapToSteps')
-const steps = require('../steps/steps')
+const definitions = require('../definitions/definitions')
 
 const loadFeatureFiles = (featuresFolder) => {
   return new Promise((res, rej) => {
@@ -25,13 +25,13 @@ const parseFeatures = (featureFiles) => {
   }, Promise.resolve([]))
 }
 
-const loadFeatures = async (config, steps) => {
+const loadFeatures = async (config, definitions) => {
   const { featuresFolder } = config.editor
   const featureFiles = featuresFolder && await loadFeatureFiles(featuresFolder)
   const features = await parseFeatures(featureFiles)
 
-  return steps
-    ? mapToSteps(features, steps)
+  return definitions
+    ? mapToSteps(features, definitions)
     : features
 }
 

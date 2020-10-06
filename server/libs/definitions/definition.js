@@ -1,4 +1,4 @@
-const { StepParameter } = require('./stepParameter')
+const { DefinitionParameter } = require('./definitionParameter')
 const { exists, uuid, isStr } = require('@keg-hub/jsutils')
 
 const REGEXP_TESTER = /\(([^\)]+)\)/g
@@ -20,7 +20,7 @@ const checkDynamicVariant = (str, token, validators, index) => {
   return { value, dynamic }
 }
 
-class Step {
+class Definition {
 
   constructor(name='', type='', altType) {
     this.type = type
@@ -70,7 +70,7 @@ class Step {
         const { value, dynamic } = checkDynamicVariant(str, token, validators, index)
 
         if((exists(value) || dynamic))
-          tokens.push(new StepParameter(value, dynamic, REGEXP_DISPLAY_NAME))
+          tokens.push(new DefinitionParameter(value, dynamic, REGEXP_DISPLAY_NAME))
 
         return tokens
       }, [])
@@ -79,5 +79,5 @@ class Step {
 }
 
 module.exports = {
-  Step
+  Definition
 }

@@ -1,4 +1,4 @@
 module.exports = {
-  ...require('./steps'),
+  ...require('./definitions'),
   ...require('./features')
 }

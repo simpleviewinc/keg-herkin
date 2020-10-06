@@ -7,7 +7,7 @@ const inputHeight = theme?.form?.input?.default?.height ?? 35
 
 export const tags = {
   main: {
-    padding: 15,
+    padding: theme.padding.size,
     paddingBottom: 0,
     ...theme.flex.center,
     ...theme.flex.justify.start,
@@ -15,7 +15,7 @@ export const tags = {
   row: {
     p: 0,
     bW: 1,
-    bRad: 3,
+    bRad: tapColors.borderRadius,
     minH: inputHeight,
     maxH: inputHeight,
     bC: tapColors.border,

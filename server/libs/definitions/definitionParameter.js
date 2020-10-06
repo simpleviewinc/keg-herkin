@@ -1,4 +1,4 @@
-class StepParameter {
+class DefinitionParameter {
   regexp = undefined
   variable = false
   _value = undefined
@@ -40,5 +40,5 @@ class StepParameter {
 }
 
 module.exports = {
-  StepParameter
+  DefinitionParameter
 }

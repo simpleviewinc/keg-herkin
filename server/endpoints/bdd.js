@@ -1,11 +1,11 @@
 const { apiErr, apiResponse } = require('./handler')
 const { loadFeatures } = require('../libs/features')
-const { loadSteps } = require('../libs/steps')
+const { loadDefinitions } = require('../libs/definitions')
 
 const testData = (app, config) => async (req, res) => {
   try {
 
-    const steps = await loadSteps(config)
+    const steps = await loadDefinitions(config)
     const features = await loadFeatures(config, steps)
 
     return apiResponse(req, res, { features, steps }, 200)

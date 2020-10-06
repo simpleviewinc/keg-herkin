@@ -1,7 +1,7 @@
 const { apiErr, apiResponse } = require('./handler')
-const { loadSteps } = require('../libs/steps')
+const { loadSteps } = require('../libs/definitions')
 
-const getSteps = (app, config) => async (req, res) => {
+const getDefinitions = (app, config) => async (req, res) => {
   try {
 
     const steps = await loadSteps(config)
@@ -15,7 +15,7 @@ const getSteps = (app, config) => async (req, res) => {
 }
 
 module.exports = (app, config) => {
-  app.get('/steps', getSteps(app, config))
+  app.get('/definitions', getDefinitions(app, config))
 
   return app
 }

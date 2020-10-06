@@ -3,7 +3,18 @@ import { Values } from 'SVConstants'
 import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'
-import { Option, Select, Text, View, Label, Form, Button } from '@keg-hub/keg-components'
+import { Parameters } from './parameters'
+import {
+  Button,
+  Form,
+  Label,
+  Row,
+  Option,
+  Select,
+  Text,
+  View
+} from '@keg-hub/keg-components'
+
 const { CATEGORIES } = Values
 
 const SelectStep = props => {
@@ -16,12 +27,12 @@ const SelectStep = props => {
   const stepsFromType = step.type && steps[ step.altType || step.type]
 
   return (
-    <>
+    <Row>
       <Label
         className={`step-edit-select-label`}
         style={styles.label}
       >
-        Step Definition
+        Definition
       </Label>
       <Select
         className='select-step-main'
@@ -40,7 +51,7 @@ const SelectStep = props => {
           )
         })}
       </Select>
-    </>
+    </Row>
   )
 
 }
@@ -49,13 +60,14 @@ const EditActions = props => {
   const { copyAction, deleteAction, saveAction, styles } = props
 
   return (
-    <View
-      className={`step-edit-actions`}
+    <Row
+      className={`step-edit-actions-main`}
+      style={styles?.actions}
     >
       { saveAction && (
         <Button
           className='step-save-action'
-          styles={styles?.saveAction?.main}
+          styles={styles?.saveAction.main}
           onPress={saveAction}
         >
           <Text
@@ -84,29 +96,7 @@ const EditActions = props => {
           Delete
         </Button>
       )}
-    </View>
-  )
-}
-
-const Parameters = props => {
-  const { styles } = props
-  return (
-    <>
-      <Label
-        className={`step-edit-parameters-label`}
-        style={styles?.label}
-      >
-        Parameters
-      </Label>
-      <View
-        className={`step-edit-parameters-main`}
-        style={styles?.main}
-      >
-        <Text>
-          All Parameters here
-        </Text>
-      </View>
-    </>
+    </Row>
   )
 }
 
@@ -117,8 +107,7 @@ export const EditStep = props => {
     step,
     styles
   } = props
-  
-  
+
   const theme = useTheme()
   const editStyles = theme.get('editStep', styles)
 

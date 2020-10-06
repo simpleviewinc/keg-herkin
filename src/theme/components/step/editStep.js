@@ -47,7 +47,10 @@ const selectStyles = {
     }
   },
 }
-
+const borderRadius = {
+  borderTopLeftRadius: 0,
+  borderBottomLeftRadius: 0,
+}
 
 export const editStep = {
   main: {
@@ -62,20 +65,28 @@ export const editStep = {
   }),
   parameters: {
     main: {
+      flex: 1,
     },
     label: {
       mT: theme?.margin?.size,
+    },
+    container: {
     },
     parameter: {
       
     }
   },
-  saveAction: sharedButton({
-    button: {
-      default: tapColors.success,
-      hover: tapColors.successDark,
-      active: tapColors.successLight,
-      disabled: tapColors.successLight
+  actions: {
+    mT: theme?.margin?.size,
+    ...theme.flex.right,
+  },
+  saveAction: {
+    ...sharedButton(),
+    main: {
+      default: { main: { bRad: tapColors.borderRadius, backgroundColor: tapColors.success }},
+      hover: { main: { bRad: tapColors.borderRadius, backgroundColor: tapColors.successDark }},
+      active: { main: { bRad: tapColors.borderRadius, backgroundColor: tapColors.successLight }},
+      disabled: { main: { bRad: tapColors.borderRadius, backgroundColor: tapColors.successLight }},
     }
-  })
+  }
 }
