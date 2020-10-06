@@ -1,60 +1,18 @@
 import React from 'react'
 import { Values } from 'SVConstants'
-import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
-import { useSelector, shallowEqual } from 'react-redux'
 import { Parameters } from './parameters'
+import { SelectDefinition } from '../definition/selectDefinition'
+
 import {
   Button,
   Form,
   Label,
   Row,
-  Option,
-  Select,
   Text,
-  View
 } from '@keg-hub/keg-components'
 
 const { CATEGORIES } = Values
-
-const SelectStep = props => {
-  const { styles, step, selectAction } = props
-  const { steps } = useSelector(({ items }) => pickKeys(
-    items,
-    [ CATEGORIES.STEPS ]
-  ), shallowEqual)
-
-  const stepsFromType = step.type && steps[ step.altType || step.type]
-
-  return (
-    <Row>
-      <Label
-        className={`step-edit-select-label`}
-        style={styles.label}
-      >
-        Definition
-      </Label>
-      <Select
-        className='select-step-main'
-        styles={styles}
-        value={step.definition}
-        onValueChange={selectAction}
-      >
-        {stepsFromType && stepsFromType.map(parsed => {
-          const { name, uuid } = parsed
-          return (
-            <Option
-              key={uuid}
-              value={uuid}
-              label={name}
-            />
-          )
-        })}
-      </Select>
-    </Row>
-  )
-
-}
 
 const EditActions = props => {
   const { copyAction, deleteAction, saveAction, styles } = props
@@ -116,12 +74,14 @@ export const EditStep = props => {
       className={`step-edit-main`}
       style={editStyles.main}
     >
-      <SelectStep
-        step={step}
-        className={`step-select`}
-        styles={editStyles.selectStep}
-        selectAction={selectAction}
-      />
+      <Row>
+        <SelectDefinition
+          step={step}
+          className={`step-select`}
+          styles={editStyles.selectStep}
+          selectAction={selectAction}
+        />
+      </Row>
       <Parameters
         step={step}
         className={`step-parameters`}

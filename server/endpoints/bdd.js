@@ -5,10 +5,10 @@ const { loadDefinitions } = require('../libs/definitions')
 const testData = (app, config) => async (req, res) => {
   try {
 
-    const steps = await loadDefinitions(config)
-    const features = await loadFeatures(config, steps)
+    const definitions = await loadDefinitions(config)
+    const features = await loadFeatures(config, definitions)
 
-    return apiResponse(req, res, { features, steps }, 200)
+    return apiResponse(req, res, { features, definitions }, 200)
   }
   catch(err){
     return apiErr(req, res, err, 400)
