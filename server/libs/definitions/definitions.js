@@ -12,7 +12,7 @@ const loadDefinitionsFiles = (definitionsFolder) => {
   })
 }
 
-const parseDefinitions = (definitionFiles) => {
+const parseDefinitions = definitionFiles => {
   return definitionFiles.reduce(async (toResolve, file) => {
     const loaded = await toResolve
     if(!file) return loaded
@@ -26,10 +26,14 @@ const parseDefinitions = (definitionFiles) => {
 const loadDefinitions = async config => {
   const { stepsFolder } = config.editor
   const definitionFiles = stepsFolder && await loadDefinitionsFiles(stepsFolder)
-
   const definitions = await parseDefinitions(definitionFiles) || []
 
+  // Reset the cached definitions
+  DefinitionsParser.resetDefinitions()
+  
   return definitions.reduce((organized, definition) => {
+    if(!definition || !definition.type) return organized
+    
     const type = definition.type.toLowerCase()
     organized[type] = organized[type] || []
     organized[type].push(definition)

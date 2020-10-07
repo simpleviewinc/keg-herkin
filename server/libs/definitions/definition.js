@@ -1,19 +1,22 @@
-const { NOT_INDEX, NOT_PARAMETER, NOT_REPLACE, REGEX_VARIANT } = require('../../constants')
 const { DefinitionTokens } = require('./definitionTokens')
-const { uuid, isStr } = require('@keg-hub/jsutils')
+const { uuid } = require('@keg-hub/jsutils')
+const {
+  NOT_INDEX,
+  NOT_PARAMETER,
+  NOT_REPLACE,
+  REGEX_VARIANT
+} = require('../../constants')
 
 
 class Definition {
 
-  constructor(name='', type='', altType) {
+  constructor(name='', type='', variant) {
     this.type = type
-    altType && (this.altType = altType)
-    this.variant = isStr(name) ? `expression` : `regex`
+    this.variant = variant
     this.name = this.sanitizeName(name, type)
     this.uuid = uuid()
     this.tokens = this.toTokens(this.name)
   }
-
 
   sanitizeName(str=''){
     str = this.variant === REGEX_VARIANT ? str.source : str

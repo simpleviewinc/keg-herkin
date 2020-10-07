@@ -1,58 +1,81 @@
-"use strict"
-
+const fs = require('fs')
 const { Definition } = require("./definition")
-let definitionCache = {}
+const { REGEX_VARIANT, EXPRESSION_VARIANT } = require('../../constants')
 
-const validateSignature = (signature, type) => {
-  if(!signature)
-    return console.warn(
-      `Found a ${type} definition that contains an empty signature in the definition definition files!`
-    )
-  
-  if(definitionCache[signature])
-    return console.warn(
-      `Found 2 ${type} definitions with the same signature of ${signature} in the definition files!`
-    )
-  
-  return signature
-}
+let defCache = {}
+const DEFINITION_REGEX = new RegExp(/(Given|When|Then)\(('|"|`|\/)(.*)('|"|`|\/),/, 'gm')
 
 class DefinitionsParser {
 
   constructor(){
-    this.When = this.addStep('When')
-    this.And = this.addStep('And' , `When`)
-    this.Given = this.addStep('Given')
-    this.Then = this.addStep('Then')
-  }
-  async getDefinitions(file) {
-    this.definitions = []
-    require(file).apply(this)
-    const definitions = await Promise.resolve(this.definitions)
-    this.definitionsLoaded = true
-
-    return definitions
+    this.resetDefinitions()
   }
 
-  addStep(type, altType) {
-    return (signature, fn) => {
-      if(!this.definitionsLoaded && !validateSignature(signature, altType || type)) return
-
-      const definition = definitionCache[signature] || new Definition(signature, type, altType)
-      !definitionCache[signature] && (definitionCache[signature] = definition)
-
-      this.definitions.push(definition)
-    }
+  resetDefinitions = () => { 
+    // Holds the loaded defs
+    // Used to check if a definition was already loaded
+    this.definitions = {}
   }
 
-  getComponents(file) {
-    let components = []
-    try {
-      components = require(file).components
-    }
-    catch(err){}
+  getDefinitions = async filePath => {
+    if(defCache[filePath]) return defCache[filePath]
 
-    return Promise.resolve(components)
+    // Holds the loaded defs by file name
+    // This is what will be returned to the frontend
+    defCache[filePath] = []
+
+    const definitions = await this.parseDefinition(filePath)
+
+    const loadedDefs = definitions.map(({ match, type, variant }) => {
+      if(!this.validateMatch(filePath, match, type)) return
+
+      const definition = this.definitions[match] || new Definition(match, type, variant)
+      !this.definitions[match] && (this.definitions[match] = definition)
+
+      return definition
+    })
+
+    defCache[filePath] = loadedDefs
+
+    return defCache[filePath]
+  }
+
+  parseDefinition = (filePath) => {
+    return new Promise((res, rej) => {
+      const definitions = []
+      fs.readFile(filePath, (err, content) => {
+        if(err) return rej(err)
+
+        const definitionFile = content.toString()
+        let definitionMatch
+        while (definitionMatch = DEFINITION_REGEX.exec(definitionFile)) {
+          const [ _, type, identifier, match ] = definitionMatch
+          const variant = identifier === `/` ? REGEX_VARIANT : EXPRESSION_VARIANT
+          
+          definitions.push({
+            type,
+            variant,
+            match: variant === REGEX_VARIANT ? new RegExp(match, `gm`) : match,
+          })
+        }
+
+        return res(definitions)
+      })
+    })
+  }
+
+  validateMatch = (filePath, match, type) => {
+    if(!match)
+      return console.warn(
+        `Found a ${type} definition that contains an empty match in the definition definition files!`
+      )
+    
+    if(this.definitions[match])
+      return console.warn(
+        `Found 2 ${type} definitions with the same match of ${match} in the definition files!`
+      )
+    
+    return match
   }
 
 }

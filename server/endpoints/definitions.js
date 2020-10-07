@@ -1,10 +1,10 @@
 const { apiErr, apiResponse } = require('./handler')
-const { loadSteps } = require('../libs/definitions')
+const { loadDefinitions } = require('../libs/definitions')
 
 const getDefinitions = (app, config) => async (req, res) => {
   try {
 
-    const steps = await loadSteps(config)
+    const steps = await loadDefinitions(config)
 
     return apiResponse(req, res, steps || [], 200)
   }
