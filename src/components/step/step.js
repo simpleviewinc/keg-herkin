@@ -89,9 +89,15 @@ const useStepActions = (props) => {
     console.log(`Delete Action not implemented!`)
   }, [isEditing, step, scenario, feature ])
 
-  const parameterAction = useCallback(() => {
-    // TODO: add code to delete a step from the feature scenario
-    console.log(`Delete Action not implemented!`)
+  const parameterAction = useCallback((param, value) => {
+
+    console.log(`---------- param ----------`)
+    console.log(param)
+    console.log(`---------- value ----------`)
+    console.log(value)
+    
+    // TODO: add code to update a step's parameter from the feature scenario
+    console.log(`Parameter action Action not implemented!`)
   }, [isEditing, step, scenario, feature ])
 
   return {

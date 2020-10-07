@@ -30,6 +30,34 @@ const buildButton = color => {
   }
 }
 
+const table = {
+  header: {
+    main: {
+      
+    },
+    column0: {
+      size: 3
+    },
+    column1: {
+      size: 9
+    }
+  },
+  row: {
+    main: {
+      mT: theme.margin.size,
+    },
+    column: {
+
+    },
+    column0: {
+      size: 3
+    },
+    column1: {
+      size: 9
+    }
+  }
+}
+
 export const editStep = {
   main: {
     p: theme?.padding?.size,
@@ -49,10 +77,11 @@ export const editStep = {
     },
     parameter: {
       
-    }
+    },
+    table
   },
   actions: {
-    mT: theme?.margin?.size,
+    mT: theme?.margin?.size * 2,
     ...theme.flex.right,
     flD: 'row',
   },

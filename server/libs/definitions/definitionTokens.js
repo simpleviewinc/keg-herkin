@@ -1,4 +1,5 @@
 const { NOT_PARAMETER, NOT_REPLACE } = require('../../constants')
+const { exists, uuid } = require('@keg-hub/jsutils')
 
 const extractDynamic = (value, validators=[], variant) => {
   const valSplit = value.split(validators[1])
@@ -7,13 +8,14 @@ const extractDynamic = (value, validators=[], variant) => {
     const cleaned = part.replace(regEx, '')
 
     const param = cleaned.indexOf('\\d') !== -1
-      ? { variant, type: 'number', match: value }
+      ? { variant, type: 'number', match: value, uuid: uuid(), }
       : cleaned.indexOf(`|`) !== -1
         ? {
             variant,
             type: 'select',
             match: value,
-            option: cleaned.split(`|`),
+            options: cleaned.split(`|`),
+            uuid: uuid(),
           }
         : null
 
@@ -28,14 +30,19 @@ const extractDynamic = (value, validators=[], variant) => {
 const checkDynamic = (value, validators=[], variant) => {
   switch(value[0]){
     case `"`: {
-      return [{ variant, type: `string`, match: value.slice(1, value.length - 1) }]
+      return [{
+        variant,
+        type: `string`,
+        match: value.slice(1, value.length - 1),
+        uuid: uuid(),
+      }]
     }
     case validators[0]: {
       return extractDynamic(value, validators, variant)
     }
     default: {
       return value === NOT_PARAMETER
-        ? [{ variant, type: `boolean`, match: NOT_REPLACE }]
+        ? [{ variant, type: `boolean`, match: NOT_REPLACE, uuid: uuid(), }]
         : false
     }
   }
@@ -43,6 +50,7 @@ const checkDynamic = (value, validators=[], variant) => {
 
 class DefinitionTokens {
   value = undefined
+  uuid = uuid()
 
   constructor (definition, value, validators, index) {
     this.value = value
