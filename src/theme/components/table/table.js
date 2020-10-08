@@ -3,7 +3,6 @@ import { tapColors } from '../../tapColors'
 
 const rowStyles = {
   main: {
-    mT: theme.margin.size,
     alI: 'center',
   },
   column: {
@@ -23,5 +22,9 @@ export const table = {
   },
   row: {
     ...rowStyles,
+    main: {
+      ...rowStyles.main,
+      mT: theme.margin.size,
+    }
   }
 }

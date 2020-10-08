@@ -15,5 +15,21 @@ export const sideBar = {
     shadowOffset: { width: 1, height: 12 },
     shadowOpacity: 0.05,
     shadowRadius: 6,
+  },
+  back: {
+    backgroundColor: tapColors.sidebarBackground,
+    left: 0,
+    minHeight: 'calc(100vh - 70px)',
+    position: 'fixed',
+    top: -70,
+    width: 250,
+    height: '100vh',
+    zIndex: -1,
+  },
+  drawer: {
+    
+  },
+  toggle: {
+    
   }
 }

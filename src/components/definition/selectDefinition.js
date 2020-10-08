@@ -6,6 +6,7 @@ import {
   Label,
   Option,
   Select,
+  View,
 } from '@keg-hub/keg-components'
 
 const { CATEGORIES, EMPTY_STEP } = Values
@@ -19,16 +20,19 @@ export const SelectDefinition = props => {
   const selectStyles = theme.get('definitions.select', styles)
 
   return (
-    <>
+    <View
+      className={`step-edit-select-main`}
+      style={selectStyles?.main}
+    >
       <Label
         className={`step-edit-select-label`}
-        style={selectStyles.label}
+        style={selectStyles?.label}
       >
         Definition
       </Label>
       <Select
-        className='select-step-main'
-        styles={selectStyles}
+        className='step-edit-definition-select'
+        styles={selectStyles.select}
         value={step.definition || EMPTY_STEP}
         onValueChange={selectAction}
       >
@@ -50,7 +54,7 @@ export const SelectDefinition = props => {
           )
         })}
       </Select>
-    </>
+    </View>
   )
 
 }

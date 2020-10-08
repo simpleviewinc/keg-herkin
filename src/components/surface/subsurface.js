@@ -2,38 +2,13 @@ import { Drawer } from 'SVComponents'
 import { Subheader } from '../subheader'
 import { useTheme } from '@keg-hub/re-theme'
 import { noOpObj } from 'SVUtils/helpers'
+import { useToggledStyles } from 'SVHooks/useToggledStyles'
 import React, { useState, useCallback, useMemo } from 'react'
 import { Grid, Row, View, Touchable, Text, Icon } from '@keg-hub/keg-components'
 // import { Plus, Minus } from 'SVAssets'
 
-
-const useAnimationStyles = (toggled, styles) => {
-  return useMemo(() => {
-    const toggleStyles = toggled ? styles?.open : styles?.closed
-    return {
-      main: {
-        ...styles?.default?.main,
-        ...toggleStyles?.main
-      },
-    //  icon: {
-    //     icon: {
-    //       transitionProperty: 'transform',
-    //       transitionDuration: '0.8s',
-    //       transform: toggled ? 'rotate(180deg)' : 'rotate(0deg)',
-    //       ...styles?.default?.icon,
-    //       ...toggleStyles?.icon
-    //     }
-    //   },
-      text: {
-        ...styles?.default?.text,
-        ...toggleStyles?.text
-      },
-    }
-  }, [ toggled, styles ])
-}
-
 const DrawerToggle = ({ onPress, toggled, styles }) => {
-  const iconStyles = useAnimationStyles(toggled, styles?.toggle)
+  const iconStyles = useToggledStyles(toggled, styles?.toggle)
 
   return (
     <Touchable

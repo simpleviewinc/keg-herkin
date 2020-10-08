@@ -18,11 +18,17 @@ export const RootContainer = withAppHeader('KeGherkin Editor', props => {
   }, [])
 
   return (
-    <View className={`tap-main`} style={containerStyles.main}>
-      <Sidebar style={ theme?.sideBar?.main } >
-        <FeatureList />
-      </Sidebar>
-      <Screen />
-    </View>
+    <>
+      <View
+        className={`sidebar-back`}
+        style={theme?.sideBar?.back} 
+      />
+      <View className={`tap-main`} style={containerStyles.main}>
+        <Sidebar styles={theme?.sideBar} >
+          <FeatureList />
+        </Sidebar>
+        <Screen />
+      </View>
+    </>
   )
 })

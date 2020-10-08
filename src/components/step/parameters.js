@@ -1,27 +1,52 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import { checkCall } from '@keg-hub/jsutils'
 import { Label, Input, Option, Select, View } from '@keg-hub/keg-components'
-import { Parameter } from './parameter'
+import { noOpObj, noOpArr } from 'SVUtils/helpers/noop'
+import { removeQuotes } from 'SVUtils/helpers/removeQuotes'
 import { Table } from '../table'
 
-const noPropObj = {}
-const dynamicValueType = (value, param, styles=noPropObj, parameterAction) => {
-  const type = param?.type || `string`
+const headerRow = [ 'Token', 'Value' ]
+
+const useParameterAction = (param, parameterAction) => {
+  return useCallback(value => {
+    return checkCall(parameterAction, param, value)
+  }, [ param, parameterAction ])
+}
+
+const DynamicInput = props => {
+  const {
+    param,
+    parameterAction,
+    styles,
+    value,
+  } = props
+
+  const {
+    options=noOpArr,
+    type=`string`,
+    uuid,
+  } = param
+
+  const paramAction = useParameterAction(param, parameterAction)
 
   switch(type){
     case 'select': {
       return (
         <Select
-          key={param.uuid}
+          key={uuid}
           className={`step-param-select`}
-          style={styles.select}
-          onValueChange={parameterAction}
+          style={styles?.select}
+          onValueChange={paramAction}
           value={value}
         >
-          {(param.options || []).map(option => {
+          {options.map(option => {
             return (
-              <Option key={`{$param.uuid}-${option}`} key={option} value={option} label={option} />
+              <Option
+                key={option}
+                value={option}
+                label={option}
+              />
             )
           })}
         </Select>
@@ -30,40 +55,30 @@ const dynamicValueType = (value, param, styles=noPropObj, parameterAction) => {
     case 'boolean': {
       return (
         <Select
-          key={param.uuid}
+          key={uuid}
           className={`step-param-select`}
-          style={styles.select}
-          onValueChange={parameterAction}
+          style={styles?.select}
+          onValueChange={paramAction}
           value={value}
         >
-          <Option key={`${param.uuid}-{on}`} value={'true'} label={'On'} />
-          <Option key={`${param.uuid}-off`} value={'false'} label={'Off'} />
+          <Option key={`${uuid}-{on}`} value={'true'} label={'On'} />
+          <Option key={`${uuid}-off`} value={'false'} label={'Off'} />
         </Select>
       )
     }
     case 'string':
     default: {
-
-      if(value[0] === '"') value = value.substring(1, value.length)
-      if(value[value.length -1 ] === '"') value = value.substring(0, value.length - 1)
-
       return (
         <Input
-          key={param.uuid}
+          key={uuid}
           className={`step-param-input`}
-          style={styles.input}
-          onValueChange={parameterAction}
-          value={value}
+          style={styles?.input}
+          onValueChange={paramAction}
+          value={removeQuotes(value)}
         />
       )
     }
   }
-}
-
-const useParameterAction = (param, parameterAction) => {
-  return useCallback(value => {
-    return checkCall(parameterAction, param, value)
-  }, [ param, parameterAction ])
 }
 
 /**
@@ -78,44 +93,48 @@ const useParameterAction = (param, parameterAction) => {
  * |    ( not)*     |     empty     |
  * ----------------------------------
  * 
- *
+ * @returns {Array} - Array of arrays, containing row items for the Table component
 */
-const getTableData = (definition, step, styles, parameterAction) => {
-  const headerRow = [ 'Token', 'Value' ]
+const useTableRows = (tokens=noOpArr, dynamicMap=noOpObj, styles=noOpObj, parameterAction) => {
+  return useMemo(() => {
+    return Object.entries(dynamicMap)
+      .reduce((tableRows, [ index, value ]) => {
+        const defToken = tokens[index]
 
-  const rows = Object.entries(step.dynamicMap)
-    .reduce((tableData, [ index, value ]) => {
-      const defToken = definition.tokens[index]
-      if(!defToken || !defToken.params) return tableData
-
-      // Create a new row for the table
-      const row = [
-        // Add the token value as the first item
-        // this is what the user value with match against
-        defToken.value,
-        // Loop over the params and add the component based on the type for each one
-        (<>
-          {defToken.params.map(param => {
-            const paramAction = useParameterAction(param, parameterAction)
-            if(!param) return
-
-            return dynamicValueType(value, param, styles, paramAction)
-          })}
-        </>)
-      ]
-
-      tableData.push(row)
-
-      return tableData
-    }, [])
-
-  return { headerRow, rows }
+        return !defToken || !defToken.params
+          ? tableRows
+          // Create a new row for the table
+          : tableRows.push([
+              // Add the token value as the first item
+              // this is what the user value with match against
+              defToken.value,
+              // Loop over the params and add the component based on the type for each one
+              defToken.params.map(param => {
+                return param && (
+                  <DynamicInput
+                    key={param.uuid}
+                    value={value}
+                    param={param}
+                    styles={styles}
+                    parameterAction={parameterAction}
+                  />
+                )
+              })
+            ]) && tableRows
+      }, [])
+  }, [tokens, dynamicMap, styles, parameterAction])
 }
 
 export const Parameters = props => {
   const { definition, step, styles, parameterAction } = props
   const theme = useTheme()
   const paramStyles = theme.get('editStep.parameters', styles)
+  const tableRows = useTableRows(
+    definition.tokens,
+    step.dynamicMap,
+    paramStyles?.dynamic,
+    parameterAction
+  )
 
   return (
     <View
@@ -131,7 +150,8 @@ export const Parameters = props => {
       <Table
         className={`step-edit-parameters-table`}
         styles={paramStyles?.table}
-        {...getTableData(definition, step, styles, parameterAction)}
+        headerRow={headerRow}
+        rows={tableRows}
       />
     </View>
   )

@@ -2,7 +2,7 @@ import { tapColors } from '../../tapColors'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 import { sharedSelect } from '../shared'
 
-export const selectDefinition = sharedSelect({
+const select = sharedSelect({
   main: {
     bW: 0,
     bgC: theme.colors.palette.transparent,
@@ -46,3 +46,11 @@ export const selectDefinition = sharedSelect({
     }
   },
 })
+
+export const selectDefinition = {
+  select,
+  main: select.main,
+  label: {
+    
+  }
+}

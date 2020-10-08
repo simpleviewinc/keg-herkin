@@ -5,16 +5,18 @@ import { matchText } from './matchText'
 
 export const step = {
   main: {
-    mT: theme.margin.size * 2,
+    mT: theme.margin.size,
     pB: 0,
   },
   container: {
     p: 0,
     bW: 1,
-    bRad: 3,
+    bRad: tapColors.borderRadius,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    bC: tapColors.border,
     minH: tapColors.inputHeight,
     maxH: tapColors.inputHeight,
-    bC: tapColors.border,
     bgC: tapColors.backGround,
     overflow: 'hidden',
     flexDirection: `row`

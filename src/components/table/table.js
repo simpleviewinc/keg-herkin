@@ -1,55 +1,55 @@
 
-import React, { useMemo } from 'react'
+import React from 'react'
+import { useIds } from 'SVHooks/useIds'
 import { useTheme } from '@keg-hub/re-theme'
+import { noOpObj, noOpArr } from 'SVUtils/helpers/noop'
+import { isFunc, isArr, isStr, isObj, isNum } from '@keg-hub/jsutils'
 import { Column, Row, Text, View, isValidComponent, renderFromType } from '@keg-hub/keg-components'
-import { doIt, uuid, eitherArr, isFunc, isArr, isStr, isObj, isNum } from '@keg-hub/jsutils'
-
-const noPropsArr = []
-const noPropsObj = {}
-
-const useIds = (rowData) => {
-  const deps = eitherArr(rowData, [rowData])
-  return useMemo(() => {
-    return doIt(rowData.length, null, () => uuid())
-  }, [ ...deps ])
-}
 
 const Wrapper = props => {
-  const { styles, children, id, uuid } = props
+  const { styles, children } = props
   return (
-    <Text
-      className={`table-column-text`}
-      style={styles?.text} 
-    >
+    <Text className={`table-column-text`} style={styles?.text} >
       {children}
     </Text>
   )
 }
 
-const RenderRow = props => {
+const RenderColumns = props => {
+  const { ids=noOpArr, row, styles=noOpObj } = props
+
   const theme = useTheme()
-  const { row, styles, ids=noPropsArr } = props
   const columnSize = 12 / row.length
+
+  return row.map((item, index) => {
+    const { size, ...colStyles } = (styles && styles[`column${index}`] || noOpObj)
+
+    return (
+      <Column
+        size={size || columnSize}
+        key={ids[index] || index}
+        className={`table-column`}
+        style={theme.get(styles?.column, colStyles)}
+      >
+        { renderFromType(item, props, Wrapper) }
+      </Column>
+    )
+  })
+}
+
+const RenderRow = props => {
+  const { styles=noOpObj, ids=noOpArr } = props
   return (
     <Row
       key={ids[0]}
       className={`table-column-row`}
       style={styles.main}
     >
-      {row.map((item, index) => {
-        const { size, ...colStyles } = ( styles && styles[`column${index}`] || noPropsObj )
-
-        return (
-          <Column
-            size={size || columnSize}
-            key={ids[index]}
-            className={`table-column`}
-            style={theme.get(styles?.column, colStyles)}
-          >
-            { renderFromType(item, props, Wrapper) }
-          </Column>
-        )
-      })}
+      <RenderColumns
+        {...props}
+        ids={ids}
+        styles={styles}
+      />
     </Row>
   )
 }
@@ -73,16 +73,24 @@ const BuildRow = props => {
     : isValidComponent(RowCustom)
       ? (<RowCustom {...props} />)
       : (<RenderRow {...props} row={row} />)
-
 }
 
 export const Table = props => {
-  const { Header, headerRow, rows, renderRow, Row:RowCustom, renderHeader, styles } = props
+  const {
+    Header,
+    headerRow,
+    rows,
+    renderRow,
+    Row:RowCustom,
+    renderHeader,
+    styles
+  } = props
+
   const theme = useTheme()
   const tableStyles = theme.get('table', styles)
 
   return (
-    <View style={ tableStyles?.main } >
+    <View style={tableStyles?.main} >
       {(headerRow || Header || renderHeader) && (
         <BuildRow
           row={headerRow}

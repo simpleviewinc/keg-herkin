@@ -3,7 +3,7 @@
 ios/platform.sqlite
 
 **/clients/**/temp
-
+.env
 /temp_assets
 src/assets/fonts
 /builds/*

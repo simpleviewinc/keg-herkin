@@ -1,3 +1,4 @@
+import { parameters } from '../parameters'
 import { tapColors } from '../../tapColors'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 import { sharedButton, defaultButton } from '../shared'
@@ -30,33 +31,7 @@ const buildButton = color => {
   }
 }
 
-const table = {
-  header: {
-    main: {
-      
-    },
-    column0: {
-      size: 3
-    },
-    column1: {
-      size: 9
-    }
-  },
-  row: {
-    main: {
-      mT: theme.margin.size,
-    },
-    column: {
 
-    },
-    column0: {
-      size: 3
-    },
-    column1: {
-      size: 9
-    }
-  }
-}
 
 export const editStep = {
   main: {
@@ -65,21 +40,10 @@ export const editStep = {
     borderTopWidth: 0,
     bC: tapColors.border,
     bRad: tapColors.borderRadius,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
   },
-  parameters: {
-    main: {
-      flex: 1,
-    },
-    label: {
-      mT: theme?.margin?.size,
-    },
-    container: {
-    },
-    parameter: {
-      
-    },
-    table
-  },
+  parameters,
   actions: {
     mT: theme?.margin?.size * 2,
     ...theme.flex.right,
