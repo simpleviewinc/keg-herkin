@@ -1,4 +1,3 @@
-import { deepMerge } from '@keg-hub/jsutils'
 import { tapColors } from '../tapColors'
 import { sharedButton } from './shared'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'

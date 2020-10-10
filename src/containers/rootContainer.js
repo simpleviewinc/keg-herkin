@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import {
   View,
@@ -6,7 +6,6 @@ import {
   FeatureList,
   withAppHeader
 } from 'SVComponents'
-
 import { init } from 'SVActions'
 import { Screen } from './screens/screen'
 
@@ -16,19 +15,25 @@ export const RootContainer = withAppHeader('KeGherkin Editor', props => {
   useEffect(() => {
     init()
   }, [])
+  
+  const [ toggled, setToggled ] = useState(true)
+  
+  const onToggled = useCallback(toggledUpdate => {
+    setToggled(toggledUpdate)
+  }, [ toggled, setToggled ])
+  
 
   return (
-    <>
-      <View
-        className={`sidebar-back`}
-        style={theme?.sideBar?.back} 
-      />
-      <View className={`tap-main`} style={containerStyles.main}>
-        <Sidebar styles={theme?.sideBar} >
-          <FeatureList />
-        </Sidebar>
-        <Screen />
-      </View>
-    </>
+    <View className={`tap-main`} style={containerStyles.main}>
+      <Sidebar 
+        initial={-250}
+        to={0}
+        toggled={toggled}
+        onToggled={onToggled}
+      >
+        <FeatureList />
+      </Sidebar>
+      <Screen sideToggled={toggled} />
+    </View>
   )
 })

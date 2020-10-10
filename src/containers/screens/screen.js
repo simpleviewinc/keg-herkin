@@ -9,7 +9,10 @@ import { useTheme } from '@keg-hub/re-theme'
 
 const { CATEGORIES, SCREENS } = Values
 
+
 export const Screen = props => {
+  const { sideToggled } = props
+
   const theme = useTheme()
   const { activeData } = useSelector(({ items }) => pickKeys(
     items,
@@ -23,7 +26,13 @@ export const Screen = props => {
     : EmptyScreen
 
   return (
-    <View className={`screen-main`} style={theme?.screens?.main} >
+    <View
+      className={`screen-main`}
+      style={theme.get(
+        theme?.screens?.root?.main,
+        !sideToggled && theme?.screens?.root?.closed
+      )}
+    >
       <ScreenComp {...props} />
     </View>
   )
