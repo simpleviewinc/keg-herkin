@@ -30,6 +30,7 @@ const getTableRows = (tokens=noOpArr, dynamicMap=noOpObj) => {
         ? tableRows
         // Create a new row for the table
         : tableRows.push({
+            ...defToken,
             // Add the token value as the first item
             // this is what the user value with match against
             token: defToken.value,

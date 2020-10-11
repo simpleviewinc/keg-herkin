@@ -9,6 +9,7 @@ import { StepMatchText } from './stepMatchText'
 import { StepEditToggle } from './stepEditToggle'
 import { devLog, getDefinitionFromId } from 'SVUtils'
 import React, { useState, useCallback, useMemo } from 'react'
+import { updateFeatureStep } from 'SVActions/features/updateFeatureStep'
 import { SelectDefinitionType } from '../definition/selectDefinitionType'
 
 const { CATEGORIES } = Values
@@ -63,7 +64,7 @@ const useStepActions = (props) => {
       definition: definition.uuid,
     })
 
-  }, [isEditing, step, definitions])
+  }, [isEditing, step, definitions, updateStep])
 
   // Action for updating the step type
   const typeAction = useCallback(type => {
@@ -75,7 +76,7 @@ const useStepActions = (props) => {
       definition: ``,
     })
 
-  }, [isEditing, step])
+  }, [isEditing, step, updateStep])
 
   // Action to copy the step text to the clipboard
   const copyAction = useCallback(() => {
@@ -89,16 +90,17 @@ const useStepActions = (props) => {
     console.log(`Delete Action not implemented!`)
   }, [isEditing, step, scenario, feature ])
 
-  const parameterAction = useCallback((param, value) => {
+  const parameterAction = useCallback((row, param, value) => {
+    const { index } = row
+    // Use index to get the param number and update the step based
+    // on the index of the row. It should match the dynamicMap indexes
+    // This allows getting the value to be replaced in the step
 
-    console.log(`---------- param ----------`)
-    console.log(param)
-    console.log(`---------- value ----------`)
-    console.log(value)
+    // updateStep({
+    //   ...step,
+    // })
 
-    // TODO: add code to update a step's parameter from the feature scenario
-    console.log(`Parameter action Action not implemented!`)
-  }, [isEditing, step, scenario, feature ])
+  }, [isEditing, step, scenario, feature, updateStep ])
 
   return {
     cancelAction,

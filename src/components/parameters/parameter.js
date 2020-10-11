@@ -24,16 +24,17 @@ const Wrapper = props => {
   )
 }
 
-const useParameterAction = (param, parameterAction) => {
+const useParameterAction = (row, param, parameterAction) => {
   return useCallback(value => {
-    return checkCall(parameterAction, param, value)
-  }, [param, parameterAction])
+    return checkCall(parameterAction, row, param, value)
+  }, [row, param, parameterAction])
 }
 
 const DynamicInput = props => {
   const {
     param,
     parameterAction,
+    row,
     styles,
     value,
   } = props
@@ -44,7 +45,7 @@ const DynamicInput = props => {
     uuid,
   } = param
 
-  const paramAction = useParameterAction(param, parameterAction)
+  const paramAction = useParameterAction(row, param, parameterAction)
 
   switch(type){
     case 'select': {
@@ -126,6 +127,7 @@ const RenderColumns = props => {
         { params && params.map(param => {
           return (
             <DynamicInput
+              row={row}
               param={param}
               value={value}
               key={param.uuid}
