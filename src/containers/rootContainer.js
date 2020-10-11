@@ -15,25 +15,17 @@ export const RootContainer = withAppHeader('KeGherkin Editor', props => {
   useEffect(() => {
     init()
   }, [])
-  
-  const [ toggled, setToggled ] = useState(true)
-  
-  const onToggled = useCallback(toggledUpdate => {
-    setToggled(toggledUpdate)
-  }, [ toggled, setToggled ])
-  
 
   return (
     <View className={`tap-main`} style={containerStyles.main}>
       <Sidebar 
         initial={-250}
         to={0}
-        toggled={toggled}
-        onToggled={onToggled}
+        toggled={false}
       >
         <FeatureList />
       </Sidebar>
-      <Screen sideToggled={toggled} />
+      <Screen />
     </View>
   )
 })
