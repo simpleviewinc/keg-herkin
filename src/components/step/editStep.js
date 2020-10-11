@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTheme } from '@keg-hub/re-theme'
-import { Parameters } from './parameters'
+import { Parameters } from '../parameters'
 import { SelectDefinition } from '../definition/selectDefinition'
 import {
   Button,

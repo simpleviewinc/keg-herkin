@@ -1,3 +1,4 @@
+import './theme.config.js'
 import { deepMerge } from '@keg-hub/jsutils'
 import { app } from './app'
 import { appHeader } from './appHeader'

@@ -95,7 +95,7 @@ const useStepActions = (props) => {
     console.log(param)
     console.log(`---------- value ----------`)
     console.log(value)
-    
+
     // TODO: add code to update a step's parameter from the feature scenario
     console.log(`Parameter action Action not implemented!`)
   }, [isEditing, step, scenario, feature ])

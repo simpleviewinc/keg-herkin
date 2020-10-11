@@ -54,24 +54,12 @@ const RenderRow = props => {
   )
 }
 
-const getRowKey = row => {
-  return isStr(row) || isNum(row)
-    ? row
-    : isObj(row)
-      ? row.key || row.id || row.uuid || row.uid || row.title || row.name
-      : isArr(row) && row.length
-        ? getRowKey(row[0])
-        // TODO: update this to use the hasher function from retheme useCss hook
-        : row
-}
-
-
 const BuildRow = props => {
-  const { row, renderRow, RowCustom } = props
+  const { row, renderRow, RowCustom, ...rowProps } = props
   return isFunc(renderRow)
-    ? renderRow(props)
+    ? renderRow(row, rowProps)
     : isValidComponent(RowCustom)
-      ? (<RowCustom {...props} />)
+      ? (<RowCustom {...props} row={row} />)
       : (<RenderRow {...props} row={row} />)
 }
 
@@ -83,7 +71,8 @@ export const Table = props => {
     renderRow,
     Row:RowCustom,
     renderHeader,
-    styles
+    styles,
+    ...rowProps
   } = props
 
   const theme = useTheme()
@@ -99,19 +88,21 @@ export const Table = props => {
           RowCustom={Header}
           renderRow={renderHeader}
           styles={tableStyles?.header}
+          rowProps={rowProps}
         />
       )}
       {isArr(rows) && rows.map((row, index) => {
-        const ids = useIds(row)
+        const ids = row.ids || useIds(row)
         return (
           <BuildRow
-            key={ids[0]}
+            key={ids.pop()}
             ids={ids}
             row={row}
             index={index}
             RowCustom={RowCustom}
             renderRow={renderRow}
             styles={tableStyles?.row}
+            rowProps={rowProps}
           />
         )
       })}

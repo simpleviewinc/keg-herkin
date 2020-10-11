@@ -1,5 +1,7 @@
 import { tapColors } from '../../tapColors'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
+import { sharedSelectInline } from '../shared/select'
+import { sharedInputInline } from '../shared/input'
 
 const table = {
   main: {
@@ -47,9 +49,12 @@ const table = {
 
 const dynamic = {
   input: {
-    
+    ...sharedInputInline,
   },
   select: {
+    ...sharedSelectInline,
+  },
+  switch: {
     
   }
 }
