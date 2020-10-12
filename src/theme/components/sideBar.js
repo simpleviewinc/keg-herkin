@@ -31,7 +31,7 @@ export const sidebar = {
     main: {
       position: 'absolute',
       left: 250,
-      top: `15vh`,
+      top: `40vh`,
       bRad: tapColors.borderRadius,
       bgC: tapColors.sidebarBackground,
       shadowColor: tapColors.shadowColor,
