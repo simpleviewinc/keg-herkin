@@ -4,7 +4,7 @@ import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 export const parent = {
   main: {
     $web: {
-      mT: 0,
+      mT: 70,
       minHeight: 'calc( 100vh - 70px )',
       maxWidth: `100vw`,
       transitionDuration: '1s',
@@ -17,9 +17,5 @@ export const parent = {
       pH: theme?.padding?.size * 2,
       backgroundColor: tapColors.appBackground,
     }
-  },
-  closed: {
-    maxWidth: `100vw`,
-    left: 0,
   }
 }

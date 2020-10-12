@@ -36,7 +36,6 @@ export const Sidebar = props => {
     toggled,
     type='timing',
     config=noOpObj,
-    onLayout=noOp,
     onToggled=noOp,
     ToggleComponent=SidebarToggle,
     ...childProps
@@ -68,24 +67,6 @@ export const Sidebar = props => {
 
   // Cache the initial animation values
   const xPosRef = useRef({ initial, to })
-
-  // On every Animated layout call,
-  // Call the onLayoutProp if passed
-  // And check the current pos of the animated view
-  // If the position is in the to position, update the animated value
-  // This way on next animation we know to animate back to the initial pos
-  const setCurrentXPos = event => {
-    const currentXPos = event.nativeEvent.layout.y
-
-    // Call the onLayout helper to the parent can getAccess to the isToggled helper
-    checkCall(onLayout, setIsToggled)
-
-    if (!xPosRef.current || xPosRef.current.to === currentXPos) return
-
-    xPosRef.current.to = currentXPos
-    toggled && setAnimation(new Animated.Value(currentXPos))
-    
-  }
 
   // Wrapper to toggle the sidebar
   // Also calls the onToggled prop if it's passed in
@@ -128,7 +109,6 @@ export const Sidebar = props => {
   return (
     <>
       <Animated.View
-        onLayout={setCurrentXPos}
         style={[
           sidebarStyles?.main,
           { left: animation },

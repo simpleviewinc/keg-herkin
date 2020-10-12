@@ -7,6 +7,7 @@ export const Values = {
     ACTIVE_DATA: 'activeData',
     FEATURE: 'feature',
     SCREEN: 'screen',
+    COPY_STEP: 'copy_step',
   },
   STEP_TYPES: [
     'and',

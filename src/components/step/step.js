@@ -1,4 +1,3 @@
-import { saveStep } from 'SVActions'
 import { Values } from 'SVConstants'
 import { Drawer } from 'SVComponents'
 import { useSelector } from 'SVHooks'
@@ -8,9 +7,13 @@ import { View } from '@keg-hub/keg-components'
 import { StepMatchText } from './stepMatchText'
 import { StepEditToggle } from './stepEditToggle'
 import { devLog, getDefinitionFromId } from 'SVUtils'
+import { updateStepIndex } from 'SVUtils/steps/updateStepIndex'
+import { replaceScenarioStep } from 'SVUtils/features/replaceScenarioStep'
 import React, { useState, useCallback, useMemo } from 'react'
-import { updateFeatureStep } from 'SVActions/features/updateFeatureStep'
+import { saveFeature } from 'SVActions/features/saveFeature'
+import { copyStep } from 'SVActions/steps/copyStep'
 import { SelectDefinitionType } from '../definition/selectDefinitionType'
+
 
 const { CATEGORIES } = Values
 
@@ -18,6 +21,24 @@ const useDefinition = (definitions, step) => {
   return useMemo(() => {
     return getDefinitionFromId(definitions, step.definition, step.altType || step.type)
   }, [ definitions, step ])
+}
+
+const useStepFromScenario = (scenario, setScenario, step) => {
+  return useMemo(() => {
+
+    // Find the step within the scenario, and use that one
+    const scenarioStep = scenario.steps.find(stp => {
+      return stp.uuid === step.uuid
+    })
+    
+    // Add helper method to update the scenario with the passed in step
+    const setStep = updatedStep => {
+      const updatedScenario = replaceScenarioStep(scenario, updatedStep)
+      setScenario(updatedScenario)
+    }
+
+    return [scenarioStep, setStep]
+  }, [scenario, setScenario, step, replaceScenarioStep])
 }
 
 const useStepActions = (props) => {
@@ -30,7 +51,8 @@ const useStepActions = (props) => {
     scenario,
     setIsEditing,
     step,
-    updateStep
+    setScenario,
+    setStep
   } = props
 
   // Action for saving the step to the feature / scenario
@@ -40,7 +62,7 @@ const useStepActions = (props) => {
     setIsEditing(false)
 
     // Revert to the original passed in step
-    updateStep(orgStep)
+    setStep(orgStep)
 
   }, [isEditing, step, orgStep ])
 
@@ -50,25 +72,27 @@ const useStepActions = (props) => {
   // Action for saving the step to the feature / scenario
   const saveAction = useCallback(()=> {
     // Update the store with the new step information
-    saveStep(step, feature, scenario)
+    saveFeature(feature, scenario, step)
   }, [isEditing, step, feature, scenario])
 
   // Action for updating the step definition
   const selectAction = useCallback((value) => {
     const definition = getDefinitionFromId(definitions, value, step.altType || step.type)
-    if(!definition) return devLog.info(`Could not find step definition with id: ${value}`, definitions)
 
-    updateStep({
+    if(!definition)
+      return devLog.info(`Could not find step definition with id: ${value}`, definitions)
+
+    setStep({
       ...step,
       step: ``,
       definition: definition.uuid,
     })
 
-  }, [isEditing, step, definitions, updateStep])
+  }, [isEditing, step, definitions, setStep])
 
   // Action for updating the step type
   const typeAction = useCallback(type => {
-    updateStep({
+    setStep({
       ...step,
       ...(type === `and` ? { altType: 'when' } : {}),
       type,
@@ -76,13 +100,10 @@ const useStepActions = (props) => {
       definition: ``,
     })
 
-  }, [isEditing, step, updateStep])
+  }, [isEditing, step, setStep])
 
   // Action to copy the step text to the clipboard
-  const copyAction = useCallback(() => {
-    // TODO: add code to copy the step text to the clipboard
-    console.log(`Copy Action not implemented!`)
-  }, [isEditing, step])
+  const copyAction = useCallback(() => copyStep(step), [step])
 
   // Action to delete a step from the feature scenario
   const deleteAction = useCallback(() => {
@@ -90,17 +111,12 @@ const useStepActions = (props) => {
     console.log(`Delete Action not implemented!`)
   }, [isEditing, step, scenario, feature ])
 
+  // Action to update the parameter of a step within a scenario
   const parameterAction = useCallback((row, param, value) => {
-    const { index } = row
-    // Use index to get the param number and update the step based
-    // on the index of the row. It should match the dynamicMap indexes
-    // This allows getting the value to be replaced in the step
+    const updatedStep = updateStepIndex(step, value, row, param)
 
-    // updateStep({
-    //   ...step,
-    // })
-
-  }, [isEditing, step, scenario, feature, updateStep ])
+    setStep(updatedStep)
+  }, [isEditing, step, scenario, setScenario, setStep ])
 
   return {
     cancelAction,
@@ -116,9 +132,11 @@ const useStepActions = (props) => {
 }
 
 export const Step = props => {
-  const { styles, feature, scenario } = props
+
+  const { styles, feature } = props
+  const [scenario, setScenario] = useState(props.scenario)
+  const [step, setStep] = useStepFromScenario(scenario, setScenario, props.step)
   
-  const [step, updateStep] = useState(props.step)
   // TODO: revert this back to false when other steps are added back
   const [isEditing, setIsEditing] = useState(true)
   const { definitions } = useSelector(CATEGORIES.DEFINITIONS)
@@ -139,9 +157,11 @@ export const Step = props => {
     feature,
     orgStep: props.step,
     scenario,
+    orgScenario: props.scenario,
+    setScenario,
     setIsEditing,
     step,
-    updateStep,
+    setStep,
   })
 
   const theme = useTheme()

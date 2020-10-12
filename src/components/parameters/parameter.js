@@ -1,9 +1,10 @@
 
-import React, { useCallback } from 'react'
-import { checkCall } from '@keg-hub/jsutils'
+import React, { useCallback, useRef, useEffect } from 'react'
+import { checkCall, exists } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { noOpObj, noOpArr } from 'SVUtils/helpers/noop'
 import { removeQuotes } from 'SVUtils/helpers/removeQuotes'
+import { devLog } from 'SVUtils/devLog'
 import {
   Column,
   Row,
@@ -28,6 +29,38 @@ const useParameterAction = (row, param, parameterAction) => {
   return useCallback(value => {
     return checkCall(parameterAction, row, param, value)
   }, [row, param, parameterAction])
+}
+
+const validateInputUpdate = (currentValue, inputEl, value) => {
+  if(!exists(currentValue))
+    return devLog.warn(`Can not focus Param Input. Value does not exist!`)
+  else if(!inputEl)
+    return devLog.warn(`Can not focus Param Input. Input Element does not exist!`)
+  else if(value === currentValue)
+    return
+  
+  return true
+}
+
+const ParamInput = props => {
+  const { value } = props
+  const inputRef = useRef(null)
+  const valueRef = useRef(value)
+
+  // TODO: Move this to Keg-Components input
+  // Need to come up with more consistent way to handle input focus
+  useEffect(() => {
+    if(!validateInputUpdate(valueRef?.current, inputRef?.current, value))
+      return
+
+    valueRef.current = props.value
+    inputRef.current.focus()
+
+  }, [ value, inputRef.current, valueRef ])
+
+  return (
+    <Input {...props} ref={inputRef} value={value === '"' ? '' : value} />
+  )
 }
 
 const DynamicInput = props => {
@@ -83,7 +116,7 @@ const DynamicInput = props => {
     case 'string':
     default: {
       return (
-        <Input
+        <ParamInput
           key={uuid}
           className={`step-param-input`}
           style={styles?.input}

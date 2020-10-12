@@ -1,11 +1,11 @@
 import { useToggledStyles } from 'SVHooks/useToggledStyles'
-import { Icon, Touchable, Text, View } from 'SVComponents'
+import { Touchable, Text, View } from 'SVComponents'
 import { ChevronDown } from 'SVAssets'
 import { useTheme, useThemeHover } from '@keg-hub/re-theme'
 import React from 'react'
 
 const ToggleContent = props => {
-  const { text, styles, toggled, theme, onPress } = props
+  const { text, styles, toggled, onPress } = props
   const iconStyles = { transform: toggled ? 'rotate(90deg)' : 'rotate(270deg)' }
   const [ ref, themeStyles ] = useThemeHover(styles, styles?.hover)
   const iconSize = themeStyles?.icon?.fontSize || 20
@@ -22,12 +22,13 @@ const ToggleContent = props => {
         className={`sidebar-toggle-content`}
         style={themeStyles?.content}
       >
-      <ChevronDown
-        size={iconSize}
-        stroke={iconStroke}
-        style={[ themeStyles.icon, iconStyles ]}
-      />
-      { text && (
+      { !text ? (
+        <ChevronDown
+          size={iconSize}
+          stroke={iconStroke}
+          style={[ themeStyles.icon, iconStyles ]}
+        />
+      ) : (
         <Text
           className={`sidebar-toggle-text`}
           style={themeStyles?.text}
@@ -35,6 +36,7 @@ const ToggleContent = props => {
           { text }
         </Text>
       )}
+
       </View>
     </Touchable>
   )

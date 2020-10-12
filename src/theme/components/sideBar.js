@@ -10,8 +10,8 @@ export const sidebar = {
   content: {
     backgroundColor: tapColors.sidebarBackground,
     width: 250,
-    minHeight: 'calc( 100vh - 70px )',
-    pT: theme.padding.size,
+    minHeight: '100vh',
+    pT: 70 + theme.padding.size,
     shadowColor: tapColors.shadowColor,
     shadowOffset: { width: 1, height: 12 },
     shadowOpacity: 0.05,
@@ -31,7 +31,7 @@ export const sidebar = {
     main: {
       position: 'absolute',
       left: 250,
-      top: `10vh`,
+      top: `15vh`,
       bRad: tapColors.borderRadius,
       bgC: tapColors.sidebarBackground,
       shadowColor: tapColors.shadowColor,

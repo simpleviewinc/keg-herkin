@@ -67,5 +67,6 @@ export const parameters = {
     mT: theme?.margin?.size,
   },
   label: {
+    color: tapColors.inactive,
   },
 }
