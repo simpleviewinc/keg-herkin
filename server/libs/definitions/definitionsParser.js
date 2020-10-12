@@ -1,9 +1,11 @@
 const fs = require('fs')
 const { Definition } = require("./definition")
 const { REGEX_VARIANT, EXPRESSION_VARIANT } = require('../../constants')
+const { stripComments } = require('../../utils/stripComments')
 
 let defCache = {}
 const DEFINITION_REGEX = new RegExp(/(Given|When|Then)\(('|"|`|\/)(.*)('|"|`|\/),/, 'gm')
+
 
 class DefinitionsParser {
 
@@ -46,7 +48,7 @@ class DefinitionsParser {
       fs.readFile(filePath, (err, content) => {
         if(err) return rej(err)
 
-        const definitionFile = content.toString()
+        const definitionFile = stripComments(content.toString())
         let definitionMatch
         while (definitionMatch = DEFINITION_REGEX.exec(definitionFile)) {
           const [ _, type, identifier, match ] = definitionMatch
