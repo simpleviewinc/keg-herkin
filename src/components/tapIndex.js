@@ -1,5 +1,6 @@
 export * from 'SVComponents/hocs/tapIndex'
 export * from 'SVComponents/kegComponents'
+export * from 'SVComponents/aceEditor'
 export * from 'SVComponents/chip'
 export * from 'SVComponents/drawer'
 export * from 'SVComponents/feature'

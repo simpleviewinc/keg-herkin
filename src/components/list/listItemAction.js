@@ -1,17 +1,18 @@
-import { TouchableIcon } from 'SVComponents'
-import { useStyles } from 'SVHooks'
-
+import { TouchableIcon, View } from 'SVComponents'
 
 export const ListItemAction = props => {
   const { name, action, styles, icon } = props
   return (
-    <View data-class='list-item-action-wrapper' style={ styles.main }  >
+    <View
+      className='list-item-action-wrapper'
+      style={styles.main}
+    >
       <TouchableIcon
-        data-class='list-item-action-icon'
-        name={ icon || name }
-        onPress={ action }
-        styles={ styles }
-        size={ size }
+        className='list-item-action-icon'
+        name={icon || name}
+        onPress={action}
+        styles={styles}
+        size={size}
       />
     </View>
   )

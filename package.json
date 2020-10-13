@@ -38,7 +38,7 @@
   "dependencies": {
     "gherkin-parser": "^1.0.1",
     "keg-core": "npm:@keg-hub/keg-core@6.0.0",
-    "react-native-elements": "^2.3.2"
+    "react-ace-editor": "https://github.com/lancetipton/react-ace-editor.git"
   },
   "devDependencies": {
     "@keg-hub/jsutils": "0.0.1",
