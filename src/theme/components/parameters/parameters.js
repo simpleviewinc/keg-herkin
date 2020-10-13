@@ -35,6 +35,20 @@ const table = {
       mT: theme.margin.size,
       pH: theme.padding.size,
     },
+    highlight: {
+      inactive: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'row',
+        borderWidth: 2,
+        borderColor: `transparent`,
+        bRad: tapColors.borderRadius,
+        ...theme.transition([ 'borderColor' ], 0.5),
+      },
+      active: {
+        borderColor: tapColors.link,
+      }
+    },
     column: {
 
     },
@@ -48,13 +62,13 @@ const table = {
 }
 
 const dynamic = {
-  input: {
+  string: {
     ...sharedInputInline,
   },
   select: {
     ...sharedSelectInline,
   },
-  switch: {
+  boolean: {
     
   }
 }

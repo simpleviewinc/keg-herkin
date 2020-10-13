@@ -21,6 +21,7 @@ export const sharedSelect = (styles, width=selectWidth) => deepMerge({
       bCR: tapColors.border,
       bgC: tapColors.accentBackground,
       borderRightWidth: 1,
+      bRad: tapColors.borderRadius,
       d: 'flex',
       height: 'auto',
       minH: 'auto',

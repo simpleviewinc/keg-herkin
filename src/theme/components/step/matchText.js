@@ -11,5 +11,21 @@ export const matchText = {
   },
   text: {
     ftSz: 12,
+  },
+  parameter: {
+    main: {
+      c: tapColors.link,
+      ftWt: 'bold',
+      cursor: 'pointer',
+    },
+    touchable: {
+      
+    },
+    text: {
+      ftSz: 12,
+    },
+    hover: {
+      textDecoration: 'underline',
+    }
   }
 }

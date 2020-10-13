@@ -9,6 +9,7 @@ export const sharedInput = (styles, width=inputWidth) => deepMerge({
   alignSelf: 'flex-start',
   bCR: tapColors.border,
   bgC: tapColors.accentBackground,
+  bRad: tapColors.borderRadius,
   d: 'flex',
   height: 'auto',
   minH: 'auto',

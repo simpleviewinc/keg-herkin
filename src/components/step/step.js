@@ -8,21 +8,37 @@ import { StepMatchText } from './stepMatchText'
 import { StepEditToggle } from './stepEditToggle'
 import { devLog, getDefinitionFromId } from 'SVUtils'
 import { updateStepIndex } from 'SVUtils/steps/updateStepIndex'
+import { getDynamicMap } from 'SVUtils/steps/getDynamicMap'
 import { replaceScenarioStep } from 'SVUtils/features/replaceScenarioStep'
 import React, { useState, useCallback, useMemo } from 'react'
 import { saveFeature } from 'SVActions/features/saveFeature'
 import { copyStep } from 'SVActions/steps/copyStep'
+import { useSetTimeout } from 'SVHooks'
 import { SelectDefinitionType } from '../definition/selectDefinitionType'
-
 
 const { CATEGORIES } = Values
 
+/**
+ * Hook to memoize the finding a definition based on uuid
+ * @param {Array} definitions - All loaded step definition
+ * @param {Object} step - Step containing the definition to find
+ *
+ * @returns {Object} - Found definition
+ */
 const useDefinition = (definitions, step) => {
   return useMemo(() => {
     return getDefinitionFromId(definitions, step.definition, step.altType || step.type)
   }, [ definitions, step ])
 }
 
+/**
+ * Hook to get the step from the passed in scenario
+ * @param {Object} scenario - Scenario containing the step to load
+ * @param {function} setScenario - Function to update the current scenario
+ * @param {Object} step - Step to be loaded from the scenario
+ *
+ * @returns {Object} - Found step
+ */
 const useStepFromScenario = (scenario, setScenario, step) => {
   return useMemo(() => {
 
@@ -39,6 +55,27 @@ const useStepFromScenario = (scenario, setScenario, step) => {
 
     return [scenarioStep, setStep]
   }, [scenario, setScenario, step, replaceScenarioStep])
+}
+
+const useHighlightAction = () => {
+  // Store the highlight uuid in the state
+  const [highlight, setHighlight] = useState(null)
+
+  // Action to highlight a parameter when clicked on in the matchText
+  const highlightAction = useCallback(tokenUuid => {
+    setHighlight(tokenUuid)
+  }, [highlight, setHighlight])
+
+  // Call the timeout hook, to remove the highlight uuid at a later time
+  useSetTimeout(() => {
+    highlight && setHighlight(false)
+  }, 1500, highlight)
+  
+  return {
+    highlight,
+    highlightAction,
+    setHighlight,
+  }
 }
 
 const useStepActions = (props) => {
@@ -58,11 +95,10 @@ const useStepActions = (props) => {
   // Action for saving the step to the feature / scenario
   const cancelAction = useCallback(()=> {
 
-    // Set editing to false
-    setIsEditing(false)
-
     // Revert to the original passed in step
     setStep(orgStep)
+    // Set editing to false
+    setIsEditing(false)
 
   }, [isEditing, step, orgStep ])
 
@@ -82,10 +118,12 @@ const useStepActions = (props) => {
     if(!definition)
       return devLog.info(`Could not find step definition with id: ${value}`, definitions)
 
+
     setStep({
       ...step,
       step: ``,
       definition: definition.uuid,
+      dynamicMap: getDynamicMap(definition),
     })
 
   }, [isEditing, step, definitions, setStep])
@@ -164,6 +202,8 @@ export const Step = props => {
     setStep,
   })
 
+  const { highlight, highlightAction } = useHighlightAction()
+
   const theme = useTheme()
   const stepStyles = theme.get(`step`, styles)
 
@@ -184,6 +224,7 @@ export const Step = props => {
           definition={definition}
           step={step}
           copyAction={copyAction}
+          highlightAction={highlightAction}
         />
         <StepEditToggle
           isEditing={isEditing}
@@ -206,6 +247,7 @@ export const Step = props => {
           cancelAction={cancelAction}
           copyAction={copyAction}
           deleteAction={deleteAction}
+          highlight={highlight}
           parameterAction={parameterAction}
           saveAction={saveAction}
           selectAction={selectAction}

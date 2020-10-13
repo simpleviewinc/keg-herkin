@@ -22,23 +22,25 @@ const headerRow = [ 'Token', 'Value' ]
  * 
  * @returns {Array} - Array of arrays, containing row items for the Table component
 */
-const getTableRows = (tokens=noOpArr, dynamicMap=noOpObj) => {
+const getTableRows = (tokens=noOpArr, dynamicMap=noOpObj, highlight) => {
   return Object.entries(dynamicMap)
     .reduce((tableRows, [ index, value ]) => {
-      const defToken = tokens[index]
-      return !defToken || !defToken.params
+      const token = tokens[index]
+
+      return !token || !token.params
         ? tableRows
         // Create a new row for the table
         : tableRows.push({
-            ...defToken,
+            ...token,
             // Add the token value as the first item
             // this is what the user value with match against
-            token: defToken.value,
+            token: token.value,
+            highlight: highlight === token.uuid,
             // Add the params as the second value
             // This is what the current value is mapped to for this story
-            params: defToken.params,
+            params: token.params,
             value: value,
-            ids: [ defToken.uuid ],
+            ids: [ token.uuid ],
           }) && tableRows
 
     }, [])
@@ -66,17 +68,20 @@ const renderParameter = (row, props) => {
 export const Parameters = props => {
   const {
     definition,
+    highlight,
     label,
     parameterAction,
     step,
     styles,
   } = props
+
   const theme = useTheme()
   const paramStyles = theme.get('editStep.parameters', styles)
 
   const tableRows = getTableRows(
     definition.tokens,
-    step.dynamicMap
+    step.dynamicMap,
+    highlight
   )
 
   return (

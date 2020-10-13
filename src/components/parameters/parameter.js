@@ -1,5 +1,5 @@
 
-import React, { useCallback, useRef, useEffect } from 'react'
+import React, { useCallback, useRef, useEffect, useMemo } from 'react'
 import { checkCall, exists } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { noOpObj, noOpArr } from 'SVUtils/helpers/noop'
@@ -7,12 +7,13 @@ import { removeQuotes } from 'SVUtils/helpers/removeQuotes'
 import { devLog } from 'SVUtils/devLog'
 import {
   Column,
-  Row,
-  Switch,
-  Text,
   Input,
   Option,
+  Row,
   Select,
+  Switch,
+  Text,
+  View,
   renderFromType
 } from '@keg-hub/keg-components'
 
@@ -23,6 +24,14 @@ const Wrapper = props => {
       {children}
     </Text>
   )
+}
+
+const useHighlightStyles = (highlight, styles, theme) => {
+  return useMemo(() => {
+    return highlight
+      ? theme.get(styles?.highlight?.inactive, styles?.highlight?.active)
+      : styles?.highlight?.inactive
+  }, [highlight, styles, theme])
 }
 
 const useParameterAction = (row, param, parameterAction) => {
@@ -107,7 +116,7 @@ const DynamicInput = props => {
         <Switch
           key={uuid}
           className={`step-param-boolean`}
-          style={styles?.switch}
+          style={styles?.boolean}
           onValueChange={paramAction}
           value={Boolean(value)}
         />
@@ -119,7 +128,7 @@ const DynamicInput = props => {
         <ParamInput
           key={uuid}
           className={`step-param-input`}
-          style={styles?.input}
+          style={styles?.string}
           onValueChange={paramAction}
           value={removeQuotes(value)}
         />
@@ -131,12 +140,12 @@ const DynamicInput = props => {
 const RenderColumns = props => {
   const {
     row,
+    theme,
     styles=noOpObj,
     parameterStyles,
     parameterAction
   } = props
 
-  const theme = useTheme()
   const columnSize = 12 / row.length
   const { token, params, value } = row
 
@@ -175,18 +184,25 @@ const RenderColumns = props => {
 }
 
 export const Parameter = props => {
-  const { styles=noOpObj, ids=noOpArr } = props
+  const { styles=noOpObj, ids=noOpArr, row=noOpObj } = props
+
+  const theme = useTheme()
+  const highlightStyles = useHighlightStyles(row.highlight, styles, theme)
+
   return (
     <Row
       key={ids[0]}
+      style={styles?.main}
       className={`table-column-row`}
-      style={styles.main}
     >
-      <RenderColumns
-        {...props}
-        ids={ids}
-        styles={styles}
-      />
+      <View style={highlightStyles}>
+        <RenderColumns
+          {...props}
+          ids={ids}
+          theme={theme}
+          styles={styles}
+        />
+      </View>
     </Row>
   )
 }

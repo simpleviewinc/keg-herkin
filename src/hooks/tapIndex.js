@@ -1,5 +1,6 @@
 export * from './useIds'
 export * from './useStyles'
 export * from './useSelector'
+export * from './useSetTimeout'
 export * from './useToggleAnimate'
 export * from './useToggledStyles'

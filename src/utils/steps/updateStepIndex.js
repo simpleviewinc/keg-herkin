@@ -1,6 +1,6 @@
 import { devLog } from '../devLog'
 import { addQuotes } from '../helpers/addQuotes'
-
+import { exists } from '@keg-hub/jsutils'
 
 const checkInputValue = (value, current, param) => {
   return param?.type !== 'string' || current.indexOf('"') !== 0 ? value : addQuotes(value)
@@ -8,7 +8,7 @@ const checkInputValue = (value, current, param) => {
 
 export const updateStepIndex = (step, value, row, param) => {
 
-  if(!step || !step.step) 
+  if(!step || !exists(step.step)) 
     return devLog.warn(`Step string missing, can't update step index!`, step) || step
   
   const { index, value:current } = row
