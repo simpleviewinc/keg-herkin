@@ -16,4 +16,5 @@ export const Values = {
     'then',
   ],
   EMPTY_STEP: `None Selected`,
+  EMPTY_PARAM: `PARAMETER`,
 }

@@ -18,14 +18,17 @@ export const matchText = {
       ftWt: 'bold',
       cursor: 'pointer',
     },
+    empty: {
+      c: tapColors.danger,
+    },
+    hover: {
+      textDecoration: 'underline',
+    },
     touchable: {
       
     },
     text: {
       ftSz: 12,
     },
-    hover: {
-      textDecoration: 'underline',
-    }
   }
 }

@@ -3,6 +3,10 @@ import { checkCall } from '@keg-hub/jsutils'
 import { useTheme, useThemeHover } from '@keg-hub/re-theme'
 import { Text, View, Touchable } from '@keg-hub/keg-components'
 import { buildStepFromDefinition } from 'SVUtils'
+import { noOpObj } from 'SVUtils/helpers/noop'
+import { Values } from 'SVConstants'
+
+const { EMPTY_PARAM } = Values
 
 const ParameterText = props => {
   const {
@@ -12,10 +16,10 @@ const ParameterText = props => {
     uuid,
   } = props
 
-  const [ ref, paramStyles] = useThemeHover(
-    styles?.main,
-    styles?.hover,
-  )
+  const [ ref, paramStyles] = useThemeHover({
+    ...styles?.main,
+    ...( text.trim() === EMPTY_PARAM ? styles?.empty : noOpObj )
+  }, styles?.hover)
 
   return (
     <Touchable
@@ -51,7 +55,7 @@ const useStepMatchText = (step, definition, matchStyles, onPress) => {
                 key={token.uuid}
                 uuid={token.uuid}
                 styles={matchStyles?.parameter}
-                text={`${step.dynamicMap[token.index] || 'PARAMETER' } `}
+                text={`${step.dynamicMap[token.index] || EMPTY_PARAM} `}
                 onPress={onPress}
               />
             )
