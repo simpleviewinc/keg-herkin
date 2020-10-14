@@ -20,6 +20,7 @@ env:
   DOC_COMPONENTS_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
   DOC_RETHEME_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
   DOC_RESOLVER_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/tap-resolver
+  DOC_JSUTILS_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils
 
   # Default port of the app to expose from the container
   EXPO_DEBUG_PORT: 19002

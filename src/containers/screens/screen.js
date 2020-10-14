@@ -1,9 +1,10 @@
 import React from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import { Values } from 'SVConstants'
-import { Feature, View } from 'SVComponents'
+import { View } from 'SVComponents'
 import { EmptyScreen } from './emptyScreen'
 import { FeatureScreen } from './featureScreen'
+import { EditorScreen } from './editorScreen'
 import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 
@@ -17,20 +18,26 @@ export const Screen = props => {
     [CATEGORIES.ACTIVE_DATA]
   ), shallowEqual) || {}
 
+  let RenderScreen = EmptyScreen
 
-  // Get the screen based on the passed in props
-  const ScreenComp = activeData?.screen === CATEGORIES.FEATURES
-    ? FeatureScreen
-    : EmptyScreen
+  switch(activeData?.screen){
+    case SCREENS.FEATURES: {
+      RenderScreen = FeatureScreen
+      break
+    }
+    case SCREENS.EDITORS: {
+      RenderScreen = EditorScreen
+      break
+    }
+  }
 
   return (
     <View
       className={`screen-parent-main`}
       style={theme?.screens?.parent?.main}
     >
-      <ScreenComp {...props} />
+      <EditorScreen {...props} />
     </View>
   )
-
 
 }

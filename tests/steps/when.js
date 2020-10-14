@@ -34,5 +34,4 @@ module.exports = function () {
   this.When(/^I select the (\d+)(st|nd|rd|th) option for element "([^"]*)?"$/, selectOptionByIndex)
   this.When(/^I select the option with the (name|value|text) "([^"]*)?" for element "([^"]*)?"$/, selectOption)
 
-// this.When(/^I move to element "([^"]*)?"(?: with an offset of (\d+),(\d+))*$/, moveTo)
 }

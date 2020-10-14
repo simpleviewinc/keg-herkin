@@ -1,3 +1,4 @@
+export * from './aceEditor'
 export * from './chip'
 export * from './definitions'
 export * from './drawer'

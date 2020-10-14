@@ -19,8 +19,8 @@ const extract = (line, regex, index) => {
   return line.match(regex)[index].trim()
 }
 
-const featureFactory = feature => {
-  return { feature, uuid: uuid(), tags: [], comments: {}, scenarios: [] }
+const featureFactory = (feature, text) => {
+  return { feature, uuid: uuid(), tags: [], comments: {}, scenarios: [], text }
 }
 
 const scenarioFactory = scenario => {
@@ -44,7 +44,7 @@ const addReason = (feature, reason) => {
 
 const parseFeature = text => {
   let lines = (text || '').toString().split(R_NEWLINE)
-  let feature = featureFactory(false)
+  let feature = featureFactory(false, text)
   let scenario = scenarioFactory(false)
   const features = []
   return lines.reduce((extra, line, index) => {
@@ -62,7 +62,7 @@ const parseFeature = text => {
         feature.feature = extract(line, R_FEATURE, 1)
         if(extra.indexOf(feature) === -1) extra.push(feature)
       }
-      else feature = featureFactory(extract(line, R_FEATURE, 1))
+      else feature = featureFactory(extract(line, R_FEATURE, 1), text)
     }
     else if (R_AS.test(line)) {
       feature.perspective = extract(line, R_AS, 0)

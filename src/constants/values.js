@@ -17,4 +17,9 @@ export const Values = {
   ],
   EMPTY_STEP: `None Selected`,
   EMPTY_PARAM: `PARAMETER`,
+  SCREENS: {
+    FEATURES: 'features',
+    EDITORS: 'editors',
+    EMPTY: 'empty',
+  },
 }

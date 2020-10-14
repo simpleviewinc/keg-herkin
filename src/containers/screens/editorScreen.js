@@ -1,30 +1,12 @@
+import { Values } from 'SVConstants'
 import React, { useCallback } from 'react'
-import { AceEditor } from 'SVComponents/aceEditor'
+import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components'
+import { AceEditor } from 'SVComponents/aceEditor'
+import { useSelector, shallowEqual } from 'react-redux'
 
-const editorStyles = {
-  feature: {
-    width: `100%`,
-    height: `100%`,
-  },
-  definitions: {
-    width: `100%`,
-    height: `100%`,
-  },
-  testRunner: {
-    width: `100%`,
-    height: `100%`,
-  },
-  split: {
-    feature: {
-      width: `50%`,
-    },
-    definitions: {
-      width: `50%`,
-    },
-  }
-}
+const { CATEGORIES } = Values
 
 const useEditorActions = (feature, definitions) => {
   const onFeatureEdit = useCallback(() => {
@@ -50,7 +32,6 @@ const FeatureEditor = props => {
     <AceEditor
       {...props}
       mode='gherkin'
-      style={[editorStyles.feature, props?.styles?.feature]}
     />
   )
 }
@@ -60,7 +41,6 @@ const DefinitionsEditor = props => {
     <AceEditor
       {...props}
       mode='javascript'
-      style={[editorStyles.definitions, props?.styles?.definitions]}
     />
   )
 }
@@ -71,7 +51,6 @@ const TestRunner = props => {
       {...props}
       mode='text'
       readOnly={true}
-      style={[editorStyles.testRunner, props?.styles?.testRunner]}
     />
   )
 }
@@ -79,43 +58,49 @@ const TestRunner = props => {
 export const EditorScreen = props => {
   const theme = useTheme()
   const {
-    definitions,
-    feature,
     testsOutcome
   } = props
-  
+
+  const { activeData, features, definitions } = useSelector(({ items }) => pickKeys(
+    items,
+    [ CATEGORIES.ACTIVE_DATA, CATEGORIES.FEATURES, CATEGORIES.DEFINITIONS ]
+  ), shallowEqual)
+
+  const feature = features && features[activeData?.feature]
   const { onFeatureEdit, onDefinitionEdit } = useEditorActions(feature, definitions)
-  const tab = 'feature'
-  const isSplit = Boolean(tap === `split`)
+
+  if(!feature || !definitions) return null
+
+  const tab = 'split'
   const builtStyles = theme.get(`screens.editors.${tab}`)
 
   return (
     <View
       className={`editors-screen`}
-      styles={theme.get(`screens.editors.main`)}
+      style={theme.get(`screens.editors.main`)}
     >
-      {(tab === 'feature' || tap === `split`) && (
+      {(tab === 'feature' || tab === `split`) && (
         <FeatureEditor
-          isSplit={isSplit}
-          mode='gherkin'
+          editorId={`feature-editor`}
           onChange={onFeatureEdit}
-          value={feature.text}
-          styles={builtStyles}
+          value={feature.text || ''}
+          style={builtStyles.feature || builtStyles}
         />
       )}
-      {(tab === 'definitions' || tap === `split`) && (
+      {(tab === 'definitions' || tab === `split`) && (
         <DefinitionsEditor
-          isSplit={isSplit}
+          editorId={`definitions-editor`}
           onChange={onDefinitionEdit}
-          value={definitions.text}
-          styles={builtStyles}
+          value={definitions.text || ''}
+          style={builtStyles.definitions || builtStyles}
         />
       )}
       { tab === 'runner' && (
         <TestRunner
+          editorId={`runner-editor`}
           tab={tab}
           value={testsOutcome}
-          styles={builtStyles}
+          style={builtStyles}
         />
       )}
     </View>
