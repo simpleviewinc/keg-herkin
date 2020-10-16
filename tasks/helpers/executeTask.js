@@ -1,4 +1,5 @@
 const { argsParse } = require("@keg-hub/args-parse")
+const { checkCall } = require('@keg-hub/jsutils')
 
 const executeTask = (taskModule, task, name) => {
   return taskModule.parent
@@ -8,7 +9,7 @@ const executeTask = (taskModule, task, name) => {
           task,
           args: process.argv.slice(2)
         })
-        await task({ params })
+        await checkCall(task.action, { params })
       })()
 }
 

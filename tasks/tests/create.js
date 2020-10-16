@@ -26,7 +26,11 @@ const create = {
       description: 'Url of the site there the test should be run',
       example: '--url http://my.test.site',
       required: true,
-    }
+    },
+    device: {
+      description: 'Device to run the test on. See device list here => https://github.com/microsoft/playwright/blob/master/src/server/deviceDescriptors.ts',
+      example: '--device \"iPad Mini\"',
+    },
   }
 }
 
