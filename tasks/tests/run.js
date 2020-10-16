@@ -11,9 +11,10 @@ const browserMap = {
   webkit: `--webkit`,
 }
 
-const buildTestArguments = (cmd=[], { browsers, context, sync }) => {
+const buildTestArguments = (cmd=[], { browsers, context, headless, sync }) => {
   context && cmd.push(context)
-  sync && cmd.push(`--runInBand`)
+  sync && cmd.unshift(`--runInBand`)
+  headless && cmd.unshift(`--headless`)
 
   // Map the browser shortcut to the actual argument
   // If there's a context pass the browser before passing the context
@@ -24,9 +25,9 @@ const buildTestArguments = (cmd=[], { browsers, context, sync }) => {
 
 const runTest = async (args) => {
   const { params } = args
-  let cmd = [`qawolf`, `test`]
+  const cmd = buildTestArguments([], params)
 
-  const resp = await npx(buildTestArguments(cmd, params))
+  const resp = await npx([`qawolf`, `test`].concat(cmd))
   
   return resp
 }
@@ -51,6 +52,11 @@ const run = {
       alias: [ 'browser' ],
       description: 'Which browsers to run the tests in',
       default: `chrome`
+    },
+    headless: {
+      type: `bool`,
+      description: 'Run the browser tests in headless mode',
+      default: false,
     }
   }
 }
