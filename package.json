@@ -36,13 +36,14 @@
     "web": "nodemon --watch node_modules/keg-core/core/base/configs --watch package.json --watch node_modules/keg-core/app.json --watch node_modules/keg-core/package.json --watch configs --exec 'cd node_modules/keg-core && yarn web'",
     "test:create": "node ./tasks/tests/create.js",
     "test:edit": "node ./tasks/tests/edit.js",
+    "test:launch": "node ./tasks/tests/launch.js",
     "test:run": "node ./tasks/tests/run.js"
   },
   "dependencies": {
+    "@keg-hub/args-parse": "6.1.0",
     "@keg-hub/ask-it": "0.0.1",
     "@keg-hub/jsutils": "6.1.0",
     "@keg-hub/spawn-cmd": "0.0.1",
-    "@keg-hub/args-parse": "6.1.0",
     "axios": "0.19.2",
     "body-parser": "1.10.2",
     "dotenv": "8.0.0",

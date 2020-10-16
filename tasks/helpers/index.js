@@ -1,3 +1,5 @@
 module.exports = {
-  ...require('./process')
+  ...require('./executeTask'),
+  ...require('./process'),
+  ...require('./tapRoot'),
 }

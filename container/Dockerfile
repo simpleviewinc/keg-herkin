@@ -7,7 +7,7 @@ FROM $GIT_STAGE_IMAGE_FROM as builder
 WORKDIR /
 
 # Set the 
-ARG EXPO_CLI_VERSION=${EXPO_CLI_VERSION:-3.22.3}
+ARG EXPO_CLI_VERSION=${EXPO_CLI_VERSION:-3.28.0}
 
 # Install git and the expo-cli and sharp-cli
 RUN apk add --no-cache git; \
