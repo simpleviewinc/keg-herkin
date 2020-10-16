@@ -1,17 +1,17 @@
 {
-  "name": "@keg-hub/tap-release-client",
+  "name": "@keg-hub/tap-herkin",
   "version": "1.0.1",
-  "description": "Tap Release Client",
+  "description": "Keg and Tap testing",
   "main": "index.js",
   "publishConfig": {
     "access": "public"
   },
   "repository": {
-    "url": "git+https://github.com/simpleviewinc/keg-hub.git",
+    "url": "git+https://github.com/simpleviewinc/tap-herkin.git",
     "type": "git"
   },
   "bugs": {
-    "url": "https://github.com/simpleviewinc/keg-hub/issues"
+    "url": "https://github.com/simpleviewinc/tap-herkin/issues"
   },
   "author": "Lance Tipton <lancetipton04@gmail.com>",
   "license": "MIT",
@@ -33,24 +33,31 @@
     "build:web": "cd node_modules/keg-core; yarn build:web",
     "dev": "run-p web api",
     "setup": "yarn install --ignore-engines; cd node_modules/keg-core; yarn postinstall --ignore-engines",
-    "web": "nodemon --watch node_modules/keg-core/core/base/configs --watch package.json --watch node_modules/keg-core/app.json --watch node_modules/keg-core/package.json --watch configs --exec 'cd node_modules/keg-core && yarn web'"
+    "web": "nodemon --watch node_modules/keg-core/core/base/configs --watch package.json --watch node_modules/keg-core/app.json --watch node_modules/keg-core/package.json --watch configs --exec 'cd node_modules/keg-core && yarn web'",
+    "test:create": "node ./tasks/tests/create.js",
+    "test:edit": "node ./tasks/tests/edit.js",
+    "test:run": "node ./tasks/tests/run.js"
   },
   "dependencies": {
-    "gherkin-parser": "^1.0.1",
-    "keg-core": "npm:@keg-hub/keg-core@6.0.0",
-    "react-ace-editor": "https://github.com/lancetipton/react-ace-editor.git"
-  },
-  "devDependencies": {
-    "@keg-hub/jsutils": "0.0.1",
+    "@keg-hub/ask-it": "0.0.1",
+    "@keg-hub/jsutils": "6.1.0",
     "@keg-hub/spawn-cmd": "0.0.1",
+    "@keg-hub/args-parse": "6.1.0",
     "axios": "0.19.2",
     "body-parser": "1.10.2",
     "dotenv": "8.0.0",
     "express": "4.11.1",
+    "gherkin-parser": "^1.0.1",
+    "keg-core": "npm:@keg-hub/keg-core@6.0.0",
     "module-alias": "2.2.2",
     "nodemon": "2.0.4",
     "npm-run-all": "4.1.5",
-    "rimraf": "3.0.2",
+    "qawolf": "1.4.0",
+    "react-ace-editor": "https://github.com/lancetipton/react-ace-editor.git",
     "socket.io": "2.3.0"
+  },
+  "devDependencies": {
+    "jest": "^26.4.2",
+    "rimraf": "3.0.2"
   }
 }

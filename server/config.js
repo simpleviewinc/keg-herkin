@@ -10,9 +10,9 @@ const defConfig = {
     host: '0.0.0.0'
   },
   editor: {
-    stepsFolder: path.join(rootDir, 'tests/steps'),
-    featuresFolder: path.join(rootDir, 'tests/features'),
-    componentsFile: path.join(rootDir, 'tests/components.js'),
+    stepsFolder: path.join(rootDir, 'tests/bdd/steps'),
+    featuresFolder: path.join(rootDir, 'tests/bdd/features'),
+    componentsFile: path.join(rootDir, 'tests/bdd/components.js'),
   }
 }
 

@@ -39,7 +39,7 @@ ARG KEG_DOCKER_IP
 
 # Used by react native builder to set the ip address, other wise 
 # Will use the ip address of the docker container.
-ENV REACT_NATIVE_PACKAGER_HOSTNAME $KEG_DOCKER_IP
+ENV REACT_NATIVE_PACKAGER_HOSTNAME=${KEG_DOCKER_IP:-0.0.0.0}
 
 # Listen to all IPs within the container
 ENV EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
