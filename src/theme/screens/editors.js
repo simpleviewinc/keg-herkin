@@ -27,8 +27,13 @@ export const editors = {
       height: `75vh`,
     },
     definitions: {
-      width: `calc( 50% - 15px )`,
-      height: `75vh`,
+      main: {
+        width: `calc( 50% - 15px )`,
+        height: `75vh`,
+      },
+      editor: {
+        width: `100%`,
+      }
     },
   }
 }
