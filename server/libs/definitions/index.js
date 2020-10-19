@@ -1,1 +1,4 @@
-module.exports = require('./definitions')
+module.exports = {
+  ...require('./definitions'),
+  ...require('./register')
+}

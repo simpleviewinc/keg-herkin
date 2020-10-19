@@ -4,8 +4,7 @@ const { REGEX_VARIANT, EXPRESSION_VARIANT } = require('../../constants')
 const { stripComments } = require('../../utils/stripComments')
 
 let defCache = {}
-const DEFINITION_REGEX = new RegExp(/(Given|When|Then)\(('|"|`|\/)(.*)('|"|`|\/),/, 'gm')
-
+const DEFINITION_REGEX = new RegExp(/(Given|When|Then|test)\(('|"|`|\/)(.*)('|"|`|\/),/, 'gm')
 
 class DefinitionsParser {
 
@@ -28,10 +27,10 @@ class DefinitionsParser {
 
     const definitions = await this.parseDefinition(filePath)
 
-    const loadedDefs = definitions.map(({ match, type, variant }) => {
+    const loadedDefs = definitions.map(({ match, type, variant, text }) => {
       if(!this.validateMatch(filePath, match, type)) return
 
-      const definition = this.definitions[match] || new Definition(match, type, variant)
+      const definition = this.definitions[match] || new Definition(match, type, variant, text)
       !this.definitions[match] && (this.definitions[match] = definition)
 
       return definition
@@ -48,16 +47,18 @@ class DefinitionsParser {
       fs.readFile(filePath, (err, content) => {
         if(err) return rej(err)
 
-        const definitionFile = stripComments(content.toString())
+        const contentStr = content.toString()
+        const definitionFile = stripComments(contentStr)
+
         let definitionMatch
         while (definitionMatch = DEFINITION_REGEX.exec(definitionFile)) {
           const [ _, type, identifier, match ] = definitionMatch
           const variant = identifier === `/` ? REGEX_VARIANT : EXPRESSION_VARIANT
-          
           definitions.push({
             type,
             variant,
             match: variant === REGEX_VARIANT ? new RegExp(match, `gm`) : match,
+            text: contentStr
           })
         }
 
