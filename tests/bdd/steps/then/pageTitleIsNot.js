@@ -1,8 +1,8 @@
-const { Given } = require("cucumber")
+const { Then } = require("cucumber")
 const { getBrowserContext } = require('../../support/setup')
 const { getPage } = getBrowserContext()
 
-Given("I open the site {site}", async site => {
+Then('the title is not {title}', async (title) => {
   const page = await getPage()
-  await page.goto(site)
+  expect(await page.title()).toBe(title)
 })

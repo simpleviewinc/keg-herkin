@@ -6,8 +6,8 @@ const addStepError = (feature, step) => {
   feature.errors.steps = feature.errors.steps || {}
   feature.errors.steps[step.uuid] = (
     `Could not find step definition for this step!\n` +
-    `To fix this issue, either change the step definition in the feature file\n` +
-    `Or add a valid matching the step definition.`
+    `To fix this issue, either change the step in the feature file\n` +
+    `Or create a matching step definition.`
   )
 }
 
@@ -36,8 +36,11 @@ const mapDynamicIndexes = (step, definition) => {
 
 }
 
-const matchExpressionDefinition = (step, definitions) => {
-  
+const matchExpressionDefinition = (step, definition) => {
+  const cleanedStep = step.step.replace(/\s*".*"\s*/g, '')
+  const cleanedDef = definition.name.replace(/\s*{.*}\s*/g, '')
+  if(cleanedStep !== cleanedDef) return false
+  mapDynamicIndexes(step, definition)
 }
 
 const matchRegExDefinition = (step, definition) => {
@@ -53,9 +56,12 @@ const matchRegExDefinition = (step, definition) => {
 
 const mapStepToDefinition = (feature, step, definitions) => {
   const foundMatch = definitions.reduce((hasMatch, definition) => {
+    
     return hasMatch
       ? hasMatch
-      : matchRegExDefinition(step, definition)
+      : definition.variant === 'expression'
+        ? matchExpressionDefinition(step, definition)
+        : matchRegExDefinition(step, definition)
   }, false)
 
   !step.definition && addStepError(feature, step)

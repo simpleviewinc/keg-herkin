@@ -1,10 +1,16 @@
 const fs = require('fs')
+const { isArr } = require('@keg-hub/jsutils')
 const { Definition } = require("./definition")
 const { REGEX_VARIANT, EXPRESSION_VARIANT } = require('../../constants')
 const { stripComments } = require('../../utils/stripComments')
 
 let defCache = {}
 const DEFINITION_REGEX = new RegExp(/(Given|When|Then|test)\(('|"|`|\/)(.*)('|"|`|\/),/, 'gm')
+
+const getDefinitionText = definitionMatch => {
+  const content = definitionMatch.input.split(definitionMatch[0]).pop()
+  return `${definitionMatch[0]}${content.split(definitionMatch[1]).shift()}`
+}
 
 class DefinitionsParser {
 
@@ -58,7 +64,7 @@ class DefinitionsParser {
             type,
             variant,
             match: variant === REGEX_VARIANT ? new RegExp(match, `gm`) : match,
-            text: contentStr
+            text: getDefinitionText(definitionMatch)
           })
         }
 

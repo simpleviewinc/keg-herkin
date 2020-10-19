@@ -7,8 +7,14 @@ export const editors = {
     height: `75vh`,
   },
   definitions: {
-    width: `100%`,
-    height: `75vh`,
+    main: {
+      width: `100%`,
+      height: `75vh`,
+    },
+    editor: {
+      width: `100%`,
+      height: `20vh`,
+    }
   },
   testRunner: {
     width: `100%`,

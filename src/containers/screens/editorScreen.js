@@ -1,5 +1,5 @@
 import { Values } from 'SVConstants'
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components'
@@ -27,6 +27,27 @@ const useEditorActions = (feature, definitions) => {
   return { onFeatureEdit, onDefinitionEdit, onRunTests }
 }
 
+const useMatchingDefinitions = (feature, definitions) => {
+
+  return useMemo(() => {
+    let mappedDefs = []
+    if(!feature || !feature.scenarios) return mappedDefs
+    feature.scenarios.map(scenario => {
+      scenario.steps && scenario.steps.map(step => {
+        const uuid = step.definition
+        const type = step.type
+        if(!definitions || !definitions[type]) return
+
+        const foundDef = definitions[type].find(def => def.uuid === step.definition)
+        foundDef && mappedDefs.push(foundDef)
+      })
+    })
+
+    return mappedDefs
+  }, [feature, definitions])
+
+}
+
 const FeatureEditor = props => {
   return (
     <AceEditor
@@ -36,12 +57,25 @@ const FeatureEditor = props => {
   )
 }
 
-const DefinitionsEditor = props => {
+const DefinitionsEditor = ({ definitions, styles, ...props }) => {
   return (
-    <AceEditor
-      {...props}
-      mode='javascript'
-    />
+    <View
+      className='definitions-editors-wrapper'
+      style={styles.main}
+    >
+      {definitions && definitions.map(def => {
+          return (
+            <AceEditor
+              key={def.uuid}
+              {...props}
+              editorId={`definition-editor-${def.uuid}`}
+              value={def.text || ''}
+              style={styles.editor}
+              mode='javascript'
+            />
+          )
+        })}
+    </View>
   )
 }
 
@@ -69,6 +103,8 @@ export const EditorScreen = props => {
   const feature = features && features[activeData?.feature]
   const { onFeatureEdit, onDefinitionEdit } = useEditorActions(feature, definitions)
 
+  const matchingDefinitions = useMatchingDefinitions(feature, definitions)
+
   if(!feature || !definitions) return null
 
   const tab = 'split'
@@ -91,8 +127,8 @@ export const EditorScreen = props => {
         <DefinitionsEditor
           editorId={`definitions-editor`}
           onChange={onDefinitionEdit}
-          value={definitions.text || ''}
-          style={builtStyles.definitions || builtStyles}
+          definitions={matchingDefinitions}
+          styles={builtStyles.definitions || builtStyles}
         />
       )}
       { tab === 'runner' && (
