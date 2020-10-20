@@ -7,7 +7,9 @@ import React from 'react'
 const ToggleContent = props => {
   const { text, styles, toggled, onPress } = props
   const iconStyles = { transform: toggled ? 'rotate(90deg)' : 'rotate(270deg)' }
+
   const [ ref, themeStyles ] = useThemeHover(styles, styles?.hover)
+
   const iconSize = themeStyles?.icon?.fontSize || 20
   const iconStroke = themeStyles?.icon?.c || themeStyles?.icon?.color
 
@@ -16,7 +18,7 @@ const ToggleContent = props => {
       touchRef={ref}
       className={`sidebar-toggle-action`}
       onPress={onPress}
-      style={styles?.action}
+      style={themeStyles?.action}
     >
       <View
         className={`sidebar-toggle-content`}
