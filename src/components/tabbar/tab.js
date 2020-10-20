@@ -1,7 +1,7 @@
-import { get, isStr, deepMerge } from '@keg-hub/jsutils'
 import React from 'react'
-import { Label, Icon, Touchable, isValidComponent } from 'SVComponents'
-import { isValidComponent } from 'SVUtils/validate'
+import { useThemeHover } from '@keg-hub/re-theme'
+import { get, isStr, deepMerge } from '@keg-hub/jsutils'
+import { Label, Icon, Touchable, isValidComponent, renderFromType } from 'SVComponents'
 
 const TabIcon = ({ icon, location, styles }) => {
   icon = isStr(icon) ? { name: icon } : icon
@@ -17,7 +17,7 @@ const TabIcon = ({ icon, location, styles }) => {
 const BuildChildren = (props) => {
 
   // If there are custom children, just return
-  if(props.children) return props.children
+  if(props.children) return renderFromType(props.children, props)
 
   const { active, styles, icon, Title, title } = props
   const TitleComp = Title || title
@@ -68,14 +68,17 @@ const BuildChildren = (props) => {
 
 export const Tab = props => {
   const { active, id, onTabSelect, styles } = props
+  const [ styleRef, themeStyles ] = useThemeHover(styles.default, styles.hover)
+  
   const mergedStyles = active
-    ? deepMerge(styles.default, styles.active)
-    : styles.default
+    ? deepMerge(themeStyles, styles.active)
+    : themeStyles
 
   return (
     <Touchable
+      touchRef={styleRef}
       className="tabbar-tab"
-      style={ mergedStyles.container }
+      style={ mergedStyles.main }
       onPress={() => onTabSelect(id)}
     >
       <BuildChildren

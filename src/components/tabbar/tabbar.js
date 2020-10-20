@@ -1,117 +1,71 @@
-import React, { isValidElement, useMemo, useCallback, useState } from 'react'
 import { Tab } from './tab'
-import { TabView } from './tabview'
-import { checkCall, mapColl } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
-import { isValidComponent } from 'SVUtils/validate'
+import { checkCall, mapColl } from '@keg-hub/jsutils'
+import React, { useMemo, useCallback, useState, useLayoutEffect } from 'react'
+import { View, isValidComponent, renderFromType } from '@keg-hub/keg-components'
 
-const barStyles = {
-  main: {
-    flex: 1,
-    flexGrow: 1,
-  },
-  fixed: {
-    main: {
-      position: 'fixed',
-      right: 0,
-      left: 0,
-    },
-    top: {
-      top: 0,
-    },
-    bottom: {
-      bottom: 0
-    }
-  },
-  container: {
-  },
-  tabview: {
-    main: {
-      flex: 1,
-      flexDirection: 'row',
-      borderTopWidth: 1,
-    },
-    container: {
-      padding: 30,
-    },
-    scroll: {
-      
-    },
-  },
-  bar: {
-    bottom: {
-      minHeight: 50,
-      flexDirection: 'row',
-    },
-    top: {
-      minHeight: 30,
-      flexDirection: 'row',
-    }
-  },
-  tab: {
-    default: {
-      container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: 0,
-      },
-      text: {
-        textAlign: 'center',
-        marginBottom: 0,
-      },
-      icon: {
-        before: {
-          
-        },
-        after: {
-          
-        },
-      }
-    },
-    active: {
-      
-    },
-  }
-}
+const useTabSelect = (tabs, activeTab, onTabSelect, setActiveId) => useCallback((id) => {
+  if(!tabs) return
 
-const _onScroll = event => {}
+  // Call the event hook, and if it returns true, then skip the state update
+  const skip = checkCall(onTabSelect, id, tabs)
+
+  // If nothing is returned, then update the tab id
+  !skip && setActiveId(id)
+
+}, [tabs, activeTab, onTabSelect, setActiveId])
+
+const useCurrentTab = (tabs, activeId) => useMemo(() =>
+  tabs.find(tab => tab.id === activeId),
+  [tabs, activeId]
+)
+
+const useCheckActiveTab = (activeTab, activeId, setActiveId) => useLayoutEffect(() => 
+  { activeTab !== activeId && setActiveId(activeTab) },
+  [activeTab, activeId, setActiveId]
+)
 
 const Bar = ({ children, styles }) => {
   return (
-    <View style={ styles } >
+    <View
+      className='tabbar'
+      style={ styles }
+    >
       { children }
     </View>
   )
 }
 
-const Tabs = ({ activeIndex, tabs, styles, onTabSelect }) => {
+const Tabs = ({ activeId, tabs, styles, onTabSelect }) => {
   return useMemo(() => {
     return mapColl(tabs, (index, tab) => {
-      const { Component, component, id, key, ...tabProps } = tab
+      const { Tab:Component, tab:component, id, key, title, ...tabProps } = tab
+
       const keyId = key || id || index
-      return (
-        <Tab
-          className='tabbar-tab'
-          key={ keyId }
-          id={ keyId }
-          { ...tabProps }
-          styles={ styles }
-          onTabSelect={ onTabSelect }
-          active={ activeIndex === index }
-        >
-          { Component || component }
-        </Tab>
-      )
+      return !Component && !component && !title
+        ? null
+        : (
+            <Tab
+              className='tabbar-tab'
+              key={ keyId }
+              id={ id }
+              { ...tabProps }
+              title={title}
+              styles={ styles }
+              onTabSelect={ onTabSelect }
+              active={ activeId === id }
+            >
+              { renderFromType(Component || component) }
+            </Tab>
+          )
     })
-  }, [ activeIndex, tabs, styles ])
+  }, [ activeId, tabs, styles ])
 }
 
-const ActiveScreen = ({ tab, styles }) => {
-  const Screen = tab && (tab.Screen || tab.screen)
-  return isValidComponent(Screen)
-    ? (<Screen { ...tab } styles={ styles } />)
+const ActiveTabView = ({ tab, styles }) => {
+  const ViewComponent = tab && (tab.View || tab.view)
+  return isValidComponent(ViewComponent)
+    ? (<ViewComponent { ...tab } styles={ styles } />)
     : null
 }
 
@@ -120,45 +74,29 @@ export const Tabbar = props => {
     activeTab,
     location='bottom',
     fixed,
-    onScroll,
     onTabSelect,
-    scroll,
     styles,
     tabs,
-    themePath,
-    type='default',
   } = props
   
+  const addMethod = location === 'bottom' ? 'unshift' : 'push'
+
   const theme = useTheme()
+  const barStyles = theme.get('tabbar')
+  const [ activeId, setActiveId ] = useState(activeTab)
+  const CurrentTab = useCurrentTab(tabs, activeId)
+  const tabSelectEvent = useTabSelect(tabs, activeId, onTabSelect, setActiveId)
 
-  const scrollEvent = useCallback((event) => {
-    checkCall(onScroll, event)
-    _onScroll(event)
-  }, [ _onScroll, onScroll ])
-
-  const [ activeIndex, setActiveIndex ] = useState(activeTab)
-  const active = tabs[activeIndex]
-
-  const tabSelectEvent = useCallback((index) => {
-    if(!tabs) return
-
-    // Call the event hook, and if it returns true, then skip the state update
-    const skip = checkCall(onTabSelect, index, tabs)
-
-    // If nothing is returned, then update the tab index
-    !skip && setActiveIndex(index)
-
-  }, [ tabs ])
-
+  useCheckActiveTab(activeTab, activeId, setActiveId)
 
   const TabComponents = []
-  const addMethod = location === 'bottom' ? 'unshift' : 'push'
 
   tabs && TabComponents.push(
     <Bar
       className='tabbar-bar'
-      key={ 'tabbar' }
+      key={'tabbar'}
       styles={theme.join(
+        barStyles.bar.main,
         barStyles.bar[location],
         fixed && { ...barStyles.fixed.main, ...barStyles.fixed[location] }
       )}
@@ -166,7 +104,7 @@ export const Tabbar = props => {
     { tabs && (
       <Tabs 
         tabs={ tabs }
-        activeIndex={ activeIndex }
+        activeId={ activeId }
         styles={ barStyles.tab }
         onTabSelect={ tabSelectEvent }
       />
@@ -175,15 +113,13 @@ export const Tabbar = props => {
   )
 
   tabs && TabComponents[addMethod](
-    <TabView
-      className='tabbar-view'
-      key={ 'tabview' }
-      scroll={ scroll }
-      onScroll={ scrollEvent }
-      styles={ barStyles.tabview }
+    <View
+      className='tabview-main'
+      key='tabview-main'
+      style={barStyles.tabview}
     >
-      <ActiveScreen tab={ active } styles={ barStyles } />
-    </TabView>
+      <ActiveTabView tab={ CurrentTab } styles={ barStyles } />
+    </View>
   )
 
   return (

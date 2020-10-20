@@ -1,8 +1,9 @@
 import { dispatch, getStore } from 'SVStore'
 import { Values, ActionTypes } from 'SVConstants'
 import { devLog } from 'SVUtils'
+import { setScreen } from '../setScreen'
 
-const { CATEGORIES } = Values
+const { CATEGORIES, SCREENS } = Values
 
 export const setFeatureActive = async feature => {
   const { items } = getStore()?.getState()
@@ -13,14 +14,7 @@ export const setFeatureActive = async feature => {
   const index = features.findIndex(feat => feat.feature === feature.feature)
   if(index === -1) return devLog(`warn`, `Feature does not exist in the items store!`, items)
 
-  dispatch({
-    type: ActionTypes.SET_ITEM,
-    payload: {
-      category: CATEGORIES.ACTIVE_DATA,
-      key: CATEGORIES.SCREEN,
-      item: CATEGORIES.FEATURES,
-    },
-  })
+  setScreen(SCREENS.FEATURES)
 
   dispatch({
     type: ActionTypes.SET_ITEM,

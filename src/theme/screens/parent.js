@@ -4,7 +4,7 @@ import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 export const parent = {
   main: {
     $web: {
-      mT: 70,
+      mT: 110,
       minHeight: 'calc( 100vh - 70px )',
       maxWidth: `100vw`,
       transitionDuration: '1s',

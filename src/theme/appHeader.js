@@ -1,17 +1,15 @@
 import { tapColors } from './tapColors'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
+import { sharedShadow } from './components/shared/shadow'
 
 export const appHeader = {
   main: {
     $all: {
-      backgroundColor: tapColors.headerBackground,
-      shadowColor: tapColors.shadowColor,
-      shadowOffset: { width: 0, height: 0 },
-      shadowOpacity: 0.05,
-      shadowRadius: 10,
-      position: 'fixed',
-      width: '100%',
       zIndex: 6,
+      width: '100%',
+      position: 'fixed',
+      ...sharedShadow,
+      backgroundColor: tapColors.headerBackground,
     },
   },
   side: {},

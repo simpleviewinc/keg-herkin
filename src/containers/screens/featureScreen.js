@@ -1,6 +1,6 @@
 import React from 'react'
 import { Values } from 'SVConstants'
-import { Feature } from 'SVComponents'
+import { Feature, Text, View } from 'SVComponents'
 import { pickKeys } from '@keg-hub/jsutils'
 import { useSelector, shallowEqual } from 'react-redux'
 
@@ -12,7 +12,11 @@ export const FeatureScreen = props => {
     [ CATEGORIES.ACTIVE_DATA, CATEGORIES.FEATURES ]
   ), shallowEqual)
 
-  return (
-    <Feature feature={features[activeData?.feature]} />
-  )
+  return !features || !activeData
+    ? (
+        <View>
+          <Text>No feature selected!</Text>
+        </View>
+      )
+    : (<Feature feature={features[activeData?.feature]} />)
 }
