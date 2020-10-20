@@ -37,7 +37,7 @@ export const tapColors = {
   borderRadius: 3,
   borderColor: '#5e6e82',
   headerBackground: '#ffffff',
-  shadowColor: '#000',
+  shadowColor: '#000000',
   inactive: `#a6b0c0`,
   accentBackground: '#f9fafe',
   border: `#e1e7ef`,

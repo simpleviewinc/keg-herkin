@@ -1,5 +1,5 @@
 import { Values } from 'SVConstants'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components'
@@ -9,12 +9,17 @@ import { useSelector, shallowEqual } from 'react-redux'
 const { CATEGORIES } = Values
 
 const useEditorActions = (feature, definitions) => {
-  const onFeatureEdit = useCallback(() => {
+
+  const onFeatureEdit = useCallback((text, change) => {
+    if(text === feature.text || !text.trim()) return
+
     // Add code to update feature file
     console.log(`Feature file change not implemented!`)
   }, [feature])
 
-  const onDefinitionEdit = useCallback(() => {
+  const onDefinitionEdit = useCallback((text, change) => {
+    if(!text.trim() || definitions.map(def => def.text).indexOf(text) !== -1) return
+
     // Add code to update definition file
     console.log(`Definition file change not implemented!`)
   }, [definitions])
@@ -28,7 +33,6 @@ const useEditorActions = (feature, definitions) => {
 }
 
 const useMatchingDefinitions = (feature, definitions) => {
-
   return useMemo(() => {
     let mappedDefs = []
     if(!feature || !feature.scenarios) return mappedDefs
@@ -45,7 +49,6 @@ const useMatchingDefinitions = (feature, definitions) => {
 
     return mappedDefs
   }, [feature, definitions])
-
 }
 
 const FeatureEditor = props => {
@@ -101,11 +104,11 @@ export const EditorScreen = props => {
   ), shallowEqual)
 
   const feature = features && features[activeData?.feature]
-  const { onFeatureEdit, onDefinitionEdit } = useEditorActions(feature, definitions)
 
   const matchingDefinitions = useMatchingDefinitions(feature, definitions)
+  const { onFeatureEdit, onDefinitionEdit } = useEditorActions(feature, matchingDefinitions)
 
-  if(!feature || !definitions) return null
+  if(!feature || !matchingDefinitions) return null
 
   const tab = 'split'
   const builtStyles = theme.get(`screens.editors.${tab}`)

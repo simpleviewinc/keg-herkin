@@ -18,7 +18,7 @@ const buildStyles = (theme, styles={}) => {
     content: {
       header: {},
       drawer: {
-        backgroundColor: theme?.tapColors?.inactive,
+        backgroundColor: theme?.tapColors?.backGround,
       },
       item: {}
     }

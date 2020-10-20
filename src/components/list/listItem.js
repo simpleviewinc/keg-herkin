@@ -85,8 +85,10 @@ export const ListItem = props => {
         style={[itemStyles.main, activeStyle?.main]}
         onPress={onItemPress}
       >
-      <Row style={theme.get(itemStyles.row, activeStyle?.row)} >
-      
+      <Row
+        className='list-item-row'
+        style={theme.get(itemStyles.row, activeStyle?.row)}
+      >
         { children || ([
           avatar && renderCustomOrDefault(
             components.avatar,

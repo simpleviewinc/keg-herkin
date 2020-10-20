@@ -22,9 +22,6 @@ export const AceEditor = props => {
     value='',
   } = props
 
-  console.log(`---------- editorId ----------`)
-  console.log(editorId)
-
   return (
     <ReactAce
       editorId={editorId}
