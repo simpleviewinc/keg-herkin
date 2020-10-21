@@ -3,10 +3,11 @@ import { useSelector, shallowEqual } from 'react-redux'
 import { Values } from 'SVConstants'
 import { View, Tabbar } from 'SVComponents'
 import { EmptyScreen } from './emptyScreen'
-import { FeatureScreen } from './featureScreen'
+import { BuilderScreen } from './builderScreen'
 import { EditorScreen } from './editorScreen'
+import { RunnerScreen } from './runnerScreen'
 import { setScreen } from 'SVActions'
-import { pickKeys, capitalize } from '@keg-hub/jsutils'
+import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 
 const { CATEGORIES, SCREENS } = Values
@@ -17,8 +18,8 @@ const tabs = [
     View: EmptyScreen,
   },
   {
-    id: SCREENS.FEATURES,
-    View: FeatureScreen,
+    id: SCREENS.BUILDER,
+    View: BuilderScreen,
     title: `Feature Builder`,
   },
   {
@@ -26,6 +27,12 @@ const tabs = [
     View: EditorScreen,
     title: `Code Editor`,
   },
+  {
+    id: SCREENS.RUNNER,
+    View: RunnerScreen,
+    title: `Tests Runner`,
+  },
+  
 ]
 
 const useScreen = screen => useMemo(() => {

@@ -1,8 +1,9 @@
 import { tapColors } from '../../tapColors'
 import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 import { sharedShadow } from '../shared/shadow'
+import { deepMerge } from '@keg-hub/jsutils'
 
-export const tabbar = {
+const defTabbar = {
   main: {
     flex: 1,
     flexGrow: 1,
@@ -53,7 +54,8 @@ export const tabbar = {
         justifyContent: 'center',
         borderBottomWidth: 1,
         borderBottomColor: tapColors.disabledColor,
-        ...theme.transition([ 'borderBottomColor' ], 0.8),
+        bgC: tapColors.accentBackground,
+        ...theme.transition([ 'borderBottomColor', 'backgroundColor' ], 0.8),
       },
       text: {
         marginBottom: 0,
@@ -74,6 +76,7 @@ export const tabbar = {
     hover: {
       main: {
         borderBottomColor: tapColors.link,
+        bgC: tapColors.sidebarBackground,
       },
       text: {
         color: tapColors.link,
@@ -82,10 +85,38 @@ export const tabbar = {
     active: {
       main: {
         borderBottomColor: tapColors.primary,
+        bgC: tapColors.sidebarBackground,
       },
       text: {
         color: tapColors.primary,
       },
     },
   }
+}
+
+const editor = deepMerge(defTabbar, {
+  main: {
+    
+  },
+  container: {
+    
+  },
+  tabview: {
+    
+  },
+  bar: {
+    main: {
+      top: 'initial',
+      bottom: 0,
+      zIndex: 6,
+    },
+  },
+  tab: {
+    
+  }
+})
+
+export const tabbar = {
+    editor,
+    default: defTabbar,
 }

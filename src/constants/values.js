@@ -18,8 +18,14 @@ export const Values = {
   EMPTY_STEP: `None Selected`,
   EMPTY_PARAM: `PARAMETER`,
   SCREENS: {
-    FEATURES: 'features',
+    BUILDER: 'builder',
     EDITORS: 'editors',
     EMPTY: 'empty',
+    RUNNER: 'runner',
+  },
+  EDITOR_MODES: {
+    SPLIT: 'split',
+    FEATURE: 'feature',
+    DEFINITIONS: 'definitions',
   },
 }

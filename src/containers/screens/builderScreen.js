@@ -6,7 +6,7 @@ import { useSelector, shallowEqual } from 'react-redux'
 
 const { CATEGORIES } = Values
 
-export const FeatureScreen = props => {
+export const BuilderScreen = props => {
   const { activeData, features } = useSelector(({ items }) => pickKeys(
     items,
     [ CATEGORIES.ACTIVE_DATA, CATEGORIES.FEATURES ]

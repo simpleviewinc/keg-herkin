@@ -77,12 +77,13 @@ export const Tabbar = props => {
     onTabSelect,
     styles,
     tabs,
+    type='default',
   } = props
   
   const addMethod = location === 'bottom' ? 'unshift' : 'push'
 
   const theme = useTheme()
-  const barStyles = theme.get('tabbar')
+  const barStyles = theme.get(`tabbar.${type}`)
   const [ activeId, setActiveId ] = useState(activeTab)
   const CurrentTab = useCurrentTab(tabs, activeId)
   const tabSelectEvent = useTabSelect(tabs, activeId, onTabSelect, setActiveId)

@@ -14,7 +14,7 @@ export const setFeatureActive = async feature => {
   const index = features.findIndex(feat => feat.feature === feature.feature)
   if(index === -1) return devLog(`warn`, `Feature does not exist in the items store!`, items)
 
-  setScreen(SCREENS.FEATURES)
+  setScreen(SCREENS.EDITORS)
 
   dispatch({
     type: ActionTypes.SET_ITEM,
