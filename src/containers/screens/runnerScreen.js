@@ -14,6 +14,13 @@ const TestRunner = props => {
       {...props}
       mode='text'
       readOnly={true}
+      editorProps={{
+        wrapBehavioursEnabled: false,
+        animatedScroll: false,
+        dragEnabled: false,
+        tabSize: 2,
+        wrap: true,
+      }}
     />
   )
 }

@@ -1,33 +1,37 @@
 import { Values } from 'SVConstants'
 import React, { useCallback, useMemo, useState } from 'react'
-import { pickKeys } from '@keg-hub/jsutils'
+import { pickKeys, checkCall } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components'
 import { EditorTabs } from './editorTabs'
 import { AceEditor } from 'SVComponents/aceEditor'
 import { useSelector, shallowEqual } from 'react-redux'
+import { runTests } from 'SVActions'
 
 const { CATEGORIES, EDITOR_MODES } = Values
 
-const useEditorActions = (feature, definitions) => {
+const useEditorActions = (feature, setFeature, definitions, setDefinitions) => {
 
   const onFeatureEdit = useCallback((text, change) => {
-    if(text === feature.text || !text.trim()) return
+    text !== feature.text &&
+      !text.trim() &&
+      setFeature({ ...feature, text })
+      
+  }, [feature, setFeature])
 
-    // Add code to update feature file
-    console.log(`Feature file change not implemented!`)
-  }, [feature])
+  const onDefinitionEdit = useCallback((uuid, text, change) => {
+    if(!text || !text.trim()) return
 
-  const onDefinitionEdit = useCallback((text, change) => {
-    if(!text.trim() || definitions.map(def => def.text).indexOf(text) !== -1) return
+    const defs = definitions.map(def => {
+      return def.uuid === uuid ? { ...def, text } : def
+    })
 
-    // Add code to update definition file
-    console.log(`Definition file change not implemented!`)
-  }, [definitions])
+    setDefinitions(defs)
+  }, [definitions, setDefinitions])
   
   const onRunTests = useCallback(() => {
-    // Add code to update definition file
-    console.log(`Run tests action not implemented!`)
+    
+    runTests(feature, definitions)
   }, [ feature, definitions ])
 
   return { onFeatureEdit, onDefinitionEdit, onRunTests }
@@ -72,10 +76,19 @@ const DefinitionsEditor = ({ definitions, styles, ...props }) => {
             <AceEditor
               key={def.uuid}
               {...props}
+              onChange={text => checkCall(props.onChange, def.uuid, text)}
               editorId={`definition-editor-${def.uuid}`}
               value={def.text || ''}
               style={styles.editor}
               mode='javascript'
+              editorProps={{
+                wrapBehavioursEnabled: false,
+                animatedScroll: false,
+                dragEnabled: false,
+                tabSize: 2,
+                wrap: true,
+                ...props.editorProps,
+              }}
             />
           )
         })}
@@ -99,12 +112,21 @@ export const CodeEditor = props => {
   const feature = features && features[activeData?.feature]
 
   const matchingDefinitions = useMatchingDefinitions(feature, definitions)
-  const { onFeatureEdit, onDefinitionEdit } = useEditorActions(feature, matchingDefinitions)
+  const [localFeat, setLocalFeat] = useState(feature)
+  const [localDefs, setLocalDefs] = useState(matchingDefinitions)
+
+  const { onFeatureEdit, onDefinitionEdit, onRunTests } = useEditorActions(
+    localFeat,
+    setLocalFeat,
+    localDefs,
+    setLocalDefs
+  )
+
   const [tab, setTab] = useState(props.activeTab || EDITOR_MODES.SPLIT)
   const tabSelect = onTabSelect(tab, setTab)
   const builtStyles = theme.get(`screens.editors.${tab}`)
 
-  if(!feature || !matchingDefinitions) return null
+  if(!localFeat || !localDefs) return null
 
   return (
     <>
@@ -113,7 +135,7 @@ export const CodeEditor = props => {
           key={`${tab}-feature`}
           editorId={`feature-editor`}
           onChange={onFeatureEdit}
-          value={feature.text || ''}
+          value={localFeat.text || ''}
           style={builtStyles.feature || builtStyles}
         />
       )}
@@ -122,11 +144,11 @@ export const CodeEditor = props => {
           key={`${tab}-definitions`}
           editorId={`definitions-editor`}
           onChange={onDefinitionEdit}
-          definitions={matchingDefinitions}
+          definitions={localDefs}
           styles={builtStyles.definitions || builtStyles}
         />
       )}
-      <EditorTabs activeTab={tab} onTabSelect={tabSelect} />
+      <EditorTabs activeTab={tab} onTabSelect={tabSelect} onRun={onRunTests} />
     </>
   )
 }

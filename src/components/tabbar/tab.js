@@ -1,6 +1,6 @@
 import React from 'react'
 import { useThemeHover } from '@keg-hub/re-theme'
-import { get, isStr, deepMerge } from '@keg-hub/jsutils'
+import { get, isStr, deepMerge, isArr } from '@keg-hub/jsutils'
 import { Label, Icon, Touchable, isValidComponent, renderFromType } from 'SVComponents'
 
 const TabIcon = ({ icon, location, styles }) => {
@@ -14,10 +14,28 @@ const TabIcon = ({ icon, location, styles }) => {
   )
 }
 
+const renderByType = (Element, props) => {
+  return isValidComponent(Element) ? (
+    React.cloneElement(
+      Element,
+      props,
+      Element.children
+    )
+  ) : isArr(Element) ? (
+    Element
+  ) : Wrapper ? (
+    <Wrapper {...props}>{ Element }</Wrapper>
+  ) : (
+    Element
+  )
+}
+
+
 const BuildChildren = (props) => {
 
   // If there are custom children, just return
-  if(props.children) return renderFromType(props.children, props)
+  if(props.children) return renderByType(props.children, props)
+
 
   const { active, styles, icon, Title, title } = props
   const TitleComp = Title || title

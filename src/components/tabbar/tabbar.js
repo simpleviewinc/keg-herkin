@@ -37,29 +37,27 @@ const Bar = ({ children, styles }) => {
 }
 
 const Tabs = ({ activeId, tabs, styles, onTabSelect }) => {
-  return useMemo(() => {
-    return mapColl(tabs, (index, tab) => {
-      const { Tab:Component, tab:component, id, key, title, ...tabProps } = tab
+  return mapColl(tabs, (index, tab) => {
+    const { Tab:Component, tab:component, id, key, title, ...tabProps } = tab
 
-      const keyId = key || id || index
-      return !Component && !component && !title
-        ? null
-        : (
-            <Tab
-              className='tabbar-tab'
-              key={ keyId }
-              id={ id }
-              { ...tabProps }
-              title={title}
-              styles={ styles }
-              onTabSelect={ onTabSelect }
-              active={ activeId === id }
-            >
-              { renderFromType(Component || component) }
-            </Tab>
-          )
-    })
-  }, [ activeId, tabs, styles ])
+    const keyId = key || id || index
+    return !Component && !component && !title
+      ? null
+      : (
+          <Tab
+            className='tabbar-tab'
+            key={ keyId }
+            id={ id }
+            { ...tabProps }
+            title={title}
+            styles={ styles }
+            onTabSelect={ onTabSelect }
+            active={ activeId === id }
+          >
+            { renderFromType(Component || component) }
+          </Tab>
+        )
+  })
 }
 
 const ActiveTabView = ({ tab, styles }) => {

@@ -1,7 +1,7 @@
 import { useTheme } from '@keg-hub/re-theme'
 import { Tabbar } from 'SVComponents'
 import { Values } from 'SVConstants'
-import { pickKeys, checkCall, isFunc } from '@keg-hub/jsutils'
+import { isFunc } from '@keg-hub/jsutils'
 import { View, Button } from '@keg-hub/keg-components'
 import React, { useCallback, useEffect, useState } from 'react'
 
@@ -17,7 +17,10 @@ const TestActions = props => {
         </Button>
       </View>
       <View >
-        <Button type='secondary' >
+        <Button
+          type='secondary'
+          onClick={props.onRun}
+        >
           Run
         </Button>
       </View>
@@ -38,10 +41,6 @@ const tabs = [
     id: EDITOR_MODES.DEFINITIONS,
     title: `Definitions`,
   },
-  {
-    id: `test-actions`,
-    Tab: TestActions,
-  }
 ]
 
 
@@ -55,7 +54,7 @@ const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
 }, [ tab, setTab, onTabSelect ])
 
 export const EditorTabs = props => {
-  const { activeTab, onTabSelect } = props
+  const { activeTab, onTabSelect, onRun } = props
   const [tab, setTab] = useState(activeTab || EDITOR_MODES.SPLIT)
   const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
   
@@ -65,10 +64,12 @@ export const EditorTabs = props => {
       setTab(activeTab)
   }, [activeTab, onTabSelect, tab, setTab])
 
+  
+  
   return (
     <Tabbar
       type='editor'
-      tabs={tabs}
+      tabs={[ ...tabs, { onRun, id: `test-actions`, Tab: TestActions }]}
       activeTab={tab}
       location='bottom'
       onTabSelect={tabSelect}

@@ -12,6 +12,9 @@ env:
   # The KEG_CONTEXT_PATH env should be the location of the external app being run
   KEG_CONTEXT_PATH: "{{ cli.taps.links.herkin }}"
 
+  # Override the default node version with more up-to-date one
+  KEG_NODE_VERSION: 14.14.0
+
   # --- DOCKER ENV CONTEXT --- #
 
   # Default location of the app in the docker container

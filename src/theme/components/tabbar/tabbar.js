@@ -52,7 +52,7 @@ const defTabbar = {
         cursor: 'pointer',
         alignItems: 'center',
         justifyContent: 'center',
-        borderBottomWidth: 1,
+        borderBottomWidth: 2,
         borderBottomColor: tapColors.disabledColor,
         bgC: tapColors.accentBackground,
         ...theme.transition([ 'borderBottomColor', 'backgroundColor' ], 0.8),
