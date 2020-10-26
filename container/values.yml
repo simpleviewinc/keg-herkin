@@ -17,7 +17,9 @@ env:
 
   # --- DOCKER ENV CONTEXT --- #
 
-  # Default location of the app in the docker container
+  # Paths within the docker contianer
+  # Used when setting up syncs between host and container
+  # Should follow the pattern DOC_<name-of-linked-folder>_PATH
   DOC_APP_PATH: /keg/tap
   DOC_CORE_PATH: /keg/tap/node_modules/keg-core
   DOC_COMPONENTS_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
@@ -26,11 +28,15 @@ env:
   DOC_JSUTILS_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils
 
   # Default port of the app to expose from the container
-  EXPO_DEBUG_PORT: 19002
   DOC_APP_PORT: 19006
+  EXPO_DEBUG_PORT: 19002
   API_PORT: 5005
 
   # --- GENERAL CONTEXT ENVs --- #
+
+  KEG_PROXY_HOST: herkin.local.kegdev.xyz
+  KEG_PROXY_ENTRY: keg
+  KEG_EXEC_CMD: dev
 
   # Image/Container Build information
   # IMAGE and CONTAINER_NAME should be the same

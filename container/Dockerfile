@@ -48,8 +48,6 @@ ENV EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
 ENV PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin
 
 # Expose container ports
-EXPOSE 80
-EXPOSE 443
 EXPOSE $DOC_APP_PORT
 EXPOSE $EXPO_DEBUG_PORT
 

@@ -1,9 +1,6 @@
 version: "3.8"
 services:
   keg-herkin:
-    image: ${IMAGE}
-    tty: true
-    stdin_open: true
     privileged: true
     volumes:
       - ${CLI_PATH}:${DOC_CLI_PATH}
@@ -26,7 +23,4 @@ services:
       - KEG_NM_INSTALL
       - NODE_ENV
     ports:
-      - 80:${DOC_APP_PORT}
-      - ${DOC_APP_PORT}:${DOC_APP_PORT}
       - ${API_PORT}:${API_PORT}
-      - ${EXPO_DEBUG_PORT}:${EXPO_DEBUG_PORT}
