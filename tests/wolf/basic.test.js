@@ -1,5 +1,6 @@
 const qawolf = require("qawolf")
 const { chromium, firefox, webkit  } = require('playwright')
+const { Given  } = require('cucumber')
 
 const { BROWSER } = process.env
 const BROWSER_WS_PORT = process.env.BROWSER_WS_PORT || '64238'
@@ -33,7 +34,14 @@ afterAll(async () => {
   await browser.close();
 })
 
+// Should run test for jest && Given for cucumber
 test("basic", async () => {
   await page.goto("${url}")
+  await qawolf.create()
+})
+
+Given("I open the site {site}", async site => {
+  const page = await getPage()
+  await page.goto(site)
   await qawolf.create()
 })

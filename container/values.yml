@@ -28,7 +28,7 @@ env:
   DOC_JSUTILS_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils
 
   # Default port of the app to expose from the container
-  DOC_APP_PORT: 19006
+  KEG_PROXY_PORT: 19006
   EXPO_DEBUG_PORT: 19002
   API_PORT: 5005
 
