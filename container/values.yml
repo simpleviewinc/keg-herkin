@@ -33,9 +33,6 @@ env:
   API_PORT: 5005
 
   # --- GENERAL CONTEXT ENVs --- #
-
-  KEG_PROXY_HOST: herkin.local.kegdev.xyz
-  KEG_PROXY_ENTRY: keg
   KEG_EXEC_CMD: dev
 
   # Image/Container Build information
