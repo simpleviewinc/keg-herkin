@@ -25,4 +25,4 @@ const edit = {
   }
 }
 
-executeTask(module, edit, edit.name)
+module.exports = executeTask(edit)

@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 const { executeTask } = require('../helpers/executeTask')
 
 // TODO: update to call the tests/playwright/server.js script on the host machine
@@ -24,4 +23,4 @@ const launch = {
   }
 }
 
-executeTask(module, launch, launch.name)
+module.exports = executeTask(launch)

@@ -61,5 +61,4 @@ const run = {
   }
 }
 
-
-executeTask(module, run, run.name)
+module.exports = executeTask(run)

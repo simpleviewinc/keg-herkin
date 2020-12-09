@@ -34,4 +34,4 @@ const create = {
   }
 }
 
-executeTask(module, create, create.name)
+module.exports = executeTask(create)
