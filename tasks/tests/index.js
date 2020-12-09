@@ -1,3 +1,4 @@
 module.exports = {
-  ...require('./create')
+  ...require('./create'),
+  ...require('./run'),
 }
