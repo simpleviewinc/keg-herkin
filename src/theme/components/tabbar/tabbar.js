@@ -1,9 +1,8 @@
 import { tapColors } from '../../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 import { sharedShadow } from '../shared/shadow'
 import { deepMerge } from '@keg-hub/jsutils'
 
-const defTabbar = {
+const defTabbar = theme => ({
   main: {
     flex: 1,
     flexGrow: 1,
@@ -92,9 +91,9 @@ const defTabbar = {
       },
     },
   }
-}
+})
 
-const editor = deepMerge(defTabbar, {
+const editor = (theme, defTabbar) => deepMerge(defTabbar, {
   main: {
     
   },
@@ -116,7 +115,10 @@ const editor = deepMerge(defTabbar, {
   }
 })
 
-export const tabbar = {
-    editor,
-    default: defTabbar,
+export const tabbar = theme => {
+  const builtTabbar = defTabbar(theme)
+  return {
+    default: builtTabbar,
+    editor: editor(theme, builtTabbar),
+  }
 }

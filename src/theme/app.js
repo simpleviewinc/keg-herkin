@@ -1,7 +1,7 @@
 import { tapColors } from './tapColors'
 import { get } from '@keg-hub/jsutils'
 
-export const app = {
+export const app = theme => ({
   main: {
     height: '100%',
     width: '100%',
@@ -10,4 +10,4 @@ export const app = {
     maxWidth: '100%',
     backgroundColor: tapColors.appBackground,
   }
-}
+})

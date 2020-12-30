@@ -1,7 +1,6 @@
 import { tapColors } from '../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
-export const sidebar = {
+export const sidebar = theme => ({
   main: {
     zIndex: 5,
     left: 250,
@@ -70,4 +69,4 @@ export const sidebar = {
     }
   },
   closed: {},
-}
+})

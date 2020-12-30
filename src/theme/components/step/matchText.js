@@ -1,6 +1,6 @@
 import { tapColors } from '../../tapColors'
 
-export const matchText = {
+export const matchText = theme => ({
   main: {
     d: 'flex',
     fl: 1,
@@ -31,4 +31,4 @@ export const matchText = {
       ftSz: 12,
     },
   }
-}
+})

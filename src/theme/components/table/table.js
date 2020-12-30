@@ -1,4 +1,3 @@
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 import { tapColors } from '../../tapColors'
 
 const rowStyles = {
@@ -13,18 +12,20 @@ const rowStyles = {
   }
 }
 
-export const table = {
-  main: {
-    
-  },
-  header: {
-    ...rowStyles,
-  },
-  row: {
-    ...rowStyles,
+export const table = theme => {
+  return {
     main: {
-      ...rowStyles.main,
-      mT: theme.margin.size,
+      
+    },
+    header: {
+      ...rowStyles,
+    },
+    row: {
+      ...rowStyles,
+      main: {
+        ...rowStyles.main,
+        mT: theme.margin.size,
+      }
     }
-  }
+  } 
 }

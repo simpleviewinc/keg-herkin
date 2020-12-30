@@ -1,7 +1,6 @@
 import { tapColors } from '../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
-export const section = {
+export const section = theme => ({
   default: {
     $all: {
       backgroundColor: theme?.colors?.palette?.white01,
@@ -16,4 +15,4 @@ export const section = {
       minH: 200,
     },
   },
-}
+})

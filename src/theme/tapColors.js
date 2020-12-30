@@ -1,7 +1,6 @@
 import { shadeHex } from '@keg-hub/re-theme/colors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
-const inputHeight = theme?.form?.input?.default?.height ?? 35
+const inputHeight = 35
 
 // Example : http://snpy.in/EuGKsu
 export const tapColors = {

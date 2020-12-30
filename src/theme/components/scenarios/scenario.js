@@ -1,7 +1,6 @@
 import { tapColors } from '../../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
-export const scenario = {
+export const scenario = theme => ({
   main: {
     flex: 1,
   },
@@ -15,7 +14,7 @@ export const scenario = {
     default: {
       main: {}
     },
-    sideBar: {
+    sidebar: {
       main: {},
       container: {}
     }
@@ -30,4 +29,4 @@ export const scenario = {
     fl: 1,
   },
   step: {}
-}
+})

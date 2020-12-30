@@ -1,10 +1,9 @@
 import { deepMerge } from '@keg-hub/jsutils'
 import { tapColors } from '../../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
 const inputWidth = '100%'
 
-export const sharedInput = (styles, width=inputWidth) => deepMerge({
+export const sharedInput = (theme, styles, width=inputWidth) => deepMerge({
   alignItems: 'center',
   alignSelf: 'flex-start',
   bCR: tapColors.border,
@@ -22,4 +21,4 @@ export const sharedInput = (styles, width=inputWidth) => deepMerge({
 }, styles)
 
 
-export const sharedInputInline = sharedInput()
+export const sharedInputInline = theme => sharedInput(theme)

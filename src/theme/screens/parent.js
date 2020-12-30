@@ -1,7 +1,6 @@
 import { tapColors } from '../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
-export const parent = {
+export const parent = theme => ({
   main: {
     $web: {
       mT: 110,
@@ -18,4 +17,4 @@ export const parent = {
       backgroundColor: tapColors.appBackground,
     }
   }
-}
+})

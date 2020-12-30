@@ -1,4 +1,4 @@
-export const editors = {
+export const editors = theme => ({
   main: {
     flexDirection: 'row',
   },
@@ -36,4 +36,4 @@ export const editors = {
       }
     },
   }
-}
+})

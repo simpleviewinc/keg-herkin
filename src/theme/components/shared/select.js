@@ -1,10 +1,9 @@
 import { deepMerge } from '@keg-hub/jsutils'
 import { tapColors } from '../../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
 const selectWidth = 90
 
-export const sharedSelect = (styles, width=selectWidth) => deepMerge({
+export const sharedSelect = (theme, styles, width=selectWidth) => deepMerge({
   main: {
     bgC: theme.colors.palette.transparent,
     bW: 0,
@@ -49,7 +48,7 @@ export const sharedSelect = (styles, width=selectWidth) => deepMerge({
 }, styles)
 
 
-export const sharedSelectInline = sharedSelect({
+export const sharedSelectInline = theme => sharedSelect(theme, {
   main: {
     bW: 0,
     bgC: theme.colors.palette.transparent,

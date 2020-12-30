@@ -1,7 +1,6 @@
 import { tapColors } from '../../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
-export const subheader = {
+export const subheader = theme => ({
   main: {
     fl: 1,
     d: 'flex',
@@ -16,4 +15,4 @@ export const subheader = {
   title: {
     
   }
-}
+})

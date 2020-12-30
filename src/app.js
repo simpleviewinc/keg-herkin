@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { theme } from 'SVTheme'
+import { theme } from 'SVTheme/tapIndex'
 import { SafeAreaView, StatusBar } from 'react-native'
-import { ReThemeProvider, getDefaultTheme, setDefaultTheme } from '@keg-hub/re-theme'
+import { ReThemeProvider, getDefaultTheme } from '@keg-hub/re-theme'
 import { Provider } from 'react-redux'
 import { getStore } from 'SVStore'
 import { initAppAction } from 'SVActions'
@@ -12,9 +12,6 @@ import { ContainerRoutes } from 'SVNavigation/containerRoutes'
 import { keg } from 'SVConfig'
 import { getHistory } from 'SVNavigation'
 import { isNative } from 'SVUtils/platform'
-
-
-setDefaultTheme(theme)
 
 const checkAppInit = setInit => {
   setInit(true)

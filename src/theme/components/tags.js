@@ -1,10 +1,10 @@
 import { tapColors } from '../tapColors'
 import { sharedButton } from './shared'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
-const inputHeight = theme?.form?.input?.default?.height ?? 35
 
-export const tags = {
+const inputHeight = 35
+
+export const tags = theme => ({
   main: {
     padding: theme.padding.size,
     paddingBottom: 0,
@@ -49,7 +49,7 @@ export const tags = {
     outline: 'none',
     bgC: 'transparent',
   },
-  button: sharedButton({
+  button: sharedButton(theme, {
     side: 'right',
     colors: {
       button: {
@@ -60,4 +60,4 @@ export const tags = {
       }
     }
   }),
-}
+})

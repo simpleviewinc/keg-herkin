@@ -1,3 +1,3 @@
-export const feature = {
+export const feature = theme => ({
   
-}
+})

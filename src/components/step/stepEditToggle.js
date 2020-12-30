@@ -1,5 +1,5 @@
 import React from 'react'
-import { Edit, Times } from 'SVAssets'
+import { Edit, Times } from 'SVAssets/icons'
 import {
   Button,
   Icon,

@@ -1,12 +1,11 @@
 import { tapColors } from '../../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
 const subheaderText = {
   ftSz: 14,
   ftWt: 'bold'
 }
 
-const toggleState  = {
+const toggleState = theme => ({
   default: {
     main: {},
     icon: {
@@ -34,9 +33,9 @@ const toggleState  = {
       
     }
   },
-}
+})
 
-export const subsurface = {
+export const subsurface = theme => ({
   main: {
     mT: theme.margin.size,
     p: theme.padding.size,
@@ -66,8 +65,8 @@ export const subsurface = {
       main: {}
     },
   },
-  toggle: toggleState,
+  toggle: toggleState(theme),
   containerRow: {
   },
   container: {},
-}
+})

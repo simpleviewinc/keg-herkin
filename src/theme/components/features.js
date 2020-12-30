@@ -1,19 +1,18 @@
-import { kegComponentsTheme } from 'SVTheme/kegComponentsTheme'
-const { colors } = kegComponentsTheme
 
-export const features = {
-  main: {
-  },
-  list: {
+export const features = theme => {
+  return {
     main: {
-      flex: 1,
     },
-    header: {
-      ftWt: 'bold',
+    list: {
+      main: {
+        flex: 1,
+      },
+      header: {
+        ftWt: 'bold',
+      },
+      item: {
+        color: theme?.colors?.palette?.gray01,
+      }
     },
-    item: {
-      color: colors?.palette?.gray01,
-    }
-  },
-  
+  }
 }

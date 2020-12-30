@@ -26,7 +26,7 @@ const builtFeatureList = (features, activeFeature={}) => {
   }
 }
 
-const drawerProps = { variant: 'sideBar' }
+const drawerProps = { variant: 'sidebar' }
 export const FeatureList = props => {
 
   const theme = useTheme()

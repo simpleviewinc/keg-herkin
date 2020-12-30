@@ -1,5 +1,5 @@
 
-export const addScenario = {
+export const addScenario = theme => ({
   main: {
     display: 'flex',
     width: '100%',
@@ -15,4 +15,4 @@ export const addScenario = {
   icon: {
     
   }
-}
+})

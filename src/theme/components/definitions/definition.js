@@ -1,5 +1,5 @@
 
 
-export const definition = {
+export const definition = theme => ({
   
-}
+})

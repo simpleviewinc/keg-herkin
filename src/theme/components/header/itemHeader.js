@@ -1,6 +1,6 @@
 import { tapColors } from '../../tapColors'
 
-export const itemHeader = {
+export const itemHeader = theme => ({
   main: {
     $all: {
       backgroundColor: tapColors.accentBackground,
@@ -16,4 +16,4 @@ export const itemHeader = {
       },
     },
   },
-}
+})

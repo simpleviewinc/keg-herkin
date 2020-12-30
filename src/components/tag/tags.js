@@ -2,7 +2,7 @@ import { Tag } from './tag'
 import { useTheme } from '@keg-hub/re-theme'
 import React, { useCallback, useRef } from 'react'
 import { Button, Grid, Icon, Input, Row, Text, View } from 'SVComponents'
-import { PlusCircle } from 'SVAssets'
+import { PlusCircle } from 'SVAssets/icons'
 import { checkCall, capitalize, get, isFunc, set } from '@keg-hub/jsutils'
 import { noOpObj } from 'SVUtils/helpers/noop'
 

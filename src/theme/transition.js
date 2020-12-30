@@ -1,4 +1,4 @@
-export const transition = {
+export const transition = theme => ({
   height: {
     overflow: 'hidden',
     // transition: 'max-height 1s ease',
@@ -7,4 +7,4 @@ export const transition = {
     default: { transition: 'transform 1s ease' },
     180: { transform: 'rotate(180deg)' }
   },
-}
+})

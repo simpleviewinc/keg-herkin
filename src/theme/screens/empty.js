@@ -1,6 +1,5 @@
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
-export const empty = {
+export const empty = theme => ({
   main: {
     ...theme?.flex?.center,
     flex: 0,
@@ -9,4 +8,4 @@ export const empty = {
     textAlign: 'center',
     w: `100%`,
   }
-}
+})

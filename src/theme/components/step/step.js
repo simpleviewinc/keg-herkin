@@ -1,9 +1,8 @@
 import { tapColors } from '../../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 import { sharedButton } from '../shared'
 import { matchText } from './matchText'
 
-export const step = {
+export const step = theme => ({
   main: {
     mT: theme.margin.size,
     pB: 0,
@@ -21,8 +20,8 @@ export const step = {
     overflow: 'hidden',
     flexDirection: `row`
   },
-  matchText,
-  editButton: sharedButton({
+  matchText: matchText(theme),
+  editButton: sharedButton(theme, {
     side: 'right',
     colors: {
       button: {
@@ -33,7 +32,7 @@ export const step = {
       }
     }
   }),
-  cancelButton: sharedButton({
+  cancelButton: sharedButton(theme, {
     side: 'right',
     colors: {
       button: {
@@ -44,4 +43,4 @@ export const step = {
       }
     }
   }),
-}
+})

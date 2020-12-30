@@ -1,3 +1,7 @@
 import { itemHeader } from './itemHeader'
-export * from './subheader'
-export const header = { itemHeader }
+import { subheader } from './subheader'
+
+export const header = theme => ({
+  header: { itemHeader: itemHeader(theme) },
+  subheader: subheader(theme)
+})

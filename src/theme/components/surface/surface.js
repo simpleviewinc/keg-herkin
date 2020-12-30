@@ -1,8 +1,7 @@
 import { tapColors } from '../../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 
 const titleSize = 16
-export const surface = {
+export const surface = theme => ({
   main: {
     borderTopLeftRadius: tapColors.borderRadius,
     borderTopRightRadius: tapColors.borderRadius,
@@ -52,4 +51,4 @@ export const surface = {
       c: tapColors?.success
     }
   },
-}
+})

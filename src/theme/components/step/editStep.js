@@ -1,6 +1,5 @@
 import { parameters } from '../parameters'
 import { tapColors } from '../../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 import { sharedButton, defaultButton } from '../shared'
 
 const getColors = type => {
@@ -12,7 +11,7 @@ const getColors = type => {
   }
 }
 
-const buildButton = color => {
+const buildButton = (theme, color) => {
   const colors = getColors(color)
   const btnObj = {
     ...defaultButton,
@@ -21,7 +20,7 @@ const buildButton = color => {
   }
   
   return {
-    ...sharedButton(),
+    ...sharedButton(theme),
     main: {
       default: { main: { ...btnObj, backgroundColor: colors.default }},
       hover: { main: { ...btnObj, backgroundColor: colors.hover }},
@@ -33,7 +32,7 @@ const buildButton = color => {
 
 
 
-export const editStep = {
+export const editStep = theme => ({
   main: {
     p: theme?.padding?.size,
     bW: 1,
@@ -49,7 +48,7 @@ export const editStep = {
     ...theme.flex.right,
     flD: 'row',
   },
-  copyAction: buildButton('warn'),
-  deleteAction: buildButton('danger'),
-  saveAction: buildButton('success'),
-}
+  copyAction: buildButton(theme, 'warn'),
+  deleteAction: buildButton(theme, 'danger'),
+  saveAction: buildButton(theme, 'success'),
+})

@@ -1,7 +1,18 @@
-import { set } from '@keg-hub/jsutils'
-import { tapColors } from './tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
+import { set, noOpObj } from '@keg-hub/jsutils'
+import { shadeHex } from '@keg-hub/re-theme/colors'
 
-
-set(theme, `form.input.default.borderBottomColor`, theme.colors.palette.gray01)
-set(theme, `form.select.default.main.borderBottomColor`, theme.colors.palette.gray01)
+export const themeConfig = {
+  defaults: noOpObj,
+  input: {
+    default: {
+      borderBottomColor: shadeHex("#999999", 45)
+    }
+  },
+  select: {
+    default: {
+      main: {
+        borderBottomColor: shadeHex("#999999", 45)
+      }
+    }
+  },
+}

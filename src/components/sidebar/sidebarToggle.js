@@ -1,6 +1,6 @@
 import { useToggledStyles } from 'SVHooks/useToggledStyles'
 import { Touchable, Text, View } from 'SVComponents'
-import { ChevronDown } from 'SVAssets'
+import { ChevronDown } from 'SVAssets/icons'
 import { useTheme, useThemeHover } from '@keg-hub/re-theme'
 import React from 'react'
 

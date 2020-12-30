@@ -32,7 +32,7 @@ const defColors = {
   }
 }
 
-export const sharedButton = (styles={}) => {
+export const sharedButton = (theme, styles={}) => {
   const { side, colors:customColors, ...customStyles } = styles
   const buttonFrom = { ...defaultButton, ...(sideButton[side] || {}) }
   const { button, ...colors } = deepMerge(defColors, customColors)

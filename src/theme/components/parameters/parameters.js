@@ -1,9 +1,8 @@
 import { tapColors } from '../../tapColors'
-import { kegComponentsTheme as theme } from 'SVTheme/kegComponentsTheme'
 import { sharedSelectInline } from '../shared/select'
 import { sharedInputInline } from '../shared/input'
 
-const table = {
+const table = theme => ({
   main: {
     bW: 1,
     bRad: tapColors.borderRadius,
@@ -59,23 +58,23 @@ const table = {
       size: 9
     }
   }
-}
+})
 
-const dynamic = {
+const dynamic = theme => ({
   string: {
-    ...sharedInputInline,
+    ...sharedInputInline(theme),
   },
   select: {
-    ...sharedSelectInline,
+    ...sharedSelectInline(theme),
   },
   boolean: {
     
   }
-}
+})
 
-export const parameters = {
-  table,
-  dynamic,
+export const parameters = theme => ({
+  table: table(theme),
+  dynamic: dynamic(theme),
   main: {
     flex: 1,
     mT: theme?.margin?.size,
@@ -83,4 +82,4 @@ export const parameters = {
   label: {
     color: tapColors.inactive,
   },
-}
+})

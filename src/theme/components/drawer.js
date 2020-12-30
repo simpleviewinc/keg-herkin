@@ -1,13 +1,13 @@
 import { tapColors } from '../tapColors'
 
-export const drawer = {
+export const drawer = theme => ({
   default: {
     main: {
       overflow: 'hidden',
       width: "100%"
     }
   },
-  sideBar: {
+  sidebar: {
     main: {},
     container: {
       backgroundColor: tapColors.accentBackground,
@@ -17,4 +17,4 @@ export const drawer = {
       borderBottomWidth: 1,
     }
   }
-}
+})

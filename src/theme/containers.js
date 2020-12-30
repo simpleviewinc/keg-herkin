@@ -1,4 +1,4 @@
-export const containers = {
+export const containers = theme => ({
   containers: {
     root: {
       main: {
@@ -9,4 +9,4 @@ export const containers = {
       }
     }
   }
-}
+})
