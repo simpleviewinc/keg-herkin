@@ -81,7 +81,8 @@ export const Tags = props => {
             key={`${type}-tags-input`}
             ref={inputRef}
             className={`tags-input`}
-            style={tagsStyles.input}
+            style={tagsStyles.input.input}
+            touchStyle={tagsStyles.input.main}
           />
           { addText && (
             <Button

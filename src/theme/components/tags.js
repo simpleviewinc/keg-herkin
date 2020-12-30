@@ -42,12 +42,17 @@ export const tags = theme => ({
     ovf: 'hidden',
   },
   input: {
-    bW: 0,
-    pL: 0,
-    flex: 4,
-    width: 'unset',
-    outline: 'none',
-    bgC: 'transparent',
+    main: {
+      flexGrow: 2
+    },
+    input: {
+      bW: 0,
+      pL: 0,
+      flex: 4,
+      width: 'unset',
+      outline: 'none',
+      bgC: 'transparent',
+    }
   },
   button: sharedButton(theme, {
     side: 'right',
