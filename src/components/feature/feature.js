@@ -11,7 +11,10 @@ export const Feature = props => {
   const { feature } = props
 
   return feature && (
-    <Surface title={feature.feature} >
+    <Surface
+      title={feature.feature}
+      prefix={`Feature - `}
+    >
       <Tags
         parent={feature}
         type={`feature`}

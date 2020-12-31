@@ -1,55 +1,39 @@
-import { Values } from 'SVConstants'
-import React, { useCallback, useMemo, useState } from 'react'
-import { pickKeys } from '@keg-hub/jsutils'
+import React from "react"
+import expect from "expect"
+import { describe, test, run } from "jest-circus-browser"
+import { Results } from 'SVComponents/runner/results'
+import { Runner } from 'SVComponents/runner/runner'
 import { useTheme } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components'
-import { AceEditor } from 'SVComponents/aceEditor'
-import { useSelector, shallowEqual } from 'react-redux'
 
-const { CATEGORIES } = Values
 
-const TestRunner = props => {
-  return (
-    <AceEditor
-      {...props}
-      mode='text'
-      readOnly={true}
-      editorProps={{
-        wrapBehavioursEnabled: false,
-        animatedScroll: false,
-        dragEnabled: false,
-        tabSize: 2,
-        wrap: true,
-      }}
-    />
-  )
-}
+// TODO: Replace with actual tests from definitions file
+// For display, show features, but run step definitions
+const tests = `
+      describe('basic math', () => {<br/>
+     &nbsp&nbsp;test('addition', () => {<br/>
+      &nbsp;&nbsp;&nbsp&nbsp;expect(1+1).toBe(2);<br/>
+      &nbsp;&nbsp;})<br/>
+      &nbsp&nbsp;test('subtraction', () => {<br/>
+        &nbsp;&nbsp;&nbsp&nbsp;expect(1+1).toBe(0);<br/>
+        &nbsp;&nbsp;})<br/>
+      });
+    `;
+
 
 export const RunnerScreen = props => {
   const theme = useTheme()
-  const {
-    testsOutcome
-  } = props
-
-  const { activeData, features } = useSelector(({ items }) => pickKeys(
-    items,
-    [ CATEGORIES.ACTIVE_DATA, CATEGORIES.FEATURES, CATEGORIES.DEFINITIONS ]
-  ), shallowEqual)
-
-  const feature = features && features[activeData?.feature]
-  if(!feature) return null
-
-  const builtStyles = theme.get(`screens.editors.runner`)
+  const builtStyles = theme.get(`screens.runner`)
 
   return (
     <View
-      className={`editors-screen`}
-      style={theme.get(`screens.editors.main`)}
+      className={`runner-screen`}
+      style={builtStyles.main}
     >
-      <TestRunner
-        editorId={`runner-editor`}
-        value={testsOutcome}
-        style={builtStyles}
+      <Runner
+        tests={tests}
+        title={'Features'}
+        prefix={`Test Runner - `}
       />
     </View>
   )

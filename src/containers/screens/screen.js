@@ -32,11 +32,10 @@ const tabs = [
     View: RunnerScreen,
     title: `Tests Runner`,
   },
-  
 ]
 
 const useScreen = screen => useMemo(() => {
-  return tabs.find(item => item.id === screen) || tabs[0]
+  return tabs.find(item => item.id === screen) || tabs[3]
 }, [screen])
 
 export const Screen = props => {

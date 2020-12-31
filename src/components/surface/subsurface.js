@@ -7,10 +7,10 @@ import React, { useState, useCallback, useMemo } from 'react'
 import { Grid, Row, View, Touchable, Text, Icon } from '@keg-hub/keg-components'
 // import { Plus, Minus } from 'SVAssets'
 
-const DrawerToggle = ({ onPress, toggled, styles }) => {
+const DrawerToggle = ({ onPress, toggled, toggleDisabled, styles }) => {
   const iconStyles = useToggledStyles(toggled, styles?.toggle)
 
-  return (
+  return !toggleDisabled && (
     <Touchable
       className={`toggle-action`}
       onPress={onPress}
@@ -23,7 +23,7 @@ const DrawerToggle = ({ onPress, toggled, styles }) => {
         {toggled ? ' Hide' : ' Show'}
       </Text>
     </Touchable>
-  )
+  ) || null
 }
 
 
@@ -35,6 +35,7 @@ export const SubSurface = props => {
     children,
     initialToggle,
     styles=noOpObj,
+    toggleDisabled,
     classNames=noOpObj,
   } = props
 
@@ -66,6 +67,7 @@ export const SubSurface = props => {
             onPress={onTogglePress}
             toggled={toggled}
             styles={surfaceStyles}
+            toggleDisabled={toggleDisabled}
           />
         </Subheader>
       </Row>

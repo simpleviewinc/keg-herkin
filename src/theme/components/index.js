@@ -5,6 +5,7 @@ import { drawer } from './drawer'
 import { features } from './features'
 import { header } from './header'
 import { list } from './list'
+import { runner } from './runner'
 import { scenarios } from './scenarios'
 import { section } from './section'
 import { sidebar } from './sidebar'
@@ -21,6 +22,7 @@ export const components = theme => ({
   drawer: drawer(theme),
   features: features(theme),
   list: list(theme),
+  runner: runner(theme),
   scenarios: scenarios(theme),
   section: section(theme),
   sidebar: sidebar(theme),
