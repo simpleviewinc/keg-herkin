@@ -94,7 +94,7 @@ export const Tabbar = props => {
     <Bar
       className='tabbar-bar'
       key={'tabbar'}
-      styles={theme.join(
+      styles={theme.get(
         barStyles.bar.main,
         barStyles.bar[location],
         fixed && { ...barStyles.fixed.main, ...barStyles.fixed[location] }
