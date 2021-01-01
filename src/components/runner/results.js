@@ -52,9 +52,6 @@ export const Results = ({ results }) => {
   const theme = useTheme()
   const styles = theme.get(`runner.results`)
 
-  console.log(`---------- results ----------`)
-  console.log(results)
-
   return results.map((result) => {
     const { testPath, errors, id } = result
     const [_, block, test] = testPath

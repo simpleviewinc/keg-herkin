@@ -4,7 +4,7 @@ export const parent = theme => ({
   main: {
     $web: {
       mT: 110,
-      minHeight: 'calc( 100vh - 70px )',
+      minHeight: 'calc( 100vh - 110px )',
       maxWidth: `100vw`,
       transitionDuration: '1s',
       transitionProperty: 'max-width left',
