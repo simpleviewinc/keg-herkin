@@ -131,3 +131,39 @@ re-theme-touch.js
 *.code-workspace
 **/temp/**
 .temp
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+jspm_packages/
+/.pnp
+.pnp.js
+
+# dotenv environment variables file
+.env
+.env.test
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# testing
+/static/coverage
+
+# production
+/static/build
+/static/dist
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Yarn Integrity file
+.yarn-integrity
