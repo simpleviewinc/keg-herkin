@@ -5,7 +5,6 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const TerserJSPlugin = require("terser-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const BrotliPlugin = require("brotli-webpack-plugin");
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 const glob = require("glob");
 
@@ -34,7 +33,6 @@ module.exports = {
           MiniCssExtractPlugin.loader,
           "css-loader", // translates CSS into CommonJS
           "postcss-loader", // Loader for webpack to process CSS with PostCSS
-          "sass-loader" // compiles Sass to CSS, using Node Sass by default
         ]
       },
       {
@@ -101,6 +99,5 @@ module.exports = {
     new CompressionPlugin({
       algorithm: "gzip"
     }),
-    new BrotliPlugin(),
   ]
 };

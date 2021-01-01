@@ -11,13 +11,16 @@ module.exports = {
     filename: "[name].bundle.js"
   },
   mode: "development",
+  watchOptions: {
+    ignored: ["node_modules/**"],
+  },
+  devtool: "inline-cheap-source-map",
   devServer: {
     contentBase: path.join(__dirname, "../build"),
     compress: true,
     port: 3000,
     overlay: true
   },
-  devtool: "cheap-module-eval-source-map",
   module: {
     rules: [
       {
@@ -33,7 +36,6 @@ module.exports = {
           "style-loader", // creates style nodes from JS strings
           "css-loader", // translates CSS into CommonJS
           "postcss-loader", // Loader for webpack to process CSS with PostCSS
-          "sass-loader" // compiles Sass to CSS, using Node Sass by default
         ]
       },
       {
@@ -53,7 +55,7 @@ module.exports = {
         use: {
           loader: "html-loader",
           options: {
-            attrs: ["img:src", ":data-src"],
+            attributes: true,
             minimize: true
           }
         }
@@ -67,7 +69,7 @@ module.exports = {
     // The plugin will generate an HTML5 file for you that includes all your webpack bundles in the body using script tags
     new HtmlWebpackPlugin({
       template: "./src/index.html",
-      filename: "index.html"
+      inject: 'body',
     }),
   ]
 };
