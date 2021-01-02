@@ -1,8 +1,8 @@
 import './styles/style.css'
 import './styles/bootstrap.min.css'
-import { MessengerParent } from './scripts/messenger'
+import { MessengerParent } from '../../messenger'
 
 const config = {}
 
-const messenger = new MessengerParent(config)
+const Parent = new MessengerParent(config)
 

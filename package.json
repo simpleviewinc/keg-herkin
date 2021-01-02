@@ -64,6 +64,7 @@
     "module-alias": "2.2.2",
     "nodemon": "2.0.4",
     "npm-run-all": "4.1.5",
+    "penpal": "5.3.0",
     "qawolf": "1.4.0",
     "react-ace-editor": "https://github.com/lancetipton/react-ace-editor.git",
     "socket.io": "2.3.0"
