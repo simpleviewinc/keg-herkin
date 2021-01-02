@@ -1,4 +1,4 @@
-import App from './src/app'
+import App from './repos/tap/app'
 export {
   App
 }

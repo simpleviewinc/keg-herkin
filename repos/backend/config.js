@@ -20,7 +20,7 @@ const defConfig = {
 const loadConfig = () => {
   if(loadedConfig) return loadedConfig
 
-  const configPath = path.join(rootDir, EDITOR_CONFIG_PATH || './configs/app.config')
+  const configPath = path.join(rootDir, EDITOR_CONFIG_PATH || '../../configs/app.config')
 
   try { loadedConfig = require(configPath) }
   catch (e) { loadedConfig = {} }

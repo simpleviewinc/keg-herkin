@@ -2,13 +2,28 @@ import { connectToParent } from 'penpal'
 import { childConfig } from './child.config'
 import { createMethods } from '../utils/createMethods'
 import { deepMerge, noOpObj } from '@keg-hub/jsutils'
+import { checkIframe } from './checkIframe'
 
 export class MessengerChild{
 
   isConnected=false
+  inIframe=false
 
   constructor(config=noOpObj){
+    this.inIframe = checkIframe()
     this.__init(config)
+  }
+
+  /**
+  * Ensures the MessengerChild is created within an Iframe element
+  * @memberof MessengerChild
+  * @function
+  *
+  * @return {void}
+  */
+  __checkIframe = () => {
+    if(!this.inIframe)
+      throw new Error(`Messenger Child must be created within an IFrame`)
   }
 
   /**
@@ -20,6 +35,8 @@ export class MessengerChild{
   * @return {void}
   */
   __init(config){
+    this.__checkIframe()
+    
     this.config = deepMerge(childConfig, config)
   }
 
@@ -33,6 +50,7 @@ export class MessengerChild{
   * @return {Object} - Exposed child methods
   */
   connect = async (options=noOpObj) => {
+    this.__checkIframe()
 
     // Ensure we have initialized the exposed methods
     this.methods = this.methods || createMethods(this, {
@@ -59,6 +77,8 @@ export class MessengerChild{
   }
 
   destroy = () => {
+    this.__checkIframe()
+
     // Destroy the connection with the parent window
     this.parent?.connection?.destroy?.()
     this.parent = undefined

@@ -159,6 +159,14 @@ jspm_packages/
 /static/build
 /static/dist
 
+
+# testing
+/repos/**/coverage
+
+# production
+/repos/**/build
+/repos/**/dist
+
 # Optional npm cache directory
 .npm
 

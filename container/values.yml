@@ -29,7 +29,6 @@ env:
 
   # Default port of the app to expose from the container
   KEG_PROXY_PORT: 19006
-  EXPO_DEBUG_PORT: 19002
   API_PORT: 5005
 
   # --- GENERAL CONTEXT ENVs --- #

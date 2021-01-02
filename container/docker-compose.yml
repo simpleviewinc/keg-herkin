@@ -17,7 +17,6 @@ services:
       - DOC_APP_PATH
       - DOC_APP_PORT
       - ENV
-      - EXPO_DEBUG_PORT
       - KEG_EXEC_CMD
       - KEG_DOCKER_EXEC
       - KEG_NM_INSTALL

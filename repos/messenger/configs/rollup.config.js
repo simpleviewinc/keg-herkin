@@ -5,6 +5,9 @@ import replace from '@rollup/plugin-replace'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import { terser } from "rollup-plugin-terser"
+import { exists } from "@keg-hub/jsutils"
+
+const { DOC_APP_PATH, DOC_APP_PORT, NODE_ENV } = process.env
 
 // Need to require our babel.config.js because it uses module.exports
 const babelConfig = require('./babel.config.js')

@@ -1,10 +1,10 @@
 {
-  "name": "tap-release-client",
-  "displayName": "Tap Release Client",
+  "name": "keg-herkin",
+  "displayName": "KeG-Herkin",
   "keg": {
     "cli": {
       "link": {
-        "name": "rc"
+        "name": "herkin"
       }
     },
     "routes": {
@@ -12,12 +12,12 @@
     },
     "tapResolver": {
       "paths": {
-        "tapSrc": "./src"
+        "tapSrc": "./repos/tap"
       }
     }
   },
   "expo": {
-    "name": "tap-release-client",
-    "slug": "tap-release-client"
+    "name": "keg-herkin",
+    "slug": "keg-herkin"
   }
 }
