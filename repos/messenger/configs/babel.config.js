@@ -4,7 +4,8 @@ module.exports = {
       useBuiltIns: "usage",
       debug: true,
       corejs: 3
-    }]
+    }],
+    [ '@babel/preset-react' ]
   ],
   plugins: [
     ["@babel/plugin-syntax-dynamic-import"],

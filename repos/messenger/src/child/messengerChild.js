@@ -1,13 +1,14 @@
 import { connectToParent } from 'penpal'
 import { childConfig } from './child.config'
 import { createMethods } from '../utils/createMethods'
-import { deepMerge, noOpObj } from '@keg-hub/jsutils'
+import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 import { checkIframe } from './checkIframe'
 
 export class MessengerChild{
 
   isConnected=false
   inIframe=false
+  __instanceType='child'
 
   constructor(config=noOpObj){
     this.inIframe = checkIframe()
@@ -50,15 +51,17 @@ export class MessengerChild{
   * @return {Object} - Exposed child methods
   */
   connect = async (options=noOpObj) => {
+    const { methods, onConnected, ...opts } = options
     this.__checkIframe()
 
     // Ensure we have initialized the exposed methods
     this.methods = this.methods || createMethods(this, {
-      ...options.methods,
+      ...this.config.methods,
+      ...methods,
     })
 
     const connection = connectToParent({
-      ...options,
+      ...opts,
       ...this.config.connection,
       // Methods child is exposing to parent
       methods: this.methods,
@@ -72,6 +75,11 @@ export class MessengerChild{
     }
 
     this.isConnected = true
+
+    checkCall(onConnected, this)
+
+    onConnected !== this.config.onConnected &&
+      checkCall(this.config.onConnected, this)
 
     return this.parent
   }

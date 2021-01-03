@@ -18,6 +18,7 @@ export class MessengerParent {
   isOpen=false
   iframeLoaded=false
   isConnected=false
+  __instanceType='parent'
 
   constructor(config=noOpObj){
     this.__init(config)

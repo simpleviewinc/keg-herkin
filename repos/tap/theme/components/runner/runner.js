@@ -1,4 +1,5 @@
 import { results } from './results'
+import { tapColors } from '../../tapColors'
 
 const subsurface = {
   main: {
@@ -39,6 +40,42 @@ const toRun = theme => ({
   }
 })
 
+const isRunning = theme => ({
+  main: {},
+  container: {
+    bgC: 'transparent',
+    pos: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  background: {
+    bgC: tapColors.inactive,
+    pos: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    op: 0.5,
+  },
+  progress: {
+  
+  },
+  indicator: {
+    icon: {
+    }
+  },
+  text: {
+    mT: 35,
+    color: theme?.colors?.surface?.primary?.colors?.main,
+    ftWt: 'bold',
+  },
+})
+
 export const runner = theme => ({
   main: {
     fl: 1,
@@ -50,10 +87,19 @@ export const runner = theme => ({
     main: {
       fl: 1,
     },
+    content: {
+      fl: 1,
+    }
   },
   subsurface,
   toRun: toRun(theme),
   results: results(theme),
+  isRunning: isRunning(theme),
+  editor: {
+    height: '300px',
+    width: '100%',
+    fontSize: '14px'
+  },
   tabs: {
     main: {
       flexDirection: 'row',
