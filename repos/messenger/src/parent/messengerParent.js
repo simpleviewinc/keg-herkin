@@ -1,7 +1,6 @@
 import { toggle } from './toggle'
 import { connectToChild } from 'penpal'
 import { parentConfig } from './parent.config'
-import { createMethods } from '../utils/createMethods'
 import { createDomTree } from './domTree/createDomTree.js'
 import { deepMerge, checkCall, noOpObj } from '@keg-hub/jsutils'
 import { Page } from './page'
@@ -110,15 +109,16 @@ export class MessengerParent {
       return console.error(`MessengerParent.connect requires a child IFrame Element.`)
 
     // Ensure we have initialized the exposed methods
-    this.methods = this.methods || createMethods(this, new Page({
+    this.methods = new Page({
       ...this.config,
       methods: {
-        // Add toggle method to allow the child to toggle its self
-        toggle: this.__toggle,
+        ...this.methods,
         ...this.config.methods,
         ...options.methods,
+        // Add toggle method to allow the child to toggle its self
+        toggle: this.__toggle.bind(this),
       }
-    }))
+    })
 
     const connection = connectToChild({
       ...options,

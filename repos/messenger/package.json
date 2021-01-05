@@ -28,7 +28,7 @@
     "clean:full": "yarn clean:nm; clean:build",
     "clean:install": "yarn clean:full; yarn install --force",
     "clean:nm": "rimraf yarn.lock; rimraf package.lock; rimraf node_modules",
-    "dev": "nodemon --watch ./configs --exec 'rollup -c ./configs/rollup.config.js -w'",
+    "dev": "yarn clean:build; nodemon --watch ./configs --exec 'rollup -c ./configs/rollup.config.js -w'",
     "start": "yarn dev",
     "test": "NODE_ENV=test jest --no-cache --verbose --config=./configs/jest.config.js"
   },

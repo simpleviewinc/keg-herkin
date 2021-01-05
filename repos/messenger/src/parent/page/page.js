@@ -4,7 +4,7 @@ import * as methods from './methods'
 import * as noOp from './noOp'
 import * as selectors from './selectors'
 import * as waitFor from './waitFor'
-import { noOpObj } from '@keg-hub/jsutils'
+import { noOpObj, isFunc } from '@keg-hub/jsutils'
 
 export class Page {
 
@@ -19,7 +19,9 @@ export class Page {
       selectors,
       waitFor
     )
-    Object.entries(this).map(([ name, method ]) => this[name] = method.bind(this))
+
+    Object.entries(this)
+      .map(([ name, method ]) => this[name] = method.bind(this))
   }
 
 }

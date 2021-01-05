@@ -1,1 +1,1 @@
-export * from './createMethods'
+export * from './stringToDom'

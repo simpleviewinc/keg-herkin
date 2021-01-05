@@ -34,6 +34,8 @@
     "ex:i": "yarn ex:install",
     "ex:install": "cd ./repos/example && yarn install",
     "ex:start": "yarn ex:dev",
+    "ex:mess:dev": "run-p ex:dev mess:dev",
+    "ex:mess:start": "yarn dev",
     "format": "yarn pretty",
     "ios": "cd node_modules/keg-core; yarn ios",
     "keg": "cd node_modules/keg-core; yarn",

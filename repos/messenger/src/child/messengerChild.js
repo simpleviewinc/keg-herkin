@@ -1,8 +1,8 @@
+import { Page } from './page'
 import { connectToParent } from 'penpal'
-import { childConfig } from './child.config'
-import { createMethods } from '../utils/createMethods'
-import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 import { checkIframe } from './checkIframe'
+import { childConfig } from './child.config'
+import { deepMerge, noOpObj, checkCall } from '@keg-hub/jsutils'
 
 export class MessengerChild{
 
@@ -54,11 +54,12 @@ export class MessengerChild{
     const { methods, onConnected, ...opts } = options
     this.__checkIframe()
 
-    // Ensure we have initialized the exposed methods
-    this.methods = this.methods || createMethods(this, {
+    // Join all the methods from different locations
+    this.methods = {
+      ...this.methods,
       ...this.config.methods,
       ...methods,
-    })
+    }
 
     const connection = connectToParent({
       ...opts,
@@ -67,11 +68,13 @@ export class MessengerChild{
       methods: this.methods,
     })
 
+    const parentMethods = await connection.promise
+
     // Store the connection, and the parent methods
     // The connection has the destroy method, so we hang on to it
     this.parent = {
       connection,
-      methods: await connection.promise
+      methods: new Page(parentMethods)
     }
 
     this.isConnected = true

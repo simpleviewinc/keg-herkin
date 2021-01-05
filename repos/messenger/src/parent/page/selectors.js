@@ -1,13 +1,26 @@
-import { exists, isFunc, get, set, ensureArr } from '@keg-hub/jsutils'
-import { emulateDomNode } from '../../utils/emulateDomNode'
 
 export const $ = (selector, context=document) => {
-  return selector && emulateDomNode(context.querySelector(selector))
+  if(!selector)
+    throw new Error(`Page#$ ( select ) requires a selector argument`)
+
+  const element = context.querySelector(selector)
+
+  return {
+    html: element.outerHTML,
+    css: getComputedStyle(element).cssText
+  }
 }
 
 export const $$ = (selector, context=document) => {
-  return selector && Array.from(context.querySelectorAll(selector))
-    .map(element => emulateDomNode(element))
+  if(!selector)
+    throw new Error(`Page#$$ ( group select ) requires a selector argument`)
+
+  const elements = Array.from(context.querySelectorAll(selector))
+
+  return elements.map(element => ({
+    html: element.outerHTML,
+    css: getComputedStyle(element).cssText
+  }))
 }
 
 export const $eval = (selector, pageFunction, arg) => {
