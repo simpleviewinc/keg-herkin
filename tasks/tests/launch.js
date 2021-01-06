@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const { executeTask } = require('../helpers/executeTask')
+const { executeTask } = require('../utils/executeTask')
 const { noOpObj, exists } = require('@keg-hub/jsutils')
-const { launchBrowser } = require('../playwright/launchBrowser')
+const { launchBrowser } = require('../utils/playwright/launchBrowser')
 
 /**
 * Gets the options to launch the Playwright browser based on passed in options and config settings
