@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const { npx } = require('../utils/process')
-const { executeTask } = require('../utils/executeTask')
+const { npx } = require('../utils/process/process')
+const { executeTask } = require('../utils/task/executeTask')
 
 const createTest = async (args) => {
   const { params } = args

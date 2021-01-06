@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
-const { executeTask } = require('../utils/executeTask')
 const { noOpObj, exists } = require('@keg-hub/jsutils')
+const { executeTask } = require('../utils/task/executeTask')
+const { sharedOptions } = require('../utils/task/sharedOptions')
 const { launchBrowser } = require('../utils/playwright/launchBrowser')
 
 /**
@@ -60,7 +61,7 @@ const launch = {
   action: launchAction,
   example: 'yarn test:launch',
   description : 'Launch a locally installed browser',
-  options: {
+  options: sharedOptions('launch', {
     context: {
       alias: [ 'name' ],
       enforce: true,
@@ -69,34 +70,14 @@ const launch = {
       example: 'launch --context firefox',
       default: 'chromium',
     },
-    chrome: {
-      alias: [ 'chromium', 'chrom', 'ch' ],
-      description: 'Launch the locally installed Chromium browser through Playwright',
-      example: 'launch --chrome',
-    },
-    firefox: {
-      alias: [ 'fire', 'fox', 'ff' ],
-      description: 'Launch the locally installed Firefox browser through Playwright',
-      example: 'launch --firefox',
-    },
-    webkit: {
-      alias: [ 'webkit', 'safari', 'sa' ],
-      description: 'Launch the locally installed Safari browser through Playwright',
-      example: 'launch --webkit',
-    },
-    headless: {
-      alias: [ 'hl' ],
-      description: 'Launch the browser in headless mode',
-      default: false,
-      example: 'launch --no-headless',
-    },
-    log: {
-      alias: [ 'lg' ],
-      description: 'Log the browsers websocket after it\'s created',
-      default: true,
-      example: 'launch --no-log',
-    },
     // TODO:  add other browser launch options here and in (tap.json) => keg.playwright.config
+  }, [
+    'chrome',
+    'firefox',
+    'webkit',
+    'headless',
+    'log'
+  ])
   }
 }
 

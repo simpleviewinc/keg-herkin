@@ -1,6 +1,5 @@
 module.exports = {
-  ...require('./executeTask'),
-  ...require('./getKegGlobalConfig'),
+  ...require('./playwright'),
   ...require('./process'),
-  ...require('./tapRoot'),
+  ...require('./task'),
 }

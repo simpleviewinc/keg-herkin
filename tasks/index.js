@@ -1,3 +1,1 @@
-module.exports = {
-  ...require('./tests'),
-}
+module.exports = require('./definitions')
