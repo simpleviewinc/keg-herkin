@@ -1,5 +1,5 @@
 module.exports = {
-  ...require('./executeTask'),
+  ...require('./findTask'),
   ...require('./getKegGlobalConfig'),
   ...require('./sharedOptions'),
 }

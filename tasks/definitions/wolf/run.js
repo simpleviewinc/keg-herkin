@@ -1,7 +1,4 @@
-#!/usr/bin/env node
-
-const { npx } = require('../utils/process/process')
-const { executeTask } = require('../utils/task/executeTask')
+const { npx } = require('../../utils/process/process')
 
 const browserMap = {
   all: `--all-browsers`,
@@ -32,33 +29,33 @@ const runTest = async (args) => {
   return resp
 }
 
-const run = {
-  name: 'run',
-  action: runTest,
-  example: 'yarn test:run',
-  description : 'Runs all or defined QAWolf tests',
-  options: {
-    context: {
-      alias: [ 'name' ],
-      description: 'Context or name of the test to be run. If not passed, all tests are run',
-    },
-    sync: {
-      description: 'Run all tests sequentially',
-      example: `--sync`,
-      default: false,
-    },
-    browsers: {
-      allowed: [ `all`, `chrome`, `firefox`, `safari`, `webkit` ],
-      alias: [ 'browser' ],
-      description: 'Which browsers to run the tests in',
-      default: `chrome`
-    },
-    headless: {
-      type: `bool`,
-      description: 'Run the browser tests in headless mode',
-      default: false,
+module.exports = {
+  run: {
+    name: 'run',
+    action: runTest,
+    example: 'yarn test:run',
+    description : 'Runs all or defined QAWolf tests',
+    options: {
+      context: {
+        alias: [ 'name' ],
+        description: 'Context or name of the test to be run. If not passed, all tests are run',
+      },
+      sync: {
+        description: 'Run all tests sequentially',
+        example: `--sync`,
+        default: false,
+      },
+      browsers: {
+        allowed: [ `all`, `chrome`, `firefox`, `safari`, `webkit` ],
+        alias: [ 'browser' ],
+        description: 'Which browsers to run the tests in',
+        default: `chrome`
+      },
+      headless: {
+        type: `bool`,
+        description: 'Run the browser tests in headless mode',
+        default: false,
+      }
     }
   }
 }
-
-module.exports = executeTask(run)

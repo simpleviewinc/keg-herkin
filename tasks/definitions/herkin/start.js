@@ -1,34 +1,32 @@
-#!/usr/bin/env node
 
-const { npx } = require('../utils/process/process')
-const { executeTask } = require('../utils/task/executeTask')
-const { sharedOptions } = require('../utils/options/sharedOptions')
-
-const browserMap = {
-  all: `--all-browsers`,
-  chrome: `--chromium`,
-  firefox: `--firefox`,
-  safari: `--webkit`,
-  webkit: `--webkit`,
-}
-
+/**
+ * Starts all the Keg-Herkin services needed to run tests
+ * @param {Object} args - arguments passed from the runTask method
+ * @param {string} args.command - Root task name
+ * @param {Object} args.tasks - All registered tasks of the CLI
+ * @param {string} args.task - Task Definition of the task being run
+ * @param {Array} args.options - arguments passed from the command line
+ * @param {Object} args.globalConfig - Global config object for the keg-cli
+ * @param {string} args.params - Passed in options, converted into an object
+ * @param {Array} args.herkin - Local config, injected into the task args
+ *
+ * @returns {void}
+ */
 const startHerkin = async (args) => {
-  const { params } = args
-  const cmd = buildTestArguments([], params)
-
-  const resp = await npx([`qawolf`, `test`].concat(cmd))
+  const { params, herkin } = args
   
-  return resp
+  console.log(`---------- Start Keg-Herkin Services ----------`)
+
 }
 
-const start = {
-  name: 'start',
-  action: startHerkin,
-  example: 'test:start',
-  description : 'Starts all services. (Local Webserver and Docker Container)',
-  options: {
-
+module.exports = {
+  start: {
+    name: 'start',
+    alias: ['st'],
+    action: startHerkin,
+    example: 'test:start',
+    description : 'Starts all services. (Local Webserver and Docker Container)',
+    options: {
+    }
   }
 }
-
-module.exports = executeTask(start)

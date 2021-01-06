@@ -1,4 +1,10 @@
-const { pickKeys, deepMerge, noOpObj, noOpArr } = require('@keg-hub/jsutils')
+const {
+  deepMerge,
+  isArr,
+  noOpObj,
+  noOpArr,
+  pickKeys
+} = require('@keg-hub/jsutils')
 
 /**
 * Gets the options to launch the Playwright browser based on passed in options and config settings
@@ -19,7 +25,7 @@ const sharedOptions = (action, taskOps=noOpObj, include=noOpArr) => {
       allowed: [ `all`, `chrome`, `firefox`, `safari`, `webkit` ],
       alias: [ 'browser' ],
       description: 'Which browsers to run the tests in. Only valid in headless mode.',
-      default: `chrome`
+      default: `chrome`,
       example: `${action} --browsers chrome`,
     },
     chrome: {

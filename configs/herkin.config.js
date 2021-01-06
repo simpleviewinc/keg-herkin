@@ -51,7 +51,6 @@ const getHerkinConfig = (argsConfig=noOpObj) => {
     get(appConfig, ['keg']),
     get(tapConfig, ['keg']),
     customConfig,
-    runtimeConfig,
   )
 
 }

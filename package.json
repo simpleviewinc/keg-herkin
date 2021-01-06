@@ -44,10 +44,7 @@
     "postinstall": "node scripts/postinstall.js",
     "setup": "yarn install --ignore-engines; cd node_modules/keg-core; yarn postinstall --ignore-engines",
     "start": "cd node_modules/keg-core; expo start",
-    "test:create": "node ./tasks/tests/create.js",
-    "test:edit": "node ./tasks/tests/edit.js",
-    "test:launch": "node ./tasks/tests/launch.js",
-    "test:run": "node ./tasks/tests/run.js",
+    "task": "node ./tasks/runTask.js",
     "web": "yarn web:dev",
     "web:build": "cd node_modules/keg-core; yarn build:web",
     "web:dev": "nodemon --watch node_modules/keg-core/core/base/configs --watch package.json --watch node_modules/keg-core/app.json --watch node_modules/keg-core/package.json --watch configs --exec 'cd node_modules/keg-core && yarn web'"

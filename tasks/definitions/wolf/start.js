@@ -1,8 +1,5 @@
-#!/usr/bin/env node
-
-const { npx } = require('../utils/process/process')
-const { executeTask } = require('../utils/task/executeTask')
-const { sharedOptions } = require('../utils/task/sharedOptions')
+const { npx } = require('../../utils/process/process')
+const { sharedOptions } = require('../../utils/task/sharedOptions')
 
 const browserMap = {
   all: `--all-browsers`,
@@ -21,14 +18,14 @@ const startTests = async (args) => {
   return resp
 }
 
-const start = {
-  name: 'start',
-  action: startTests,
-  example: 'test:start',
-  description : 'Starts all services. (Local Webserver and Docker Container)',
-  options: {
+module.exports = {
+  start: {
+    name: 'start',
+    action: startTests,
+    example: 'test:start',
+    description : 'Starts all services. (Local Webserver and Docker Container)',
+    options: {
 
+    }
   }
 }
-
-module.exports = executeTask(start)
