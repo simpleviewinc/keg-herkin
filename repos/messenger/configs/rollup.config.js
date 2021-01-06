@@ -5,6 +5,8 @@ import replace from '@rollup/plugin-replace'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import { terser } from "rollup-plugin-terser"
+import builtins from 'rollup-plugin-node-builtins'
+import globals from 'rollup-plugin-node-globals'
 
 const { DOC_APP_PATH, DOC_APP_PORT, NODE_ENV } = process.env
 
@@ -15,6 +17,7 @@ const isProd = process.env.NODE_ENV === 'production'
 
 // Default location of the build output
 const buildPath = `./build`
+
 
 // Rollup accepts an array of configs as an export
 // Which allows us to loop over the export types for cjs and esm
@@ -42,7 +45,7 @@ export default Array.from([ 'cjs', 'esm' ])
       },
       external: [
         'react',
-        '@keg-hub/jsutils',
+        '@keg-hub/jsutils'
       ],
       plugins: [
         replace({
@@ -51,7 +54,9 @@ export default Array.from([ 'cjs', 'esm' ])
         alias({
           entries: {},
         }),
-        resolve(),
+        globals(),
+        builtins(),
+        resolve({}),
         babel({
           babelrc: false,
           sourceMaps: true,
