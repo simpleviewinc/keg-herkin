@@ -14,6 +14,13 @@
       "paths": {
         "tapSrc": "./repos/tap"
       }
+    },
+    "playwright": {
+      "browser": {
+        "type": "chromium",
+        "allowed": [ "chromium", "firefox", "webkit" ],
+        "headless": false
+      }
     }
   },
   "expo": {

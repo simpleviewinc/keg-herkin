@@ -1,6 +1,7 @@
 const { checkCall } = require('@keg-hub/jsutils')
 const { argsParse } = require("@keg-hub/args-parse")
 const { getKegGlobalConfig } = require('./getKegGlobalConfig')
+const { getHerkinConfig } = require('../../configs/herkin.config')
 
 /**
  * Executes the passed in task if it's called directly, otherwise added it to the module.exports object
@@ -28,6 +29,7 @@ const executeTask = task => {
           task,
           params,
           options,
+          herkin: getHerkinConfig(params),
           globalConfig: getKegGlobalConfig(false)
         })
 
