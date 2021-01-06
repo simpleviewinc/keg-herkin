@@ -45,7 +45,6 @@ export default Array.from([ 'cjs', 'esm' ])
       },
       external: [
         'react',
-        '@keg-hub/jsutils'
       ],
       plugins: [
         replace({
