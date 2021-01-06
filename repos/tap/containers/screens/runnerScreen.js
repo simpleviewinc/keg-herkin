@@ -13,13 +13,13 @@ import { Results } from 'SVComponents/runner/results'
 const defTests = `
 describe('basic math', () => {
 
-  test('addition', () => {
+  it('should add two numbers', () => {
     expect(1+1).toBe(2)
   })
 
-  test('subtraction', async () => {
+  test('should find the nav-bar button on the page', async () => {
     const button = await page.$('button.navbar-toggler')
-    console.log(button)
+    expect(button).not.toBe(undefined)
   })
 
 })

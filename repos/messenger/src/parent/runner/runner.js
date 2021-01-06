@@ -1,16 +1,21 @@
-import { noOpObj, get, set } from "@keg-hub/jsutils"
-import expect from "expect"
-import { describe, test, run } from "jest-circus-browser"
+import { noOpObj, noOp, get, set } from "@keg-hub/jsutils"
+import {describe, it, expect, run} from 'jest-lite'
+
+/**
+* Holds the global Jest state
+* @object
+*/
+let globalJestState
 
 /**
 * Executes the tests inside a scoped function
+* <br/> Builds the tests function dynamically, and injects the passed in tests
 * @function
 * @private
-* <br/> Builds the tests function dynamically, and injects the passed in tests
 * @param {string} testCode - Tests to run in the Parent browser context
 * @param {Object} page - Methods that allow accessing the Dom in the Parents context
 *
-* @return {Object} - The current global state of jest
+* @return {Object} - Response from the run tests
 */
 const execTests = (testCode, page=noOpObj) => {
   return Function(`return (describe, test, expect, run, page) => {
@@ -26,19 +31,24 @@ const execTests = (testCode, page=noOpObj) => {
 *
 * @return {Object} - The current global state of jest
 */
-const getJestSymbolData = () => {
+const setGlobalJestState = () => {
+  if(globalJestState) return globalJestState
+
   const jestSym = Object.getOwnPropertySymbols(window)
     .find(sym => String(sym) === `Symbol(JEST_STATE_SYMBOL)`)
 
-  return window[jestSym]
+  globalJestState = window[jestSym]
+
+  return globalJestState
 }
 
 
 export class Runner {
 
-  constructor(config){
+  constructor(config=noOpObj){
     this.page = config.page || noOpObj
-    this.jestState = getJestSymbolData()
+    this.toggleHerkin = config.toggleHerkin || noOp
+    setGlobalJestState()
   }
 
   /**
@@ -49,8 +59,8 @@ export class Runner {
   * @return {void}
   */
   clearPreviousTests(){
-    get(this.jestState, 'currentDescribeBlock.children', []).length &&
-      set(this.jestState, 'currentDescribeBlock.children', [])
+    get(globalJestState, 'currentDescribeBlock.children', []).length &&
+      set(globalJestState, 'currentDescribeBlock.children', [])
   }
 
   /**

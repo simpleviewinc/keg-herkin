@@ -123,7 +123,7 @@ export class MessengerParent {
     this.runner = new Runner({
       page: this.page,
       // Add toggle method to allow the child to toggle its self
-      toggle: this.__toggle.bind(this),
+      toggleHerkin: this.__toggle.bind(this),
     })
 
     const connection = connectToChild({
