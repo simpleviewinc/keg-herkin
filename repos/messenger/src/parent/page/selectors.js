@@ -3,24 +3,14 @@ export const $ = (selector, context=document) => {
   if(!selector)
     throw new Error(`Page#$ ( select ) requires a selector argument`)
 
-  const element = context.querySelector(selector)
-
-  return {
-    html: element.outerHTML,
-    css: getComputedStyle(element).cssText
-  }
+  return context.querySelector(selector)
 }
 
 export const $$ = (selector, context=document) => {
   if(!selector)
     throw new Error(`Page#$$ ( group select ) requires a selector argument`)
 
-  const elements = Array.from(context.querySelectorAll(selector))
-
-  return elements.map(element => ({
-    html: element.outerHTML,
-    css: getComputedStyle(element).cssText
-  }))
+  return Array.from(context.querySelectorAll(selector))
 }
 
 export const $eval = (selector, pageFunction, arg) => {

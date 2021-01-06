@@ -3,7 +3,7 @@ import { RunnerTabs } from './runnerTabs'
 import { useTheme } from '@keg-hub/re-theme'
 import { Surface } from 'SVComponents/surface'
 import { useFeature } from 'SVHooks/useFeature'
-import { useJestRunner } from 'SVHooks/useJestRunner'
+import { useTestRunner } from 'SVHooks/useTestRunner'
 import { Row } from '@keg-hub/keg-components/row'
 import { AceEditor } from 'SVComponents/aceEditor'
 import { View } from '@keg-hub/keg-components/view'
@@ -71,7 +71,7 @@ export const Runner = props => {
   const {
     autoRun=true,
     activeTab,
-    page,
+    parentMethods,
     prefix,
     tests,
     title,
@@ -87,18 +87,18 @@ export const Runner = props => {
   const tabSelect = useTabSelect(tab, setTab)
   const [testResults, setTestResults] = useState([])
 
-  const onRunTests = useJestRunner(
+  const onRunTests = useTestRunner(
     setTestResults,
     setIsRunning,
     editorRef,
-    page,
+    parentMethods,
   )
 
   const { feature, definitions } = useFeature()
 
   useEffect(() => {
     autoRun && onRunTests()
-  }, [autoRun, setTestResults, page])
+  }, [autoRun, setTestResults, parentMethods])
 
 
   return (

@@ -4,6 +4,8 @@ import { parentConfig } from './parent.config'
 import { createDomTree } from './domTree/createDomTree.js'
 import { deepMerge, checkCall, noOpObj } from '@keg-hub/jsutils'
 import { Page } from './page'
+import { Runner } from './runner'
+
 /**
  * MessengerParent
  * Parent Class for interacting with a Messenger child instance within an Iframe
@@ -109,22 +111,26 @@ export class MessengerParent {
       return console.error(`MessengerParent.connect requires a child IFrame Element.`)
 
     // Ensure we have initialized the exposed methods
-    this.methods = new Page({
+    this.page = new Page({
       ...this.config,
       methods: {
         ...this.methods,
         ...this.config.methods,
         ...options.methods,
-        // Add toggle method to allow the child to toggle its self
-        toggle: this.__toggle.bind(this),
       }
+    })
+    
+    this.runner = new Runner({
+      page: this.page,
+      // Add toggle method to allow the child to toggle its self
+      toggle: this.__toggle.bind(this),
     })
 
     const connection = connectToChild({
       ...options,
       ...this.config.connection,
       iframe: iframeEl,
-      methods: this.methods,
+      methods: this.runner,
     })
 
     // Store the connection, and the child methods

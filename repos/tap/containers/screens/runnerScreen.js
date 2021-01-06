@@ -1,6 +1,6 @@
 import expect from "expect"
 import { exists } from '@keg-hub/jsutils'
-import { usePlaywrightPage } from 'SVHooks'
+import { useParentMethods } from 'SVHooks'
 import { useTheme } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components'
 import React, { useState, useEffect } from "react"
@@ -28,7 +28,7 @@ describe('basic math', () => {
 export const RunnerScreen = props => {
   const theme = useTheme()
   const builtStyles = theme.get(`screens.runner`)
-  const page = usePlaywrightPage()
+  const parentMethods = useParentMethods()
 
   const [ tests, setTests ] = useState(props.tests || defTests)
   useEffect(() => {
@@ -48,7 +48,7 @@ export const RunnerScreen = props => {
         tests={tests}
         title={'Features'}
         prefix={`Test Runner - `}
-        page={page}
+        parentMethods={parentMethods}
       />
     </View>
   )
