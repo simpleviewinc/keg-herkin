@@ -1,5 +1,5 @@
 import { noOpObj, noOp, get, set } from "@keg-hub/jsutils"
-import {describe, it, expect, run} from 'jest-lite'
+import {describe, it, expect, run} from 'codeamigo-jest-lite'
 
 /**
 * Holds the global Jest state
@@ -18,10 +18,10 @@ let globalJestState
 * @return {Object} - Response from the run tests
 */
 const execTests = (testCode, page=noOpObj) => {
-  return Function(`return (describe, test, expect, run, page) => {
+  return Function(`return (describe, it, test, expect, run, page) => {
     ${testCode}
     return run()
-  }`)()(describe, test, expect, run, page)
+  }`)()(describe, it, it, expect, run, page)
 }
 
 /**

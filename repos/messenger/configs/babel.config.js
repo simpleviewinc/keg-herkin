@@ -1,8 +1,10 @@
+const { DEBUG_BABEL } = process.env
+
 module.exports = {
   presets: [
     ["@babel/preset-env", {
       useBuiltIns: "usage",
-      debug: true,
+      debug: Boolean(DEBUG_BABEL),
       corejs: 3
     }],
     [ '@babel/preset-react' ]

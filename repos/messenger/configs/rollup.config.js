@@ -42,6 +42,8 @@ export default buildTypes.reduce((apps, type) => {
     },
     external: [
       'react',
+      '@keg-hub/jsutils',
+      'codeamigo-jest-lite',
     ],
     plugins: [
       replace({
