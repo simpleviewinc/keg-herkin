@@ -1,5 +1,18 @@
 import { noOpObj, noOp, get, set } from "@keg-hub/jsutils"
-import {describe, it, expect, run} from 'codeamigo-jest-lite'
+import { core } from 'codeamigo-jest-lite'
+const {
+  addEventHandler,
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+  run,
+  test
+} = core
 
 /**
 * Holds the global Jest state
@@ -18,11 +31,27 @@ let globalJestState
 * @return {Object} - Response from the run tests
 */
 const execTests = (testCode, page=noOpObj) => {
-  return Function(`return (describe, it, test, expect, run, page) => {
+  return Function(`return (addEventHandler, afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, jest, run, page, test, testCode) => {
     ${testCode}
     return run()
-  }`)()(describe, it, it, expect, run, page)
+  }`)()(
+    addEventHandler,
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    jest,
+    run,
+    page,
+    test,
+    testCode
+  )
 }
+
+    
 
 /**
 * Gets gets global state from the window
@@ -58,7 +87,7 @@ export class Runner {
   *
   * @return {void}
   */
-  clearPreviousTests(){
+  clearPreviousTests = () => {
     get(globalJestState, 'currentDescribeBlock.children', []).length &&
       set(globalJestState, 'currentDescribeBlock.children', [])
   }
@@ -71,10 +100,10 @@ export class Runner {
   *
   * @return {Object} - Results from the tests being run
   */
-  async runTests(testCode){
+  runTests = async (testCode) => {
     const results = await execTests(testCode, this.page)
 
-    return results
+    return { results }
   }
 
 }

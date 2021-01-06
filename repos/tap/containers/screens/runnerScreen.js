@@ -11,7 +11,7 @@ import { Results } from 'SVComponents/runner/results'
 // TODO: Replace with actual tests from definitions file
 // For display, show features, but run step definitions
 const defTests = `
-describe('basic math', () => {
+describe('Example Tests', () => {
 
   it('should add two numbers', () => {
     expect(1+1).toBe(2)

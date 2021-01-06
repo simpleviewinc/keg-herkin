@@ -60,6 +60,7 @@
     "@keg-hub/ask-it": "0.0.1",
     "@keg-hub/jsutils": "7.0.2",
     "@keg-hub/spawn-cmd": "0.1.0",
+    "@keg-hub/messenger": "file:repos/messenger",
     "ansi-html": "0.0.7",
     "axios": "0.19.2",
     "body-parser": "1.10.2",

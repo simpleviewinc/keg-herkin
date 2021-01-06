@@ -27,9 +27,10 @@ export default buildTypes.reduce((apps, type) => {
     // This allows importing only when you need
     input: {
       index: `./src/index.js`,
-      react: './src/react/index.js',
       parent: './src/parent/index.js',
+      reactParent: './src/parent/react/index.js',
       child: './src/child/index.js',
+      reactChild: './src/child/react/index.js',
     },
     output: {
       dir: `${buildPath}/${type}`,
