@@ -21,5 +21,6 @@ services:
       - KEG_DOCKER_EXEC
       - KEG_NM_INSTALL
       - NODE_ENV
+      - KEG_PLAYWRIGHT_WS
     ports:
       - ${API_PORT}:${API_PORT}

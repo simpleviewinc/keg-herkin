@@ -18,6 +18,6 @@ const initialize = tasks => {
 }
 
 module.exports = {
-  ...initialize(require('./herkin')),
+  ...initialize(require('./tap')),
   ...initialize(require('./wolf')),
 }

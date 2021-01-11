@@ -1,3 +1,6 @@
+// const { launchAction } from './launch'
+const { get, checkCall } = require('@keg-hub/jsutils')
+const { sharedOptions } = require('../../utils/task/sharedOptions')
 
 /**
  * Starts all the Keg-Herkin services needed to run tests
@@ -14,8 +17,13 @@
  */
 const startHerkin = async (args) => {
   const { params, herkin } = args
-  
-  console.log(`---------- Start Keg-Herkin Services ----------`)
+  const launchSocket = (params.launch && !params.headless)
+
+  launchSocket &&
+    await checkCall(get(args, 'tasks.tap.tasks.launch.action'), args)
+
+
+  // await args.task.cliTask(args)
 
 }
 
@@ -26,7 +34,19 @@ module.exports = {
     action: startHerkin,
     example: 'test:start',
     description : 'Starts all services. (Local Webserver and Docker Container)',
-    options: {
-    }
+    options: sharedOptions('start', {
+        launch: {
+          description: 'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
+          example: 'start --no-launch',
+          default: true,
+        },q
+      // TODO:  add other browser launch options here and in (tap.json) => keg.playwright.config
+    }, [
+      'chrome',
+      'firefox',
+      'webkit',
+      'headless',
+      'log'
+    ])
   }
 }
