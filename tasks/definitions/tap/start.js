@@ -39,7 +39,7 @@ module.exports = {
           description: 'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
           example: 'start --no-launch',
           default: true,
-        },q
+        },
       // TODO:  add other browser launch options here and in (tap.json) => keg.playwright.config
     }, [
       'chrome',
