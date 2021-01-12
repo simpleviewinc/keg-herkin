@@ -73,9 +73,9 @@
     "prettier": "2.0.5",
     "qawolf": "1.4.0",
     "react-ace-editor": "https://github.com/lancetipton/react-ace-editor.git",
-    "rollup": "^2.36.1",
+    "rollup": "2.36.1",
     "socket.io": "2.3.0",
-    "webpack": "^5.13.0"
+    "webpack": "5.13.0"
   },
   "devDependencies": {
     "jest": "26.4.2",
