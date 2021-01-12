@@ -12,19 +12,19 @@ export const $$ = (selector, context = document) => {
   return Array.from(context.querySelectorAll(selector))
 }
 
+export const frame = selector => {
+  return window.frames[selector]
+}
+
+export const frames = () => {
+  return Array.from(window.frames)
+}
+
 export const $eval = (selector, pageFunction, arg) => {
   console.log(`---------- Not Implemented ----------`)
 }
 
 export const $$eval = (selector, pageFunction, arg) => {
-  console.log(`---------- Not Implemented ----------`)
-}
-
-export const frame = frameSelector => {
-  console.log(`---------- Not Implemented ----------`)
-}
-
-export const frames = () => {
   console.log(`---------- Not Implemented ----------`)
 }
 

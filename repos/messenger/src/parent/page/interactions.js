@@ -1,58 +1,95 @@
-import { $ } from './selectors'
+import { dispatchEvent } from '../../utils/dom/dispatchEvent'
+import { withSelector } from '../../utils/dom/withSelector'
 
-export const check = (selector, options) => {
-  console.log(`---------- Not Implemented ----------`)
-}
-export const click = (selector, options) => {
-  const element = $(selector)
-  element.click()
-}
-export const dblclick = (selector, options) => {
-  console.log(`---------- Not Implemented ----------`)
-}
+export const check = withSelector((element, selector, options) => {
+  element.setAttribute(checked, true)
+  return element
+})
 
-export const dispatchEvent = (selector, type, eventInit, options) => {
-  console.log(`---------- Not Implemented ----------`)
-}
+export const uncheck = withSelector((element, selector, options) => {
+  element.setAttribute(checked, false)
+  return element
+})
 
-export const fill = (selector, value, options) => {
-  const element = $(selector)
-  element.value(value)
-}
+export const click = withSelector((element, selector, options) => {
+  dispatchEvent(element, 'click', 'MouseEvents', options)
+  return element
+})
 
-export const focus = (selector, options) => {
-  const element = $(selector)
+export const dblclick = withSelector((element, selector, options) => {
+  dispatchEvent(element, 'dblclick', 'MouseEvents', options)
+  return element
+})
+
+export const dispatchEvent = withSelector(element, selector, type, eventInit, options) => {
+  dispatchEvent(element, type, eventInit, options)
+  return element
+})
+
+export const fill = withSelector((element, selector, value, options) => {
   element.focus()
-}
+  element.value(value)
+  return element
+})
 
-export const hover = (selector, options) => {
-  console.log(`---------- Not Implemented ----------`)
-}
+export const focus = withSelector((element, selector, options) => {
+  element.focus()
+  return element
+})
 
-export const innerHTML = (selector, options) => {
-  console.log(`---------- Not Implemented ----------`)
-}
+export const hover = withSelector((element, selector, options) => {
+  dispatchEvent(element, 'hover', 'MouseEvents', options)
+})
 
-export const innerText = (selector, options) => {
-  console.log(`---------- Not Implemented ----------`)
-}
+export const press = withSelector((element, selector, key, options) => {
+  element.focus()
+  dispatchEvent(element, 'keydown', { key, ..options })
+})
 
-export const press = (selector, key, options) => {
-  console.log(`---------- Not Implemented ----------`)
-}
+export const innerHTML = withSelector((element, selector, options) => {
+  return element.innerHTML
+})
 
-export const selectOption = (selector, values, options) => {
-  console.log(`---------- Not Implemented ----------`)
-}
+export const innerText = withSelector((element, selector, options) => {
+  return element.innerText
+})
 
-export const textContent = (selector, options) => {
-  console.log(`---------- Not Implemented ----------`)
-}
+export const selectOption = withSelector((element, selector, values, options) => {
+  const { index, label, value } = options
 
-export const type = (selector, text, options) => {
-  console.log(`---------- Not Implemented ----------`)
-}
+  const hasMultiple = Boolean(element.getAttribute('multiple'))
 
-export const uncheck = (selector, options) => {
+  const optionEls = Array.from(element.getElementsByTagName('option'))
+  optionEls.reduce((matching, optionEl, idx) => {
+    if(matching.length && !hasMultiple) return matching
+
+    if((idx === index) || (value = optionEl.value) || (label = optionEl.label)){
+      optionEl.setAttribute('selected')
+      matching.push(optionEl.value)
+    }
+
+    return matching
+  }, [])
+
+})
+
+export const textContent = withSelector((element, selector, options) => {
+  return element.textContent
+})
+
+// TODO: Must send events for keydown, keypress, keyup in that order
+// For each char of the passed in text
+export const type = withSelector((element, selector, text='', options) => {
+  // Implementation would look something like this =>
+  //
+  // element.focus()
+  // text.split('').map(key => {
+  //   dispatchEvent(element, 'keydown', { ...options, key })
+  //   dispatchEvent(element, 'keypress', { ...options, key })
+  //   dispatchEvent(element, 'keyup', { ...options, key })
+  // })
+  //
+
   console.log(`---------- Not Implemented ----------`)
-}
+})
+

@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { MessengerChild } from '../messengerChild'
-import { checkCall, noOpObj, noOp } from '@keg-hub/jsutils'
 
 let ChildInstance
 
