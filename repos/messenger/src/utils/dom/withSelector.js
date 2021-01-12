@@ -1,4 +1,4 @@
-import { $ } from '../../page/selectors'
+import { $ } from '../../parent/page/selectors'
 import { throwNoElement } from '../../utils/errors/throwNoElement'
 import { throwNoSelector } from '../../utils/errors/throwNoSelector'
 
