@@ -29,6 +29,8 @@ const addEventListener = (event, callback) => {
 
 // TODO: not all events align directly with real dom events
 // Will need to wrap other ( REAL DOM EVENTS ), to map them to the pageEvents list
+// Callback is most likely a string, so need to convert into a real function
+// with the Function constructor
 export const on = (event, callback) => {
   return !pageEvents.includes(event)
     ? throwError(
