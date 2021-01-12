@@ -1,4 +1,4 @@
-import { noOpObj, noOp, get, set } from "@keg-hub/jsutils"
+import { noOpObj, noOp, get, set } from '@keg-hub/jsutils'
 import {
   addEventHandler,
   afterAll,
@@ -10,7 +10,7 @@ import {
   it,
   jest,
   run,
-  test
+  test,
 } from 'codeamigo-jest-lite'
 
 /**
@@ -89,14 +89,14 @@ export class Runner {
   }
 
   /**
-  * Clears previous test runs to ensure they are not duplicated
-  * @memberof Runner
-  * @function
-  * @param {string} testCode - Tests to run in the Parent browser context
-  *
-  * @return {Object} - Results from the tests being run
-  */
-  runTests = async (testCode) => {
+   * Clears previous test runs to ensure they are not duplicated
+   * @memberof Runner
+   * @function
+   * @param {string} testCode - Tests to run in the Parent browser context
+   *
+   * @return {Object} - Results from the tests being run
+   */
+  runTests = async testCode => {
     console.log('runTests!!')
     const results = await execTests(testCode, this.page)
 
