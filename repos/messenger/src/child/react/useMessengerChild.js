@@ -13,12 +13,11 @@ let ChildInstance
 export const useMessengerChild = ({ onConnected, ...config }) => {
   useEffect(() => {
     // Only setup messenger if we are in an Iframe
-    if(window.parent === window) return
+    if (window.parent === window) return
 
-    if(!ChildInstance) ChildInstance = new MessengerChild(config)
+    if (!ChildInstance) ChildInstance = new MessengerChild(config)
 
     !ChildInstance.isConnected &&
       (async () => await ChildInstance.connect({ onConnected }))()
-    
   }, [])
 }

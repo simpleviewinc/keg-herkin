@@ -10,7 +10,7 @@ export const waitForLoadState = async (state, options) => {
   console.log(`---------- Not Implemented ----------`)
 }
 
-export const waitForNavigation = async (options) => {
+export const waitForNavigation = async options => {
   console.log(`---------- Not Implemented ----------`)
 }
 
@@ -26,6 +26,6 @@ export const waitForSelector = async (selector, options) => {
   console.log(`---------- Not Implemented ----------`)
 }
 
-export const waitForTimeout = async (timeout) => {
+export const waitForTimeout = async timeout => {
   console.log(`---------- Not Implemented ----------`)
 }

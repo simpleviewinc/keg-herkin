@@ -8,10 +8,8 @@ import { convertTreeToDom } from './convertTreeToDom'
  *
  * @return {boolean} - Ready state of the document
  */
-const isDocReady = () => (
-  document.readyState === 'complete' ||
-    document.readyState === 'interactive'
-)
+const isDocReady = () =>
+  document.readyState === 'complete' || document.readyState === 'interactive'
 
 /**
  * Adds the Messenger container Element to the Dom
@@ -21,12 +19,12 @@ const isDocReady = () => (
  *
  * @return {void}
  */
-const addContainerToDom = (container) => {
+const addContainerToDom = container => {
   isDocReady()
     ? document.body.appendChild(container)
     : document.addEventListener('DOMContentLoaded', () => {
-        document.body.appendChild(container)
-      })
+      document.body.appendChild(container)
+    })
 }
 
 /**
@@ -38,15 +36,11 @@ const addContainerToDom = (container) => {
  * @return {Object} Styles for the Iframe Dom Element
  */
 const getIframeStyles = config => {
-  return deepMerge(
-    config.iframe.attrs.style,
-    config.iframe.style,
-    {
-      width: '100%',
-      height: '100%',
-      border: 'none',
-    }
-  )
+  return deepMerge(config.iframe.attrs.style, config.iframe.style, {
+    width: '100%',
+    height: '100%',
+    border: 'none',
+  })
 }
 
 /**
@@ -65,11 +59,10 @@ const getIframeAttrs = (config, { __iframeOnLoad }) => {
 
   ifConfig.id && (attrs.id = ifConfig.id)
   ifConfig.src && (attrs.src = ifConfig.src)
-  ifConfig.class && (
-    attrs.className = isArr(ifConfig.class)
+  ifConfig.class &&
+    (attrs.className = isArr(ifConfig.class)
       ? ifConfig.class.join(' ')
-      : ifConfig.class
-  )
+      : ifConfig.class)
   attrs.style = getIframeStyles(config)
 
   // Set the internal iframe onload event
@@ -91,13 +84,13 @@ export const createDomTree = (config, events) => {
 
   const iframe = document.getElementById(ifConfig.id || ifConfig.attrs.id)
   // If the iframe already exists, don't creat it, just return the container parent
-  if(iframe) return iframe.parentNode
+  if (iframe) return iframe.parentNode
 
   // Build the domTree elements
   const container = convertTreeToDom(
-    ['iframe', getIframeAttrs(config, events)],
+    [ 'iframe', getIframeAttrs(config, events) ],
     config,
-    events,
+    events
   )
 
   // Add the elements to the DOM

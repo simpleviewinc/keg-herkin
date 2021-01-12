@@ -25,4 +25,3 @@ export const exposeBinding = (name, playwrightBinding, options) => {
 export const exposeFunction = (name, playwrightFunction) => {
   console.log(`---------- Not Implemented ----------`)
 }
-

@@ -17,7 +17,7 @@ const pageEvents = [
   'requestfinished',
   'response',
   'websocket',
-  'worker'
+  'worker',
 ]
 
 export const on = (event, callback) => {

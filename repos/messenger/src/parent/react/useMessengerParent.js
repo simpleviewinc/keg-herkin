@@ -4,7 +4,7 @@ import { checkCall, noOpObj, noOp } from '@keg-hub/jsutils'
 
 let ParentInstance
 
-export const useMessengerParent = (config=noOpObj, callback=noOp) => {
+export const useMessengerParent = (config = noOpObj, callback = noOp) => {
   useEffect(() => {
     ParentInstance = ParentInstance || new MessengerParent(config)
     checkCall(callback, ParentInstance)
