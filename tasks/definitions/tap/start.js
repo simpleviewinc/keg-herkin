@@ -16,15 +16,14 @@ const { sharedOptions } = require('../../utils/task/sharedOptions')
  * @returns {void}
  */
 const startHerkin = async (args) => {
-  const { params, herkin } = args
-  const launchSocket = (params.launch && !params.headless)
+  // const { params, herkin } = args
+  // const launchSocket = (params.launch && !params.headless)
 
-  launchSocket &&
-    await checkCall(get(args, 'tasks.tap.tasks.launch.action'), args)
+  // launchSocket &&
+  //   await checkCall(launch.action, args)
+  // await yarn('ex:mess')
 
-
-  // await args.task.cliTask(args)
-
+  await args.task.cliTask(args)
 }
 
 module.exports = {
