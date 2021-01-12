@@ -1,4 +1,3 @@
-
 /**
  * Default Messenger Parent config
  * @Object
@@ -15,9 +14,9 @@ export const parentConfig = {
     // URL to set the Iframe too, overrides the default Keg-Herkin bundle
     // TODO: update this to be the bundled keg-herkin client code as data url
     src: `http://herkin-master.local.kegdev.xyz/`,
-    // Extra attributes to add to the iframe 
+    // Extra attributes to add to the iframe
     attrs: {
-      frameborder: "0",
+      frameborder: '0',
       allowfullscreen: true,
     },
   },
@@ -37,6 +36,5 @@ export const parentConfig = {
     // onDisconnect: null,
   },
   // Custom methods that can be called by the child iframe within the parent's context
-  methods: {
-  }
+  methods: {},
 }

@@ -1,4 +1,5 @@
 module.exports = {
   ...require('./definitions'),
-  ...require('./features')
+  ...require('./features'),
+  testFiles: require('testFiles'),
 }

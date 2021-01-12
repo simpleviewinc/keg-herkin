@@ -1,4 +1,3 @@
-
 /**
  * Slide Toggles the Messenger open
  * @param  {Object} container - Root Dom Element of the Messenger
@@ -26,7 +25,8 @@ const toggleOpen = (container, config) => {
  */
 const toggleClosed = (container, config) => {
   const side = config.toggle.side
-  const amount = side === 'top' || side === 'bottom'
+  const amount =
+    side === 'top' || side === 'bottom'
       ? container.offsetHeight
       : container.offsetWidth
 
@@ -50,9 +50,7 @@ const toggleClosed = (container, config) => {
  * @return {boolean} Updated open state of the Messenger
  */
 export const toggle = (isOpen, container, config) => {
-  isOpen
-    ? toggleClosed(container, config)
-    : toggleOpen(container, config)
+  isOpen ? toggleClosed(container, config) : toggleOpen(container, config)
 
   return !isOpen
 }

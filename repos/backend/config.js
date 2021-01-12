@@ -13,6 +13,7 @@ const defConfig = {
     stepsFolder: path.join(rootDir, 'tests/bdd/steps'),
     featuresFolder: path.join(rootDir, 'tests/bdd/features'),
     componentsFile: path.join(rootDir, 'tests/bdd/components.js'),
+    testsFolder: path.join(rootDir, 'tests/tests')
   }
 }
 

@@ -5,14 +5,14 @@ import { isFunc, isArr, isStr, isObj } from '@keg-hub/jsutils'
  * @private
  * @Array
  */
-const SVG_TYPES = [`path`, `svg`, `circle`]
+const SVG_TYPES = [ `path`, `svg`, `circle` ]
 
 /**
  * Extra prop for SVG dom elements, when calling the `createElementNS` method
  * @private
  * @string
  */
-const SVG_NAMESPACE = "http://www.w3.org/2000/svg"
+const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
 
 /**
  * Creates a dom element and children based on the passed arguments
@@ -34,37 +34,35 @@ export const buildElement = (type, attrs, children) => {
     // Loop the attributes and add them based on their key
     // Handles functions by calling addEventListener
     // Handles style attribute as and object || string
-    Object.entries(attrs)
-      .map(([ attr, value ]) => {
-        isFunc(value)
-          ? element.addEventListener(attr, value)
-          : attr === 'style' && isObj(value)
-            ? Object.assign(element.style, value)
-            : element.setAttribute(attr, value)
-      })
+    Object.entries(attrs).map(([ attr, value ]) => {
+      isFunc(value)
+        ? element.addEventListener(attr, value)
+        : attr === 'style' && isObj(value)
+          ? Object.assign(element.style, value)
+          : element.setAttribute(attr, value)
+    })
 
     // Add any children by recursively calling buildElement
     // Then appending each child to the current element
     isArr(children)
       ? isArr(children[0])
-        ? children.map(child => {
-            const childEl = isArr(child) ? buildElement(...child) : child
+          ? children.map(child => {
+              const childEl = isArr(child) ? buildElement(...child) : child
 
-            isStr(childEl)
-              ? element.appendChild(document.createTextNode(childEl))
-              : element.appendChild(childEl)
-          })
-        : element.appendChild(buildElement(...children))
+              isStr(childEl)
+                ? element.appendChild(document.createTextNode(childEl))
+                : element.appendChild(childEl)
+            })
+          : element.appendChild(buildElement(...children))
       : children && (element.innerHTML = children)
 
     return element
   }
-  catch(err){
+  catch (err) {
     // If there was an error, with attrs and children, then throw it
-    if(attrs || children) throw err
+    if (attrs || children) throw err
 
     // Otherwise, just return the type, because is should be a string which can be rendered
-    return isArr(type) && type[0] || type
+    return (isArr(type) && type[0]) || type
   }
-
 }

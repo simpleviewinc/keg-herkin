@@ -56,8 +56,8 @@
     "@keg-hub/args-parse": "6.2.1",
     "@keg-hub/ask-it": "0.0.1",
     "@keg-hub/jsutils": "7.0.2",
-    "@keg-hub/spawn-cmd": "0.1.0",
     "@keg-hub/messenger": "file:repos/messenger",
+    "@keg-hub/spawn-cmd": "0.1.0",
     "ansi-html": "0.0.7",
     "axios": "0.19.2",
     "body-parser": "1.10.2",
@@ -73,7 +73,9 @@
     "prettier": "2.0.5",
     "qawolf": "1.4.0",
     "react-ace-editor": "https://github.com/lancetipton/react-ace-editor.git",
-    "socket.io": "2.3.0"
+    "rollup": "2.36.1",
+    "socket.io": "2.3.0",
+    "webpack": "5.13.0"
   },
   "devDependencies": {
     "jest": "26.4.2",

@@ -5,7 +5,7 @@ const logError = (error) => {
 }
 
 const handleApiErr = (req, res, err, status) => {
-  const error = isObj(err) ? err : { message: err || `An api error occured!`} 
+  const error = isObj(err) ? err : { message: err || `An api error occurred!`} 
   res.statusCode = status || 400
   logError(err.stack || err.message)
 
