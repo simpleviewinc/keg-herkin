@@ -21,11 +21,6 @@ export const dblclick = withSelector((element, selector, options) => {
   return element
 })
 
-export const dispatchEvent = withSelector(element, selector, type, eventInit, options) => {
-  dispatchEvent(element, type, eventInit, options)
-  return element
-})
-
 export const fill = withSelector((element, selector, value, options) => {
   element.focus()
   element.value(value)
@@ -43,7 +38,7 @@ export const hover = withSelector((element, selector, options) => {
 
 export const press = withSelector((element, selector, key, options) => {
   element.focus()
-  dispatchEvent(element, 'keydown', { key, ..options })
+  dispatchEvent(element, 'keydown', { key, ...options })
 })
 
 export const innerHTML = withSelector((element, selector, options) => {
@@ -54,24 +49,29 @@ export const innerText = withSelector((element, selector, options) => {
   return element.innerText
 })
 
-export const selectOption = withSelector((element, selector, values, options) => {
-  const { index, label, value } = options
+export const selectOption = withSelector(
+  (element, selector, values, options) => {
+    const { index, label, value } = options
 
-  const hasMultiple = Boolean(element.getAttribute('multiple'))
+    const hasMultiple = Boolean(element.getAttribute('multiple'))
 
-  const optionEls = Array.from(element.getElementsByTagName('option'))
-  optionEls.reduce((matching, optionEl, idx) => {
-    if(matching.length && !hasMultiple) return matching
+    const optionEls = Array.from(element.getElementsByTagName('option'))
+    optionEls.reduce((matching, optionEl, idx) => {
+      if (matching.length && !hasMultiple) return matching
 
-    if((idx === index) || (value = optionEl.value) || (label = optionEl.label)){
-      optionEl.setAttribute('selected')
-      matching.push(optionEl.value)
-    }
+      if (
+        idx === index ||
+        value === optionEl.value ||
+        label === optionEl.label
+      ) {
+        optionEl.setAttribute('selected')
+        matching.push(optionEl.value)
+      }
 
-    return matching
-  }, [])
-
-})
+      return matching
+    }, [])
+  }
+)
 
 export const textContent = withSelector((element, selector, options) => {
   return element.textContent
@@ -79,7 +79,7 @@ export const textContent = withSelector((element, selector, options) => {
 
 // TODO: Must send events for keydown, keypress, keyup in that order
 // For each char of the passed in text
-export const type = withSelector((element, selector, text='', options) => {
+export const type = withSelector((element, selector, text = '', options) => {
   // Implementation would look something like this =>
   //
   // element.focus()
@@ -93,3 +93,11 @@ export const type = withSelector((element, selector, text='', options) => {
   console.log(`---------- Not Implemented ----------`)
 })
 
+const wrappedDispatchEvent = withSelector(
+  (element, selector, type, eventInit, options) => {
+    dispatchEvent(element, type, eventInit, options)
+    return element
+  }
+)
+
+export { wrappedDispatchEvent as dispatchEvent }

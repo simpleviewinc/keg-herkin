@@ -31,10 +31,12 @@ const addEventListener = (event, callback) => {
 // Will need to wrap other ( REAL DOM EVENTS ), to map them to the pageEvents list
 export const on = (event, callback) => {
   return !pageEvents.includes(event)
-    ? throwError(`Invalid event name ${event}. Must be one of ${pageEvents.join(', ')}`)
+    ? throwError(
+        `Invalid event name ${event}. Must be one of ${pageEvents.join(', ')}`
+      )
     : !isFunc(callback)
-      ? throwError(`Callback must be a function`)
-      : hasDomAccess()
-        ? addEventListener(event, callback)
-        : throwError(`Access to the Dom is required!`)
+        ? throwError(`Callback must be a function`)
+        : hasDomAccess()
+          ? addEventListener(event, callback)
+          : throwError(`Access to the Dom is required!`)
 }

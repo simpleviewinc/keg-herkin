@@ -1,4 +1,3 @@
-
-export const throwError = (message) => {
+export const throwError = message => {
   throw new Error(message)
 }
