@@ -1,6 +1,5 @@
 import { noOpObj, noOp, get, set } from "@keg-hub/jsutils"
-import { core } from 'codeamigo-jest-lite'
-const {
+import {
   addEventHandler,
   afterAll,
   afterEach,
@@ -12,7 +11,7 @@ const {
   jest,
   run,
   test
-} = core
+} from 'codeamigo-jest-lite'
 
 /**
 * Holds the global Jest state
@@ -101,6 +100,7 @@ export class Runner {
   * @return {Object} - Results from the tests being run
   */
   runTests = async (testCode) => {
+    console.log('runTests!!')
     const results = await execTests(testCode, this.page)
 
     return { results }

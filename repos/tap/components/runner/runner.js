@@ -100,7 +100,6 @@ export const Runner = props => {
     autoRun && onRunTests()
   }, [autoRun, setTestResults, parentMethods])
 
-
   return (
     <Surface
       title={title}

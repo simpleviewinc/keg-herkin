@@ -15,7 +15,6 @@ export const useTestRunner = (setTestResults, setIsRunning, editorRef, parentMet
     setTestResults([])
 
     setIsRunning(true)
-
     const { results } = await parentMethods.runTests(testCode)
     const testResults = results.reduce((withId, result) => {
       result.id = result.id || uuid()

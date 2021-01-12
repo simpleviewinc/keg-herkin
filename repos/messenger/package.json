@@ -33,8 +33,8 @@
     "test": "NODE_ENV=test jest --no-cache --verbose --config=./configs/jest.config.js"
   },
   "dependencies": {
-    "@keg-hub/jsutils": "7.0.2",
-    "codeamigo-jest-lite": "^1.0.0-alpha.7"
+    "@keg-hub/jsutils": "8.1.1",
+    "codeamigo-jest-lite": "1.0.0-alpha.9"
   },
   "devDependencies": {
     "@babel/core": "7.12.10",
