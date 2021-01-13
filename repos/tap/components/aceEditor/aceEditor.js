@@ -28,13 +28,17 @@ export const AceEditor = props => {
   const editorRef = useRef(null)
 
   useEffect(() => {
-    editorRef?.current?.editor?.resize()
+    const editor = aceRef?.current?.editor
+    editor?.resize()
+    // The Ace editor only allows setting the initial text data
+    // So we have to call the ace editor API directly to update the text content
+    editor?.setValue(value, -1)
 
     isObj(aceRef) && 'current' in aceRef
       ? (aceRef.current = editorRef?.current)
       : checkCall(editorRef)
 
-  }, [])
+  }, [value])
 
   return (
     <ReactAce

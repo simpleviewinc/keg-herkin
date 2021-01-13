@@ -12,8 +12,10 @@ import { ContainerRoutes } from 'SVNavigation/containerRoutes'
 import { keg } from 'SVConfig'
 import { getHistory } from 'SVNavigation'
 import { isNative } from 'SVUtils/platform'
+import { init } from 'SVActions'
 
-const checkAppInit = setInit => {
+const checkAppInit = async setInit => {
+  await init()
   setInit(true)
   checkCall(initAppAction)
 }
