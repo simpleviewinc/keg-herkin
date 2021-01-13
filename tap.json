@@ -1,6 +1,6 @@
 {
   "name": "keg-herkin",
-  "displayName": "KeG-Herkin",
+  "displayName": "Keg-Herkin",
   "keg": {
     "cli": {
       "link": {
@@ -13,6 +13,11 @@
     "tapResolver": {
       "paths": {
         "tapSrc": "./repos/tap"
+      },
+      "aliases": {
+        "dynamic": {
+          "Tests": "../../tests"
+        }
       }
     },
     "playwright": {

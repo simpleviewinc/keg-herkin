@@ -13,4 +13,12 @@ describe('Example Tests', () => {
     expect(button).not.toBe(undefined)
   })
 
+  test('Click increment button', async () => {
+    const button = await page.$('#incrementInput')
+    expect(button).not.toBe(undefined)
+    button.click()
+    
+    const label = await page.$('#number')
+    expect(parseFloat(label.innerText)).toEqual(5)
+  })
 })
