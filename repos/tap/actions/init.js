@@ -3,7 +3,7 @@ import { upsertDefinitions }  from './definitions/upsertDefinitions'
 import { upsertFeatures }  from './features/upsertFeatures'
 import { upsertActiveData }  from './runner/upsertActiveData'
 
-const exampleFile = 'exampleTests.js'
+const exampleFile = 'example/exampleTests.js'
 
 /**
  * Init action
