@@ -18,8 +18,9 @@ const deleteTestFile = async (config, testPath) => {
 const getTestFile = async (config, testPath) => {
   const { testsFolder } = config.editor
   const fullPath = path.join(testsFolder, testPath)
-  const content = await readFile(fullPath)
-  
+
+  const [ , content ] = await readFile(fullPath)
+
   return {
     content,
     fullPath,
