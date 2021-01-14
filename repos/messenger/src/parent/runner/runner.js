@@ -97,7 +97,6 @@ export class Runner {
    * @return {Object} - Results from the tests being run
    */
   runTests = async testCode => {
-    console.log('runTests!!')
     const results = await execTests(testCode, this.page)
 
     return { results }

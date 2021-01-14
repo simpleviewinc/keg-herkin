@@ -1,15 +1,19 @@
+import { elementWrapper } from '../../utils/wrapper/elementWrapper'
+
 export const $ = (selector, context = document) => {
   if (!selector)
     throw new Error(`Page#$ ( select ) requires a selector argument`)
 
-  return context.querySelector(selector)
+  const element = context.querySelector(selector)
+  return elementWrapper(element)
 }
 
 export const $$ = (selector, context = document) => {
   if (!selector)
     throw new Error(`Page#$$ ( group select ) requires a selector argument`)
 
-  return Array.from(context.querySelectorAll(selector))
+  const elements = Array.from(context.querySelectorAll(selector))
+  return elements.map((element) => elementWrapper(element), [])
 }
 
 export const frame = selector => {

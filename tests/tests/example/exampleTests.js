@@ -1,6 +1,7 @@
 describe('Example Tests', () => {
   beforeAll(async() => {
-    // localhost for testing purposes
+    // the server config will start up the example app before running tests
+    // see <root>/configs/jest-playwright.config.js
     await page.goto('http://localhost:3000/')
   })
 
@@ -13,12 +14,12 @@ describe('Example Tests', () => {
     expect(button).not.toBe(undefined)
   })
 
-  test('Click increment button', async () => {
-    const button = await page.$('#incrementInput')
+  test('Click "left" button', async () => {
+    const button = await page.$('#leftInput')
     expect(button).not.toBe(undefined)
-    button.click()
-    
-    const label = await page.$('#number')
-    expect(parseFloat(label.innerText)).toEqual(5)
+    await button.click()
+
+    const label = await page.$('#label-text')
+    expect(await label.innerText()).toEqual('left')
   })
 })
