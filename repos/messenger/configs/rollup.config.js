@@ -6,6 +6,11 @@ import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import { terser } from "rollup-plugin-terser"
 
+const { execSync } = require('child_process');
+const branchName = execSync('git branch --show-current')
+  .toString()
+  .trim()
+
 const { DOC_APP_PATH, DOC_APP_PORT, NODE_ENV } = process.env
 
 // Need to require our babel.config.js because it uses module.exports
@@ -49,6 +54,7 @@ export default buildTypes.reduce((apps, type) => {
     plugins: [
       replace({
         "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+        "process.env.BRANCH_NAME": JSON.stringify(branchName)
       }),
       alias({
         entries: {},

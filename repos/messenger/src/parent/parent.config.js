@@ -1,3 +1,6 @@
+const { BRANCH_NAME='master' } = process.env
+const herkinTapURL = `http://herkin-${BRANCH_NAME}.local.kegdev.xyz`
+
 /**
  * Default Messenger Parent config
  * @Object
@@ -13,7 +16,7 @@ export const parentConfig = {
     // onLoad: null
     // URL to set the Iframe too, overrides the default Keg-Herkin bundle
     // TODO: update this to be the bundled keg-herkin client code as data url
-    src: `http://herkin-master.local.kegdev.xyz/`,
+    src: herkinTapURL,
     // Extra attributes to add to the iframe
     attrs: {
       frameborder: '0',
