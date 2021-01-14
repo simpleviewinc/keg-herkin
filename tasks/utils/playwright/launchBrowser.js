@@ -6,7 +6,7 @@
 */
 const { Logger }  = require('@keg-hub/ask-it/src/logger')
 const playwright = require('playwright')
-const { noOpObj, isStr, exists } = require('@keg-hub/jsutils')
+const { noOpObj, exists } = require('@keg-hub/jsutils')
 
 /**
 * Default config for starting the Playwright browser server
@@ -115,7 +115,8 @@ const launchBrowser = async (config=noOpObj) => {
   log && logWebsocket(wsEndpoint, browserType)
 
   // Add the websocket to the current processes ENV's
-  process.env['KEG_PLAYWRIGHT_WS'] = wsEndpoint
+  process.env['KEG_BROWSER_WS'] = wsEndpoint
+  process.env['KEG_BROWSER_TYPE'] = browserType
 
   return wsEndpoint
 }

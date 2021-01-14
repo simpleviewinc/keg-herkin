@@ -5,8 +5,8 @@ import replace from '@rollup/plugin-replace'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import { terser } from "rollup-plugin-terser"
+import { execSync } from 'child_process'
 
-const { execSync } = require('child_process');
 const branchName = execSync('git branch --show-current')
   .toString()
   .trim()

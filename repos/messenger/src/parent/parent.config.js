@@ -1,5 +1,4 @@
-const { BRANCH_NAME='master' } = process.env
-const herkinTapURL = `http://herkin-${BRANCH_NAME}.local.kegdev.xyz`
+const herkinTapURL = `http://herkin-${process.env.BRANCH_NAME || 'master'}.local.kegdev.xyz`
 
 /**
  * Default Messenger Parent config

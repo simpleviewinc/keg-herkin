@@ -46,7 +46,7 @@ const launchAction = async (args) => {
 
   const launchOptions = getLaunchOptions(args.herkin)
   const websocket = await launchBrowser(launchOptions)
-  
+
   return {
     websocket,
     launchOptions

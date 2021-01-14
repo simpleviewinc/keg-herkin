@@ -1,6 +1,8 @@
 // const { launchAction } from './launch'
 const { get, checkCall } = require('@keg-hub/jsutils')
 const { sharedOptions } = require('../../utils/task/sharedOptions')
+const { launch } = require('./launch')
+const { yarn } = require('../../utils/process/process')
 
 /**
  * Starts all the Keg-Herkin services needed to run tests
@@ -16,13 +18,20 @@ const { sharedOptions } = require('../../utils/task/sharedOptions')
  * @returns {void}
  */
 const startHerkin = async (args) => {
-  // const { params, herkin } = args
-  // const launchSocket = (params.launch && !params.headless)
+  const { params, herkin } = args
+  const shouldLaunchBrowser = (params.launch && !params.headless)
 
-  // launchSocket &&
-  //   await checkCall(launch.action, args)
+  console.log(args)
+
+  const { websocket } = shouldLaunchBrowser
+    ? await checkCall(launch.action, args)
+    : {}
+
+  // console.log('waiting exmess')
   // await yarn('ex:mess')
+  // console.log('exmess launched')
 
+  // runs the start task using the cli, which will actually start the container
   await args.task.cliTask(args)
 }
 

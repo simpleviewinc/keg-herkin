@@ -2,25 +2,20 @@ const qawolf = require("qawolf")
 const { chromium, firefox, webkit  } = require('playwright')
 
 const {
-  BROWSER,
-  DOC_APP_PATH,
-  BROWSER_WS_HASH,
-  BROWSER_WS_PORT='64238',
-  BROWSER_HOST_URL=(DOC_APP_PATH ? `host.docker.internal` : `127.0.0.1`)
+  KEG_BROWSER_WS,
+  KEG_BROWSER_TYPE
 } = process.env
 
 const getBrowser = () => {
-  return ['firefox', 'ff'].includes(BROWSER)
+  return ['firefox', 'ff'].includes(KEG_BROWSER_TYPE)
     ? firefox
-    : ['safari', 'webkit'].includes(BROWSER)
+    : ['safari', 'webkit'].includes(KEG_BROWSER_TYPE)
       ? webkit
       : chromium
 }
 
 const initialize = async () => {
-  global.browser = await getBrowser().connect({
-    wsEndpoint: `ws://${BROWSER_HOST_URL}:${BROWSER_WS_PORT}/${BROWSER_WS_HASH}`,
-  })
+  global.browser = await getBrowser().connect({ wsEndpoint: KEG_BROWSER_WS })
 
   global.context = await browser.newContext()
 

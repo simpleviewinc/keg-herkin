@@ -13,6 +13,8 @@ services:
         - DOC_APP_PORT
         - ENV
         - NODE_ENV
+        - KEG_BROWSER_WS
+        - KEG_BROWSER_TYPE
     container_name: ${CONTAINER_NAME}
     environment:
       - DOC_APP_PATH
@@ -22,6 +24,7 @@ services:
       - KEG_DOCKER_EXEC
       - KEG_NM_INSTALL
       - NODE_ENV
-      - KEG_PLAYWRIGHT_WS
+      - KEG_BROWSER_WS
+      - KEG_BROWSER_TYPE
     ports:
       - ${API_PORT}:${API_PORT}
