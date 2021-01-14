@@ -13,11 +13,6 @@
     "tapResolver": {
       "paths": {
         "tapSrc": "./repos/tap"
-      },
-      "aliases": {
-        "dynamic": {
-          "Tests": "../../tests"
-        }
       }
     },
     "playwright": {
