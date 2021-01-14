@@ -20,6 +20,7 @@ sync:
         - "/repos/messenger/build"
         - "/repos/example/build"
         - "/docs"
+        - "/tests/wolf"
 actions:
   herkin:
     build:
