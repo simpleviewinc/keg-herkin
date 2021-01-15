@@ -16,13 +16,17 @@ const getBrowser = () => {
 
 const initialize = async () => {
   global.browser = await getBrowser().connect({ wsEndpoint: KEG_BROWSER_WS })
-
   global.context = await browser.newContext()
 
   await qawolf.register(context)
 }
 
 const cleanup = async () => {
+  console.log({
+    KEG_BROWSER_WS,
+    KEG_BROWSER_TYPE
+  })
+
   await qawolf.stopVideos()
   await browser.close()
   delete global.browser

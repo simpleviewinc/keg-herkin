@@ -114,8 +114,8 @@ const launchBrowser = async (config=noOpObj) => {
 
   log && logWebsocket(wsEndpoint, browserType)
 
-  // Add the websocket to the current processes ENV's
-  process.env['KEG_BROWSER_WS'] = wsEndpoint
+  // Add the playwright browser metadata to process envs, to be passed to keg-herkin container
+  process.env['KEG_BROWSER_WS'] = wsEndpoint.replace('127.0.0.1', 'host.docker.internal')
   process.env['KEG_BROWSER_TYPE'] = browserType
 
   return wsEndpoint

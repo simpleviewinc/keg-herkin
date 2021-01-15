@@ -21,8 +21,6 @@ const startHerkin = async (args) => {
   const { params, herkin } = args
   const shouldLaunchBrowser = (params.launch && !params.headless)
 
-  console.log(args)
-
   const { websocket } = shouldLaunchBrowser
     ? await checkCall(launch.action, args)
     : {}
@@ -48,7 +46,7 @@ module.exports = {
           example: 'start --no-launch',
           default: true,
         },
-      // TODO:  add other browser launch options here and in (tap.json) => keg.playwright.config
+      // TODO:  add other browser launch options here and in (tap.js) => keg.playwright.config
     }, [
       'chrome',
       'firefox',

@@ -69,7 +69,7 @@ module.exports = {
         example: 'launch --context firefox',
         default: 'chromium',
       },
-      // TODO:  add other browser launch options here and in (tap.json) => keg.playwright.config
+      // TODO:  add other browser launch options here and in (tap.js) => keg.playwright.config
     }, [
       'chrome',
       'firefox',

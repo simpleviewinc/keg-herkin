@@ -1,5 +1,5 @@
 sync:
-  rc:
+  keg-herkin:
     alpha: "/keg/tap"
     beta: "docker://tap/keg/tap"
     mode: "one-way-replica"
