@@ -50,6 +50,15 @@
 
 ## Architecture
 
+### CI
+* TODO
+
+### Local Development
+* TODO
+
+### Iframe
+* TODO
+
 
 ## Tasks
 * [Start](/docs/tasks/start.md) - Start the Keg-Herkin application
