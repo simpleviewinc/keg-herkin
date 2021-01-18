@@ -6,7 +6,8 @@
 */
 const { Logger }  = require('@keg-hub/ask-it/src/logger')
 const playwright = require('playwright')
-const { noOpObj, exists } = require('@keg-hub/jsutils')
+const { noOpObj, exists, isEmpty, limbo } = require('@keg-hub/jsutils')
+const metadata = require('./metadata')
 
 /**
 * Default config for starting the Playwright browser server
@@ -52,27 +53,29 @@ const getBrowserType = (browser, allowed) => {
   return browser || defConfig.browser
 }
 
-/**
-* Sets up listeners for browsers events
-* @function
-* @private
-* @param {Object} browserServer - Browser instance created by Playwright
-* @param {string} browser - Name of the browser
-*
-* @returns {void}
-*/
-const addBrowserEvents = (browserServer, browser) => {
+const getBrowserServer = async (browserType, launchOptions, log) => {
+  const { type, endpoint='' } = metadata.read()
 
-  browserServer.on('disconnected', event => {
-    Logger.empty()
-    Logger.warn(`Host browser ${browser} has disconnected!`)
-    Logger.empty()
-    
-    // If the browser disconnected, then exit it the process
-    // Nothing we can do about it
-    process.exit(0)
-  })
+  log && Logger.empty()
 
+  // If an endpoint is already saved to the system, and the previously launched
+  // browser matches `browserType`, then just try connecting to that launched
+  // browser. If you can connect, close the connection and do nothing else.
+  // Otherwise, launch the browser.
+  if (!isEmpty(endpoint) && browserType === type) {
+    const [ err, browser ] = await limbo(
+      playwright[type].connect({ wsEndpoint: endpoint })
+    )
+
+    log && Logger.log(`Using previously-launched browser on host machine...`)
+    if (!err && browser.isConnected()) {
+      browser.close()
+      return null
+    }
+  }
+
+  log && Logger.log(`Starting browser on host machine...`)
+  return playwright[browserType].launchServer(launchOptions)
 }
 
 /**
@@ -99,14 +102,12 @@ const launchBrowser = async (config=noOpObj) => {
   } = config
 
   const browserType = getBrowserType(browser, allowed)
-
-  log && Logger.empty()
-  log && Logger.log(`Starting browser on host machine...`)
-
-  const browserServer = await playwright[browserType].launchServer({
+  const browserServer = await getBrowserServer(browserType, {
     ...defConfig.serverOptions,
     ...serverOptions,
-  })
+  }, log)
+
+  if (!browserServer) return
 
   const wsEndpoint = browserServer.wsEndpoint()
   if(!wsEndpoint)
@@ -114,9 +115,11 @@ const launchBrowser = async (config=noOpObj) => {
 
   log && logWebsocket(wsEndpoint, browserType)
 
-  // Add the playwright browser metadata to process envs, to be passed to keg-herkin container
-  process.env['KEG_BROWSER_WS'] = wsEndpoint.replace('127.0.0.1', 'host.docker.internal')
-  process.env['KEG_BROWSER_TYPE'] = browserType
+  // Save the playwright browser metadata to the browser-meta.json, to be used in the container.
+  metadata.save(
+    browserType, 
+    wsEndpoint
+  )
 
   return wsEndpoint
 }

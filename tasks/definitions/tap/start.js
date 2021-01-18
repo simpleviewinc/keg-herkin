@@ -30,7 +30,11 @@ const startHerkin = async (args) => {
   // console.log('exmess launched')
 
   // runs the start task using the cli, which will actually start the container
-  await args.task.cliTask(args)
+  args.task.cliTask(args)
+  // await args.task.cliTask({ ...args, 
+  //   options: [ ...args.options, '--recreate'], 
+  //   params: { ...args.params, recreate: true }
+  // })
 }
 
 module.exports = {
