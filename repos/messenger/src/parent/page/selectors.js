@@ -1,11 +1,11 @@
-import { elementWrapper } from '../../utils/wrapper/elementWrapper'
+import { ElementHandle } from '../../utils/wrapper/elementHandle'
 
 export const $ = (selector, context = document) => {
   if (!selector)
     throw new Error(`Page#$ ( select ) requires a selector argument`)
 
   const element = context.querySelector(selector)
-  return elementWrapper(element)
+  return new ElementHandle(element)
 }
 
 export const $$ = (selector, context = document) => {
@@ -13,7 +13,7 @@ export const $$ = (selector, context = document) => {
     throw new Error(`Page#$$ ( group select ) requires a selector argument`)
 
   const elements = Array.from(context.querySelectorAll(selector))
-  return elements.map((element) => elementWrapper(element), [])
+  return elements.map((element) => new ElementHandle(element), [])
 }
 
 export const frame = selector => {

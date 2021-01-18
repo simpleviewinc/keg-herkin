@@ -5,6 +5,7 @@ export const Values = {
     DEFINITIONS: 'definitions',
     ACTIVE_FEATURE: 'activeFeature',
     ACTIVE_DATA: 'activeData',
+    ACTIVE_RUNNER_DATA: 'activeRunnerData',
     FEATURE: 'feature',
     SCREEN: 'screen',
     COPY_STEP: 'copy_step',

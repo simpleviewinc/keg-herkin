@@ -60,7 +60,6 @@
     "@keg-hub/messenger": "file:repos/messenger",
     "@keg-hub/spawn-cmd": "0.1.0",
     "ansi-html": "0.0.7",
-    "app-root-path": "3.0.0",
     "axios": "0.19.2",
     "body-parser": "1.10.2",
     "dotenv": "8.0.0",

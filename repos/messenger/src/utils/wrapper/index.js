@@ -1,1 +1,1 @@
-export * from './elementWrapper'
+export * from './elementHandle'

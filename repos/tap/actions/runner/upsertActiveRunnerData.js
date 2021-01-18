@@ -10,11 +10,11 @@ const { CATEGORIES } = Values
  * 
  * @param {Object} data 
  */
-export const upsertActiveData = (data) => {
+export const upsertActiveRunnerData = (data) => {
   data && dispatch({
     type: ActionTypes.UPSERT_ITEMS,
     payload: {
-      category: CATEGORIES.ACTIVE_DATA,
+      category: CATEGORIES.ACTIVE_RUNNER_DATA,
       items: data,
     },
   })

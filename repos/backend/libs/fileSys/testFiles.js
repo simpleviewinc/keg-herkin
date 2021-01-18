@@ -19,7 +19,7 @@ const getTestFile = async (config, testPath) => {
   const { testsFolder } = config.editor
   const fullPath = path.join(testsFolder, testPath)
 
-  const [ , content ] = await readFile(fullPath)
+  const [ __, content ] = await readFile(fullPath)
 
   return {
     content,

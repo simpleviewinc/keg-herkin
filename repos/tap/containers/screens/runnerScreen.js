@@ -15,7 +15,7 @@ export const RunnerScreen = props => {
   const parentMethods = useParentMethods()
   const [ tests, setTests ] = useState('')
 
-  const { content } = useStoreItems(CATEGORIES.ACTIVE_DATA) || {}
+  const { content } = useStoreItems(CATEGORIES.ACTIVE_RUNNER_DATA) || {}
 
   useEffect(() => {
     exists(content) &&
