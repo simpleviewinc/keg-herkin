@@ -1,6 +1,6 @@
 # Keg-Herkin
 * Provides **cross-platform** and **cross-browser** application testing.
-* Runs within an isolated environment (docker) to ensure a dependable an predicable testing conditions.
+* Runs within an isolated environment (docker) to ensure dependable and predicable testing conditions.
 * Simplifies the testing process through functionality such:
   * Visualize tests as they are run on the host machines browser
   * Write and execute tests directly in the browser within a web applications context
