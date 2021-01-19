@@ -61,19 +61,19 @@ const getBrowserServer = async (browserType, launchOptions, log) => {
   // If an endpoint is already saved to the system, and the previously launched
   // browser matches `browserType`, then just try connecting to that launched
   // browser. If you can connect, close the connection and do nothing else.
-  // Otherwise, launch the browser.
   if (!isEmpty(endpoint) && browserType === type) {
     const [ err, browser ] = await limbo(
       playwright[type].connect({ wsEndpoint: endpoint })
     )
 
-    log && Logger.log(`Using previously-launched browser on host machine...`)
     if (!err && browser.isConnected()) {
+      log && Logger.log(`Using previously-launched browser on host machine...`)
       browser.close()
       return null
     }
   }
 
+  // Otherwise, launch the browser.
   log && Logger.log(`Starting browser on host machine...`)
   return playwright[browserType].launchServer(launchOptions)
 }
