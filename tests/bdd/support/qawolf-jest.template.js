@@ -1,4 +1,4 @@
-const qawolf = require("qawolf");
+const qawolf = require('qawolf')
 const { setupTestEnvironment } = require('../bdd/support/setup')
 
 setupTestEnvironment()

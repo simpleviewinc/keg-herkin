@@ -10,19 +10,6 @@ const { noOpObj, exists, isEmpty, limbo } = require('@keg-hub/jsutils')
 const metadata = require('./metadata')
 
 /**
-* Default config for starting the Playwright browser server
-* @object
-*/
-const defConfig = {
-  log: true,
-  browser: 'chromium',
-  browsers: [ 'chromium', 'firefox', 'webkit' ],
-  serverOptions: {
-    headless: false,
-  }
-}
-
-/**
 * Logs the websocket endpoint to the terminal
 * @function
 * @private
@@ -53,28 +40,39 @@ const getBrowserType = (browser, allowed) => {
   return browser || defConfig.browser
 }
 
-const getBrowserServer = async (browserType, launchOptions, log) => {
-  const { type, endpoint='' } = metadata.read()
+/**
+ * Launches the browser server instance of the browserType and launch options
+ * @param {String} browserType - one of 'chromium', 'firefox', or 'webkit'
+ * @param {Object} launchOptions - see: https://playwright.dev/docs/api/class-browsertype?_highlight=launch#browsertypelaunchserveroptions
+ * @param {boolean} log - if true, logs out stages of launch
+ */
+const launchBrowserServer = async (browserType, launchOptions, log) => {
+  const { type: prevType, endpoint='', launchOptions: prevOptions } = metadata.read()
 
   log && Logger.empty()
+
+  const shouldCheckForRunningBrowser = !isEmpty(endpoint)
+    && browserType === prevType
+    && launchOptions.headless === prevOptions.headless
 
   // If an endpoint is already saved to the system, and the previously launched
   // browser matches `browserType`, then just try connecting to that launched
   // browser. If you can connect, close the connection and do nothing else.
-  if (!isEmpty(endpoint) && browserType === type) {
+  if (shouldCheckForRunningBrowser) {
     const [ err, browser ] = await limbo(
-      playwright[type].connect({ wsEndpoint: endpoint })
+      playwright[browserType].connect({ wsEndpoint: endpoint })
     )
 
     if (!err && browser.isConnected()) {
-      log && Logger.log(`Using previously-launched browser on host machine...`)
+      log && Logger.log(`==== Using previously-launched browser on host machine... ====`)
       browser.close()
       return null
     }
   }
 
   // Otherwise, launch the browser.
-  log && Logger.log(`Starting browser on host machine...`)
+  log && Logger.log(`==== Starting${launchOptions.headless ? ' headless' : ''} ${browserType} on host machine... ====`)
+
   return playwright[browserType].launchServer(launchOptions)
 }
 
@@ -95,17 +93,20 @@ const getBrowserServer = async (browserType, launchOptions, log) => {
 */
 const launchBrowser = async (config=noOpObj) => {
   const {
-    log=defConfig.log,
-    browser=defConfig.browser,
-    allowed=defConfig.browsers,
-    ...serverOptions
+    log=true,
+    browser='chromium',
+    allowed=[ 'chromium', 'firefox', 'webkit' ],
+    ...params
   } = config
 
+  const launchParams = {
+    headless: exists(config.headless) ? config.headless : true,
+    ...params
+  }
+
   const browserType = getBrowserType(browser, allowed)
-  const browserServer = await getBrowserServer(browserType, {
-    ...defConfig.serverOptions,
-    ...serverOptions,
-  }, log)
+
+  const browserServer = await launchBrowserServer(browserType, launchParams, log)
 
   if (!browserServer) return
 
@@ -118,7 +119,8 @@ const launchBrowser = async (config=noOpObj) => {
   // Save the playwright browser metadata to the browser-meta.json, to be used in the container.
   metadata.save(
     browserType, 
-    wsEndpoint
+    wsEndpoint,
+    launchParams
   )
 
   return wsEndpoint

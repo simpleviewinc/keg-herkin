@@ -1,4 +1,5 @@
-const { npx } = require('../../utils/process/process')
+const { dockerExec } = require('../../utils/process/process')
+const { launchBrowser } = require('../../utils/playwright/launchBrowser') 
 
 const browserMap = {
   all: `--all-browsers`,
@@ -22,9 +23,10 @@ const buildTestArguments = (cmd=[], { browsers, context, headless, sync }) => {
 
 const runTest = async (args) => {
   const { params } = args
+  // launchBrowser({ browser: params.browsers })
   const cmd = buildTestArguments([], params)
 
-  const resp = await npx([`qawolf`, `test`].concat(cmd))
+  const resp = await dockerExec(params.container, [`npx`, `qawolf`, `test`].concat(cmd))
   
   return resp
 }
@@ -35,6 +37,7 @@ module.exports = {
     action: runTest,
     example: 'yarn test:run',
     description : 'Runs all or defined QAWolf tests',
+    alias: ['test'],
     options: {
       context: {
         alias: [ 'name' ],
@@ -42,6 +45,7 @@ module.exports = {
       },
       sync: {
         description: 'Run all tests sequentially',
+        alias: [ 'runInBand' ],
         example: `--sync`,
         default: false,
       },
@@ -55,7 +59,13 @@ module.exports = {
         type: `bool`,
         description: 'Run the browser tests in headless mode',
         default: false,
-      }
+      },
+      container: {
+        description: 'Name of container within which to run create command',
+        example: '--container keg-herkin',
+        required: true,
+        default: 'keg-herkin',
+      },
     }
   }
 }

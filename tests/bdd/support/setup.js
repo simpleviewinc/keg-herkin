@@ -17,7 +17,7 @@ const getBrowser = (type) => {
 }
 
 /**
- * Initializes tests by connecting to the browser loaced at the websocket
+ * Initializes tests by connecting to the browser loaded at the websocket
  * endpoint, creating a new browser context, and registering qawolf.
  * @param {Function} done - jest function called when all asynchronous ops are complete
  */

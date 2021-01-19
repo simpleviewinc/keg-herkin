@@ -44,7 +44,7 @@ const getLaunchOptions = ({ playwright=noOpObj, ...params }) => {
 */
 const launchAction = async (args) => {
 
-  const launchOptions = getLaunchOptions(args.herkin)
+  const launchOptions = getLaunchOptions(args)
   const websocket = await launchBrowser(launchOptions)
 
   return {

@@ -1,5 +1,9 @@
 const fs = require('fs')
 
+const {
+  TEMPLATE_TYPE='jest'
+} = process.env
+
 /**
  * @param {Object} params - params of the test, as provided by qa-wolf
  */
@@ -13,7 +17,7 @@ module.exports.createTemplate = (params) => {
   } = params
 
   const template = fs.readFileSync(
-    'tests/bdd/support/qawolf.template.js', 
+    `tests/bdd/support/qawolf-${TEMPLATE_TYPE}.template.js`, 
     { encoding: 'utf8' }
   )
 

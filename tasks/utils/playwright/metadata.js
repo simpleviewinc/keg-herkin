@@ -24,13 +24,14 @@ const read = () => {
  * Saves browser metadata to file
  * @param {string} type - browser type (chromium, firefox, webkit, etc.)
  * @param {string} endpoint - websocket endpoint to the browser
+ * @param {Object} launchOptions - other playwright launch options used (e.g. launchOptions.headless)
  */
-const save = (type, endpoint) => {
+const save = (type, endpoint, launchOptions) => {
   const [ valid ] = validate({ type, endpoint }, { $default: isStr })
   if (!valid) return
 
   try {
-    fs.writeFileSync(META_PATH, JSON.stringify({ type, endpoint }))
+    fs.writeFileSync(META_PATH, JSON.stringify({ type, endpoint, launchOptions }))
   }
   catch (err) {
     console.error(err)
