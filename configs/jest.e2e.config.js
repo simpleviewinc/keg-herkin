@@ -8,4 +8,5 @@ module.exports = {
   preset: 'jest-playwright-preset',
   rootDir,
   testMatch: ['<rootDir>/tests/tests/**/*.js?(x)'],
+  testPathIgnorePatterns: ['config.js']
 }
