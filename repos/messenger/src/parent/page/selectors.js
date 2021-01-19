@@ -1,4 +1,4 @@
-import { ElementHandle } from '../../utils/wrapper/elementHandle'
+import { ElementHandle } from '../playwright/elementHandle'
 
 export const $ = (selector, context = document) => {
   if (!selector)

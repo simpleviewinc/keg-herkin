@@ -30,5 +30,5 @@ export class ElementHandle {
    * @param {string} name - Attribute name to get the value for
    * @returns {null|string}
    */
-  getAttribute = (name) => console.log(`---------- Not Implemented ----------`)
+  getAttribute = (name) => this.element?.getAttribute?.(name)
 }

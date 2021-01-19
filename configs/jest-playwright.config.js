@@ -34,7 +34,7 @@ const getPlaywrightConfig = () => {
   )
   
   // set default browser if none passed in
-  if (!config.browsers) config.browsers = ['chromium']
+  if (!config.browsers) config.browsers = ['chromium', 'firefox', 'webkit']
 
   return config
 }
