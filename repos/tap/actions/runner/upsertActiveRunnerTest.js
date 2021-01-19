@@ -14,7 +14,7 @@ export const upsertActiveRunnerTest = (data) => {
   data && dispatch({
     type: ActionTypes.UPSERT_ITEMS,
     payload: {
-      category: CATEGORIES.ACTIVE_RUNNER_TEST,
+      category: CATEGORIES.ACTIVE_RUNNER_TESTS,
       items: data,
     },
   })
