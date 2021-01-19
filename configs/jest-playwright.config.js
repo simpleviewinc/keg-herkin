@@ -1,8 +1,8 @@
 
-const fs = require('fs')
 const path = require('path')
 const testsDir = path.join(__dirname, '../tests')
-const scriptName = path.basename(__filename)
+const { getCustomConfigPaths } = require('./getCustomConfigPaths')
+const scriptName = process.env.HERKIN_PLAYWRIGHT_CONFIG || path.basename(__filename)
 const { deepMerge } = require('@keg-hub/jsutils')
 
 const defaultConfig = {
@@ -17,32 +17,6 @@ const defaultConfig = {
       height: 1080
     }
   },
-  browsers: ['chromium'],
-}
-
-/**
- * Recursively searches for the custom config file in the given directory
- * @param {string} directory 
- * 
- * @returns {Array<string>} - array of absolute paths
- */
-const getCustomConfigPaths = (directory) => {
-  let results = []
-  const contents = fs.readdirSync(directory)
-  
-  contents.length && contents.forEach((content) => {
-
-    const contentPath = path.join(directory, content)
-    const stat = fs.statSync(contentPath)
-
-    results = stat.isDirectory()
-      ? results.concat(getCustomConfigPaths(contentPath))
-      : (content === scriptName)
-        ? results.concat(contentPath)
-        : results
-  })
-
-  return results
 }
 
 
@@ -51,13 +25,18 @@ const getCustomConfigPaths = (directory) => {
  * @returns {Object}
  */
 const getPlaywrightConfig = () => {
-  const customConfigPath = getCustomConfigPaths(testsDir)[0]
+  const customConfigPath = getCustomConfigPaths(testsDir, scriptName)[0]
   const customConfig = customConfigPath && require(customConfigPath)
 
-  return deepMerge(
+  const config = deepMerge(
     defaultConfig,
     customConfig
   )
+  
+  // set default browser if none passed in
+  if (!config.browsers) config.browsers = ['chromium']
+
+  return config
 }
 
 module.exports = getPlaywrightConfig()

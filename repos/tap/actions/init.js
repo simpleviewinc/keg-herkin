@@ -1,7 +1,7 @@
 import { apiRequest } from 'SVUtils/apiRequest'
 // import { upsertDefinitions }  from './definitions/upsertDefinitions'
 // import { upsertFeatures }  from './features/upsertFeatures'
-import { upsertActiveRunnerData }  from './runner/upsertActiveRunnerData'
+import { upsertActiveRunnerTest }  from './runner/upsertActiveRunnerTest'
 
 const exampleFile = 'example/exampleTests.js'
 
@@ -18,5 +18,5 @@ export const init = async () => {
 
   // loading example test data from <root>/tests/tests
   const data = await apiRequest(`/files/load?file=${exampleFile}`)
-  upsertActiveRunnerData(data)
+  upsertActiveRunnerTest(data)
 }
