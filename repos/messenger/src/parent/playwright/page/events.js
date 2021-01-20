@@ -1,5 +1,5 @@
 import { hasDomAccess, isFunc } from '@keg-hub/jsutils'
-import { throwError } from '../../utils/errors/throwError'
+import { throwError } from '../../../utils/errors/throwError'
 
 const pageEvents = [
   'close',

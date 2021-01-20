@@ -1,4 +1,4 @@
-import { dispatchEvent } from '../../utils/dom/dispatchEvent'
+import { dispatchEvent } from '../../../utils/dom/dispatchEvent'
 import { withSelector } from '../../utils/dom/withSelector'
 
 export const check = withSelector((element, selector, options) => {
