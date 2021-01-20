@@ -28,6 +28,11 @@ const sharedOptions = (action, taskOps=noOpObj, include=noOpArr) => {
       default: `chromium`,
       example: `${action} --browsers chromium`,
     },
+    allBrowsers: {
+      alias: [ 'all'],
+      description: 'Launch all supported browsers',
+      example: `${action} --all`,
+    },
     chromium: {
       alias: [ 'chrome', 'chrom', 'ch' ],
       description: 'Launch Chromium browser through Playwright',

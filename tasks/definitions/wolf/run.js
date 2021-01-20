@@ -1,34 +1,41 @@
 const { dockerExec } = require('../../utils/process/process')
 const { launchBrowser } = require('../../utils/playwright/launchBrowser') 
+const { sharedOptions } = require('../../utils/task/sharedOptions')
 
-const browserMap = {
-  all: `--all-browsers`,
-  chrome: `--chromium`,
-  firefox: `--firefox`,
-  safari: `--webkit`,
-  webkit: `--webkit`,
-}
+const buildTestArguments = (params) => {
+  const { 
+    context: name, 
+    headless, 
+    sync,
+    firefox,
+    chromium,
+    webkit,
+    allBrowsers,
+  } = params
 
-const buildTestArguments = (cmd=[], { browsers, context, headless, sync }) => {
-  context && cmd.push(context)
-  sync && cmd.unshift(`--runInBand`)
-  headless && cmd.unshift(`--headless`)
-
-  // Map the browser shortcut to the actual argument
-  // If there's a context pass the browser before passing the context
-  browserMap[browsers] && cmd[ context ? `unshift` : `push` ](browserMap[browsers])
-
-  return cmd
+  return [
+    sync && '--runInBand',
+    headless && '--headless',
+    (allBrowsers || firefox) && '--firefox',
+    (allBrowsers || chromium) && '--chromium',
+    (allBrowsers || webkit) && '--webkit',
+    name,
+  ].reduce(
+    (all, opt) => {
+      opt && all.push(opt)
+      console.log(opt)
+      return all
+    },
+    []
+  )
 }
 
 const runTest = async (args) => {
   const { params } = args
-  // launchBrowser({ browser: params.browsers })
-  const cmd = buildTestArguments([], params)
 
-  const resp = await dockerExec(params.container, [`npx`, `qawolf`, `test`].concat(cmd))
-  
-  return resp
+  const cmdOptions = buildTestArguments(params)
+
+  return dockerExec(params.container, [`npx`, `qawolf`, `test`, ...cmdOptions])
 }
 
 module.exports = {
@@ -38,26 +45,15 @@ module.exports = {
     example: 'yarn test:run',
     description : 'Runs all or defined QAWolf tests',
     alias: ['test'],
-    options: {
+    options: sharedOptions('run', {
       context: {
         alias: [ 'name' ],
-        description: 'Context or name of the test to be run. If not passed, all tests are run',
+        description: 'Name of the test to be run. If not passed, all tests are run',
       },
       sync: {
         description: 'Run all tests sequentially',
         alias: [ 'runInBand' ],
         example: `--sync`,
-        default: false,
-      },
-      browsers: {
-        allowed: [ `all`, `chrome`, `firefox`, `safari`, `webkit` ],
-        alias: [ 'browser' ],
-        description: 'Which browsers to run the tests in',
-        default: `chrome`
-      },
-      headless: {
-        type: `bool`,
-        description: 'Run the browser tests in headless mode',
         default: false,
       },
       container: {
@@ -66,6 +62,12 @@ module.exports = {
         required: true,
         default: 'keg-herkin',
       },
-    }
+    }, [
+      'allBrowsers',
+      'chromium',
+      'firefox',
+      'webkit',
+      'headless',
+    ])
   }
 }
