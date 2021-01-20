@@ -57,7 +57,7 @@ const launchBrowsers = launchParams => {
     })
   )
 
-  // synchronously launch each browser
+  // launch each browser in a series
   return runSeq(launchFunctions)
 }
 
