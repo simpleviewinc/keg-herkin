@@ -3,6 +3,10 @@ const { chromium, firefox, webkit  } = require('playwright')
 const metadata = require('../../../tasks/utils/playwright/metadata')
 const { isStr } = require('@keg-hub/jsutils')
 
+// QAW_BROWSER is a qawolf-set env, dependent on parameters like
+// --all-browsers or --firefox
+const BROWSER = process.env.QAW_BROWSER || 'chromium'
+
 /**
  * Gets the browser type playwright object
  * @param {string} type - browser type (e.g. chromium)
@@ -23,9 +27,9 @@ const getBrowser = (type) => {
  */
 const initialize = async done => {
   try {
-    const { endpoint, type } = metadata.read()
+    const { endpoint, type } = metadata.read(BROWSER)
     if (!isStr(endpoint) || !isStr(type))
-      throw new Error('Could not read the websocket and browser type from browser-meta.json')
+      throw new Error(`Browser type "${BROWSER}" is not running (no entry in browser-meta.json)`)
 
     const wsEndpoint = endpoint.replace('127.0.0.1', 'host.docker.internal')
 
@@ -36,6 +40,9 @@ const initialize = async done => {
   }
   catch (err) {
     console.error(err.message)
+    // exit 2 seconds later to ensure error 
+    // has time to be written to stdout
+    setTimeout(() => process.exit(1), 2000)
   }
   finally {
     global.context && global.browser && done()

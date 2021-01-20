@@ -1,18 +1,23 @@
 const path = require('path')
 const fs = require('fs')
 const rootDir = require('app-root-path').path
-const { validate, isStr } = require('@keg-hub/jsutils')
+const { validate, isStr, isObj } = require('@keg-hub/jsutils')
 
 const META_PATH = path.resolve(rootDir, 'browser-meta.json')
 
 /**
  * Reads browser metadata from file
+ * @param {string?} type - optional - specific browser type to read. If omitted, just returns all metadata.
  * @return {Object} - json of the metadata
  */
-const read = () => {
+const read = type => {
   try {
     const data = fs.readFileSync(META_PATH, 'utf8')
-    return JSON.parse(data)
+    const parsed = JSON.parse(data)
+    const value = isObj(parsed) && type
+      ? parsed[type]
+      : parsed
+    return value || {}
   }
   catch (err) {
     console.error(err)
@@ -30,8 +35,18 @@ const save = (type, endpoint, launchOptions) => {
   const [ valid ] = validate({ type, endpoint }, { $default: isStr })
   if (!valid) return
 
+  const nextMetadata = {
+    ...read(),
+    [type]: {
+      type,
+      endpoint,
+      launchTime: new Date().toString(),
+      launchOptions
+    }
+  }
+
   try {
-    fs.writeFileSync(META_PATH, JSON.stringify({ type, endpoint, launchOptions }))
+    fs.writeFileSync(META_PATH, JSON.stringify(nextMetadata, null, 2))
   }
   catch (err) {
     console.error(err)

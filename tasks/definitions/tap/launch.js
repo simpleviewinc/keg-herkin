@@ -12,14 +12,6 @@ const { launchBrowser } = require('../../utils/playwright/launchBrowser')
 */
 const getLaunchOptions = ({ playwright=noOpObj, ...params }) => {
   const {
-    context,
-    chrome,
-    firefox,
-    webkit,
-    headless,
-  } = params
-
-  const {
     allowed,
     type:defBrowser,
     ...serverOptions
@@ -28,10 +20,11 @@ const getLaunchOptions = ({ playwright=noOpObj, ...params }) => {
   return {
     allowed,
     ...serverOptions,
-    browser: chrome || firefox || webkit || defBrowser || context,
-    headless: exists(headless) ? headless : serverOptions.headless,
+    ...params,
+    headless: exists(params.headless) 
+      ? params.headless 
+      : serverOptions.headless
   }
-
 }
 
 /**
@@ -71,7 +64,8 @@ module.exports = {
       },
       // TODO:  add other browser launch options here and in (tap.js) => keg.playwright.config
     }, [
-      'chrome',
+      'browsers',
+      'chromium',
       'firefox',
       'webkit',
       'headless',

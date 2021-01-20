@@ -47,31 +47,38 @@ const getBrowserType = (browser, allowed) => {
  * @param {boolean} log - if true, logs out stages of launch
  */
 const launchBrowserServer = async (browserType, launchOptions, log) => {
-  const { type: prevType, endpoint='', launchOptions: prevOptions } = metadata.read()
+  const { 
+    endpoint='', 
+    type: prevType, 
+    launchOptions: prevOptions 
+  } = metadata.read(browserType) || {}
 
   log && Logger.empty()
 
-  const shouldCheckForRunningBrowser = !isEmpty(endpoint)
+  // check to see if the previous launch parameters match the current ones
+  const launchParamsMatch = 
+    !isEmpty(endpoint)
     && browserType === prevType
     && launchOptions.headless === prevOptions.headless
 
-  // If an endpoint is already saved to the system, and the previously launched
-  // browser matches `browserType`, then just try connecting to that launched
+  const browserName = `${launchOptions.headless ? 'headless ' : ''}${browserType}`
+
+  // If launch params match, then just try connecting to that launched
   // browser. If you can connect, close the connection and do nothing else.
-  if (shouldCheckForRunningBrowser) {
+  if (launchParamsMatch) {
     const [ err, browser ] = await limbo(
       playwright[browserType].connect({ wsEndpoint: endpoint })
     )
 
     if (!err && browser.isConnected()) {
-      log && Logger.log(`==== Using previously-launched browser on host machine... ====`)
+      log && Logger.log(`==== Using previously-launched ${browserName} on host machine... ====`)
       browser.close()
       return null
     }
   }
 
   // Otherwise, launch the browser.
-  log && Logger.log(`==== Starting${launchOptions.headless ? ' headless' : ''} ${browserType} on host machine... ====`)
+  log && Logger.log(`==== Starting ${browserName} on host machine... ====`)
 
   return playwright[browserType].launchServer(launchOptions)
 }
@@ -107,7 +114,6 @@ const launchBrowser = async (config=noOpObj) => {
   const browserType = getBrowserType(browser, allowed)
 
   const browserServer = await launchBrowserServer(browserType, launchParams, log)
-
   if (!browserServer) return
 
   const wsEndpoint = browserServer.wsEndpoint()
