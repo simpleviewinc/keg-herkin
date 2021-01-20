@@ -38,7 +38,6 @@ module.exports = {
         },
       // TODO:  add other browser launch options here and in (tap.js) => keg.playwright.config
     }, [
-      'browsers',
       'chromium',
       'firefox',
       'webkit',

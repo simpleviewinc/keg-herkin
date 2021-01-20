@@ -21,13 +21,6 @@ const {
 */
 const sharedOptions = (action, taskOps=noOpObj, include=noOpArr) => {
   const options = {
-    browsers: {
-      allowed: [ `all`, `chromium`, `firefox`, `safari`, `webkit` ],
-      alias: [ 'browser' ],
-      description: 'Which browsers to run the tests in. Only valid in headless mode.',
-      default: `chromium`,
-      example: `${action} --browsers chromium`,
-    },
     allBrowsers: {
       alias: [ 'all'],
       description: 'Launch all supported browsers',

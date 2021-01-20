@@ -1,10 +1,18 @@
 const { eitherArr } = require('@keg-hub/jsutils')
 const { launchBrowser } = require('./launchBrowser')
 
+// TODO: move to jsutils. I've wanted something like this needed before.
+/**
+ * Calls each promise-returning function in array `asyncFns`,
+ * but awaits each before calling the next. Will pass the
+ * index and resolved values of complete functions to each subsequent
+ * function, in case any need them.
+ * @param {Array<Function>} asyncFns 
+ */
 const runSeq = async (asyncFns=[]) => {
   const results = []
   for (const fn of asyncFns) {
-    const result = await fn()
+    const result = await fn(results.length, results)
     results.push(result)
   }
   return results
@@ -15,15 +23,14 @@ const runSeq = async (asyncFns=[]) => {
  * @return {Array<string>} - list of browsers to launch in the start task
  */
 const getBrowsers = params => {
-
   const {
     firefox=false,
     chromium=false,
     webkit=false,
-    browsers,
+    browsers='',
   } = params
 
-
+  // get an array of browsers from the browsers string, comma or space delimited
   const browsersArr = eitherArr(browsers, browsers.split(/\s|,/gi))
 
   return Array.from(
@@ -36,7 +43,7 @@ const getBrowsers = params => {
   ).filter(Boolean)
 }
 
-module.exports.launchBrowsers = launchParams => {
+const launchBrowsers = launchParams => {
   const { headless, log, ...browserParams } = launchParams
 
   const browsers = getBrowsers(browserParams)
@@ -50,6 +57,8 @@ module.exports.launchBrowsers = launchParams => {
     })
   )
 
-  // launch each browser sequentially
+  // synchronously launch each browser
   return runSeq(launchFunctions)
 }
+
+module.exports = { launchBrowsers }

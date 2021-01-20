@@ -23,7 +23,6 @@ const buildTestArguments = (params) => {
   ].reduce(
     (all, opt) => {
       opt && all.push(opt)
-      console.log(opt)
       return all
     },
     []
