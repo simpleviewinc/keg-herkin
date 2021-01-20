@@ -1,7 +1,6 @@
 const { eitherArr } = require('@keg-hub/jsutils')
 const { launchBrowser } = require('./launchBrowser')
 
-// TODO: move to jsutils. I've wanted something like this needed before.
 /**
  * Calls each promise-returning function in array `asyncFns`,
  * but awaits each before calling the next. Will pass the
