@@ -24,6 +24,7 @@ const runSeq = async (asyncFns=[]) => {
  */
 const getBrowsers = params => {
   const {
+    allBrowsers,
     firefox=false,
     chromium=false,
     webkit=false,
@@ -36,9 +37,9 @@ const getBrowsers = params => {
   return Array.from(
     new Set([
       ...browsersArr,
-      firefox && 'firefox',
-      chromium && 'chromium',
-      webkit && 'webkit'
+      (allBrowsers || firefox) && 'firefox',
+      (allBrowsers || chromium) && 'chromium',
+      (allBrowsers || webkit) && 'webkit'
     ])
   ).filter(Boolean)
 }

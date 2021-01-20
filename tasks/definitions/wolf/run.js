@@ -1,5 +1,5 @@
 const { dockerExec } = require('../../utils/process/process')
-const { launchBrowser } = require('../../utils/playwright/launchBrowser') 
+const { launchBrowsers } = require('../../utils/playwright/launchBrowsers') 
 const { sharedOptions } = require('../../utils/task/sharedOptions')
 
 const buildTestArguments = (params) => {
@@ -13,6 +13,7 @@ const buildTestArguments = (params) => {
     allBrowsers,
   } = params
 
+  // get a list of qawolf "test" command arguments
   return [
     sync && '--runInBand',
     headless && '--headless',
@@ -20,17 +21,13 @@ const buildTestArguments = (params) => {
     (allBrowsers || chromium) && '--chromium',
     (allBrowsers || webkit) && '--webkit',
     name,
-  ].reduce(
-    (all, opt) => {
-      opt && all.push(opt)
-      return all
-    },
-    []
-  )
+  ].filter(Boolean)
 }
 
 const runTest = async (args) => {
   const { params } = args
+
+  await launchBrowsers(params)
 
   const cmdOptions = buildTestArguments(params)
 
