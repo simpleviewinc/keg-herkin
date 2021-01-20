@@ -1,8 +1,12 @@
 const { dockerExec } = require('../../utils/process/process')
+const { launchBrowser } = require('../../utils/playwright/launchBrowser') 
 
 const createTest = async args => {
   const { params } = args
   const { url, name, container } = params
+
+  // ensure a non-headless chromium instance is running
+  await launchBrowser({ browser: 'chromium', headless: false })
 
   dockerExec(container, `npx qawolf create ${url} ${name}`)
 }

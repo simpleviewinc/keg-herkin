@@ -1,4 +1,4 @@
-const { createTemplate } = require('../tests/bdd/support/createTemplate')
+const { createTemplate } = require('../tasks/utils/wolf/createTemplate')
 
 module.exports = {
   config: "node_modules/qawolf/js-jest.config.json",

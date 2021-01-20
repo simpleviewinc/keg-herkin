@@ -64,6 +64,7 @@ module.exports = {
       'firefox',
       'webkit',
       'headless',
+      'log',
     ])
   }
 }

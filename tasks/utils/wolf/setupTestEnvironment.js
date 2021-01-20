@@ -1,6 +1,6 @@
-const qawolf = require("qawolf")
+const qawolf = require('qawolf')
+const metadata = require('../playwright/metadata')
 const { chromium, firefox, webkit  } = require('playwright')
-const metadata = require('../../../tasks/utils/playwright/metadata')
 const { isStr } = require('@keg-hub/jsutils')
 
 // QAW_BROWSER is a qawolf-set env, dependent on parameters like
@@ -65,15 +65,6 @@ const cleanup = async done => {
 }
 
 /**
- * Helper that calls the jest beforeAll and afterAll
- * functions for setup and teardown. Called in the qa-wolf template.
- */
-const setupTestEnvironment = () => {
-  beforeAll(initialize)
-  afterAll(cleanup)
-}
-
-/**
  * Gets the browser page instance, or else creates a new one
  */
 const getPage = async () => {
@@ -84,6 +75,15 @@ const getPage = async () => {
 /**
  */
 const getBrowserContext = () => ({ getPage })
+
+/**
+ * Helper that calls the jest beforeAll and afterAll
+ * functions for setup and teardown. Called in the qa-wolf template.
+ */
+const setupTestEnvironment = () => {
+  beforeAll(initialize)
+  afterAll(cleanup)
+}
 
 module.exports = {
   setupTestEnvironment,
