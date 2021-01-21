@@ -3,7 +3,7 @@ import { connectToChild } from 'penpal'
 import { parentConfig } from './parent.config'
 import { createDomTree } from './domTree/createDomTree.js'
 import { deepMerge, checkCall, noOpObj } from '@keg-hub/jsutils'
-import { Page } from './page'
+import { Page } from './playwright'
 import { Runner } from './runner'
 
 /**

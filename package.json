@@ -44,6 +44,7 @@
     "postinstall": "node scripts/postinstall.js",
     "setup": "yarn install --ignore-engines; cd node_modules/keg-core; yarn postinstall --ignore-engines",
     "start": "cd node_modules/keg-core; expo start",
+    "test:e2e": "NODE_ENV=test JEST_PLAYWRIGHT_CONFIG=./configs/jest-playwright.config.js jest --no-cache --config=./configs/jest.e2e.config.js",
     "task": "node ./tasks/runTask.js",
     "web": "yarn web:dev",
     "web:build": "cd node_modules/keg-core; yarn build:web",
@@ -55,7 +56,7 @@
     "@cucumber/messages": "13.1.0",
     "@keg-hub/args-parse": "6.2.1",
     "@keg-hub/ask-it": "0.0.1",
-    "@keg-hub/jsutils": "7.0.2",
+    "@keg-hub/jsutils": "8.1.0",
     "@keg-hub/messenger": "file:repos/messenger",
     "@keg-hub/spawn-cmd": "0.1.0",
     "ansi-html": "0.0.7",
@@ -79,6 +80,7 @@
   },
   "devDependencies": {
     "jest": "26.4.2",
+    "jest-playwright-preset": "1.4.4",
     "rimraf": "3.0.2"
   }
 }

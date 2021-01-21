@@ -21,7 +21,7 @@ const saveFile = (app, config) => async (req, res) => {
 
 const loadFile = (app, config) => async (req, res) => {
   try {
-    const file = req.params.file
+    const file = req.query.file
     const meta = await getTestFile(config, file)
     
     return apiResponse(req, res, meta || {}, 200)

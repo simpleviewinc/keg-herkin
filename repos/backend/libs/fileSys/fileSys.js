@@ -1,5 +1,5 @@
-const path = require('path')
 const fs = require('fs')
+const { limbo } = require('@keg-hub/jsutils')
 
 /**
  * Wraps a method with a callback into a promise
@@ -63,7 +63,7 @@ const pathExists = checkPath => {
  * @param {string} filePath - Path of the file to read
  * @param {string} [format=utf8] - Format of the file
  *
- * @returns {Promise|string} - Content of the file
+ * @returns {Promise|Array} - Slot 1 => error, Slot 2 => contents of file
  */
 const readFile = (filePath, format='utf8') => {
   return limboify(fs.readFile, filePath, format)

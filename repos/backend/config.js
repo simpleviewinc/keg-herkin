@@ -1,6 +1,6 @@
 const path = require('path')
 const { deepMerge } = require('@keg-hub/jsutils')
-const rootDir = path.join(__dirname, '../')
+const rootDir = path.join(__dirname, '../../')
 const { EDITOR_CONFIG_PATH } = process.env
 let loadedConfig
 

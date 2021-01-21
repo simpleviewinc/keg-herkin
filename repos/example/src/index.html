@@ -65,9 +65,30 @@
         <h1 class="fw-light">Album example</h1>
         <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
         <p>
-          <a href="#" class="btn btn-primary my-2">Main call to action</a>
-          <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+          <script>
+            function left() {
+              document.getElementById('label-text').innerText = 'left'
+            }
+            function right() {
+              document.getElementById('label-text').innerText = 'right'
+            }
+            </script>
+          <input 
+            onclick="left()" 
+            id="leftInput"
+            class="btn btn-primary my-2" 
+            type="button" 
+            value="Set Left"
+          />
+          <input 
+            onclick="right()" 
+            id="rightInput"
+            class="btn btn-secondary my-2" 
+            type="button" 
+            value="Set Right"
+          />
         </p>
+        <p id="label-text">Hello World!</p>
       </div>
     </div>
   </section>

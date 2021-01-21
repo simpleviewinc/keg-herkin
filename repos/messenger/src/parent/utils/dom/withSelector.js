@@ -1,6 +1,6 @@
-import { $ } from '../../parent/page/selectors'
-import { throwNoElement } from '../../utils/errors/throwNoElement'
-import { throwNoSelector } from '../../utils/errors/throwNoSelector'
+import { $ } from '../../playwright/page/selectors'
+import { throwNoElement } from '../../../utils/errors/throwNoElement'
+import { throwNoSelector } from '../../../utils/errors/throwNoSelector'
 
 export const withSelector = cb => {
   return (selector, ...args) => {

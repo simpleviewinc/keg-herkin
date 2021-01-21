@@ -1,7 +1,6 @@
 # Allows overwriting where the base image is pulled from
 # Must come before the FROM directive
-ARG KEG_NODE_VERSION
-ARG GIT_STAGE_IMAGE_FROM=node:$KEG_NODE_VERSION
+ARG GIT_STAGE_IMAGE_FROM
 FROM $GIT_STAGE_IMAGE_FROM as builder
 
 WORKDIR /
@@ -31,7 +30,7 @@ COPY . $DOC_APP_PATH
 
 # Install the dependecies with yarn setup, then remove the .npmrc
 # Install git and the expo-cli and sharp-cli
-RUN apk add --no-cache git bash sudo; \
+RUN apt-get install -y git bash sudo; \
     yarn global add expo-cli@$EXPO_CLI_VERSION sharp-cli nodemon npm-run-all; \
     echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
     sudo sysctl -p; \

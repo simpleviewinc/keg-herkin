@@ -69,7 +69,7 @@ const ResultsRow = ({ styles, results }) => {
 export const Runner = props => {
 
   const {
-    autoRun=true,
+    autoRun=false,
     activeTab,
     parentMethods,
     prefix,
