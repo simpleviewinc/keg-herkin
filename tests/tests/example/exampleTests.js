@@ -10,7 +10,7 @@ describe('Example Tests', () => {
   })
 
   test('should find the nav-bar button on the page', async () => {
-    const button = await page.$$('button.navbar-toggler')
+    const button = await page.$('button.navbar-toggler')
     expect(button).not.toBe(null)
   })
 
