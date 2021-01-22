@@ -1,5 +1,5 @@
 const { execSync } = require('child_process')
-const env = process.env.NODE_ENV || 'local'
+const host = process.env.KEG_PROXY_HOST || 'local.kegdev.xyz'
 
 module.exports.getKegHerkinUrl = () => {
   let branchName
@@ -13,5 +13,5 @@ module.exports.getKegHerkinUrl = () => {
     branchName = 'master'
   }
   
-  return `http://herkin-${branchName}.${env}.kegdev.xyz`
+  return `http://herkin-${branchName}.${host}`
 }

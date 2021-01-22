@@ -69,7 +69,7 @@ const cleanup = async done => {
  */
 const getPage = async () => {
   global.page = global.page || await context.newPage()
-  return page
+  return global.page
 }
 
 /**
