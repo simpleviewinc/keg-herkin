@@ -1,7 +1,8 @@
 const { execSync } = require('child_process')
+const env = process.env.NODE_ENV || 'local'
 
 module.exports.getKegHerkinUrl = () => {
-  let branchName;
+  let branchName
   try {
     branchName = execSync(`git -C ${__dirname} branch --show-current`)
       .toString()
@@ -12,5 +13,5 @@ module.exports.getKegHerkinUrl = () => {
     branchName = 'master'
   }
   
-  return `http://herkin-${branchName}.local.kegdev.xyz`
+  return `http://herkin-${branchName}.${env}.kegdev.xyz`
 }

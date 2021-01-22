@@ -1,10 +1,15 @@
 const { dockerExec } = require('../../utils/process/process')
 const { launchBrowsers } = require('../../utils/playwright/launchBrowsers') 
 const { sharedOptions } = require('../../utils/task/sharedOptions')
+const { buildArguments } = require('../../utils/task/buildArguments')
 
+/**
+ * Builds the QAwolf test command
+ * @param {Object} params 
+ * @returns {Array<string>} - array of cli args
+ */
 const buildTestArguments = (params) => {
   const { 
-    context: name, 
     headless, 
     sync,
     firefox,
@@ -13,25 +18,29 @@ const buildTestArguments = (params) => {
     allBrowsers,
   } = params
 
-  // get a list of qawolf "test" command arguments
-  return [
-    sync && '--runInBand',
-    headless && '--headless',
-    (allBrowsers || firefox) && '--firefox',
-    (allBrowsers || chromium) && '--chromium',
-    (allBrowsers || webkit) && '--webkit',
-    name,
-  ].filter(Boolean)
+  const args = {
+    headless,
+    chromium,
+    webkit,
+    firefox
+  }
+
+  if (allBrowsers || (firefox && chromium && webkit)) {
+    args['all-browsers'] = allBrowsers
+  } 
+  if (sync) args['runInBand'] = sync
+
+  return buildArguments(args)
 }
 
 const runTest = async (args) => {
   const { params } = args
+  const { context: name } = params
 
   await launchBrowsers(params)
-
   const cmdOptions = buildTestArguments(params)
 
-  return dockerExec(params.container, [`npx`, `qawolf`, `test`, ...cmdOptions])
+  return dockerExec(params.container, [`npx`, `qawolf`, `test`, name, ...cmdOptions])
 }
 
 module.exports = {
