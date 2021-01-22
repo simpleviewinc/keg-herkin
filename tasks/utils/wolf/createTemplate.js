@@ -1,6 +1,6 @@
 const fs = require('fs')
 const { template } = require('@keg-hub/jsutils')
-// TODO: remove after jsutils update
+
 template.regex = /\${(.*?)\}/g
 
 /**
