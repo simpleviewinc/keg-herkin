@@ -4,6 +4,6 @@ const { setupTestEnvironment } = require('../../tasks/utils/wolf/setupTestEnviro
 
 setupTestEnvironment()
 
-test("$name", async () => {
-  await qawolf.create("$url")
+test('${name}', async () => {
+  await qawolf.create('${url}')
 })

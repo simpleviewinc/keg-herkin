@@ -1,25 +1,31 @@
 const fs = require('fs')
+const { template } = require('@keg-hub/jsutils')
+// TODO: remove after jsutils update
+template.regex = /\${(.*?)\}/g
 
 /**
- * @param {Object} params - params of the test, as provided by qa-wolf
+ * ref: https://v1-docs.qawolf.com/docs/configure_qa_wolf#arguments
+ * 
+ * @param {object} props - combination of QA wolf createTemplate props and templatePath
+ * @param {string} props.templateFile - path to template file, relative to app root
+ * @param {string} props.device - playwright device to emulate
+ * @param {string} props.name - name of the test
+ * @param {string} props.url - visit this URL to begin the test
+ * 
+ * @returns {string} - test template
  */
-module.exports.createTemplate = (params) => {
+module.exports.createTemplate = (props) => {
   const {
     device,
     name,
-    statePath,
     url,
-    useTypeScript
-  } = params
+    templateFile
+  } = props
 
-  const template = fs.readFileSync(
-    `tasks/utils/wolf/qawolf.template.js`, 
+  const templateString = fs.readFileSync(
+    templateFile, 
     { encoding: 'utf8' }
   )
 
-  return template.replace(/\$name|\$url|\$device/gi, matched => ({
-    $name: name,
-    $url: url,
-    $device: device
-  })[matched])
+  return template(templateString, { name, url, device })
 }
