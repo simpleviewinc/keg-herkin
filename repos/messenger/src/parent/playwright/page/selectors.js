@@ -5,7 +5,9 @@ export const $ = (selector, context = document) => {
     throw new Error(`Page#$ ( select ) requires a selector argument`)
 
   const element = context.querySelector(selector)
-  return new ElementHandle(element)
+  return element 
+    ? new ElementHandle(element)
+    : null 
 }
 
 export const $$ = (selector, context = document) => {
