@@ -5,18 +5,23 @@ env:
   # Set the paths to the linked external app
   # The app should be linked to the keg-cli with `kee`
   # Example command to link the app => `keg tap link kee`
-  KEG_DOCKER_FILE: "{{ cli.taps.links.herkin }}/container/Dockerfile"
-  KEG_VALUES_FILE: "{{ cli.taps.links.herkin }}/container/values.yml"
-  KEG_COMPOSE_DEFAULT: "{{ cli.taps.links.herkin }}/container/docker-compose.yml"
+  KEG_DOCKER_FILE: "{{ cli.taps.herkin.path }}/container/Dockerfile"
+  KEG_VALUES_FILE: "{{ cli.taps.herkin.path }}/container/values.yml"
+  KEG_COMPOSE_DEFAULT: "{{ cli.taps.herkin.path }}/container/docker-compose.yml"
 
   # The KEG_CONTEXT_PATH env should be the location of the external app being run
-  KEG_CONTEXT_PATH: "{{ cli.taps.links.herkin }}"
+  KEG_CONTEXT_PATH: "{{ cli.taps.herkin.path }}"
+
+  # Image to use when building herkin
+  KEG_BASE_IMAGE: ghcr.io/simpleviewinc/tap:master
+
+  # Image to use when running herkin
+  KEG_IMAGE_FROM: ghcr.io/simpleviewinc/keg-herkin:master
 
   # base image from playwright - Alpine Linux are not supported
   # ref: https://playwright.dev/docs/docker/README/#using-on-ci
   # includes node v 14.15.3
-  GIT_STAGE_IMAGE_FROM: "mcr.microsoft.com/playwright:bionic"
-
+  PLAYWRIGHT_IMAGE_FROM: mcr.microsoft.com/playwright:bionic
 
   # --- DOCKER ENV CONTEXT --- #
 
@@ -41,4 +46,7 @@ env:
   # IMAGE and CONTAINER_NAME should be the same
   IMAGE: keg-herkin
   CONTAINER_NAME: keg-herkin
-  VERSION: "0.0.1"
+  
+  # Git tap url in github
+  GIT_APP_URL: https://github.com/simpleviewinc/keg-herkin.git
+  GIT_APP_BRANCH: master
