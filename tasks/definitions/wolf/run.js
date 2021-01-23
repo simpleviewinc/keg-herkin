@@ -1,32 +1,46 @@
-const { npx } = require('../../utils/process/process')
+const { dockerExec } = require('../../utils/process/process')
+const { launchBrowsers } = require('../../utils/playwright/launchBrowsers') 
+const { sharedOptions } = require('../../utils/task/sharedOptions')
+const { buildArguments } = require('../../utils/task/buildArguments')
 
-const browserMap = {
-  all: `--all-browsers`,
-  chrome: `--chromium`,
-  firefox: `--firefox`,
-  safari: `--webkit`,
-  webkit: `--webkit`,
-}
+/**
+ * Builds the QAwolf test command
+ * @param {Object} params 
+ * @returns {Array<string>} - array of cli args
+ */
+const buildTestArguments = (params) => {
+  const { 
+    headless, 
+    sync,
+    firefox,
+    chromium,
+    webkit,
+    allBrowsers,
+  } = params
 
-const buildTestArguments = (cmd=[], { browsers, context, headless, sync }) => {
-  context && cmd.push(context)
-  sync && cmd.unshift(`--runInBand`)
-  headless && cmd.unshift(`--headless`)
+  const args = {
+    headless,
+    chromium,
+    webkit,
+    firefox
+  }
 
-  // Map the browser shortcut to the actual argument
-  // If there's a context pass the browser before passing the context
-  browserMap[browsers] && cmd[ context ? `unshift` : `push` ](browserMap[browsers])
+  if (allBrowsers || (firefox && chromium && webkit)) {
+    args['all-browsers'] = allBrowsers
+  } 
+  if (sync) args['runInBand'] = sync
 
-  return cmd
+  return buildArguments(args)
 }
 
 const runTest = async (args) => {
   const { params } = args
-  const cmd = buildTestArguments([], params)
+  const { context: name } = params
 
-  const resp = await npx([`qawolf`, `test`].concat(cmd))
-  
-  return resp
+  await launchBrowsers(params)
+  const cmdOptions = buildTestArguments(params)
+
+  return dockerExec(params.container, [`npx`, `qawolf`, `test`, name, ...cmdOptions])
 }
 
 module.exports = {
@@ -35,27 +49,31 @@ module.exports = {
     action: runTest,
     example: 'yarn test:run',
     description : 'Runs all or defined QAWolf tests',
-    options: {
+    alias: ['test'],
+    options: sharedOptions('run', {
       context: {
         alias: [ 'name' ],
-        description: 'Context or name of the test to be run. If not passed, all tests are run',
+        description: 'Name of the test to be run. If not passed, all tests are run',
       },
       sync: {
         description: 'Run all tests sequentially',
+        alias: [ 'runInBand' ],
         example: `--sync`,
         default: false,
       },
-      browsers: {
-        allowed: [ `all`, `chrome`, `firefox`, `safari`, `webkit` ],
-        alias: [ 'browser' ],
-        description: 'Which browsers to run the tests in',
-        default: `chrome`
+      container: {
+        description: 'Name of container within which to run create command',
+        example: '--container keg-herkin',
+        required: true,
+        default: 'keg-herkin',
       },
-      headless: {
-        type: `bool`,
-        description: 'Run the browser tests in headless mode',
-        default: false,
-      }
-    }
+    }, [
+      'allBrowsers',
+      'chromium',
+      'firefox',
+      'webkit',
+      'headless',
+      'log',
+    ])
   }
 }

@@ -1,1 +1,1 @@
-module.exports = require('./configs/qawolf.config')
+module.exports = require('./configs/qawolf.config.js')

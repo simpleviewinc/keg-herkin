@@ -48,7 +48,7 @@ export default buildTypes.reduce((apps, type) => {
     ],
     plugins: [
       replace({
-        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV)
       }),
       alias({
         entries: {},

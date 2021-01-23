@@ -1,4 +1,6 @@
-{
+
+
+module.exports = {
   "name": "keg-herkin",
   "displayName": "Keg-Herkin",
   "keg": {
@@ -21,7 +23,7 @@
         "allowed": [ "chromium", "firefox", "webkit" ],
         "headless": false
       }
-    }
+    },
   },
   "expo": {
     "name": "keg-herkin",

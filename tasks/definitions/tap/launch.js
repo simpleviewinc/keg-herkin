@@ -1,38 +1,5 @@
-const { noOpObj, exists } = require('@keg-hub/jsutils')
 const { sharedOptions } = require('../../utils/task/sharedOptions')
-const { launchBrowser } = require('../../utils/playwright/launchBrowser')
-
-/**
-* Gets the options to launch the Playwright browser based on passed in options and config settings
-* @function
-* @private
-* @param {Object} params - Task params object, with Herkin params injected
-*
-* @returns {Object} - Options for launching the Playwright browser
-*/
-const getLaunchOptions = ({ playwright=noOpObj, ...params }) => {
-  const {
-    context,
-    chrome,
-    firefox,
-    webkit,
-    headless,
-  } = params
-
-  const {
-    allowed,
-    type:defBrowser,
-    ...serverOptions
-  } = playwright.browser
-
-  return {
-    allowed,
-    ...serverOptions,
-    browser: chrome || firefox || webkit || defBrowser || context,
-    headless: exists(headless) ? headless : serverOptions.headless,
-  }
-
-}
+const { launchBrowsers } = require('../../utils/playwright/launchBrowsers')
 
 /**
 * Launches a Playwright browser based on passed in options and config settings
@@ -43,13 +10,12 @@ const getLaunchOptions = ({ playwright=noOpObj, ...params }) => {
 * @returns {Object} - Browser launch options and websocket endpoint
 */
 const launchAction = async (args) => {
+  const { params } = args
 
-  const launchOptions = getLaunchOptions(args.herkin)
-  const websocket = await launchBrowser(launchOptions)
-  
+  const websockets = await launchBrowsers(params)
+
   return {
-    websocket,
-    launchOptions
+    websockets,
   }
 }
 
@@ -59,19 +25,11 @@ module.exports = {
     alias: [ 'lch' ],
     action: launchAction,
     example: 'yarn test:launch',
-    description : 'Launch a locally installed browser',
-    options: sharedOptions('launch', {
-      context: {
-        alias: [ 'name' ],
-        enforce: true,
-        allowed: [ `chromium`, `firefox`, `webkit` ],
-        description: 'Context or name of the browser to launch',
-        example: 'launch --context firefox',
-        default: 'chromium',
-      },
-      // TODO:  add other browser launch options here and in (tap.json) => keg.playwright.config
-    }, [
-      'chrome',
+    description : 'Launch one or more locally installed browsers',
+    // TODO:  add other browser launch options here and in (tap.js) => keg.playwright.config
+    options: sharedOptions('launch', {}, [
+      'allBrowsers',
+      'chromium',
       'firefox',
       'webkit',
       'headless',

@@ -1,5 +1,5 @@
 sync:
-  rc:
+  keg-herkin:
     alpha: "/keg/tap"
     beta: "docker://tap/keg/tap"
     mode: "one-way-replica"
@@ -20,6 +20,7 @@ sync:
         - "/repos/messenger/build"
         - "/repos/example/build"
         - "/docs"
+        - "/tests/wolf"
 actions:
   herkin:
     build:
@@ -64,6 +65,29 @@ actions:
       privileged: true
       cmds:
         - yarn install
+  jsutils:
+    install:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - yarn build
+    start:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils
+      privileged: true
+      detach: true
+      cmds:
+        - yarn dev
+    copyRoot:
+      location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils
+      privileged: true
+      cmds:
+        - rm -rf /keg/tap/node_modules/@keg-hub/jsutils/build
+        - cp -R /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils/build /keg/tap/node_modules/@keg-hub/jsutils/build
   retheme:
     install:
       location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme

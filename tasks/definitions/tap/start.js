@@ -1,6 +1,5 @@
-// const { launchAction } from './launch'
-const { get, checkCall } = require('@keg-hub/jsutils')
 const { sharedOptions } = require('../../utils/task/sharedOptions')
+const { launchBrowsers } = require('../../utils/playwright/launchBrowsers')
 
 /**
  * Starts all the Keg-Herkin services needed to run tests
@@ -16,14 +15,12 @@ const { sharedOptions } = require('../../utils/task/sharedOptions')
  * @returns {void}
  */
 const startHerkin = async (args) => {
-  // const { params, herkin } = args
-  // const launchSocket = (params.launch && !params.headless)
+  const { params } = args
 
-  // launchSocket &&
-  //   await checkCall(launch.action, args)
-  // await yarn('ex:mess')
+  params.launch && await launchBrowsers(params)
 
-  await args.task.cliTask(args)
+  // runs the start task using the cli, which will actually start the container
+  args.task.cliTask(args)
 }
 
 module.exports = {
@@ -39,9 +36,10 @@ module.exports = {
           example: 'start --no-launch',
           default: true,
         },
-      // TODO:  add other browser launch options here and in (tap.json) => keg.playwright.config
+      // TODO:  add other browser launch options here and in (tap.js) => keg.playwright.config
     }, [
-      'chrome',
+      'allBrowsers',
+      'chromium',
       'firefox',
       'webkit',
       'headless',

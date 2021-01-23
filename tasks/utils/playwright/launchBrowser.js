@@ -6,20 +6,8 @@
 */
 const { Logger }  = require('@keg-hub/ask-it/src/logger')
 const playwright = require('playwright')
-const { noOpObj, isStr, exists } = require('@keg-hub/jsutils')
-
-/**
-* Default config for starting the Playwright browser server
-* @object
-*/
-const defConfig = {
-  log: true,
-  browser: 'chromium',
-  browsers: [ 'chromium', 'firefox', 'webkit' ],
-  serverOptions: {
-    headless: false,
-  }
-}
+const { noOpObj, exists, isEmpty, limbo } = require('@keg-hub/jsutils')
+const metadata = require('./metadata')
 
 /**
 * Logs the websocket endpoint to the terminal
@@ -53,26 +41,46 @@ const getBrowserType = (browser, allowed) => {
 }
 
 /**
-* Sets up listeners for browsers events
-* @function
-* @private
-* @param {Object} browserServer - Browser instance created by Playwright
-* @param {string} browser - Name of the browser
-*
-* @returns {void}
-*/
-const addBrowserEvents = (browserServer, browser) => {
+ * Launches the browser server instance of the browserType and launch options
+ * @param {String} browserType - one of 'chromium', 'firefox', or 'webkit'
+ * @param {Object} launchOptions - see: https://playwright.dev/docs/api/class-browsertype?_highlight=launch#browsertypelaunchserveroptions
+ * @param {boolean} log - if true, logs out stages of launch
+ */
+const launchBrowserServer = async (browserType, launchOptions, log) => {
+  const { 
+    endpoint='', 
+    type: prevType, 
+    launchOptions: prevOptions 
+  } = metadata.read(browserType) || {}
 
-  browserServer.on('disconnected', event => {
-    Logger.empty()
-    Logger.warn(`Host browser ${browser} has disconnected!`)
-    Logger.empty()
-    
-    // If the browser disconnected, then exit it the process
-    // Nothing we can do about it
-    process.exit(0)
-  })
+  log && Logger.empty()
 
+  // check to see if the previous launch parameters match the current ones
+  const launchParamsMatch = 
+    !isEmpty(endpoint)
+    && browserType === prevType
+    && launchOptions.headless === prevOptions.headless
+
+  const browserName = `${launchOptions.headless ? 'headless ' : ''}${browserType}`
+
+  // If launch params match, then just try connecting to that launched
+  // browser. If you can connect, close the connection and do nothing else.
+  if (launchParamsMatch) {
+    const [ err, browser ] = await limbo(
+      playwright[browserType].connect({ wsEndpoint: endpoint })
+    )
+
+    if (!err && browser.isConnected()) {
+      log && Logger.log(`==== Using previously-launched ${browserName} on host machine... ====`)
+      browser.close()
+      return null
+    }
+  }
+
+  // Otherwise, launch the browser.
+  log && Logger.log(`==== Starting ${browserName} on host machine... ====`)
+
+  return playwright[browserType].launchServer(launchOptions)
 }
 
 /**
@@ -92,21 +100,21 @@ const addBrowserEvents = (browserServer, browser) => {
 */
 const launchBrowser = async (config=noOpObj) => {
   const {
-    log=defConfig.log,
-    browser=defConfig.browser,
-    allowed=defConfig.browsers,
-    ...serverOptions
+    log=true,
+    browser='chromium',
+    allowed=[ 'chromium', 'firefox', 'webkit' ],
+    ...params
   } = config
+
+  const launchParams = {
+    headless: exists(config.headless) ? config.headless : true,
+    ...params
+  }
 
   const browserType = getBrowserType(browser, allowed)
 
-  log && Logger.empty()
-  log && Logger.log(`Starting browser on host machine...`)
-
-  const browserServer = await playwright[browserType].launchServer({
-    ...defConfig.serverOptions,
-    ...serverOptions,
-  })
+  const browserServer = await launchBrowserServer(browserType, launchParams, log)
+  if (!browserServer) return
 
   const wsEndpoint = browserServer.wsEndpoint()
   if(!wsEndpoint)
@@ -114,8 +122,12 @@ const launchBrowser = async (config=noOpObj) => {
 
   log && logWebsocket(wsEndpoint, browserType)
 
-  // Add the websocket to the current processes ENV's
-  process.env['KEG_PLAYWRIGHT_WS'] = wsEndpoint
+  // Save the playwright browser metadata to the browser-meta.json, to be used in the container.
+  metadata.save(
+    browserType, 
+    wsEndpoint,
+    launchParams
+  )
 
   return wsEndpoint
 }

@@ -13,7 +13,7 @@ export const parentConfig = {
     // onLoad: null
     // URL to set the Iframe too, overrides the default Keg-Herkin bundle
     // TODO: update this to be the bundled keg-herkin client code as data url
-    src: `http://herkin-master.local.kegdev.xyz/`,
+    src: `http://herkin-master.local.kegdev.xyz`,
     // Extra attributes to add to the iframe
     attrs: {
       frameborder: '0',

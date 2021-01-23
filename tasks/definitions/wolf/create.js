@@ -1,11 +1,14 @@
-const { npx } = require('../../utils/process/process')
+const { dockerExec } = require('../../utils/process/process')
+const { launchBrowser } = require('../../utils/playwright/launchBrowser') 
 
-const createTest = async (args) => {
+const createTest = async args => {
   const { params } = args
-  const { url, context } = params
-  const resp = await npx(`qawolf create ${url} ${context}`)
+  const { url, name, container } = params
 
-  return resp
+  // ensure a non-headless chromium instance is running
+  await launchBrowser({ browser: 'chromium', headless: false })
+
+  dockerExec(container, `npx qawolf create ${url} ${name}`)
 }
 
 module.exports = {
@@ -15,15 +18,21 @@ module.exports = {
     example: 'yarn test:create',
     description : 'Creates a new QAWolf test based on the passed in context and url',
     options: {
-      context: {
-        alias: [ 'name' ],
-        description: 'Context or name of the test to be created',
+      name: {
+        alias: [ 'context' ],
+        description: 'Name of the test to be created',
         required: true,
       },
       url: {
         description: 'Url of the site there the test should be run',
         example: '--url http://my.test.site',
         required: true,
+      },
+      container: {
+        description: 'Name of container within which to run create command',
+        example: '--container keg-herkin',
+        required: true,
+        default: 'keg-herkin',
       },
       device: {
         description: 'Device to run the test on. See device list here => https://github.com/microsoft/playwright/blob/master/src/server/deviceDescriptors.ts',

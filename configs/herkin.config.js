@@ -1,5 +1,5 @@
 const path = require('path')
-const tapConfig = require('../tap.json')
+const tapConfig = require('../tap.js')
 const appConfig = require('./app.config.js')
 const pkgConfig = require('../package.json')
 const { deepMerge, exists, get, isStr, isFunc, noOpObj } = require('@keg-hub/jsutils')
