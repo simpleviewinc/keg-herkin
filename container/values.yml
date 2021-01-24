@@ -16,11 +16,14 @@ env:
   KEG_BASE_IMAGE: ghcr.io/simpleviewinc/tap:master
 
   # Image to use when running herkin
+  # Even if the dockerfile does not use this in the FROM directive
+  # It should still be defined as the image used to run the Tap
   KEG_IMAGE_FROM: ghcr.io/simpleviewinc/keg-herkin:master
 
-  # base image from playwright - Alpine Linux are not supported
+  # This is a true base image from playwright - Alpine Linux are not supported
   # ref: https://playwright.dev/docs/docker/README/#using-on-ci
   # includes node v 14.15.3
+  # When building the keg-herkin image, this acts as the parent image
   PLAYWRIGHT_IMAGE_FROM: mcr.microsoft.com/playwright:bionic
 
   # --- DOCKER ENV CONTEXT --- #
