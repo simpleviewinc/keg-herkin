@@ -12,8 +12,6 @@ FROM $KEG_BASE_IMAGE as tap-base
 # Must come before the FROM directive
 FROM $PLAYWRIGHT_IMAGE_FROM as builder
 
-WORKDIR /
-
 # Path of the app within the docker container
 ENV DOC_APP_PATH=$DOC_APP_PATH
 ENV GIT_APP_URL=$GIT_APP_URL
