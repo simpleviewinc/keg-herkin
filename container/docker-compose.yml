@@ -7,11 +7,10 @@ services:
       - ${KEG_CONTEXT_PATH}/tests/wolf:${DOC_APP_PATH}/tests/wolf
     environment:
       - DOC_APP_PATH
-      - DOC_APP_PORT
       - ENV
       - KEG_EXEC_CMD
       - KEG_DOCKER_EXEC
-      - KEG_NM_INSTALL
+      - KEG_PROXY_PORT
       - NODE_ENV
     ports:
       - ${API_PORT}:${API_PORT}

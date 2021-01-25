@@ -1,8 +1,11 @@
+
 # Path of the tap within the docker container
 ARG DOC_APP_PATH=/keg/tap
 ARG GIT_APP_URL=https://github.com/simpleviewinc/keg-herkin.git
 ARG GIT_APP_BRANCH=master
 ARG PLAYWRIGHT_IMAGE_FROM=mcr.microsoft.com/playwright:bionic
+# Flag to copy over the taps local folder instead of pulling from git
+ARG KEG_COPY_LOCAL
 
 # Add a FROM for the tap-base image to we can copy content from it
 ARG KEG_BASE_IMAGE=ghcr.io/simpleviewinc/tap:master
@@ -12,19 +15,20 @@ FROM $KEG_BASE_IMAGE as tap-base
 # Must come before the FROM directive
 FROM $PLAYWRIGHT_IMAGE_FROM as builder
 
-# Path of the app within the docker container
-ENV DOC_APP_PATH=$DOC_APP_PATH
-ENV GIT_APP_URL=$GIT_APP_URL
-ENV GIT_APP_BRANCH=$GIT_APP_BRANCH
-
+# Path of the tap within the docker container
+ARG DOC_APP_PATH=/keg/tap
 # Port the app is running on
-ARG DOC_APP_PORT=${DOC_APP_PORT:-19006}
+ARG KEG_PROXY_PORT=19006
+
+# Add the path and port args as envs
+ENV DOC_APP_PATH=$DOC_APP_PATH
+ENV KEG_PROXY_PORT=$KEG_PROXY_PORT
 
 # Expose container ports
-EXPOSE $DOC_APP_PORT
+EXPOSE $KEG_PROXY_PORT
 
 # Ensure the expo cli version
-ARG EXPO_CLI_VERSION=${EXPO_CLI_VERSION:-3.28.0}
+ARG EXPO_CLI_VERSION=3.28.0
 
 # Add yarn's global bin to PATH
 ENV PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin
