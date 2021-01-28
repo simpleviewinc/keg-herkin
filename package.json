@@ -65,7 +65,7 @@
     "dotenv": "8.0.0",
     "events": "3.2.0",
     "express": "4.11.1",
-    "keg-core": "npm:@keg-hub/keg-core@8.0.0",
+    "keg-core": "npm:@keg-hub/keg-core@8.2.0",
     "module-alias": "2.2.2",
     "nodemon": "2.0.4",
     "npm-run-all": "4.1.5",
@@ -78,6 +78,9 @@
     "socket.io": "2.3.0",
     "webpack": "5.13.0",
     "app-root-path": "3.0.0"
+  },
+  "resolutions": {
+    "@keg-hub/jsutils": "8.1.0"
   },
   "devDependencies": {
     "jest": "26.4.2",
