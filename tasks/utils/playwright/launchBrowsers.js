@@ -2,6 +2,7 @@ const { eitherArr } = require('@keg-hub/jsutils')
 const { launchBrowser } = require('./launchBrowser')
 
 /**
+ * TODO: update this to use `jsutils.runSeq` once its released
  * Calls each promise-returning function in array `asyncFns`,
  * but awaits each before calling the next. Will pass the
  * index and resolved values of complete functions to each subsequent

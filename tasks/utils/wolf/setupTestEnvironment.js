@@ -45,7 +45,11 @@ const initialize = async done => {
     setTimeout(() => process.exit(1), 2000)
   }
   finally {
-    global.context && global.browser && done()
+    global.context && global.browser && done && done()
+    return { 
+      context,
+      browser
+    }
   }
 }
 
@@ -55,13 +59,13 @@ const initialize = async done => {
  * @param {Function} done - jest function called when all asynchronous ops are complete
  */
 const cleanup = async done => {
-  if (!global.browser) return done()
+  if (!global.browser) return done && done()
   await qawolf.stopVideos()
   await browser.close()
   delete global.browser
   delete global.context
   delete global.page
-  done()
+  done && done()
 }
 
 /**
@@ -88,4 +92,6 @@ const setupTestEnvironment = () => {
 module.exports = {
   setupTestEnvironment,
   getBrowserContext,
+  initialize,
+  cleanup
 }
