@@ -39,19 +39,12 @@ COPY --from=tap-base /keg/. /keg/
 
 # Install the dependecies with yarn setup, then remove the .npmrc
 # Install git and the expo-cli and sharp-cli
-RUN apt-get install -y git bash sudo; \
-    yarn global add expo-cli@$EXPO_CLI_VERSION sharp-cli nodemon npm-run-all; \
+RUN yarn global add npm-run-all; \
     echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
     sudo sysctl -p; \
     rm -rf /var/cache/apk/*; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
-    cd $DOC_APP_PATH; \
-    yarn install --ignore-engines; \
-    yarn cache clean; \
     cd $DOC_APP_PATH/repos/messenger; \
-    yarn install --ignore-engines; \
-    yarn cache clean; \
-    cd $DOC_APP_PATH/repos/client-example; \
     yarn install --ignore-engines; \
     yarn cache clean
 
