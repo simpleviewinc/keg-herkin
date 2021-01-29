@@ -1,5 +1,6 @@
 const { createTemplate } = require('../tasks/utils/wolf/createTemplate')
 const path = require('path')
+const { pipeline } = require('@keg-hub/jsutils')
 
 const IS_CUCUMBER = process.env.WOLF_TEMPLATE === 'cucumber' 
 const TIMEOUT = IS_CUCUMBER
@@ -38,10 +39,8 @@ module.exports = {
   }
 }
 
-const withAsyncCreateHandle = code => {
-  const lines = code.split(/\n/g)
+const withAsyncCreateHandles = lines => {
   const indices = lines.map((_, idx) => idx)
-
 
   const stepHandles = {
     given: 'given(', 
@@ -55,12 +54,17 @@ const withAsyncCreateHandle = code => {
     indicesOfHandles.map(idx => {
       lines[idx] = lines[idx].replace('/, (', '/, async (')
       lines[idx + 1] = handle === stepHandles.given
-          ? '\t\t await qawolf.create(arg0)'
-          : '\t\t // await qawolf.create()'
+          ? '\t\tawait qawolf.create(arg0)'
+          : '\t\t// await qawolf.create()'
     })
   })
 
-  return lines.join('\n')
+  return lines
+}
+
+const withTimeout = lines => {
+  lines[lines.length - 1] = `\t}, ${TIMEOUT});`
+  return lines
 }
 
 const generateTestBlock = () => {
@@ -68,6 +72,11 @@ const generateTestBlock = () => {
   const featurePath = process.env.KEG_FEATURE_PATH
   const feature = loadFeature(featurePath)
   const scenarioLine = feature.scenarios[0].lineNumber
-  const scenarioCode = generateCodeFromFeature(feature, scenarioLine)
-  return withAsyncCreateHandle(scenarioCode)
+  const code = generateCodeFromFeature(feature, scenarioLine)
+  return pipeline(
+    code.split(/\n/),
+    withAsyncCreateHandles,
+    withTimeout,
+    lines => lines.join('\n')
+  )
 }
