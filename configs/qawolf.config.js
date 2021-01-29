@@ -1,10 +1,73 @@
 const { createTemplate } = require('../tasks/utils/wolf/createTemplate')
-const templateFile = process.env.WOLF_TEMPLATE_FILE || 'tasks/utils/wolf/qawolf.template.js'
+const path = require('path')
+
+const IS_CUCUMBER = process.env.WOLF_TEMPLATE === 'cucumber' 
+const TIMEOUT = IS_CUCUMBER
+  ? process.env.CUCUMBER_TIMEOUT || Math.pow(10, 6)
+  : 60 * 1000
+
+let FEATURE = undefined;
+try {
+ FEATURE = path.resolve(process.env.KEG_FEATURE_PATH)
+}
+catch (err) {}
+
+const templateFile = IS_CUCUMBER
+  ? 'tasks/utils/wolf/qawolf-cucumber.template.js'
+  : 'tasks/utils/wolf/qawolf-jest.template.js'
+
+const rootDir = IS_CUCUMBER
+  ? 'tests/bdd/features/steps'
+  : 'tests/wolf'
 
 module.exports = {
-  config: 'node_modules/qawolf/js-jest.config.json',
-  rootDir: 'tests/wolf',
-  testTimeout: 60000,
+  rootDir,
+  testTimeout: TIMEOUT,
   useTypeScript: false,
-  createTemplate: (props) => createTemplate({...props, templateFile}),
+  createTemplate: props => {
+    if (IS_CUCUMBER && !FEATURE)
+      throw new Error('Cannot create the cucumber test without the feature file defined in process.env.KEG_FEATURE_PATH')
+    const body = IS_CUCUMBER && generateTestBlock()
+    return createTemplate({ 
+      ...props, 
+      templateFile, 
+      body, 
+      timeout: TIMEOUT,
+      feature: process.env.KEG_FEATURE_PATH
+    })
+  }
+}
+
+const withAsyncCreateHandle = code => {
+  const lines = code.split(/\n/g)
+  const indices = lines.map((_, idx) => idx)
+
+
+  const stepHandles = {
+    given: 'given(', 
+    when: 'when(', 
+    then: 'then('
+  }
+
+  Object.values(stepHandles).map(handle => {
+    const indicesOfHandles = indices.filter(idx => lines[idx].includes(handle))
+
+    indicesOfHandles.map(idx => {
+      lines[idx] = lines[idx].replace('/, (', '/, async (')
+      lines[idx + 1] = handle === stepHandles.given
+          ? '\t\t await qawolf.create(arg0)'
+          : '\t\t // await qawolf.create()'
+    })
+  })
+
+  return lines.join('\n')
+}
+
+const generateTestBlock = () => {
+  const { loadFeature, generateCodeFromFeature } = require('jest-cucumber')
+  const featurePath = process.env.KEG_FEATURE_PATH
+  const feature = loadFeature(featurePath)
+  const scenarioLine = feature.scenarios[0].lineNumber
+  const scenarioCode = generateCodeFromFeature(feature, scenarioLine)
+  return withAsyncCreateHandle(scenarioCode)
 }

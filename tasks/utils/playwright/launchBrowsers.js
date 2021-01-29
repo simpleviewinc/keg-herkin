@@ -44,7 +44,7 @@ const getBrowsers = params => {
   ).filter(Boolean)
 }
 
-const launchBrowsers = launchParams => {
+const launchBrowsers = (launchParams) => {
   const { headless, log, ...browserParams } = launchParams
 
   const browsers = getBrowsers(browserParams)

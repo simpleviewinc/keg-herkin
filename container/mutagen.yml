@@ -21,6 +21,7 @@ sync:
         - "/repos/example/build"
         - "/docs"
         - "/tests/wolf"
+        - "/tests/bdd/features/steps"
 actions:
   herkin:
     build:

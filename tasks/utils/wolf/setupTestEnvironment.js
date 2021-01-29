@@ -25,7 +25,7 @@ const getBrowser = (type) => {
  * endpoint, creating a new browser context, and registering qawolf.
  * @param {Function} done - jest function called when all asynchronous ops are complete
  */
-const initialize = async done => {
+const initialize = async () => {
   try {
     const { endpoint, type } = metadata.read(BROWSER)
     if (!isStr(endpoint) || !isStr(type))
@@ -45,11 +45,7 @@ const initialize = async done => {
     setTimeout(() => process.exit(1), 2000)
   }
   finally {
-    global.context && global.browser && done && done()
-    return { 
-      context,
-      browser
-    }
+    return global.context && global.browser // && done && done()
   }
 }
 
@@ -58,14 +54,15 @@ const initialize = async done => {
  * the browser window and any globals set in `initialize`.
  * @param {Function} done - jest function called when all asynchronous ops are complete
  */
-const cleanup = async done => {
-  if (!global.browser) return done && done()
+const cleanup = async () => {
+  if (!global.browser) return false // done && done()
   await qawolf.stopVideos()
   await browser.close()
   delete global.browser
   delete global.context
   delete global.page
-  done && done()
+  // done && done()
+  return true
 }
 
 /**

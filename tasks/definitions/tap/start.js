@@ -1,6 +1,25 @@
 const { sharedOptions } = require('../../utils/task/sharedOptions')
 const { launchBrowsers } = require('../../utils/playwright/launchBrowsers')
 
+const browserParams = [
+  'allBrowsers',
+  'chromium',
+  'firefox',
+  'webkit'
+]
+
+const hasBrowserSpecified = params => 
+  Object.keys(params).some(key => browserParams.includes(key))
+
+const paramsWithDefaults = params => ({
+  ...params,
+  // chromium is defaults to true, but only if no browser
+  // was specified in params
+  chromium: hasBrowserSpecified(params) 
+    ? params.chromium
+    : true
+})
+
 /**
  * Starts all the Keg-Herkin services needed to run tests
  * @param {Object} args - arguments passed from the runTask method
@@ -15,9 +34,9 @@ const { launchBrowsers } = require('../../utils/playwright/launchBrowsers')
  * @returns {void}
  */
 const startHerkin = async (args) => {
-  const { params } = args
+  const launchParams = paramsWithDefaults(args.params)
 
-  params.launch && await launchBrowsers(params)
+  launchParams.launch && await launchBrowsers(launchParams)
 
   // runs the start task using the cli, which will actually start the container
   args.task.cliTask(args)
@@ -38,12 +57,9 @@ module.exports = {
         },
       // TODO:  add other browser launch options here and in (tap.js) => keg.playwright.config
     }, [
-      'allBrowsers',
-      'chromium',
-      'firefox',
-      'webkit',
       'headless',
-      'log'
+      'log',
+      ...browserParams
     ])
   }
 }
