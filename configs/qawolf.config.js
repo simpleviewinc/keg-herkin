@@ -1,44 +1,64 @@
 const { createTemplate } = require('../tasks/utils/wolf/createTemplate')
 const path = require('path')
 const { pipeline } = require('@keg-hub/jsutils')
+const { create } = require('qawolf')
 
-const IS_CUCUMBER = process.env.WOLF_TEMPLATE === 'cucumber' 
+console.log('wow')
+
+const {
+  WOLF_TEMPLATE='jest',
+  CUCUMBER_TIMEOUT=Math.pow(10, 6),
+  JEST_TIMEOUT=(60*1000),
+  KEG_FEATURE_PATH,
+  CUCUMBER_TEST_PATH='tests/bdd/features/steps',
+  JEST_TEST_PATH='tests/wolf'
+} = process.env
+
+const IS_CUCUMBER = WOLF_TEMPLATE === 'cucumber' 
 const TIMEOUT = IS_CUCUMBER
-  ? process.env.CUCUMBER_TIMEOUT || Math.pow(10, 6)
-  : 60 * 1000
+  ? CUCUMBER_TIMEOUT
+  : JEST_TIMEOUT
 
-let FEATURE = undefined;
+let FULL_FEATURE_PATH = undefined;
 try {
- FEATURE = path.resolve(process.env.KEG_FEATURE_PATH)
+ FULL_FEATURE_PATH = path.resolve(KEG_FEATURE_PATH)
 }
 catch (err) {}
 
-const templateFile = IS_CUCUMBER
+const TEMPLATE_FILE = IS_CUCUMBER
   ? 'tasks/utils/wolf/qawolf-cucumber.template.js'
   : 'tasks/utils/wolf/qawolf-jest.template.js'
 
-const rootDir = IS_CUCUMBER
-  ? 'tests/bdd/features/steps'
-  : 'tests/wolf'
+const ROOT_DIR = IS_CUCUMBER
+  ? CUCUMBER_TEST_PATH
+  : JEST_TEST_PATH
 
-module.exports = {
-  rootDir,
-  testTimeout: TIMEOUT,
-  useTypeScript: false,
-  createTemplate: props => {
-    if (IS_CUCUMBER && !FEATURE)
-      throw new Error('Cannot create the cucumber test without the feature file defined in process.env.KEG_FEATURE_PATH')
-    const body = IS_CUCUMBER && generateTestBlock()
-    return createTemplate({ 
-      ...props, 
-      templateFile, 
-      body, 
-      timeout: TIMEOUT,
-      feature: process.env.KEG_FEATURE_PATH
-    })
-  }
+
+/**
+ * Creates the template string used to generate the test file
+ * @param {Object} props - params passed to this function by qawolf, with parameters like `device` 
+ * @return {string} template 
+ */
+const createDynamicTemplate = props => {
+  if (IS_CUCUMBER && !FULL_FEATURE_PATH)
+    throw new Error('Cannot create the cucumber test without the feature file defined in process.env.KEG_FEATURE_PATH')
+
+  const body = IS_CUCUMBER && generateTestBlock(FULL_FEATURE_PATH, TIMEOUT)
+
+  return createTemplate({ 
+    ...props, 
+    body, 
+    templateFile: TEMPLATE_FILE, 
+    timeout: TIMEOUT,
+    feature: KEG_FEATURE_PATH
+  })
 }
 
+/**
+ * Updates the generated code with qawolf.create 
+ * calls and async modifiers
+ * @param {Array<string>} lines - generated code split by new-line
+ */
 const withAsyncCreateHandles = lines => {
   const indices = lines.map((_, idx) => idx)
 
@@ -54,29 +74,46 @@ const withAsyncCreateHandles = lines => {
     indicesOfHandles.map(idx => {
       lines[idx] = lines[idx].replace('/, (', '/, async (')
       lines[idx + 1] = handle === stepHandles.given
-          ? '\t\tawait qawolf.create(arg0)'
-          : '\t\t// await qawolf.create()'
+        ? '\t\tawait qawolf.create(arg0)'
+        : '\t\t// await qawolf.create()'
     })
   })
 
   return lines
 }
 
-const withTimeout = lines => {
-  lines[lines.length - 1] = `\t}, ${TIMEOUT});`
+const withTimeout = (lines, timeout) => {
+  lines[lines.length - 1] = `\t}, ${timeout});`
   return lines
 }
 
-const generateTestBlock = () => {
+/**
+ * Generates the cucumber-jest test block, containing each
+ * step definition for the specified feature path
+ * @param {string} featurePath - path to feature file
+ * @param {number} timeout - timeout for jest to wait
+ */
+const generateTestBlock = (featurePath, timeout) => {
   const { loadFeature, generateCodeFromFeature } = require('jest-cucumber')
-  const featurePath = process.env.KEG_FEATURE_PATH
+
   const feature = loadFeature(featurePath)
+  if (!feature.scenarios.length)
+    throw new Error('Cannot generate step definitions for a feature with no steps!')
+
   const scenarioLine = feature.scenarios[0].lineNumber
   const code = generateCodeFromFeature(feature, scenarioLine)
+
   return pipeline(
     code.split(/\n/),
     withAsyncCreateHandles,
-    withTimeout,
+    lines => withTimeout(lines, timeout),
     lines => lines.join('\n')
   )
+}
+
+module.exports = {
+  rootDir: ROOT_DIR,
+  testTimeout: TIMEOUT,
+  useTypeScript: false,
+  createTemplate: createDynamicTemplate
 }
