@@ -1,8 +1,9 @@
-const { Then } = require("cucumber")
+const { When } = require("cucumber")
 const { getBrowserContext } = require('../../support/setup')
 const { getPage } = getBrowserContext()
 
-Then('the title is (\S+) ', async (title) => {
+When(/I wait for the page to load/, async () => {
   const page = await getPage()
-  expect(await page.title()).toBe(title)
+  await page.waitForNavigation()
 })
+

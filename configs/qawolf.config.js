@@ -1,6 +1,5 @@
 const { createTemplate } = require('../tasks/utils/wolf/createTemplate')
 const path = require('path')
-const { pipeline } = require('@keg-hub/jsutils')
 
 const {
   WOLF_TEMPLATE='jest',
@@ -40,95 +39,17 @@ const createDynamicTemplate = props => {
   if (IS_CUCUMBER && !FULL_FEATURE_PATH)
     throw new Error('Cannot create the cucumber test without the feature file defined in process.env.KEG_FEATURE_PATH')
 
-  const body = IS_CUCUMBER && generateTestBlock(FULL_FEATURE_PATH, TIMEOUT)
-
   return createTemplate({ 
     ...props, 
-    body, 
     templateFile: TEMPLATE_FILE, 
     timeout: TIMEOUT,
     feature: KEG_FEATURE_PATH
   })
 }
 
-/**
- * Updates the generated code with qawolf.create 
- * calls and async modifiers
- * @param {Array<string>} lines - generated code split by new-line
- */
-const withAsyncCreateHandles = lines => {
-  const indices = lines.map((_, idx) => idx)
-
-  const stepHandles = {
-    given: 'given(', 
-    when: 'when(', 
-    then: 'then('
-  }
-
-  Object.values(stepHandles).map(handle => {
-    const indicesOfHandles = indices.filter(idx => lines[idx].includes(handle))
-
-    indicesOfHandles.map(idx => {
-      lines[idx] = lines[idx].replace('/, (', '/, async (')
-      lines[idx + 1] = handle === stepHandles.given
-        ? '\t\tawait qawolf.create(arg0)'
-        : '\t\t// await qawolf.create()'
-    })
-  })
-
-  return lines
-}
-
-const withTimeout = (lines, timeout) => {
-  lines[lines.length - 1] = `\t}, ${timeout});`
-  return lines
-}
-
-/**
- * Generates the cucumber-jest test block, containing each
- * step definition for the specified feature path
- * @param {string} featurePath - path to feature file
- * @param {number} timeout - timeout for jest to wait
- */
-const generateTestBlock = (featurePath, timeout) => {
-  const { loadFeature, generateCodeFromFeature } = require('jest-cucumber')
-
-  const feature = loadFeature(featurePath)
-  if (!feature.scenarios.length)
-    throw new Error('Cannot generate step definitions for a feature with no steps!')
-
-  const scenarioLine = feature.scenarios[0].lineNumber
-  const code = generateCodeFromFeature(feature, scenarioLine)
-
-  return pipeline(
-    code.split(/\n/),
-    withAsyncCreateHandles,
-    lines => withTimeout(lines, timeout),
-    lines => lines.join('\n')
-  )
-}
-
 const jestConfig = !IS_CUCUMBER
   ? undefined
-  : {
-    "moduleFileExtensions": [
-      "feature",
-      "js",
-      "json",
-      "ts",
-      "tsx"
-    ],
-    "setupFilesAfterEnv": [
-      "/keg/tap/node_modules/cucumber-jest/dist/init.js", // <--- *2
-    ],
-    "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
-      "^.+\\.(feature)$": "jest-cucumber" // <--- *3
-    },
-    "testMatch": [
-      "/keg/tap/**/*.feature"
-    ]
-  }
+  : require('./jest-qawolf.config.js')
 
 module.exports = {
   rootDir: ROOT_DIR,
