@@ -1,9 +1,6 @@
 const { createTemplate } = require('../tasks/utils/wolf/createTemplate')
 const path = require('path')
 const { pipeline } = require('@keg-hub/jsutils')
-const { create } = require('qawolf')
-
-console.log('wow')
 
 const {
   WOLF_TEMPLATE='jest',
@@ -21,7 +18,7 @@ const TIMEOUT = IS_CUCUMBER
 
 let FULL_FEATURE_PATH = undefined;
 try {
- FULL_FEATURE_PATH = path.resolve(KEG_FEATURE_PATH)
+  FULL_FEATURE_PATH = path.resolve(KEG_FEATURE_PATH)
 }
 catch (err) {}
 
@@ -111,9 +108,32 @@ const generateTestBlock = (featurePath, timeout) => {
   )
 }
 
+const jestConfig = !IS_CUCUMBER
+  ? undefined
+  : {
+    "moduleFileExtensions": [
+      "feature",
+      "js",
+      "json",
+      "ts",
+      "tsx"
+    ],
+    "setupFilesAfterEnv": [
+      "/keg/tap/node_modules/cucumber-jest/dist/init.js", // <--- *2
+    ],
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+      "^.+\\.(feature)$": "jest-cucumber" // <--- *3
+    },
+    "testMatch": [
+      "/keg/tap/**/*.feature"
+    ]
+  }
+
 module.exports = {
   rootDir: ROOT_DIR,
   testTimeout: TIMEOUT,
   useTypeScript: false,
-  createTemplate: createDynamicTemplate
+  createTemplate: createDynamicTemplate,
+  config: jestConfig
 }

@@ -61,6 +61,7 @@
     "@keg-hub/messenger": "file:repos/messenger",
     "@keg-hub/spawn-cmd": "0.1.0",
     "ansi-html": "0.0.7",
+    "app-root-path": "3.0.0",
     "axios": "0.19.2",
     "body-parser": "1.10.2",
     "dotenv": "8.0.0",
@@ -77,15 +78,14 @@
     "react-ace-editor": "https://github.com/lancetipton/react-ace-editor.git",
     "rollup": "2.36.1",
     "socket.io": "2.3.0",
-    "webpack": "5.13.0",
-    "app-root-path": "3.0.0"
+    "webpack": "5.13.0"
   },
   "resolutions": {
     "@keg-hub/jsutils": "8.1.0"
   },
   "devDependencies": {
-    "jest-cucumber": "3.0.0",
     "jest": "26.4.2",
+    "cucumber-jest": "0.1.0",
     "jest-playwright-preset": "1.4.4",
     "rimraf": "3.0.2"
   }

@@ -9,11 +9,11 @@ const browserParams = [
 ]
 
 const hasBrowserSpecified = params => 
-  Object.keys(params).some(key => browserParams.includes(key))
+  Object.keys(params).some(key => browserParams.includes(key) && params[key])
 
 const paramsWithDefaults = params => ({
   ...params,
-  // chromium is defaults to true, but only if no browser
+  // chromium defaulting to true, but only if no browser
   // was specified in params
   chromium: hasBrowserSpecified(params) 
     ? params.chromium

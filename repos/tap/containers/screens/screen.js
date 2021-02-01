@@ -53,7 +53,6 @@ export const Screen = props => {
     return true
   }, [ screen.index ])
 
-
   return (
     <View
       className={`screen-parent-main`}

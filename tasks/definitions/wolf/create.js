@@ -3,12 +3,19 @@ const { launchBrowser } = require('../../utils/playwright/launchBrowser')
 
 const createTest = async args => {
   const { params } = args
-  const { url, name, container } = params
+  const { url, name, container, cucumber, feature } = params
 
   // ensure a non-headless chromium instance is running
   await launchBrowser({ browser: 'chromium', headless: false })
 
-  dockerExec(container, `npx qawolf create ${url} ${name}`)
+  dockerExec(
+    container, 
+    [
+      `-e KEG_FEATURE_PATH=${feature}`,
+      `-e WOLF_TEMPLATE=${cucumber ? 'cucumber' : 'jest'}`,
+      `npx qawolf create ${url} ${name}`,
+    ].join(' ')
+  )
 }
 
 module.exports = {
@@ -27,6 +34,17 @@ module.exports = {
         description: 'Url of the site there the test should be run',
         example: '--url http://my.test.site',
         required: true,
+      },
+      feature: {
+        description: 'Path to feature file. Only used if --cucumber is true.',
+        example: '--feature tests/bdd/features/google.feature',
+        required: false,
+        default: '',
+      },
+      cucumber: {
+        description: 'If set, will create a cucumber-jest test file.',
+        example: '--cucumber',
+        default: false,
       },
       container: {
         description: 'Name of container within which to run create command',
