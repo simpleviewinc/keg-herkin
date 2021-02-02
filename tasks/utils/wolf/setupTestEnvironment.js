@@ -5,7 +5,9 @@ const { isStr } = require('@keg-hub/jsutils')
 
 // QAW_BROWSER is a qawolf-set env, dependent on parameters like
 // --all-browsers or --firefox
-const BROWSER = process.env.QAW_BROWSER || 'chromium'
+const BROWSER = process.env.QAW_BROWSER
+  || process.env.HOST_BROWSER
+  || 'chromium'
 
 /**
  * Gets the browser type playwright object
@@ -24,6 +26,7 @@ const getBrowser = (type) => {
  * Initializes tests by connecting to the browser loaded at the websocket
  * endpoint, creating a new browser context, and registering qawolf.
  * @param {Function} done - jest function called when all asynchronous ops are complete
+ * @return {boolean} - true if init was successful
  */
 const initialize = async () => {
   try {
@@ -45,7 +48,7 @@ const initialize = async () => {
     setTimeout(() => process.exit(1), 2000)
   }
   finally {
-    return global.context && global.browser // && done && done()
+    return global.context && global.browser
   }
 }
 
@@ -53,15 +56,15 @@ const initialize = async () => {
  * Cleans up for testing tear down by releasing all resources, including
  * the browser window and any globals set in `initialize`.
  * @param {Function} done - jest function called when all asynchronous ops are complete
+ * @return {boolean} - true if cleanup was successful
  */
 const cleanup = async () => {
-  if (!global.browser) return false // done && done()
+  if (!global.browser) return false
   await qawolf.stopVideos()
   await browser.close()
   delete global.browser
   delete global.context
   delete global.page
-  // done && done()
   return true
 }
 
@@ -69,8 +72,10 @@ const cleanup = async () => {
  * Gets the browser page instance, or else creates a new one
  */
 const getPage = async () => {
-  global.page = global.page || await context.newPage()
-  return global.page
+  const pages = context.pages() || []
+  return pages.length 
+    ? pages[0]
+    : await context.newPage()
 }
 
 /**
