@@ -3,8 +3,8 @@ const metadata = require('../playwright/metadata')
 const { chromium, firefox, webkit  } = require('playwright')
 const { isStr } = require('@keg-hub/jsutils')
 
-// QAW_BROWSER is a qawolf-set env, dependent on parameters like
-// --all-browsers or --firefox
+// QAW_BROWSER is a qawolf-set env, dependent on parameters like --all-browsers or --firefox
+// HOST_BROWSER is set by the task `keg herkin cucumber run`
 const BROWSER = process.env.QAW_BROWSER
   || process.env.HOST_BROWSER
   || 'chromium'
@@ -33,7 +33,7 @@ const initialize = async () => {
     const { endpoint, type } = metadata.read(BROWSER)
     if (!isStr(endpoint) || !isStr(type))
       throw new Error(`Browser type "${BROWSER}" is not running (no entry in browser-meta.json)`)
-
+    
     const wsEndpoint = endpoint.replace('127.0.0.1', 'host.docker.internal')
 
     global.browser = await getBrowser(type).connect({ wsEndpoint })
@@ -72,7 +72,11 @@ const cleanup = async () => {
  * Gets the browser page instance, or else creates a new one
  */
 const getPage = async () => {
+  if (!global.context)
+    throw new Error('No browser context initialized')
+
   const pages = context.pages() || []
+
   return pages.length 
     ? pages[0]
     : await context.newPage()

@@ -1,51 +1,46 @@
-const { eitherArr } = require('@keg-hub/jsutils')
 const { launchBrowser } = require('./launchBrowser')
+const { getBrowsers } = require('../../utils/task/getBrowsers')
+const { runSeq } = require('../../utils/task/runSeq')
 
 /**
- * TODO: update this to use `jsutils.runSeq` once its released
- * Calls each promise-returning function in array `asyncFns`,
- * but awaits each before calling the next. Will pass the
- * index and resolved values of complete functions to each subsequent
- * function, in case any need them.
- * @param {Array<Function>} asyncFns 
+ * @param {Object} params 
+ * @return {boolean} true if the params has specified at least one browser
  */
-const runSeq = async (asyncFns=[]) => {
-  const results = []
-  for (const fn of asyncFns) {
-    const result = await fn(results.length, results)
-    results.push(result)
-  }
-  return results
+const hasBrowserSpecified = params => {
+  const browsers = [
+    'webkit',
+    'firefox',
+    'chromium',
+    'allBrowsers'
+  ]
+  return Object
+    .keys(params)
+    .some(key => browsers.includes(key) && params[key])
 }
 
 /**
- * @param {Object} params - `start` action params
- * @return {Array<string>} - list of browsers to launch in the start task
+ * @param {Object} params 
+ * @return {Object} updated params with default values
  */
-const getBrowsers = params => {
-  const {
-    allBrowsers,
-    firefox=false,
-    chromium=false,
-    webkit=false,
-    browsers='',
-  } = params
+const paramsWithDefaults = params => ({
+  ...params,
 
-  // get an array of browsers from the browsers string, comma or space delimited
-  const browsersArr = eitherArr(browsers, browsers.split(/\s|,/gi))
+  // ensure at least chromium is launched, if user did not specify any browser
+  chromium: hasBrowserSpecified(params) 
+    ? params.chromium
+    : true
+})
 
-  return Array.from(
-    new Set([
-      ...browsersArr,
-      (allBrowsers || firefox) && 'firefox',
-      (allBrowsers || chromium) && 'chromium',
-      (allBrowsers || webkit) && 'webkit'
-    ])
-  ).filter(Boolean)
-}
-
-const launchBrowsers = (launchParams) => {
-  const { headless, log, ...browserParams } = launchParams
+/**
+ * 
+ * @param {Object} launchParams - params for launching, including sharedOptions.js values
+ * @return {Object} - {
+ *   output: an array of the result of each browser launch,
+ *   browsers: the browsers that were launched
+ * }
+ */
+const launchBrowsers = launchParams => {
+  const { headless, log, ...browserParams } = paramsWithDefaults(launchParams)
 
   const browsers = getBrowsers(browserParams)
 
@@ -59,7 +54,12 @@ const launchBrowsers = (launchParams) => {
   )
 
   // launch each browser in a series
-  return runSeq(launchFunctions)
+  const output = runSeq(launchFunctions)
+
+  return {
+    output,
+    browsers
+  }
 }
 
 module.exports = { launchBrowsers }

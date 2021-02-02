@@ -1,15 +1,15 @@
 const { dockerExec } = require('../../utils/process/process')
 const { launchBrowsers } = require('../../utils/playwright/launchBrowsers') 
 const { sharedOptions } = require('../../utils/task/sharedOptions')
+const { runSeq } = require('../../utils/task/runSeq')
 
 const runTest = async (args) => {
   const { params } = args
   const { context: name } = params
 
-  await launchBrowsers(params)
+  const { browsers } = await launchBrowsers(params)
 
   const cmd = [
-    // 'BROWSER=firefox',
     'npx',
     'jest',
     '--config=/keg/tap/configs/jest-qawolf.config.js',
@@ -17,7 +17,16 @@ const runTest = async (args) => {
     `--testTimeout=${params.timeout}`,
     `features/${name}`
   ]
-  return dockerExec(params.container, cmd)
+
+  const commands = browsers.map(browser => 
+    () => dockerExec(params.container, cmd, { 
+      envs: {
+        HOST_BROWSER: browser
+      }
+    })
+  )
+
+  return runSeq(commands)
 }
 
 module.exports = {
@@ -31,6 +40,7 @@ module.exports = {
       context: {
         alias: [ 'name' ],
         description: 'Name of the test to be run. If not passed, all tests are run',
+        required: true,
       },
       sync: {
         description: 'Run all tests sequentially',
