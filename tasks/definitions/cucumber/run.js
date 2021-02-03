@@ -3,7 +3,11 @@ const { launchBrowsers } = require('../../utils/playwright/launchBrowsers')
 const { sharedOptions } = require('../../utils/task/sharedOptions')
 const { runSeq } = require('../../utils/task/runSeq')
 
-const runTest = async (args) => {
+/**
+ * Run cucumber tests in container
+ * @param {Object} args 
+ */
+const runTest = async args => {
   const { params } = args
   const { context: name } = params
 
@@ -12,10 +16,10 @@ const runTest = async (args) => {
   const cmd = [
     'npx',
     'jest',
-    '--config=/keg/tap/configs/jest-qawolf.config.js',
-    '--rootDir=/keg/tap/tests/bdd/',
+    `--config=${params.config}`,
+    `--rootDir=${params.rootDir}`,
     `--testTimeout=${params.timeout}`,
-    `features/${name}`
+    name || ''
   ]
 
   const commands = browsers.map(browser => 
@@ -39,8 +43,7 @@ module.exports = {
     options: sharedOptions('run', {
       context: {
         alias: [ 'name' ],
-        description: 'Name of the test to be run. If not passed, all tests are run',
-        required: true,
+        description: 'Name of the test to be run. If not passed-in, all tests are run',
       },
       sync: {
         description: 'Run all tests sequentially',
@@ -55,8 +58,16 @@ module.exports = {
         default: 'keg-herkin',
       },
       timeout: {
-        description: 'Test timeout',
-        default: 1000000
+        description: 'Test timeout. Defaults to null (no-timeout), so that async playwright tasks have sufficient time to complete.',
+        default: null
+      },
+      config: {
+        description: 'Path to jest config',
+        default: '/keg/tap/configs/jest.cucumber.config.js'
+      },
+      rootDir: {
+        description: 'Path to root directory for jest tests',
+        default: '/keg/tap/tests/bdd/features'
       }
     }, [
       'allBrowsers',
