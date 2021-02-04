@@ -1,12 +1,2 @@
-module.exports = {
-  presets: [
-    [
-      '@babel/preset-env',
-      {
-        "useBuiltIns": "usage",
-        "corejs": 3,
-      }
-    ]
-  ],
-  plugins: []
-}
+// needed for cucumber-jest 
+module.exports = require('./configs/babel.cucumber-jest.config')

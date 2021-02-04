@@ -16,8 +16,6 @@ module.exports.getBrowsers = params => {
   // get an array of browsers from the browsers string, comma or space delimited
   const browsersArr = eitherArr(browsers, browsers.split(/\s|,/gi))
 
-  console.log({ firefox, chromium, webkit, browsers, allBrowsers})
-
   return Array.from(
     new Set([
       ...browsersArr,
