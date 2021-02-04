@@ -5,13 +5,39 @@ import {
   Label,
   View
 } from '@keg-hub/keg-components'
-import { useTheme } from '@keg-hub/re-theme'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
 
 
+const ReStyleView = reStyle(
+  View,
+  'style'
+)((__, props) => ({
+  ...props?.style,
+  padding: 8,
+}))
+
+
+/**
+ * Creates the component based on the options passed in
+ * @param {Array<{label:string, value:string}>} props.options - options to display
+ * @returns
+ */
+const generateOptions = (options) => {
+  return options.map((option) => {
+    return (
+      <Option
+        key={option}
+        label={option?.label}
+        value={option?.value}
+      />
+    )
+  })
+}
 
 /**
  * 
  * @param {Object} props 
+ * @param {Array<{label:string, value:string}>} props.options - options to display
  * @returns
  */
 export const DropDown = (props) => {
@@ -23,18 +49,12 @@ export const DropDown = (props) => {
     styles
   } = props
 
-  const theme = useTheme()
-  const dropdownStyles = styles//theme.get('modal.filter')
-
   return (
-    <View style={{...dropdownStyles?.main, paddingHorizontal: 8}}>
+    <ReStyleView style={styles?.main}>
       <Label>{title}</Label>
       <Select onValueChange={onValueChange}>
-        <Option
-          label='Gherkin'
-          value={'Gherkin'}
-        />
+        {generateOptions(options)}
       </Select>
-    </View>
+    </ReStyleView>
   )
 }

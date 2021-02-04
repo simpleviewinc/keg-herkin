@@ -17,6 +17,9 @@ export const Values = {
     'when',
     'then',
   ],
+  TEST_TYPE: {
+    GHERKIN: 'gherkin',
+  },
   EMPTY_STEP: `None Selected`,
   EMPTY_PARAM: `PARAMETER`,
   SCREENS: {

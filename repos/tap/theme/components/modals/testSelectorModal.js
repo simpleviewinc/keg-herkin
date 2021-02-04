@@ -34,7 +34,7 @@ export const testSelectorModal = theme => ({
       },
       button: {
         main: {
-          mH: 8, 
+          m: 8, 
           alS: 'flex-end'
         }
       }
