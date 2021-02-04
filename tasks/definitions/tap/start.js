@@ -15,7 +15,9 @@ const { launchBrowsers } = require('../../utils/playwright/launchBrowsers')
  * @returns {void}
  */
 const startHerkin = async (args) => {
-  launchParams.launch && await launchBrowsers(args.params)
+  const { params } = args
+
+  params.launch && await launchBrowsers(params)
 
   // runs the start task using the cli, which will actually start the container
   args.task.cliTask(args)

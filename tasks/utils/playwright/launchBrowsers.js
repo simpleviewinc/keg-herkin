@@ -1,6 +1,6 @@
 const { launchBrowser } = require('./launchBrowser')
 const { getBrowsers } = require('../../utils/task/getBrowsers')
-const { runSeq } = require('../../utils/task/runSeq')
+const { runSeq } = require('@keg-hub/jsutils')
 
 /**
  * @param {Object} params 

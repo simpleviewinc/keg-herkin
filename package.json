@@ -57,7 +57,7 @@
     "@cucumber/messages": "13.2.1",
     "@keg-hub/args-parse": "6.2.1",
     "@keg-hub/ask-it": "0.0.1",
-    "@keg-hub/jsutils": "8.1.0",
+    "@keg-hub/jsutils": "8.2.0",
     "@keg-hub/messenger": "file:repos/messenger",
     "@keg-hub/spawn-cmd": "0.1.0",
     "ansi-html": "0.0.7",
@@ -81,7 +81,7 @@
     "webpack": "5.13.0"
   },
   "resolutions": {
-    "@keg-hub/jsutils": "8.1.0"
+    "@keg-hub/jsutils": "8.2.0"
   },
   "devDependencies": {
     "jest": "26.4.2",

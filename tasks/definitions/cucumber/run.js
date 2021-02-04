@@ -1,7 +1,7 @@
 const { dockerExec } = require('../../utils/process/process')
 const { launchBrowsers } = require('../../utils/playwright/launchBrowsers') 
 const { sharedOptions } = require('../../utils/task/sharedOptions')
-const { runSeq } = require('../../utils/task/runSeq')
+const { runSeq } = require('@keg-hub/jsutils')
 
 /**
  * Run cucumber tests in container
@@ -16,7 +16,7 @@ const runTest = async args => {
   const cmd = [
     'npx',
     'jest',
-    `--config=${params.config}`,
+    `--config=${params.jestConfig}`,
     `--rootDir=${params.rootDir}`,
     `--testTimeout=${params.timeout}`,
     name || ''
@@ -61,7 +61,7 @@ module.exports = {
         description: 'Test timeout. Defaults to null (no-timeout), so that async playwright tasks have sufficient time to complete.',
         default: null
       },
-      config: {
+      jestConfig: {
         description: 'Path to jest config',
         default: '/keg/tap/configs/jest.cucumber.config.js'
       },
