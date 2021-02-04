@@ -4,4 +4,4 @@ export * from './removeFeatureTag'
 export * from './saveFeature'
 export * from './setFeatureActive'
 export * from './upsertFeatures'
-
+export * from './createNewFeature'

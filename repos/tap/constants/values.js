@@ -4,6 +4,7 @@ export const Values = {
     FEATURES: 'features',
     DEFINITIONS: 'definitions',
     ACTIVE_FEATURE: 'activeFeature',
+    ACTIVE_TAB: 'activeTab',
     ACTIVE_DATA: 'activeData',
     ACTIVE_RUNNER_TESTS: 'activeRunnerTests',
     FEATURE: 'feature',
@@ -23,6 +24,7 @@ export const Values = {
     EDITORS: 'editors',
     EMPTY: 'empty',
     RUNNER: 'runner',
+    STEPS_DEFINITION: 'steps_definition'
   },
   EDITOR_MODES: {
     SPLIT: 'split',
