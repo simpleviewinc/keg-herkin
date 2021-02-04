@@ -11,13 +11,12 @@ template.regex = /\${(.*?)\}/g
  * @param {string} props.device - playwright device to emulate
  * @param {string} props.name - name of the test
  * @param {string} props.url - visit this URL to begin the test
- * @param {string} props.body - body of test
  * @param {string} props.timeout - test timeout
- * @param {string} props.feature - path to feature file
  * 
  * @returns {string} - test template
  */
-module.exports.createTemplate = (props) => {
+module.exports.createTemplate = (props={}) => {
+
   const templateString = fs.readFileSync(
     props.templateFile, 
     { encoding: 'utf8' }
