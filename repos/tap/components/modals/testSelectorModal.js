@@ -3,7 +3,33 @@ import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
 import { DropDown } from 'SVComponents'
 import { useTheme } from '@keg-hub/re-theme'
 import { createNewFeature } from 'SVActions/features'
+import { Values } from 'SVConstants'
+import { mapObj, capitalize } from '@keg-hub/jsutils'
 
+const { TEST_TYPE } = Values
+
+/**
+ * Goes through the TEST_TYPE constants and creates the options array to pass onto DropDown Component
+ * @returns {Array<{label:string, value:string}>}
+ */
+const getTypeOptions = () => {
+  return mapObj(TEST_TYPE, (__, val) => {
+    return {
+      label: capitalize(val),
+      value: val
+    }
+  })
+}
+
+const getTestFilesOptions = () => {
+  return ['',]
+}
+
+/**
+ * 
+ * @param {Object} props 
+ * @returns
+ */
 export const TestSelectorModal = (props) => {
   const {
     title = 'Test Settings',
@@ -26,7 +52,7 @@ export const TestSelectorModal = (props) => {
         <DropDown
           title={'Select test type:'}
           onValueChange={(props) => console.log(props)}
-          // options={[]}
+          options={getTypeOptions()}
         />
         <TestFileSelect styles={builtStyles?.form?.testFileSelect} />
       </View>
@@ -45,7 +71,7 @@ const TestFileSelect = ({styles}) => {
         styles={styles?.dropDown}
         title={'Select test file:'}
         onValueChange={(props) => console.log(props)}
-        // options={[]}
+        options={getTestFilesOptions()}
       />
       <Text style={styles?.orText}>OR</Text>
       <Button
