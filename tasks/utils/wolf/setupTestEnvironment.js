@@ -3,9 +3,11 @@ const metadata = require('../playwright/metadata')
 const { chromium, firefox, webkit  } = require('playwright')
 const { isStr } = require('@keg-hub/jsutils')
 
-// QAW_BROWSER is a qawolf-set env, dependent on parameters like
-// --all-browsers or --firefox
-const BROWSER = process.env.QAW_BROWSER || 'chromium'
+// QAW_BROWSER is a qawolf-set env, dependent on parameters like --all-browsers or --firefox
+// HOST_BROWSER is set by the task `keg herkin cucumber run`
+const BROWSER = process.env.QAW_BROWSER
+  || process.env.HOST_BROWSER
+  || 'chromium'
 
 /**
  * Gets the browser type playwright object
@@ -24,13 +26,14 @@ const getBrowser = (type) => {
  * Initializes tests by connecting to the browser loaded at the websocket
  * endpoint, creating a new browser context, and registering qawolf.
  * @param {Function} done - jest function called when all asynchronous ops are complete
+ * @return {boolean} - true if init was successful
  */
-const initialize = async done => {
+const initialize = async () => {
   try {
     const { endpoint, type } = metadata.read(BROWSER)
     if (!isStr(endpoint) || !isStr(type))
       throw new Error(`Browser type "${BROWSER}" is not running (no entry in browser-meta.json)`)
-
+    
     const wsEndpoint = endpoint.replace('127.0.0.1', 'host.docker.internal')
 
     global.browser = await getBrowser(type).connect({ wsEndpoint })
@@ -45,7 +48,7 @@ const initialize = async done => {
     setTimeout(() => process.exit(1), 2000)
   }
   finally {
-    global.context && global.browser && done()
+    return global.context && global.browser
   }
 }
 
@@ -53,23 +56,30 @@ const initialize = async done => {
  * Cleans up for testing tear down by releasing all resources, including
  * the browser window and any globals set in `initialize`.
  * @param {Function} done - jest function called when all asynchronous ops are complete
+ * @return {boolean} - true if cleanup was successful
  */
-const cleanup = async done => {
-  if (!global.browser) return done()
+const cleanup = async () => {
+  if (!global.browser) return false
   await qawolf.stopVideos()
   await browser.close()
   delete global.browser
   delete global.context
   delete global.page
-  done()
+  return true
 }
 
 /**
  * Gets the browser page instance, or else creates a new one
  */
 const getPage = async () => {
-  global.page = global.page || await context.newPage()
-  return global.page
+  if (!global.context)
+    throw new Error('No browser context initialized')
+
+  const pages = context.pages() || []
+
+  return pages.length 
+    ? pages[0]
+    : await context.newPage()
 }
 
 /**
@@ -88,4 +98,6 @@ const setupTestEnvironment = () => {
 module.exports = {
   setupTestEnvironment,
   getBrowserContext,
+  initialize,
+  cleanup
 }

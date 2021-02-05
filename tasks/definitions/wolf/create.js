@@ -8,7 +8,7 @@ const createTest = async args => {
   // ensure a non-headless chromium instance is running
   await launchBrowser({ browser: 'chromium', headless: false })
 
-  dockerExec(container, `npx qawolf create ${url} ${name}`)
+  return dockerExec(container, `npx qawolf create ${url} ${name}`)
 }
 
 module.exports = {

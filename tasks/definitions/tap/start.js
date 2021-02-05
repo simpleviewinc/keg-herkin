@@ -29,6 +29,8 @@ module.exports = {
     alias: ['st'],
     action: startHerkin,
     example: 'test:start',
+    // Merge the default task options with these custom task options
+    mergeOptions: true,
     description : 'Starts all services. (Local Webserver and Docker Container)',
     options: sharedOptions('start', {
         launch: {
@@ -38,12 +40,12 @@ module.exports = {
         },
       // TODO:  add other browser launch options here and in (tap.js) => keg.playwright.config
     }, [
+      'headless',
+      'log',
       'allBrowsers',
       'chromium',
       'firefox',
-      'webkit',
-      'headless',
-      'log'
+      'webkit'
     ])
   }
 }

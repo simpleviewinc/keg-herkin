@@ -1,22 +1,6 @@
 const { dockerExec } = require('../../utils/process/process')
 const { launchBrowser } = require('../../utils/playwright/launchBrowser') 
-
-/**
- * Executes and times the function `fn`.
- * @param {Function} fn 
- * @return {Array<*, number>} [ fn output, execution time in ms ]
- * @example
- * const [ result, executionTime ] = timedRun(() => http.get(url)))
- */
-const timedRun = async (fn, ...args) => {
-  if (!fn) return [ undefined, -1 ]
-  const startTime = new Date()
-  const result = await fn(...args)
-  return [
-    result,
-    new Date() - startTime
-  ]
-}
+const { timedRun } = require('@keg-hub/jsutils')
 
 /**
  * Runs the edit command, and logs out a warning if
@@ -32,7 +16,7 @@ const runEditCmd = async (containerName, testName, expectedMinTime=10000) => {
   if (exitCode === 0 && duration < expectedMinTime)
     console.log(
       '\x1b[35m%s\x1b[0m', 
-      'The edit process completed quickly! You may have forgotten to mark the edit location in your test file with `await qawolf.create()`'
+      'The edit process exited quickly! You may have forgotten to mark the edit location in your test file with `await qawolf.create()`'
     )
   return exitCode
 }

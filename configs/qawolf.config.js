@@ -1,10 +1,26 @@
 const { createTemplate } = require('../tasks/utils/wolf/createTemplate')
-const templateFile = process.env.WOLF_TEMPLATE_FILE || 'tasks/utils/wolf/qawolf.template.js'
+
+const {
+  JEST_TIMEOUT=(60*1000),
+  JEST_TEST_PATH='/keg/tap/tests/wolf',
+  TEMPLATE_PATH='/keg/tap/tasks/utils/wolf/qawolf-jest.template.js'
+} = process.env
+
+/**
+ * Creates the template string used to generate the test file
+ * @param {Object} props - params passed to this function by qawolf, with parameters like `device` 
+ * @return {string} template 
+ */
+const createDynamicTemplate = props =>
+  createTemplate({ 
+    ...props, 
+    templateFile: TEMPLATE_PATH, 
+    timeout: JEST_TIMEOUT,
+  })
 
 module.exports = {
-  config: 'node_modules/qawolf/js-jest.config.json',
-  rootDir: 'tests/wolf',
-  testTimeout: 60000,
+  createTemplate: createDynamicTemplate,
+  rootDir: JEST_TEST_PATH,
+  testTimeout: JEST_TIMEOUT,
   useTypeScript: false,
-  createTemplate: (props) => createTemplate({...props, templateFile}),
 }
