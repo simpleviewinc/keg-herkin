@@ -6,8 +6,8 @@ import { upsertFeatures }  from './features/upsertFeatures'
 import { setFeatureActive } from './features/setFeatureActive'
 import { upsertDefinitions }  from './definitions/upsertDefinitions'
 import { upsertActiveRunnerTest }  from './runner/upsertActiveRunnerTest'
-
-const { CATEGORIES, SCREENS } = Values
+import { setActiveModal } from 'SVActions/modals'
+const { MODAL_TYPES } = Values
 
 const exampleFile = 'example/exampleTests.js'
 
@@ -69,6 +69,10 @@ export const init = async () => {
 
   initTestFile(activeFeat, queryObj.file || exampleFile)
 
+  // display options modal if no valid querystring passed in
+  if (!queryObj || Object.keys(queryObj).length === 0 ) {
+    setActiveModal(MODAL_TYPES.TEST_SELECTOR_MODAL)
+  }
   // Update the current screen to match the query.tab value
   setScreen(queryObj.tab || 'empty')
 

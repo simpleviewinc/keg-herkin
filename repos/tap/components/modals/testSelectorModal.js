@@ -1,14 +1,16 @@
-import React, { useCallback } from 'react'
-import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
+import React, { useCallback, useState } from 'react'
+import { Modal, Button, ItemHeader, View} from '@keg-hub/keg-components'
 import { Select } from 'SVComponents/form/select'
 import { useTheme } from '@keg-hub/re-theme'
 import { createNewFeature } from 'SVActions/features'
-import { Values } from 'SVConstants'
-import { mapObj, capitalize } from '@keg-hub/jsutils'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { upsertActiveRunnerTest }  from 'SVActions/runner/upsertActiveRunnerTest'
+import { setModalVisibility } from 'SVActions/modals'
+import { Values } from 'SVConstants'
+import { mapObj, capitalize, wordCaps } from '@keg-hub/jsutils'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { devLog } from 'SVUtils'
 
-const { TEST_TYPE, CATEGORIES } = Values
+const { TEST_TYPE, CATEGORIES, SCREENS } = Values
 
 /**
  * Goes through the TEST_TYPE constants and creates the options array to pass onto Select Component
@@ -24,11 +26,28 @@ const getTypeOptions = () => {
 }
 
 /**
+ * Gets the options for the the tab screens
+ * @returns {Array<{label:string, value:string}>}
+ */
+const getTabOptions = () => {
+  const { EMPTY , ...VISIBLE_SREENS } = SCREENS
+  return mapObj(VISIBLE_SREENS, (__, val) => {
+    return {
+      label: capitalize(val),
+      value: val
+    }
+  })
+}
+
+/**
  * Gets the options for the test file selector
- * adds an empty value as the first index
  * @returns {Array<{label:string, value:string}>}
  */
 const getTestFilesOptions = () => {
+  const newFileOption = {
+    label: wordCaps(Values.CREATE_NEW_FILE),
+    value: Values.CREATE_NEW_FILE
+  }
   const features = useStoreItems(CATEGORIES.FEATURES) || []
   const options = features.map((feature) => {
     return {
@@ -36,7 +55,7 @@ const getTestFilesOptions = () => {
       value: feature?.feature
     }
   })
-  return [null, ...options]
+  return [newFileOption, ...options]
 }
 
 /**
@@ -47,12 +66,22 @@ const getTestFilesOptions = () => {
 export const TestSelectorModal = (props) => {
   const {
     title = 'Test Settings',
-    visible=true
+    visible=false
   } = props
 
   const theme = useTheme()
   const builtStyles = theme.get(`modals.testSelectorModal`)
   const features = useStoreItems(CATEGORIES.FEATURES) || []
+
+  const [testFile, setTestFile] = useState(Values.CREATE_NEW_FILE)
+  const loadTests = useCallback(() => {
+    testFile === Values.CREATE_NEW_FILE
+      ? createNewFeature()
+      : loadFeature()
+
+      setModalVisibility(false)
+  }, [Values.CREATE_NEW_FILE])
+
   return (
     <Modal
       visible={visible}
@@ -64,6 +93,11 @@ export const TestSelectorModal = (props) => {
       />
       <View style={builtStyles?.form?.main}>
         <Select
+          title={'Select initial tab:'}
+          onValueChange={(props) => console.log(props)}
+          options={getTabOptions()}
+        />
+        <Select
           title={'Select test type:'}
           onValueChange={(props) => console.log(props)}
           options={getTypeOptions()}
@@ -71,6 +105,13 @@ export const TestSelectorModal = (props) => {
         <TestFileSelect 
           styles={builtStyles?.form?.testFileSelect}
           features={features}
+          setTestFile={setTestFile}
+        />
+        <Button
+          themePath='button.contained.primary'
+          styles={builtStyles?.form?.button}
+          content={'Start'}
+          onPress={loadTests}
         />
       </View>
     </Modal>
@@ -78,29 +119,35 @@ export const TestSelectorModal = (props) => {
 }
 
 /**
+ * setup the Test file selection UI
+ * @param {Object} props 
+ * @param {Object} props.styles
+ * @param {Array} props.features
+ * @param {Function} props.setTestFile
  * 
+ * @returns {Component}
  */
-const TestFileSelect = ({styles, features}) => {
+const TestFileSelect = ({styles, features, setTestFile}) => {
+
+  const onValueChange = useCallback((val) => {
+    // fetch the feature file content from redux
+    const feature = features.find((feature) => feature.feature === val)
+    feature 
+      ? upsertActiveRunnerTest(feature?.text)
+      : devLog(`warn`, `Feature '${val}' does not exist!`)
+
+    setTestFile(val)
+  }, [features, setTestFile])
 
   return (
     <View style={styles?.main}>
       <Select
         styles={styles?.dropDown}
         title={'Select test file:'}
-        onValueChange={(val) => {
-          const feature = features.find((feature) => feature.feature === val)
-          console.log(feature, 'ye')
-          upsertActiveRunnerTest(feature?.text)
-        }}
+        onValueChange={onValueChange}
         options={getTestFilesOptions()}
       />
-      <Text style={styles?.orText}>OR</Text>
-      <Button
-        themePath='button.contained.primary'
-        styles={styles?.button}
-        content={'Create new file'}
-        onPress={createNewFeature}
-      />
+      
     </View>
   )
 }

@@ -23,7 +23,7 @@ const tabs = [
     title: `Feature Builder`,
   },
   {
-    id: SCREENS.EDITORS,
+    id: SCREENS.EDITOR,
     View: EditorScreen,
     title: `Code Editor`,
   },
@@ -34,24 +34,23 @@ const tabs = [
   },
 ]
 
-const useScreen = screen => useMemo(() => {
-  return tabs.find(item => item.id === screen) || tabs[3]
-}, [screen])
+const useScreen = id => useMemo(() => {
+  return tabs.find(item => item.id === id) || tabs[2]
+}, [id])
 
 export const Screen = props => {
 
   const theme = useTheme()
-  const { activeData } = useSelector(({ items }) => pickKeys(
+  const { activeTab } = useSelector(({ items }) => pickKeys(
     items,
-    [CATEGORIES.ACTIVE_DATA]
+    [CATEGORIES.ACTIVE_TAB]
   ), shallowEqual) || {}
 
-  const screen = useScreen(activeData?.screen)
-  
+  const screen = useScreen(activeTab?.id)
   const onTabSelect = useCallback(tabId => {
-    setScreen(tabId)
+    tabId !== activeTab?.id && setScreen(tabId)
     return true
-  }, [ screen.index ])
+  }, [ activeTab, setScreen ])
 
   return (
     <View

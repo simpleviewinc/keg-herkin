@@ -23,10 +23,10 @@ const ReStyleView = reStyle(
  * @returns
  */
 const generateOptions = (options) => {
-  return options.map((option) => {
+  return options.map((option, index) => {
     return (
       <Option
-        key={option}
+        key={index}
         label={option?.label}
         value={option?.value}
       />

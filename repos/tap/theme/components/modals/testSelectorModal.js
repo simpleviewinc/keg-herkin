@@ -20,7 +20,7 @@ export const testSelectorModal = theme => ({
     },
     testFileSelect: {
       main: {
-        flD: 'row', 
+        flD: 'column', 
         pV: 10
       },
       dropDown: {
@@ -28,15 +28,10 @@ export const testSelectorModal = theme => ({
           fl: 1
         }
       },
-      orText: {
-        alS: 'flex-end', 
-        pB: 10
-      },
-      button: {
-        main: {
-          m: 8, 
-          alS: 'flex-end'
-        }
+    },
+    button: {
+      main: {
+        m: 8,
       }
     }
   }
