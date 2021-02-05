@@ -3,7 +3,7 @@ const { apiErr, apiResponse } = require('./handler')
 
 const getComponents = (app, config) => async (req, res) => {
   try {
-    const { componentsFile } = config.editor
+    const { componentsFile } = config.paths
     const components = componentsFile && await StepParser.getComponents(componentsFile)
 
     return apiResponse(req, res, components || [], 200)

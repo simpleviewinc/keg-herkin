@@ -24,7 +24,7 @@ const parseDefinitions = definitionFiles => {
 }
 
 const loadDefinitions = async config => {
-  const { stepsFolder } = config.editor
+  const { stepsFolder } = config.paths
   const definitionFiles = stepsFolder && await loadDefinitionsFiles(stepsFolder)
   const definitions = await parseDefinitions(definitionFiles) || []
 
