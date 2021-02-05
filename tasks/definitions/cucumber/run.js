@@ -1,7 +1,26 @@
+const path = require('path')
 const { dockerExec } = require('../../utils/process/process')
 const { launchBrowsers } = require('../../utils/playwright/launchBrowsers') 
 const { sharedOptions } = require('../../utils/task/sharedOptions')
 const { runSeq } = require('@keg-hub/jsutils')
+
+/**
+ * Builds the arguments that are passed to jest when the test is run
+ * @param {Object} params - Parsed task definition options
+ *                          See options section of the task definition below
+ */
+const buildCmdArgs = params => {
+  const { context: name, jestConfig, testDir, timeout } = params
+
+  const cmdArgs = [ 'npx', 'jest', '--detectOpenHandles' ]
+  const docTapPath = '/keg/tap'
+  jestConfig && cmdArgs.push(`--config=${path.join(docTapPath, jestConfig)}`)
+  testDir && cmdArgs.push(`--rootDir=${path.join(docTapPath, testDir)}`)
+  timeout && cmdArgs.push(`--testTimeout=${timeout}`)
+  name && cmdArgs.push(name)
+
+  return cmdArgs
+}
 
 /**
  * Run cucumber tests in container
@@ -9,21 +28,11 @@ const { runSeq } = require('@keg-hub/jsutils')
  */
 const runTest = async args => {
   const { params } = args
-  const { context: name } = params
-
   const { browsers } = await launchBrowsers(params)
-
-  const cmd = [
-    'npx',
-    'jest',
-    `--config=${params.jestConfig}`,
-    `--rootDir=${params.rootDir}`,
-    `--testTimeout=${params.timeout}`,
-    name || ''
-  ]
+  const cmdArgs = buildCmdArgs(params)
 
   const commands = browsers.map(browser => 
-    () => dockerExec(params.container, cmd, { 
+    () => dockerExec(params.container, cmdArgs, { 
       envs: {
         HOST_BROWSER: browser
       }
@@ -54,7 +63,6 @@ module.exports = {
       container: {
         description: 'Name of container within which to run create command',
         example: '--container keg-herkin',
-        required: true,
         default: 'keg-herkin',
       },
       timeout: {
@@ -62,12 +70,12 @@ module.exports = {
         default: null
       },
       jestConfig: {
-        description: 'Path to jest config',
-        default: '/keg/tap/configs/jest.cucumber.config.js'
+        description: 'Path to jest config within the docker container',
+        default: 'configs/jest.cucumber.config.js'
       },
-      rootDir: {
-        description: 'Path to root directory for jest tests',
-        default: '/keg/tap/tests/bdd/features'
+      testDir: {
+        description: 'Path to the tests directory within the docker container',
+        default: 'tests/bdd/features'
       }
     }, [
       'allBrowsers',
