@@ -1,4 +1,4 @@
-
+const { jestAliases } = require('./aliases.config')
 const path = require('path')
 const testsDir = path.join(__dirname, '../tests')
 const { getCustomConfigPaths } = require('./getCustomConfigPaths')
@@ -17,6 +17,7 @@ const defaultConfig = {
       height: 1080
     }
   },
+  'moduleNameMapper': jestAliases
 }
 
 

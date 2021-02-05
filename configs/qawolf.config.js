@@ -1,3 +1,4 @@
+require('module-alias/register')
 const { createTemplate } = require('../tasks/utils/wolf/createTemplate')
 
 const {

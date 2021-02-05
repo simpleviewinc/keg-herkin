@@ -1,7 +1,7 @@
-const { dockerExec } = require('../../utils/process/process')
-const { launchBrowsers } = require('../../utils/playwright/launchBrowsers') 
-const { sharedOptions } = require('../../utils/task/sharedOptions')
-const { buildArguments } = require('../../utils/task/buildArguments')
+const { dockerExec } = require('@tasks/utils/process/process')
+const { launchBrowsers } = require('@tasks/utils/playwright/launchBrowsers') 
+const { sharedOptions } = require('@tasks/utils/task/sharedOptions')
+const { buildArguments } = require('@tasks/utils/task/buildArguments')
 
 /**
  * Builds the QAwolf test command

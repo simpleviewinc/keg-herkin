@@ -1,6 +1,6 @@
-const { dockerExec } = require('../../utils/process/process')
-const { launchBrowsers } = require('../../utils/playwright/launchBrowsers') 
-const { sharedOptions } = require('../../utils/task/sharedOptions')
+const { dockerExec } = require('@tasks/utils/process/process')
+const { launchBrowsers } = require('@tasks/utils/playwright/launchBrowsers') 
+const { sharedOptions } = require('@tasks/utils/task/sharedOptions')
 const { runSeq } = require('@keg-hub/jsutils')
 
 /**
@@ -67,7 +67,7 @@ module.exports = {
       },
       rootDir: {
         description: 'Path to root directory for jest tests',
-        default: '/keg/tap/tests/bdd/features'
+        default: '/keg/tap/tests/bdd'
       }
     }, [
       'allBrowsers',

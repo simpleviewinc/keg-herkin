@@ -1,3 +1,9 @@
+const { jestAliases } = require('./aliases.config')
+const tapRoot = '/keg/tap'
+const rootModules = `${tapRoot}/node_modules`
+const bddUtils = `${tapRoot}/repos/testUtils/bdd`
+const mountPoint = `${tapRoot}/tests`
+
 module.exports = {
   'moduleFileExtensions': [
     'feature',
@@ -6,11 +12,15 @@ module.exports = {
     'ts',
     'tsx'
   ],
+  'setupFiles': [
+    `${rootModules}/module-alias/register`
+  ],
   'setupFilesAfterEnv': [
-    '/keg/tap/node_modules/cucumber-jest/dist/init.js',
-    '/keg/tap/cucumber/steps',
-    '/keg/tap/cucumber/support/world',
-    '/keg/tap/cucumber/support/hooks',
+    `${rootModules}/cucumber-jest/dist/init.js`,
+    `${bddUtils}/steps`,
+    `${bddUtils}/support/world`,
+    `${bddUtils}/support/hooks`,
+    `${mountPoint}/bdd/steps`,
   ],
   'transform': {
     '^.+\\.(feature)$': 'cucumber-jest',
@@ -19,4 +29,5 @@ module.exports = {
   'testMatch': [
     '/keg/tap/**/*.feature'
   ],
+  'moduleNameMapper': jestAliases
 }

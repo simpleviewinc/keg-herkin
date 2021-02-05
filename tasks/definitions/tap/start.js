@@ -1,5 +1,5 @@
-const { sharedOptions } = require('../../utils/task/sharedOptions')
-const { launchBrowsers } = require('../../utils/playwright/launchBrowsers')
+const { sharedOptions } = require('@tasks/utils/task/sharedOptions')
+const { launchBrowsers } = require('@tasks/utils/playwright/launchBrowsers')
 
 /**
  * Starts all the Keg-Herkin services needed to run tests

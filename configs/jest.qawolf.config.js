@@ -1,3 +1,5 @@
+require('module-alias/register')
+
 module.exports = {
   preset: 'jest-playwright-preset',
   transform: {},
