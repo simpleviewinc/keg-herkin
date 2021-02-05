@@ -11,6 +11,9 @@ export const Values = {
     SCREEN: 'screen',
     COPY_STEP: 'copy_step',
   },
+  SUB_CATEGORIES: {
+    RUNNER_CONTENT: 'runnerContent'
+  },
   STEP_TYPES: [
     'and',
     'given',

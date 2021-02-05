@@ -2,20 +2,21 @@
 import { dispatch } from 'SVStore'
 import { Values, ActionTypes } from 'SVConstants'
 
-const { CATEGORIES } = Values
+const { CATEGORIES, SUB_CATEGORIES } = Values
 
 /**
  * Upserts active data to redux
  * @function
  * 
- * @param {Object} data
+ * @param {string} data
  */
 export const upsertActiveRunnerTest = (data) => {
   data && dispatch({
-    type: ActionTypes.UPSERT_ITEMS,
+    type: ActionTypes.UPSERT_ITEM,
     payload: {
       category: CATEGORIES.ACTIVE_RUNNER_TESTS,
-      items: data,
+      key: SUB_CATEGORIES.RUNNER_CONTENT,
+      item: data,
     },
   })
 }

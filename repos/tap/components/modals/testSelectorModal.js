@@ -1,16 +1,18 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
-import { DropDown } from 'SVComponents'
+import { Select } from 'SVComponents/form/select'
 import { useTheme } from '@keg-hub/re-theme'
 import { createNewFeature } from 'SVActions/features'
 import { Values } from 'SVConstants'
 import { mapObj, capitalize } from '@keg-hub/jsutils'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { upsertActiveRunnerTest }  from 'SVActions/runner/upsertActiveRunnerTest'
 
-const { TEST_TYPE } = Values
+const { TEST_TYPE, CATEGORIES } = Values
 
 /**
- * Goes through the TEST_TYPE constants and creates the options array to pass onto DropDown Component
- * @returns {Array<{label:string, value:string}>}
+ * Goes through the TEST_TYPE constants and creates the options array to pass onto Select Component
+ * @returns {Array<{label:string, value:any}>}
  */
 const getTypeOptions = () => {
   return mapObj(TEST_TYPE, (__, val) => {
@@ -21,8 +23,20 @@ const getTypeOptions = () => {
   })
 }
 
+/**
+ * Gets the options for the test file selector
+ * adds an empty value as the first index
+ * @returns {Array<{label:string, value:string}>}
+ */
 const getTestFilesOptions = () => {
-  return ['',]
+  const features = useStoreItems(CATEGORIES.FEATURES) || []
+  const options = features.map((feature) => {
+    return {
+      label: feature?.feature,
+      value: feature?.feature
+    }
+  })
+  return [null, ...options]
 }
 
 /**
@@ -38,7 +52,7 @@ export const TestSelectorModal = (props) => {
 
   const theme = useTheme()
   const builtStyles = theme.get(`modals.testSelectorModal`)
-
+  const features = useStoreItems(CATEGORIES.FEATURES) || []
   return (
     <Modal
       visible={visible}
@@ -49,12 +63,15 @@ export const TestSelectorModal = (props) => {
         styles={builtStyles?.itemHeader}
       />
       <View style={builtStyles?.form?.main}>
-        <DropDown
+        <Select
           title={'Select test type:'}
           onValueChange={(props) => console.log(props)}
           options={getTypeOptions()}
         />
-        <TestFileSelect styles={builtStyles?.form?.testFileSelect} />
+        <TestFileSelect 
+          styles={builtStyles?.form?.testFileSelect}
+          features={features}
+        />
       </View>
     </Modal>
   )
@@ -63,14 +80,18 @@ export const TestSelectorModal = (props) => {
 /**
  * 
  */
-const TestFileSelect = ({styles}) => {
+const TestFileSelect = ({styles, features}) => {
 
   return (
     <View style={styles?.main}>
-      <DropDown
+      <Select
         styles={styles?.dropDown}
         title={'Select test file:'}
-        onValueChange={(props) => console.log(props)}
+        onValueChange={(val) => {
+          const feature = features.find((feature) => feature.feature === val)
+          console.log(feature, 'ye')
+          upsertActiveRunnerTest(feature?.text)
+        }}
         options={getTestFilesOptions()}
       />
       <Text style={styles?.orText}>OR</Text>

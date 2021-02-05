@@ -49,9 +49,9 @@ const initTestFile = async (activeFeat, queryFile) => {
     return upsertActiveRunnerTest(activeFeat)
 
   const testFile = activeFeat && activeFeat.testPath || queryFile
-  const content = testFile && await apiRequest(`/files/load?file=${testFile}`)
-
-  content && upsertActiveRunnerTest(content)
+  // loading example test data from <root>/tests/tests
+  const { content } = await apiRequest(`/files/load?file=${exampleFile}`)
+  upsertActiveRunnerTest(content)
 }
 
 

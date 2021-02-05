@@ -1,6 +1,6 @@
 import React from 'react'
 import { 
-  Select, 
+  Select as KegSelect, 
   Option, 
   Label,
   View
@@ -40,7 +40,7 @@ const generateOptions = (options) => {
  * @param {Array<{label:string, value:string}>} props.options - options to display
  * @returns
  */
-export const DropDown = (props) => {
+export const Select = (props) => {
 
   const {
     title='',
@@ -52,9 +52,9 @@ export const DropDown = (props) => {
   return (
     <ReStyleView style={styles?.main}>
       <Label>{title}</Label>
-      <Select onValueChange={onValueChange}>
+      <KegSelect onValueChange={onValueChange}>
         {generateOptions(options)}
-      </Select>
+      </KegSelect>
     </ReStyleView>
   )
 }
