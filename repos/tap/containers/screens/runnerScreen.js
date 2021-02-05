@@ -16,7 +16,6 @@ export const RunnerScreen = props => {
   const [ tests, setTests ] = useState('')
 
   const {runnerContent} = useStoreItems(CATEGORIES.ACTIVE_RUNNER_TESTS) || {}
-  console.log(runnerContent)
   useEffect(() => {
     exists(runnerContent) &&
     runnerContent !== tests &&

@@ -82,11 +82,17 @@ export const TestSelectorModal = (props) => {
   const loadTests = useCallback(() => {
 
     testName === Values.CREATE_NEW_FILE
-      ? createNewFeature()
+      ? createNewFeature(selectedTab)
       : loadFeature(feature, selectedTab)
 
       setModalVisibility(false)
-  }, [Values.CREATE_NEW_FILE, testName, feature])
+  }, 
+  [
+    Values.CREATE_NEW_FILE, 
+    testName, 
+    feature,
+    selectedTab
+  ])
 
   return (
     <Modal
