@@ -58,8 +58,8 @@ module.exports = {
         default: 'keg-herkin',
       },
       timeout: {
-        description: 'Test timeout. Defaults to null (no-timeout), so that async playwright tasks have sufficient time to complete.',
-        default: null
+        description: 'Test timeout. Defaults to no timeout, so that async playwright tasks have sufficient time to complete.',
+        default: Math.pow(10, 10) // jest accepts neither Infinity nor -1 nor null to disable timeout, so we just default to 32 years
       },
       jestConfig: {
         description: 'Path to jest config',
