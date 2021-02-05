@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import { Label, View } from '@keg-hub/keg-components'
 import { Parameter } from './parameter'
-import { noOpObj, noOpArr } from 'SVUtils/helpers/noop'
+import { get, noPropArr, noOpObj } from '@keg-hub/jsutils'
 import { Table } from '../table'
 
 const headerRow = [ 'Token', 'Value' ]
@@ -22,7 +22,7 @@ const headerRow = [ 'Token', 'Value' ]
  * 
  * @returns {Array} - Array of arrays, containing row items for the Table component
 */
-const getTableRows = (tokens=noOpArr, dynamicMap=noOpObj, highlight) => {
+const getTableRows = (tokens=noPropArr, dynamicMap=noOpObj, highlight) => {
   return Object.entries(dynamicMap)
     .reduce((tableRows, [ index, value ]) => {
       const token = tokens[index]
@@ -79,7 +79,7 @@ export const Parameters = props => {
   const paramStyles = theme.get('editStep.parameters', styles)
 
   const tableRows = getTableRows(
-    definition.tokens,
+    get(definition, 'tokens'),
     step.dynamicMap,
     highlight
   )

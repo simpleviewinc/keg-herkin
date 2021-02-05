@@ -39,7 +39,7 @@ const ParameterText = props => {
 
 const useStepMatchText = (step, definition, matchStyles, onPress) => {
   return useMemo(() => {
-    return definition.tokens.reduce((matchText, token) => {
+    return definition && definition.tokens.reduce((matchText, token) => {
       matchText.push(
         !token.dynamic
           ? (
@@ -73,7 +73,7 @@ export const StepMatchText = props => {
   const matchStyles = theme.get('step.matchText', styles)
   const matchText = useStepMatchText(step, definition, matchStyles, highlightAction)
 
-  return (
+  return matchText && (
     <View className={`step-text-container`} style={matchStyles.main} >
       <Text className={`step-text-text`} style={matchStyles.text} >
         {matchText}
