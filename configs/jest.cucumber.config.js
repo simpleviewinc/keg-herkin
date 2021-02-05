@@ -8,9 +8,9 @@ module.exports = {
   ],
   'setupFilesAfterEnv': [
     '/keg/tap/node_modules/cucumber-jest/dist/init.js',
-    '/keg/tap/tests/bdd/steps',
-    '/keg/tap/tests/bdd/support/world',
-    '/keg/tap/tests/bdd/support/hooks',
+    '/keg/tap/cucumber/steps',
+    '/keg/tap/cucumber/support/world',
+    '/keg/tap/cucumber/support/hooks',
   ],
   'transform': {
     '^.+\\.(feature)$': 'cucumber-jest',
