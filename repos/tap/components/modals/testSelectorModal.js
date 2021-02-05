@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { Modal, Button, ItemHeader, View} from '@keg-hub/keg-components'
 import { Select } from 'SVComponents/form/select'
 import { useTheme } from '@keg-hub/re-theme'
-import { createNewFeature } from 'SVActions/features'
+import { createFeatureFile } from 'SVActions/features'
 import { upsertActiveRunnerTest }  from 'SVActions/runner/upsertActiveRunnerTest'
 import { setModalVisibility } from 'SVActions/modals'
 import { loadFeature } from 'SVActions/features'
@@ -82,7 +82,7 @@ export const TestSelectorModal = (props) => {
   const loadTests = useCallback(() => {
 
     testName === Values.CREATE_NEW_FILE
-      ? createNewFeature(selectedTab)
+      ? createFeatureFile(selectedTab)
       : loadFeature(feature, selectedTab)
 
       setModalVisibility(false)

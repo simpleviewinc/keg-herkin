@@ -1,7 +1,7 @@
 
 import { setScreen } from 'SVActions/setScreen'
 
-export const createNewFeature = (screenId) => {
+export const createFeatureFile = (screenId) => {
   setScreen(screenId)
   console.log('---creating new feature TBA----')
 }
