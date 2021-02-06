@@ -14,21 +14,24 @@ const loadFeatureFiles = (featuresFolder) => {
   })
 }
 
-const parseFeatures = (featureFiles) => {
+const parseFeatures = (featureFiles, testsRoot) => {
   return featureFiles.reduce(async (toResolve, file) => {
     const loaded = await toResolve
     if(!file) return loaded
 
-    const features = await FeatureParser.getFeatures(file)
+    const features = await FeatureParser.getFeatures({
+      fullPath: file,
+      testPath: file.replace(`${testsRoot}/`, '')
+    })
 
     return loaded.concat(features)
   }, Promise.resolve([]))
 }
 
 const loadFeatures = async (config, definitions) => {
-  const { featuresFolder } = config.editor
+  const { featuresFolder, testsRoot } = config.paths
   const featureFiles = featuresFolder && await loadFeatureFiles(featuresFolder)
-  const features = await parseFeatures(featureFiles)
+  const features = await parseFeatures(featureFiles, testsRoot)
 
   return definitions
     ? mapToSteps(features, definitions)

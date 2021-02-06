@@ -1,8 +1,6 @@
-import { ToRun } from './toRun'
 import { RunnerTabs } from './runnerTabs'
 import { useTheme } from '@keg-hub/re-theme'
 import { Surface } from 'SVComponents/surface'
-import { useFeature } from 'SVHooks/useFeature'
 import { useTestRunner } from 'SVHooks/useTestRunner'
 import { Row } from '@keg-hub/keg-components/row'
 import { AceEditor } from 'SVComponents/aceEditor'
@@ -10,7 +8,6 @@ import { View } from '@keg-hub/keg-components/view'
 import { Text } from '@keg-hub/keg-components/text'
 import { Grid } from '@keg-hub/keg-components/grid'
 import { Results } from 'SVComponents/runner/results'
-import { Button } from '@keg-hub/keg-components/button'
 import { Loading } from '@keg-hub/keg-components/loading'
 import { SubSurface } from 'SVComponents/surface/subsurface'
 import { uuid, checkCall } from '@keg-hub/jsutils'
@@ -93,8 +90,6 @@ export const Runner = props => {
     editorRef,
     parentMethods,
   )
-
-  const { feature, definitions } = useFeature()
 
   useEffect(() => {
     autoRun && onRunTests()

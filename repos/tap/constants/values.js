@@ -4,11 +4,19 @@ export const Values = {
     FEATURES: 'features',
     DEFINITIONS: 'definitions',
     ACTIVE_FEATURE: 'activeFeature',
+    ACTIVE_TAB: 'activeTab',
     ACTIVE_DATA: 'activeData',
     ACTIVE_RUNNER_TESTS: 'activeRunnerTests',
     FEATURE: 'feature',
     SCREEN: 'screen',
     COPY_STEP: 'copy_step',
+    MODALS: 'modals'
+  },
+  SUB_CATEGORIES: {
+    RUNNER_CONTENT: 'runnerContent'
+  },
+  MODAL_TYPES: {
+    TEST_SELECTOR_MODAL: 'testSelectorModal',
   },
   STEP_TYPES: [
     'and',
@@ -16,11 +24,15 @@ export const Values = {
     'when',
     'then',
   ],
+  TEST_TYPE: {
+    GHERKIN: 'gherkin',
+  },
   EMPTY_STEP: `None Selected`,
   EMPTY_PARAM: `PARAMETER`,
+  CREATE_NEW_FILE: 'create_new_file',
   SCREENS: {
+    EDITOR: 'editor',
     BUILDER: 'builder',
-    EDITORS: 'editors',
     EMPTY: 'empty',
     RUNNER: 'runner',
   },

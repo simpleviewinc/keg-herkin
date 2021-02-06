@@ -1,7 +1,7 @@
 "use strict"
 
 const fs = require('fs')
-const { uuid } = require('@keg-hub/jsutils')
+const { uuid, noOpObj } = require('@keg-hub/jsutils')
 
 const R_NEWLINE = /\r?\n/g
 const R_TAG = /^\s*@(.*)$/
@@ -22,8 +22,16 @@ const extract = (line, regex, index) => {
   return line.match(regex)[index].trim()
 }
 
-const featureFactory = (feature, text) => {
-  return { feature, uuid: uuid(), tags: [], comments: {}, scenarios: [], text }
+const featureFactory = (feature, content, featureMeta=noOpObj) => {
+  return {
+    feature,
+    content,
+    ...featureMeta,
+    uuid: uuid(),
+    tags: [],
+    comments: {},
+    scenarios: [],
+  }
 }
 
 const scenarioFactory = scenario => {
@@ -45,9 +53,10 @@ const addReason = (feature, reason) => {
     : null
 }
 
-const parseFeature = text => {
-  let lines = (text || '').toString().split(R_NEWLINE)
-  let feature = featureFactory(false, text)
+const parseFeature = (content, featureMeta) => {
+
+  let lines = (content || '').toString().split(R_NEWLINE)
+  let feature = featureFactory(false, content, featureMeta)
   let scenario = scenarioFactory(false)
   const features = []
   return lines.reduce((extra, line, index) => {
@@ -65,7 +74,7 @@ const parseFeature = text => {
         feature.feature = extract(line, R_FEATURE, 1)
         if(extra.indexOf(feature) === -1) extra.push(feature)
       }
-      else feature = featureFactory(extract(line, R_FEATURE, 1), text)
+      else feature = featureFactory(extract(line, R_FEATURE, 1), content, featureMeta)
     }
     else if (R_AS.test(line)) {
       feature.perspective = extract(line, R_AS, 0)
@@ -108,12 +117,14 @@ const parseFeature = text => {
 
 class FeatureParser {
 
-  getFeatures(file) {
+  getFeatures(featureMeta=noOpObj) {
+    const { fullPath, testPath } = featureMeta
+
     return new Promise((res, rej) => {
-      fs.readFile(file, (err, data) =>
+      fs.readFile(fullPath, (err, data) =>
         err
           ? rej(err)
-          : res(parseFeature(data.toString()))
+          : res(parseFeature(data.toString(), featureMeta))
       )
     })
   }

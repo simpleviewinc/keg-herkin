@@ -174,7 +174,7 @@ export const Step = props => {
   const { styles, feature } = props
   const [scenario, setScenario] = useState(props.scenario)
   const [step, setStep] = useStepFromScenario(scenario, setScenario, props.step)
-  
+
   // TODO: revert this back to false when other steps are added back
   const [isEditing, setIsEditing] = useState(false)
   const { definitions } = useSelector(CATEGORIES.DEFINITIONS)

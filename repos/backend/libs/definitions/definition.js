@@ -10,9 +10,9 @@ const {
 
 class Definition {
 
-  constructor(name='', type='', variant, text) {
+  constructor(name='', type='', variant, content) {
     this.type = type
-    this.text = text
+    this.content = content
     this.variant = variant
     this.name = this.sanitizeName(name, type)
     this.uuid = uuid()
