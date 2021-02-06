@@ -88,7 +88,6 @@ export const TestSelectorModal = (props) => {
       setModalVisibility(false)
   }, 
   [
-    Values.CREATE_NEW_FILE, 
     testName, 
     feature,
     selectedTab

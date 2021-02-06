@@ -9,6 +9,7 @@ import { RunnerScreen } from './runnerScreen'
 import { setScreen } from 'SVActions'
 import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
 
 const { CATEGORIES, SCREENS } = Values
 
@@ -41,10 +42,7 @@ const useScreen = id => useMemo(() => {
 export const Screen = props => {
 
   const theme = useTheme()
-  const { activeTab } = useSelector(({ items }) => pickKeys(
-    items,
-    [CATEGORIES.ACTIVE_TAB]
-  ), shallowEqual) || {}
+  const activeTab  = useStoreItems(CATEGORIES.ACTIVE_TAB) || {}
 
   const screen = useScreen(activeTab?.id)
   const onTabSelect = useCallback(tabId => {
