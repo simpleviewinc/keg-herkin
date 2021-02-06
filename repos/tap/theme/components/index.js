@@ -14,6 +14,7 @@ import { surface } from './surface'
 import { tabbar } from './tabbar'
 import { table } from './table'
 import { tags } from './tags'
+import { modals } from './modals'
 
 export const components = theme => ({
   aceEditor: aceEditor(theme),
@@ -29,6 +30,7 @@ export const components = theme => ({
   tabbar: tabbar(theme),
   table: table(theme),
   tags: tags(theme),
+  modals: modals(theme),
   ...header(theme),
   ...step(theme),
   ...surface(theme),
