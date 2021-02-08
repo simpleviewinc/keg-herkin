@@ -28,8 +28,8 @@ const defTabbar = theme => ({
   },
   bar: {
     main: {
-      top: 70,
-      minHeight: 50,
+      top: 50,
+      minHeight: 45,
       cursor: 'pointer',
       flexDirection: 'row',
       bgC: tapColors.headerBackground,

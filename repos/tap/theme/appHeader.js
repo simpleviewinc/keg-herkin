@@ -1,6 +1,9 @@
 import { tapColors } from './tapColors'
 import { sharedShadow } from './components/shared/shadow'
 
+const buttonStyle = {
+}
+
 export const appHeader = theme => {
   return {
     main: {
@@ -10,6 +13,7 @@ export const appHeader = theme => {
         position: 'fixed',
         ...sharedShadow,
         backgroundColor: tapColors.headerBackground,
+        height: 50,
       },
     },
     side: {},
@@ -25,5 +29,15 @@ export const appHeader = theme => {
         }
       }
     },
+    right: {
+      main: {
+        mR: 20,
+      },
+      button: buttonStyle,
+      icon: {
+        ftSz: 18,
+        color: tapColors.default,
+      },
+    }
   }
 }

@@ -5,9 +5,10 @@ export const testSelectorModal = theme => ({
     content: {
       $xsmall: {
         minHeight: 200,
+        p: 20,
       },
       $medium: {
-        minWidth: 500,
+        minWidth: 550,
       }
     },
   },
