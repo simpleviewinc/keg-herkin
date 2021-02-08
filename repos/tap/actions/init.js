@@ -1,5 +1,6 @@
-import { queryToObj, noOpObj } from '@keg-hub/jsutils'
+import { queryToObj, noOpObj, isEmptyColl } from '@keg-hub/jsutils'
 import { setScreen } from './setScreen'
+import { loadFile } from './api/files/loadFile'
 import { apiRequest } from 'SVUtils/apiRequest'
 import { Values, ActionTypes } from 'SVConstants'
 import { upsertFeatures }  from './features/upsertFeatures'
@@ -37,8 +38,6 @@ const initFeatures = (features, queryFeat) => {
   return activeFeat
 }
 
-// ?tab=builder&feature=Google%20Search
-
 const initDefs = definitions => {
   // Add all definitions to the store
   definitions && upsertDefinitions(definitions)
@@ -49,9 +48,9 @@ const initTestFile = async (activeFeat, queryFile) => {
     return upsertActiveRunnerTest(activeFeat)
 
   const testFile = activeFeat && activeFeat.testPath || queryFile
+
   // loading example test data from <root>/tests/tests
-  const { content } = await apiRequest(`/files/load?file=${exampleFile}`)
-  upsertActiveRunnerTest(content)
+  await loadFile(exampleFile, ({ content }) => upsertActiveRunnerTest(content))
 }
 
 
@@ -63,6 +62,7 @@ const initTestFile = async (activeFeat, queryFile) => {
 export const init = async () => {
   const { features, definitions } = await apiRequest(`/bdd`)
   const queryObj = getQueryData()
+
   const activeFeat = initFeatures(features, queryObj.feature)
 
   initDefs(definitions)
@@ -70,9 +70,9 @@ export const init = async () => {
   initTestFile(activeFeat, queryObj.file || exampleFile)
 
   // display options modal if no valid querystring passed in
-  if (!queryObj || Object.keys(queryObj).length === 0 ) {
+  ;(!queryObj || isEmptyColl(queryObj)) &&
     setActiveModal(MODAL_TYPES.TEST_SELECTOR_MODAL)
-  }
+
   // Update the current screen to match the query.tab value
   setScreen(queryObj.tab || 'empty')
 
