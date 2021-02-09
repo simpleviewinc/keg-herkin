@@ -1,3 +1,3 @@
-import * as Config from '../../../configs/app.config.js'
+import * as Config from '../../../configs/herkin.default.config.js'
 
 export const getConfig = () => Config

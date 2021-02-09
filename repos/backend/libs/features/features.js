@@ -4,11 +4,11 @@ const { FeatureParser } = require('./featureParser')
 const { mapToSteps } = require('./mapToSteps')
 const definitions = require('../definitions/definitions')
 
-const loadFeatureFiles = (featuresFolder) => {
+const loadFeatureFiles = featuresDir => {
   return new Promise((res, rej) => {
-    glob(path.join(featuresFolder, '**/*.feature'), {}, async (err, files=[]) => {
+    glob(path.join(featuresDir, '**/*.feature'), {}, async (err, files=[]) => {
       err || !files
-        ? rej('No feature files found in ' + featuresFolder)
+        ? rej('No feature files found in ' + featuresDir)
         : res(files)
     })
   })
@@ -29,8 +29,8 @@ const parseFeatures = (featureFiles, testsRoot) => {
 }
 
 const loadFeatures = async (config, definitions) => {
-  const { featuresFolder, testsRoot } = config.paths
-  const featureFiles = featuresFolder && await loadFeatureFiles(featuresFolder)
+  const { featuresDir, testsRoot } = config.paths
+  const featureFiles = featuresDir && await loadFeatureFiles(featuresDir)
   const features = await parseFeatures(featureFiles, testsRoot)
 
   return definitions

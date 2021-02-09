@@ -1,30 +1,31 @@
 const moduleAlias = require('module-alias')
 const tapRoot = require('app-root-path').path
+const { deepFreeze } = require('@keg-hub/jsutils')
 
-const aliases = {
+// aliases shared by jest and module-alias
+const aliases = deepFreeze({
   "@root": tapRoot,
   "@repos": `${tapRoot}/repos`,
   "@configs": `${tapRoot}/configs`,
   "@tasks": `${tapRoot}/tasks`
-}
+})
 
-/**
- * Register module aliases programmatically
- */
+// Registers module-alias aliases
 const registerAliases = () => moduleAlias.addAliases(aliases)
 
 /**
- * Jest is not compatible with module-alias, and it requires some 
- * slight changes to the format of each key and value
+ * Jest is not compatible with module-alias b/c it uses its own require function,
+ * and it requires some slight changes to the format of each key and value.
+ * This can be set to a jest config's `moduleNameMapper` property
  */
-const jestAliases = Object.keys(aliases).reduce(
+const jestAliases = deepFreeze(Object.keys(aliases).reduce(
   (aliasMap, key) => {
     const formattedKey = key + '/(.*)'
     aliasMap[formattedKey] = aliases[key] + '/$1'
     return aliasMap
   },
   {}
-)
+))
 
 module.exports = {
   aliases,

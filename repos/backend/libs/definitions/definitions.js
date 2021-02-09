@@ -2,11 +2,11 @@ const path = require('path')
 const glob = require('glob')
 const { DefinitionsParser } = require('./definitionsParser')
 
-const loadDefinitionsFiles = (definitionsFolder) => {
+const loadDefinitionsFiles = stepsDir => {
   return new Promise((res, rej) => {
-    glob(path.join(definitionsFolder, '**/*.js'), {}, async (err, files=[]) => {
+    glob(path.join(stepsDir, '**/*.js'), {}, async (err, files=[]) => {
       err || !files
-        ? rej('No definition files found in ' + definitionsFolder)
+        ? rej('No step definition files found in ' + stepsDir)
         : res(files)
     })
   })
@@ -24,8 +24,8 @@ const parseDefinitions = definitionFiles => {
 }
 
 const loadDefinitions = async config => {
-  const { stepsFolder } = config.paths
-  const definitionFiles = stepsFolder && await loadDefinitionsFiles(stepsFolder)
+  const { stepsDir } = config.paths
+  const definitionFiles = stepsDir && await loadDefinitionsFiles(stepsDir)
   const definitions = await parseDefinitions(definitionFiles) || []
 
   // Reset the cached definitions

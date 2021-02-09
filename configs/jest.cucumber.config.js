@@ -5,29 +5,29 @@ const bddUtils = `${tapRoot}/repos/testUtils/bdd`
 const mountPoint = `${tapRoot}/tests`
 
 module.exports = {
-  'moduleFileExtensions': [
+  moduleFileExtensions: [
     'feature',
     'js',
     'json',
     'ts',
     'tsx'
   ],
-  'setupFiles': [
+  setupFiles: [
     `${rootModules}/module-alias/register`
   ],
-  'setupFilesAfterEnv': [
+  setupFilesAfterEnv: [
     `${rootModules}/cucumber-jest/dist/init.js`,
     `${bddUtils}/steps`,
     `${bddUtils}/support/world`,
     `${bddUtils}/support/hooks`,
     `${mountPoint}/bdd/steps`,
   ],
-  'transform': {
+  transform: {
     '^.+\\.(feature)$': 'cucumber-jest',
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
-  'testMatch': [
+  testMatch: [
     '/keg/tap/**/*.feature'
   ],
-  'moduleNameMapper': jestAliases
+  moduleNameMapper: jestAliases
 }

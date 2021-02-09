@@ -4,7 +4,10 @@ services:
     privileged: true
     volumes:
       - ${CLI_PATH}:${DOC_CLI_PATH}
-      - ${KEG_CONTEXT_PATH}/repos/example/tests:${DOC_APP_PATH}/tests
+      - ${HERKIN_STEPS_DIR}:${DOC_APP_PATH}/tests/bdd/steps
+      - ${HERKIN_FEATURES_DIR}:${DOC_APP_PATH}/tests/bdd/features
+      - ${HERKIN_UNIT_DIR}:${DOC_APP_PATH}/tests/unit
+      - ${HERKIN_WOLF_DIR}:${DOC_APP_PATH}/tests/wolf
     environment:
       - DOC_APP_PATH
       - ENV

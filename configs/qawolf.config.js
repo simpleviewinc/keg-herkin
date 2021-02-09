@@ -1,4 +1,3 @@
-require('module-alias/register')
 const { createTemplate } = require('../tasks/utils/wolf/createTemplate')
 
 const {
@@ -23,5 +22,6 @@ module.exports = {
   createTemplate: createDynamicTemplate,
   rootDir: JEST_TEST_PATH,
   testTimeout: JEST_TIMEOUT,
+  config: '/keg/tap/configs/jest.qawolf.config.js',
   useTypeScript: false,
 }

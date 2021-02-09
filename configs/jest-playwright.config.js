@@ -17,7 +17,7 @@ const defaultConfig = {
       height: 1080
     }
   },
-  'moduleNameMapper': jestAliases
+  moduleNameMapper: jestAliases
 }
 
 
