@@ -3,7 +3,7 @@ import { Section, ItemHeader, Row, H3, Text } from 'SVComponents'
 import { useTheme } from '@keg-hub/re-theme'
 import { wordCaps } from '@keg-hub/jsutils'
 
-const SurfaceHeader = ({ styles, title, prefix }) => {
+const SurfaceHeader = ({ styles, title, prefix, capitalize=true }) => {
   return (
     <ItemHeader
       className='surface-header'
@@ -15,9 +15,14 @@ const SurfaceHeader = ({ styles, title, prefix }) => {
               {prefix}
             </Text>
           )}
-          <Text style={styles?.title}>
-            { wordCaps(`${title}`) }
-          </Text>
+          { title && (
+            <>
+              <Text style={styles?.prefix}> - </Text>
+              <Text style={styles?.title}>
+                { capitalize ? wordCaps(`${title}`) : title }
+              </Text>
+            </>
+          )}
         </H3>
       )}
     />
@@ -26,14 +31,15 @@ const SurfaceHeader = ({ styles, title, prefix }) => {
 
 export const Surface = props => {
   const theme = useTheme()
-  const { title, prefix, styles } = props
+  const { capitalize, title, prefix, styles } = props
   const surfaceStyles = theme.get(theme.surface, styles)
 
   return (
     <Section className='surface' style={surfaceStyles?.main} >
-      {title && (<SurfaceHeader
+      {(title || prefix) && (<SurfaceHeader
         title={title}
         prefix={prefix}
+        capitalize={capitalize}
         styles={surfaceStyles?.header}
       />)}
       <Row className='surface-content' style={surfaceStyles?.content} >

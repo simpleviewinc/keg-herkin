@@ -3,6 +3,8 @@ import { tapColors } from '../../tapColors'
 export const scenario = theme => ({
   main: {
     flex: 1,
+    p: theme.padding.size,
+    pB: 0,
   },
   headerRow: {},
   header: {

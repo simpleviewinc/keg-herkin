@@ -5,6 +5,7 @@ export const surface = theme => ({
   main: {
     borderTopLeftRadius: tapColors.borderRadius,
     borderTopRightRadius: tapColors.borderRadius,
+    minHeight: 0,
   },
   header: {
     // Overrides

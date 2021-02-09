@@ -23,6 +23,9 @@ export const RunnerScreen = props => {
   
   }, [ tests, setTests, runnerContent ])
 
+  // TODO: Update to be the selected test type, instead of hard coded
+  const title = 'Features'
+
   return (
     <View
       className={`runner-screen`}
@@ -31,7 +34,6 @@ export const RunnerScreen = props => {
       <Runner
         tests={tests}
         title={'Features'}
-        prefix={`Test Runner - `}
         parentMethods={parentMethods}
       />
     </View>

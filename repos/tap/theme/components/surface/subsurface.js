@@ -38,8 +38,7 @@ const toggleState = theme => ({
 export const subsurface = theme => ({
   main: {
     mT: theme.margin.size,
-    p: theme.padding.size,
-    pB: 0,
+    p: 0,
   },
   headerRow: {
     fl: 1,

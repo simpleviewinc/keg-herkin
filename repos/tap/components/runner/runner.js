@@ -19,47 +19,78 @@ const useTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
 }, [activeTab, setActiveTab])
 
 
-const ToRunRow = props => {
-  const { styles, tests, editorRef } = props
+const ToRunSection = props => {
+  const { styles, tests, editorRef, title, prefix } = props
+
   return (
-    <Row className='runner-torun' style={styles.row} >
-      <SubSurface
-        classNames={'runner-container'}
-        title={`Tests`}
-        styles={styles.subsurface}
-      >
-        <AceEditor
-          aceRef={editorRef}
-          onChange={text => checkCall(props.onChange, text)}
-          editorId={`runner-tests-editor}`}
-          value={tests || ''}
-          style={styles.editor}
-          mode='javascript'
-          editorProps={{
-            wrapBehavioursEnabled: false,
-            animatedScroll: false,
-            dragEnabled: false,
-            tabSize: 2,
-            wrap: true,
-            ...props.editorProps,
-          }}
-        />
-      </SubSurface>
-    </Row>
+    <Surface
+      title={title}
+      capitalize={false}
+      styles={styles.surface}
+      prefix={prefix || 'Runner'}
+    >
+      <Grid className={`runner-main`} style={styles.main} >
+        <Row className='runner-torun' style={styles?.toRun?.row} >
+          <AceEditor
+            aceRef={editorRef}
+            onChange={text => checkCall(props.onChange, text)}
+            editorId={`runner-tests-editor`}
+            value={tests || ''}
+            style={styles.toRun.editor}
+            mode='javascript'
+            editorProps={{
+              wrapBehavioursEnabled: false,
+              animatedScroll: false,
+              dragEnabled: false,
+              tabSize: 2,
+              wrap: true,
+              ...props.editorProps,
+            }}
+          />
+        </Row>
+      </Grid>
+    </Surface>
   )
 } 
 
-const ResultsRow = ({ styles, results }) => {
+const ResultsSection = ({ styles, results, isRunning, prefix, title }) => {
   return (
-    <Row className='runner-results' style={styles.row} >
-      <SubSurface
-        classNames={'runner-container'}
-        title={`Results`}
-        styles={styles.subsurface}
-      >
-        <Results results={results} />
-      </SubSurface>
-    </Row>
+    <Surface
+      title={title}
+      capitalize={false}
+      styles={styles.surface}
+      prefix={prefix || `Results`}
+    >
+      <Grid className={`runner-main`} style={styles.main} >
+        <Row className='runner-results-row' style={styles?.results?.row} >
+          <Results results={results} />
+        </Row>
+        { isRunning && (
+          <>
+            <View
+              className={`runner-isrunning-background`}
+              style={styles?.isRunning?.background}
+            />
+            <View
+              className={`runner-isrunning-container`}
+              style={styles?.isRunning?.container}
+            >
+              <Loading
+                className={`runner-isrunning-loading`}
+                styles={styles?.isRunning}
+                type={'primary'}
+              />
+              <Text
+                className={`runner-isrunning-text`}
+                style={styles?.isRunning.text}
+              >
+                Running Tests
+              </Text>
+            </View>
+          </>
+        )}
+      </Grid>
+    </Surface>
   )
 }
 
@@ -96,51 +127,24 @@ export const Runner = props => {
   }, [autoRun, setTestResults, parentMethods])
 
   return (
-    <Surface
-      title={title}
-      styles={runnerStyles.surface}
-      prefix={prefix}
-    >
-      <Grid className={`runner-main`} style={runnerStyles.main} >
-        <ToRunRow
-          tests={tests}
-          styles={runnerStyles}
-          editorRef={editorRef}
-        />
-        <ResultsRow
-          styles={runnerStyles}
-          results={testResults}
-        />
-        <RunnerTabs
-          activeTab={tab}
-          onTabSelect={tabSelect}
-          onRun={onRunTests}
-        />
-        { isRunning && (
-          <>
-            <View
-              className={`runner-isrunning-background`}
-              style={runnerStyles?.isRunning?.background}
-            />
-            <View
-              className={`runner-isrunning-container`}
-              style={runnerStyles?.isRunning?.container}
-            >
-              <Loading
-                className={`runner-isrunning-loading`}
-                styles={runnerStyles?.isRunning}
-                type={'primary'}
-              />
-              <Text
-                className={`runner-isrunning-text`}
-                style={runnerStyles?.isRunning.text}
-              >
-                Running Tests
-              </Text>
-            </View>
-          </>
-        )}
-      </Grid>
-    </Surface>
+    <>
+      <ToRunSection
+        tests={tests}
+        styles={runnerStyles}
+        editorRef={editorRef}
+        title={title}
+        prefix={prefix}
+      />
+      <ResultsSection
+        isRunning={isRunning}
+        results={testResults}
+        styles={runnerStyles}
+      />
+      <RunnerTabs
+        activeTab={tab}
+        onTabSelect={tabSelect}
+        onRun={onRunTests}
+      />
+    </>
   )
 }

@@ -14,6 +14,8 @@ const result = theme => ({
     bRad: tapColors.borderRadius,
     ftF: 'Consolas, monaco, monospace'
   },
+  row: {
+  },
   block: {
     c: tapColors?.default,
   },

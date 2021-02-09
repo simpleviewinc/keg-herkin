@@ -3,11 +3,7 @@ import { sharedShadow } from '../shared/shadow'
 import { deepMerge } from '@keg-hub/jsutils'
 
 const defTabbar = theme => ({
-  main: {
-    flex: 1,
-    flexGrow: 1,
-    minHeight: 50,
-  },
+  main: {},
   fixed: {
     main: {
       position: 'fixed',
