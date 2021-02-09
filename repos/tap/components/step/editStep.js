@@ -18,7 +18,7 @@ const EditActions = props => {
       className={`step-edit-actions-main`}
       style={styles?.actions}
     >
-      { deleteAction && (
+      {deleteAction && (
         <Button
           className='step-delete-action'
           styles={styles.deleteAction?.main}
@@ -32,7 +32,7 @@ const EditActions = props => {
           </Text>
         </Button>
       )}
-      { copyAction && (
+      {copyAction && (
         <Button
           className='step-copy-action'
           styles={styles.copyAction?.main}
@@ -46,7 +46,7 @@ const EditActions = props => {
           </Text>
         </Button>
       )}
-      { saveAction && (
+      {saveAction && (
         <Button
           className='step-save-action'
           styles={styles?.saveAction?.main}
@@ -82,22 +82,26 @@ export const EditStep = props => {
       className={`step-edit-main`}
       style={editStyles.main}
     >
-      <Row>
-        <SelectDefinition
-          step={step}
-          className={`step-select`}
-          selectAction={selectAction}
-        />
-      </Row>
-      <Row>
-        <Parameters
-          step={step}
-          highlight={highlight}
-          definition={definition}
-          className={`step-parameters`}
-          parameterAction={parameterAction}
-        />
-      </Row>
+      {step && (
+        <Row>
+          <SelectDefinition
+            step={step}
+            className={`step-select`}
+            selectAction={selectAction}
+          />
+        </Row>
+      )}
+      {step && definition && (
+        <Row>
+          <Parameters
+            step={step}
+            highlight={highlight}
+            definition={definition}
+            className={`step-parameters`}
+            parameterAction={parameterAction}
+          />
+        </Row>
+      )}
       <Row>
         <EditActions {...props} styles={editStyles} />
       </Row>

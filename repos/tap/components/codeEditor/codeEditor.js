@@ -13,7 +13,7 @@ const { CATEGORIES, EDITOR_MODES } = Values
 const useEditorActions = (feature, setFeature, definitions, setDefinitions) => {
 
   const onFeatureEdit = useCallback((text, change) => {
-    text !== feature.text &&
+    text !== feature.content &&
       !text.trim() &&
       setFeature({ ...feature, text })
       
@@ -78,7 +78,7 @@ const DefinitionsEditor = ({ definitions, styles, ...props }) => {
               {...props}
               onChange={text => checkCall(props.onChange, def.uuid, text)}
               editorId={`definition-editor-${def.uuid}`}
-              value={def.text || ''}
+              value={def.content || ''}
               style={styles.editor}
               mode='javascript'
               editorProps={{
@@ -135,7 +135,7 @@ export const CodeEditor = props => {
           key={`${tab}-feature`}
           editorId={`feature-editor`}
           onChange={onFeatureEdit}
-          value={localFeat.text || ''}
+          value={localFeat.content || ''}
           style={builtStyles.feature || builtStyles}
         />
       )}

@@ -13,6 +13,7 @@ import { keg } from 'SVConfig'
 import { getHistory } from 'SVNavigation'
 import { isNative } from 'SVUtils/platform'
 import { init } from 'SVActions'
+import { ModalManager } from 'SVComponents'
 
 const checkAppInit = async setInit => {
   await init()
@@ -44,6 +45,7 @@ const App = props => {
             <ReThemeProvider theme={ activeTheme } >
               <View style={activeTheme.app.main} >
                 <ContainerRoutes navigationConfigs={keg.routes}/>
+                <ModalManager />
               </View>
             </ReThemeProvider>
           </Provider>

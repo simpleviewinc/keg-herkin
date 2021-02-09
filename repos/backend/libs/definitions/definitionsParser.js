@@ -7,7 +7,7 @@ const { stripComments } = require('../../utils/stripComments')
 let defCache = {}
 const DEFINITION_REGEX = new RegExp(/(Given|When|Then|test)\(('|"|`|\/)(.*)('|"|`|\/),/, 'gm')
 
-const getDefinitionText = definitionMatch => {
+const getDefinitionContent = definitionMatch => {
   const content = definitionMatch.input.split(definitionMatch[0]).pop()
   return `${definitionMatch[0]}${content.split(definitionMatch[1]).shift()}`
 }
@@ -33,10 +33,10 @@ class DefinitionsParser {
 
     const definitions = await this.parseDefinition(filePath)
 
-    const loadedDefs = definitions.map(({ match, type, variant, text }) => {
+    const loadedDefs = definitions.map(({ match, type, variant, content }) => {
       if(!this.validateMatch(filePath, match, type)) return
 
-      const definition = this.definitions[match] || new Definition(match, type, variant, text)
+      const definition = this.definitions[match] || new Definition(match, type, variant, content)
       !this.definitions[match] && (this.definitions[match] = definition)
 
       return definition
@@ -64,7 +64,7 @@ class DefinitionsParser {
             type,
             variant,
             match: variant === REGEX_VARIANT ? new RegExp(match, `gm`) : match,
-            text: getDefinitionText(definitionMatch)
+            content: getDefinitionContent(definitionMatch)
           })
         }
 
