@@ -1,9 +1,21 @@
-import React from 'react'
-import { Section, ItemHeader, Row, H3, Text } from 'SVComponents'
-import { useTheme } from '@keg-hub/re-theme'
+import React, { useCallback, useState } from 'react'
 import { wordCaps } from '@keg-hub/jsutils'
+import { useTheme } from '@keg-hub/re-theme'
+import { DrawerToggle } from './drawerToggle'
+import { Section, ItemHeader, Row, H3, Text } from 'SVComponents'
+import { Drawer } from 'SVComponents'
 
-const SurfaceHeader = ({ styles, title, prefix, capitalize=true }) => {
+const SurfaceHeader = props => {
+  const {
+    capitalize=true,
+    prefix,
+    styles,
+    title,
+    toggled,
+    onTogglePress,
+    toggleDisabled,
+  } = props
+
   return (
     <ItemHeader
       className='surface-header'
@@ -25,14 +37,37 @@ const SurfaceHeader = ({ styles, title, prefix, capitalize=true }) => {
           )}
         </H3>
       )}
+      RightComponent={(
+          <DrawerToggle
+            onPress={onTogglePress}
+            toggled={toggled}
+            styles={styles}
+            toggleDisabled={toggleDisabled}
+            icons={true}
+          />
+      )}
     />
   )
 }
 
 export const Surface = props => {
   const theme = useTheme()
-  const { capitalize, title, prefix, styles } = props
+  const {
+    capitalize,
+    prefix,
+    styles,
+    title,
+    initialToggle,
+    toggleDisabled,
+  } = props
+  
   const surfaceStyles = theme.get(theme.surface, styles)
+
+  const [ toggled, setToggled ] = useState(initialToggle || true)
+
+  const onTogglePress = useCallback(event => {
+    setToggled(!toggled)
+  }, [ toggled, setToggled ])
 
   return (
     <Section className='surface' style={surfaceStyles?.main} >
@@ -41,10 +76,18 @@ export const Surface = props => {
         prefix={prefix}
         capitalize={capitalize}
         styles={surfaceStyles?.header}
+        toggled={toggled}
+        onTogglePress={onTogglePress}
       />)}
-      <Row className='surface-content' style={surfaceStyles?.content} >
-        {props.children}
-      </Row>
+      <Drawer
+        className='surface-drawer'
+        styles={ surfaceStyles.drawer }
+        toggled={ toggled }
+      >
+        <Row className='surface-content' style={surfaceStyles?.content} >
+          {props.children}
+        </Row>
+      </Drawer>
     </Section>
   )
 }
