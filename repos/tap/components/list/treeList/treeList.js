@@ -84,6 +84,8 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
     ? themeStyles?.header
     : themeStyles?.item
 
+  const iconStyles = { transform: isExpanded ? 'rotate(180deg)' : 'rotate(360deg)' }
+
   return (
     <View style={[styles?.main, level > 0 && { marginLeft: 10 * level }]}>
       <Text
