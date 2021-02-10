@@ -1,6 +1,6 @@
 import { networkRequest } from 'SVServices/networkRequest'
 import { isObj } from '@keg-hub/jsutils'
-import { getConfig } from './getConfig'
+import { getConfig } from '../getConfig'
 const config = getConfig()
 
 const defRequest = {

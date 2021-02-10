@@ -1,9 +1,9 @@
 
 import { setScreen } from 'SVActions/setScreen'
-import { saveFile } from 'SVActions/api/files/saveFile'
+import { saveApiFile } from 'SVUtils/api/saveApiFile'
 
 export const createFeatureFile = async (screenId, fileName) => {
   setScreen(screenId)
   console.log('---creating new feature TBA----')
-  // await saveFile(fileName)
+  // await saveApiFile(fileName)
 }

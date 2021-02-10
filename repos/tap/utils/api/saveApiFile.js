@@ -1,7 +1,7 @@
-import { apiRequest } from 'SVUtils/apiRequest'
+import { apiRequest } from './apiRequest'
 import { logData, isFunc } from '@keg-hub/jsutils'
 
-export const saveFile = async (file, content, callback) => {
+export const saveApiFile = async (file, content, callback) => {
   const response = file
     ? await apiRequest({
         method: 'post',

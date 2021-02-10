@@ -1,10 +1,10 @@
-import { apiRequest } from 'SVUtils/apiRequest'
+import { apiRequest } from './apiRequest'
 import { logData, isFunc } from '@keg-hub/jsutils'
 
-export const deleteFile = async (file, callback) => {
+export const deleteApiFile = async (file, callback) => {
   const response = file
     ? await apiRequest({
-        method: 'delete'
+        method: 'delete',
         url: `/files/delete`,
         params: { file },
       })

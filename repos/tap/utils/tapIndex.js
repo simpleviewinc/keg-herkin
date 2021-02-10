@@ -1,4 +1,4 @@
-export * from './apiRequest'
+export * from './api'
 export * from './components'
 export * from './definitions'
 export * from './devLog'

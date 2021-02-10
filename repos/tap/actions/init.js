@@ -1,7 +1,7 @@
 import { setScreen } from './setScreen'
-import { loadFile } from './api/files/loadFile'
-import { apiRequest } from 'SVUtils/apiRequest'
 import { Values, ActionTypes } from 'SVConstants'
+import { apiRequest } from 'SVUtils/api/apiRequest'
+import { loadApiFile } from 'SVUtils/api/loadApiFile'
 import { upsertFeatures }  from './features/upsertFeatures'
 import { setFeatureActive } from './features/setFeatureActive'
 import { queryToObj, noOpObj, isEmptyColl } from '@keg-hub/jsutils'
@@ -50,7 +50,7 @@ const initTestFile = async (activeFeat, queryFile) => {
   const testFile = activeFeat && activeFeat.testPath || queryFile
 
   // loading example test data from <root>/tests/tests
-  await loadFile(exampleFile, (testFile) => upsertActiveRunnerTest(testFile))
+  await loadApiFile(exampleFile, (testFile) => upsertActiveRunnerTest(testFile))
 }
 
 
