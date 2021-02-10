@@ -7,7 +7,10 @@ import { tapColors } from '../../tapColors'
 const flexStyle = { fl: 1 }
 
 export const runner = theme => ({
-  main: flexStyle,
+  main: {
+    borderTopWidth: 1,
+    borderTopColor: tapColors.border,
+  },
   surface: {
     main: flexStyle,
     content: flexStyle

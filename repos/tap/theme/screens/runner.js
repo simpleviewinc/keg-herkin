@@ -5,7 +5,6 @@ export const runner = theme => {
     main: {
       flexDirection: 'column',
       width: `100%`,
-      bgC: theme.colors.palette.white01,
     }
   }
 }

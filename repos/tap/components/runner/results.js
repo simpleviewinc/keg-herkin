@@ -3,6 +3,8 @@ import { useTheme } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components/view'
 import { Text } from '@keg-hub/keg-components/text'
 import { Row } from '@keg-hub/keg-components/row'
+import { Grid } from '@keg-hub/keg-components/grid'
+import { Surface } from 'SVComponents/surface'
 
 const TestResult = ({ block, errors, label, styles, test, type }) => {
   return (
@@ -47,8 +49,7 @@ const TestResult = ({ block, errors, label, styles, test, type }) => {
   )
 }
 
-
-export const Results = ({ results }) => {
+const BuildResults = ({ results }) => {
   const theme = useTheme()
   const styles = theme.get(`runner.results`)
 
@@ -70,3 +71,24 @@ export const Results = ({ results }) => {
     )
   })
 }
+
+export const Results = ({ results, title, prefix, styles }) => {
+  return results && results.length
+    ? (
+        <Surface
+          className={`results-main`}
+          title={title || 'N/A'}
+          capitalize={false}
+          styles={styles}
+          prefix={prefix || `Results`}
+        >
+          <Grid className={`results-grid`} style={styles?.grid} >
+            <Row className='results-results-row' style={styles?.row} >
+              <BuildResults results={results} />
+            </Row>
+          </Grid>
+        </Surface>
+      )
+    : null
+}
+
