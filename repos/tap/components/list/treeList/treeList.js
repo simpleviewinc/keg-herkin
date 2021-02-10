@@ -11,6 +11,8 @@ import {
 import { Values } from 'SVConstants'
 const { CATEGORIES } = Values
 import TreeView from 'react-native-final-tree-view'
+import { ChevronDown } from 'SVAssets/icons'
+
 // import { reStyle } from '@keg-hub/re-theme/reStyle'
 
 // const ReStyleView = reStyle(
@@ -71,7 +73,7 @@ export const TreeList = props => {
           onNodePress={(props) => {
             console.log(props)
           }}
-          getCollapsedNodeHeight={() => 30}
+          getCollapsedNodeHeight={() => 50}
         />
       )
 
@@ -84,6 +86,8 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
     ? themeStyles?.header
     : themeStyles?.item
 
+  const iconStyles = { transform: isExpanded ? 'rotate(180deg)' : 'rotate(360deg)' }
+
   return (
     <View style={[styles?.main, level > 0 && { marginLeft: 10 * level }]}>
       <Text
@@ -91,6 +95,15 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
       >
         {node.name}
       </Text>
+      {
+        node?.type === 'folder' &&
+        (
+          <ChevronDown
+            size={themeStyles?.icon?.size || 20}
+            style={[themeStyles?.icon, iconStyles]}
+          />
+        )
+      }
     </View>
   )
 }

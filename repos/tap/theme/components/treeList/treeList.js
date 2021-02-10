@@ -6,13 +6,14 @@ const sharedMainStyle = theme => ({
   borderBottomColor: tapColors.border,
   borderBottomWidth: 1,
   mL: 10,
-
+  flD: 'row'
 })
 
 const sharedTextStyle = {
   color: tapColors.inactive,
   fontWeight: 'bold',
-  fontSize: 22
+  fontSize: 22,
+  pT: 10
 }
 
 export const treeList = (theme) => ({
@@ -30,5 +31,12 @@ export const treeList = (theme) => ({
       ...sharedTextStyle,
       fontSize: 18
     }
+  },
+  icon: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    size: 18,
+    color: tapColors.default
   }
 })
