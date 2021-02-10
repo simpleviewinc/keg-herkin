@@ -10,13 +10,13 @@ const aliases = deepFreeze({
   "@tasks": `${tapRoot}/tasks`
 })
 
-// Registers module-alias aliases
+// Registers module-alias aliases (done programatically so we can reuse the aliases object for jest)
 const registerAliases = () => moduleAlias.addAliases(aliases)
 
 /**
  * Jest is not compatible with module-alias b/c it uses its own require function,
  * and it requires some slight changes to the format of each key and value.
- * This can be set to a jest config's `moduleNameMapper` property
+ * `jestAliases` can be set as value of any jest config's `moduleNameMapper` property
  */
 const jestAliases = deepFreeze(Object.keys(aliases).reduce(
   (aliasMap, key) => {

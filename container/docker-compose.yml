@@ -6,10 +6,11 @@ services:
       - ${CLI_PATH}:${DOC_CLI_PATH}
       - ${HERKIN_TESTS_ROOT}:${DOC_APP_PATH}/tests
     environment:
+      - HERKIN_TESTS_ROOT
       - HERKIN_STEPS_DIR
       - HERKIN_FEATURES_DIR
       - HERKIN_UNIT_DIR
-      - HERKIN_WOLF_DIR
+      - HERKIN_WAYPOINT_DIR
       - DOC_APP_PATH
       - ENV
       - KEG_EXEC_CMD

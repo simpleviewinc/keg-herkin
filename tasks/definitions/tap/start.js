@@ -63,6 +63,12 @@ module.exports = {
           description: 'Path to the user herkin.config.js. If omitted, keg-herkin will look in your current working directory for a herkin config.',
           example: 'keg herkin start --config my-repo/herkin.config.js',
         },
+        warn: {
+          alias: ['warn'],
+          description: 'See additional warnings (like for a missing herkin config)',
+          example: 'keg herkin start --config my-repo/herkin.config.js --no-warn',
+          default: true,
+        },
     }, [
       'headless',
       'log',

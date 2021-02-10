@@ -23,22 +23,38 @@ const tryRequire = path => {
 }
 
 /**
- * Tries to find the herkin.config.js(on) file at the execution directory.
+ * Tries to find the herkin.config.js(on) file at `cwd`
+ * @param {string} pathToCheck - directory path to check
  * @return {Object?} - the herkin config if the config exists at $(cwd)/herkin.config.js, else null
  */
-const getCwdConfig = () => {
-  const cwd = process.cwd()
-
-  const execPaths = [
-    path.join(cwd, 'herkin.config.js'),
-    path.join(cwd, 'herkin.config.json')
+const getConfigAtPath = pathToCheck => {
+  const validNames = [
+    'herkin.config.js',
+    'herkin.config.json'
   ]
 
-  for (const path of execPaths) {
+  const paths = validNames.map(name => path.join(pathToCheck, name))
+
+  for (const path of paths) {
     const config = tryRequire(path)
     if (config) return config
   }
 
+  return null
+}
+
+/**
+ * Searches the file system, from the current working directory
+ * upwards to the root directory, for the herkin config
+ * @return {Object?} - the herkin config if the config is found, else null
+ */
+const findConfig = () => {
+  let currentPath = process.cwd()
+  while (currentPath != '/') {
+    const configAtPath = getConfigAtPath(currentPath)
+    if (configAtPath) return configAtPath
+    currentPath = path.join(currentPath, '../')
+  }
   return null
 }
 
@@ -56,7 +72,7 @@ const loadCustomConfig = (runtimeConfigPath) => {
   try {
     const customConfig = configPath
       ? require(path.join(__dirname, `../`, configPath))
-      : getCwdConfig()
+      : findConfig()
 
     return isFunc(customConfig)
       ? customConfig()
@@ -67,24 +83,32 @@ const loadCustomConfig = (runtimeConfigPath) => {
 
     // if config is not specified by param or env, 
     // try finding it at the execution directory
-    return getCwdConfig()
+    return findConfig()
   }
 }
 
 /**
  * Gets the Herkin application config from a number of sources
  * @param {object} argsConfig - Config options passed at runtime
- *
  * @return {Object} - Loaded Herkin config
  */
 const getHerkinConfig = (argsConfig=noOpObj) => {
-  const customConfig = loadCustomConfig(argsConfig.config) || noOpObj
+
+  const customConfig = loadCustomConfig(argsConfig.config)
+
+  if (!customConfig && argsConfig.warn)
+    console.warn(
+      '\x1b[33m%s\x1b[0m',
+      `Can\'t find a herkin config file, defaulting to "@configs/herkin.default.config.js".\nTo use your own config, either:
+       * specify a path with "--config <path>"; or 
+       * ensure a config exists in your current working directory or above it`
+    )
 
   return deepMerge(
     get(pkgConfig, ['keg']),
     get(tapConfig, ['keg']),
     defaultConfig,
-    customConfig,
+    customConfig || noOpObj
   )
 }
 
