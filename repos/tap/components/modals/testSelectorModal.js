@@ -3,9 +3,8 @@ import { Modal, Button, ItemHeader, View} from '@keg-hub/keg-components'
 import { Select } from 'SVComponents/form/select'
 import { useTheme } from '@keg-hub/re-theme'
 import { createFeatureFile } from 'SVActions/features'
-import { upsertActiveRunnerTest }  from 'SVActions/runner/upsertActiveRunnerTest'
+import { loadFeature } from 'SVActions/features/loadFeature'
 import { setModalVisibility } from 'SVActions/modals'
-import { loadFeature } from 'SVActions/features'
 import { Values } from 'SVConstants'
 import { mapObj, capitalize, wordCaps } from '@keg-hub/jsutils'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
@@ -143,8 +142,9 @@ const TestNameSelect = ({styles, features, setTestName}) => {
   const onValueChange = useCallback((val) => {
     // fetch the feature file content from redux
     const feature = features.find((feature) => feature.feature === val)
+
     feature 
-      ? upsertActiveRunnerTest(feature?.text)
+      ? loadFeature(feature)
       : devLog(`warn`, `Feature '${val}' does not exist!`)
 
     setTestName(val)

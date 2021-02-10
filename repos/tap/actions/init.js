@@ -50,7 +50,7 @@ const initTestFile = async (activeFeat, queryFile) => {
   const testFile = activeFeat && activeFeat.testPath || queryFile
 
   // loading example test data from <root>/tests/tests
-  await loadFile(exampleFile, ({ content }) => upsertActiveRunnerTest(content))
+  await loadFile(exampleFile, (testFile) => upsertActiveRunnerTest(testFile))
 }
 
 
