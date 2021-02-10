@@ -1,3 +1,5 @@
+export * from './checkCircle'
+export * from './checkFilled'
 export * from './chevronDown'
 export * from './cog'
 export * from './edit'

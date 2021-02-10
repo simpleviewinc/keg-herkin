@@ -11,6 +11,7 @@ const SurfaceHeader = props => {
     prefix,
     styles,
     title,
+    titleStyle,
     toggled,
     onTogglePress,
     toggleDisabled,
@@ -30,7 +31,7 @@ const SurfaceHeader = props => {
           { title && (
             <>
               <Text style={styles?.prefix}> - </Text>
-              <Text style={styles?.title}>
+              <Text style={[styles?.title, titleStyle]}>
                 { capitalize ? wordCaps(`${title}`) : title }
               </Text>
             </>
@@ -57,6 +58,7 @@ export const Surface = props => {
     prefix,
     styles,
     title,
+    titleStyle,
     toggleHandel,
     initialToggle,
     toggleDisabled,
@@ -80,6 +82,7 @@ export const Surface = props => {
     <Section className='surface' style={surfaceStyles?.main} >
       {(title || prefix) && (<SurfaceHeader
         title={title}
+        titleStyle={titleStyle}
         prefix={prefix}
         capitalize={capitalize}
         styles={surfaceStyles?.header}

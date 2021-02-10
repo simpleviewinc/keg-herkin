@@ -7,6 +7,11 @@ const result = theme => ({
     flD: 'row',
     alI: 'baseline',
   },
+  icon: {
+    color: theme?.colors?.palette?.white01,
+    ftSz: 14,
+    mR: 8,
+  },
   label: {
     mR: 4,
     p: theme?.padding?.size / 2,

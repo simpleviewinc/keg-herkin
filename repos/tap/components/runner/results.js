@@ -1,12 +1,20 @@
 import React from "react"
+import { wordCaps } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components/view'
 import { Text } from '@keg-hub/keg-components/text'
 import { Row } from '@keg-hub/keg-components/row'
 import { Grid } from '@keg-hub/keg-components/grid'
+import { Icon } from '@keg-hub/keg-components/icon'
 import { Surface } from 'SVComponents/surface'
+import { CheckFilled } from 'SVAssets/icons'
+
 
 const TestResult = ({ block, errors, label, styles, test, type }) => {
+
+  const iconSize = styles?.icon?.ftSz || styles?.icon?.fontSize || 20
+  const iconStroke = styles?.icon?.c || styles?.icon?.color
+
   return (
     <>
       <View
@@ -17,7 +25,12 @@ const TestResult = ({ block, errors, label, styles, test, type }) => {
           className={`results-${type}-label`}
           style={styles?.label}
         >
-          { label }
+          <CheckFilled
+            size={iconSize}
+            stroke={iconStroke}
+            style={styles?.icon}
+          />
+          { wordCaps(type) }
         </Text>
         <Text
           className={`results-${type}-block`}
@@ -73,11 +86,15 @@ const BuildResults = ({ results }) => {
 }
 
 export const Results = ({ results, title, prefix, styles }) => {
+  const theme = useTheme()
+  const failedCount = results.reduce((count, result) => (count + result.errors.length), 0)
+
   return results && results.length
     ? (
         <Surface
           className={`results-main`}
-          title={title || 'N/A'}
+          title={failedCount ? `${failedCount} Failed Test(s)` : `Tests Passed`}
+          titleStyle={failedCount && { color: theme?.tapColors?.dangerDark }}
           capitalize={false}
           styles={styles}
           prefix={prefix || `Results`}

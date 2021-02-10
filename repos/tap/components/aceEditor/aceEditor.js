@@ -46,6 +46,10 @@ export const AceEditor = props => {
     // Allow the editor to auto-update it's size
     editor?.setOptions({ maxLines })
 
+    // Add a little padding to the top of the editor
+    editor?.renderer.setScrollMargin(15)
+
+    // Update any passed in parent refs
     isObj(aceRef) && 'current' in aceRef
       ? (aceRef.current = editorRef?.current)
       : checkCall(editorRef)
