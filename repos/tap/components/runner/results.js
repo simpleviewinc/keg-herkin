@@ -7,13 +7,14 @@ import { Row } from '@keg-hub/keg-components/row'
 import { Grid } from '@keg-hub/keg-components/grid'
 import { Icon } from '@keg-hub/keg-components/icon'
 import { Surface } from 'SVComponents/surface'
-import { CheckFilled } from 'SVAssets/icons'
+import { CheckFilled, TimesFilled } from 'SVAssets/icons'
 
 
-const TestResult = ({ block, errors, label, styles, test, type }) => {
+const TestResult = ({ block, errors, styles, test, type }) => {
 
   const iconSize = styles?.icon?.ftSz || styles?.icon?.fontSize || 20
   const iconStroke = styles?.icon?.c || styles?.icon?.color
+  const IconComponent = type === 'pass' ? CheckFilled : TimesFilled
 
   return (
     <>
@@ -25,9 +26,10 @@ const TestResult = ({ block, errors, label, styles, test, type }) => {
           className={`results-${type}-label`}
           style={styles?.label}
         >
-          <CheckFilled
+          <IconComponent
             size={iconSize}
             stroke={iconStroke}
+            fill={iconStroke}
             style={styles?.icon}
           />
           { wordCaps(type) }
@@ -77,7 +79,6 @@ const BuildResults = ({ results }) => {
           type={type}
           block={block}
           errors={errors}
-          label={type === `pass` ? `✓ PASS` :  `× FAIL`}
           styles={styles[type]}
         />
       </View>

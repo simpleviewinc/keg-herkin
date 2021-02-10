@@ -1,8 +1,6 @@
 import { tapColors } from './tapColors'
 import { sharedShadow } from './components/shared/shadow'
 
-const buttonStyle = {
-}
 
 export const appHeader = theme => {
   return {
@@ -16,28 +14,45 @@ export const appHeader = theme => {
         height: 50,
       },
     },
-    side: {},
-    center: {},
     left: {
       main: {
-        padding: theme.padding.size,
+        p: theme.padding.size,
       },
       content: {
         title: {
-          color: tapColors.default,
-          fontWeight: 'bold',
+          c: tapColors.default,
+          ftWt: 'bold',
         }
       }
     },
     right: {
-      main: {
-        mR: 20,
+      default: {
+        main: {
+          mR: 20,
+        },
+        touch: {
+          opacity: 0.5,
+          ...theme.transition([ 'opacity' ], 0.8),
+        },
+        container: {
+          alI: 'center',
+        },
+        icon: {
+          ftSz: 20,
+          c: tapColors.borderColor,
+          mB: 3,
+        },
+        text: {
+          ftSz: 10,
+          c: tapColors.borderColor,
+        }
       },
-      button: buttonStyle,
-      icon: {
-        ftSz: 18,
-        color: tapColors.default,
-      },
+      hover: {
+        touch: {
+          opacity: 1,
+        },
+      }
+      
     }
   }
 }
