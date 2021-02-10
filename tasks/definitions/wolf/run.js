@@ -54,6 +54,7 @@ module.exports = {
       context: {
         alias: [ 'name' ],
         description: 'Name of the test to be run. If not passed, all tests are run',
+        default: '.test.js',
       },
       sync: {
         description: 'Run all tests sequentially',
