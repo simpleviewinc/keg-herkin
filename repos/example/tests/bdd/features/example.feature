@@ -1,5 +1,5 @@
-@search @google
-Feature: Google Search
+@example
+Feature: Example Feature!!! 
   As an internet user
   I want to navigate to google
   
