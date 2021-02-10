@@ -2,7 +2,7 @@ const { sharedOptions } = require('@tasks/utils/task/sharedOptions')
 const { launchBrowsers } = require('@tasks/utils/playwright/launchBrowsers')
 const { snakeCase, isStr, isObj } = require('@keg-hub/jsutils')
 const defaultConfig = require('@configs/herkin.default.config.js')
-const path = require('path')
+const fs = require('fs')
 
 /**
  * Validates the herkin config's path object
@@ -11,17 +11,19 @@ const path = require('path')
  */
 const checkValidPathConfig = paths => {
   if (!isObj(paths))
-    throw new Error(`Herkin paths config must be an object. Found: ${paths}`)
+    throw new Error(`Herkin config "paths" property must be an object. Found: ${paths}`)
 
   const expectedPaths = Object.keys(defaultConfig.paths)
 
   Object
     .entries(paths)
     .map(([key, path]) => {
-      const valid = isStr(path) && expectedPaths.includes(key)
+      const valid = isStr(path) 
+        && expectedPaths.includes(key)
+        && fs.existsSync(path)
       if (!valid)
         throw new Error(
-          `Herkin config paths must be strings and keys must be one of [${expectedPaths.join(', ')}].
+          `Herkin config paths must exist on file system and keys must be one of [${expectedPaths.join(', ')}].
            Found: key = ${key}, path = ${path}`
         )
     })
@@ -31,17 +33,15 @@ const checkValidPathConfig = paths => {
 /**
  * Sets the env variables needed for mounting the
  * test directories into the container.
+ * @see `container/docker-compose.yml`, `volumes` group
  * @param {Object} paths - object of keys and values
  */
 const setMountEnvs = paths => {
-
   checkValidPathConfig(paths)
 
   Object.entries(paths).map(([pathName, value]) => {
-    if (!value) return
     const envName = 'HERKIN_' + snakeCase(pathName).toUpperCase()
     process.env[envName] = value
-    console.log(envName, value)
   })
 }
 
@@ -84,7 +84,7 @@ module.exports = {
           default: true,
         },
         config: {
-          description: 'Path to the user herkin.config.js',
+          description: 'Path to the user herkin.config.js. If omitted, keg-herkin will look in your current working directory for a herkin config.',
           example: 'keg herkin start --config my-repo/herkin.config.js',
         },
     }, [
