@@ -9,17 +9,55 @@ const glob = require('glob')
 
 const config = getHerkinConfig()
 
-const getClientSteps = () => {
-  const pattern = path.join(
+/**
+ * Finds all step definition files in client's step directory and
+ * also in the herkin testUtils repo
+ * @return {Array<string>} file paths
+ */
+const getStepDefinitions = () => {
+  const clientPattern = path.join(
     mountPoint, 
     config.paths.stepsDir, 
     '**/*.js'
   )
-  return glob.sync(pattern)
+  const clientMatches = glob.sync(clientPattern)
+
+  const herkinPattern = path.join(
+    bddUtils,
+    'steps/**/*.js',
+  )
+  const herkinMatches = glob.sync(herkinPattern)
+
+  return [
+    ...clientMatches,
+    ...herkinMatches,
+  ]
 }
 
-const getClientSupport = () => {
 
+/**
+ * Gets all file paths for cucumber support files
+ * @return {Array<string>} file paths
+ */
+const getCucumberSupport = () => {
+  const herkinWorld = `${bddUtils}/support/world`
+  const herkinHooks = `${bddUtils}/support/hooks`
+
+  const pattern = path.join(
+    mountPoint, 
+    config.paths.supportDir, 
+    '**/+(world.js|hook.js|setup.js)'
+  )
+
+  const matches = glob.sync(pattern)
+
+  // only include the HerkinWorld if the user did not override it
+  if (!matches.find(match => match.includes('world.js')))
+    matches.push(herkinWorld)
+
+  matches.push(herkinHooks)
+
+  return matches
 }
 
 module.exports = {
@@ -30,15 +68,10 @@ module.exports = {
     'ts',
     'tsx'
   ],
-  setupFiles: [
-    `${rootModules}/module-alias/register`
-  ],
   setupFilesAfterEnv: [
     `${rootModules}/cucumber-jest/dist/init.js`,
-    `${bddUtils}/steps`,
-    `${bddUtils}/support/world`,
-    `${bddUtils}/support/hooks`,
-    ...getClientSteps()
+    ...getCucumberSupport(),
+    ...getStepDefinitions()
   ],
   transform: {
     '^.+\\.(feature)$': 'cucumber-jest',
