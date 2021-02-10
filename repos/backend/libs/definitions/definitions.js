@@ -24,8 +24,9 @@ const parseDefinitions = definitionFiles => {
 }
 
 const loadDefinitions = async config => {
-  const { stepsDir } = config.paths
-  const definitionFiles = stepsDir && await loadDefinitionsFiles(stepsDir)
+  const { stepsDir, testsRoot } = config.paths
+  const pathToSteps = path.join(testsRoot, stepsDir)
+  const definitionFiles = stepsDir && await loadDefinitionsFiles(pathToSteps)
   const definitions = await parseDefinitions(definitionFiles) || []
 
   // Reset the cached definitions

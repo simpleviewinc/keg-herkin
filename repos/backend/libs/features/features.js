@@ -2,7 +2,6 @@ const path = require('path')
 const glob = require('glob')
 const { FeatureParser } = require('./featureParser')
 const { mapToSteps } = require('./mapToSteps')
-const definitions = require('../definitions/definitions')
 
 const loadFeatureFiles = featuresDir => {
   return new Promise((res, rej) => {
@@ -30,8 +29,9 @@ const parseFeatures = (featureFiles, testsRoot) => {
 
 const loadFeatures = async (config, definitions) => {
   const { featuresDir, testsRoot } = config.paths
-  const featureFiles = featuresDir && await loadFeatureFiles(featuresDir)
-  const features = await parseFeatures(featureFiles, testsRoot)
+  const pathToFeatures = path.join(testsRoot, featuresDir)
+  const featureFiles = featuresDir && await loadFeatureFiles(pathToFeatures)
+  const features = await parseFeatures(featureFiles, pathToFeatures)
 
   return definitions
     ? mapToSteps(features, definitions)

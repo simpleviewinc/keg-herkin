@@ -1,34 +1,8 @@
 const { sharedOptions } = require('@tasks/utils/task/sharedOptions')
 const { launchBrowsers } = require('@tasks/utils/playwright/launchBrowsers')
-const { snakeCase, isStr, isObj } = require('@keg-hub/jsutils')
-const defaultConfig = require('@configs/herkin.default.config.js')
-const fs = require('fs')
+const { snakeCase } = require('@keg-hub/jsutils')
 
-/**
- * Validates the herkin config's path object
- * @param {Object} paths 
- * @throws error if any paths are invalid
- */
-const checkValidPathConfig = paths => {
-  if (!isObj(paths))
-    throw new Error(`Herkin config "paths" property must be an object. Found: ${paths}`)
-
-  const expectedPaths = Object.keys(defaultConfig.paths)
-
-  Object
-    .entries(paths)
-    .map(([key, path]) => {
-      const valid = isStr(path) 
-        && expectedPaths.includes(key)
-        && fs.existsSync(path)
-      if (!valid)
-        throw new Error(
-          `Herkin config paths must exist on file system and keys must be one of [${expectedPaths.join(', ')}].
-           Found: key = ${key}, path = ${path}`
-        )
-    })
-}
-
+const getEnvName = pathName => `HERKIN_` + snakeCase(pathName).toUpperCase()
 
 /**
  * Sets the env variables needed for mounting the
@@ -37,10 +11,8 @@ const checkValidPathConfig = paths => {
  * @param {Object} paths - object of keys and values
  */
 const setMountEnvs = paths => {
-  checkValidPathConfig(paths)
-
   Object.entries(paths).map(([pathName, value]) => {
-    const envName = 'HERKIN_' + snakeCase(pathName).toUpperCase()
+    const envName = getEnvName(pathName)
     process.env[envName] = value
   })
 }
@@ -63,7 +35,7 @@ const startHerkin = async (args) => {
 
   params.launch && await launchBrowsers(params)
 
-  herkin && setMountEnvs(herkin.paths)
+  setMountEnvs(herkin.paths)
 
   args.task.cliTask(args)
 }
