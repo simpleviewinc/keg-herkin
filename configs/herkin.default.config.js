@@ -7,7 +7,7 @@ const {
   HERKIN_STEPS_DIR,
   HERKIN_SUPPORT_DIR,
   HERKIN_UNIT_DIR,
-  HERKIN_WOLF_DIR,
+  HERKIN_WAYPOINT_DIR,
 } = process.env
 
 module.exports = {
@@ -18,7 +18,7 @@ module.exports = {
     featuresDir: HERKIN_FEATURES_DIR || 'bdd/features',
     supportDir: HERKIN_SUPPORT_DIR || 'bdd/support',
     unitDir: HERKIN_UNIT_DIR || 'jest',
-    wolfDir: HERKIN_WOLF_DIR || 'wolf'
+    waypointDir: HERKIN_WAYPOINT_DIR || 'waypoint'
   },
   server: {
     port: '5005',

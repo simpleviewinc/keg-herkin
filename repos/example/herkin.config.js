@@ -7,7 +7,7 @@ module.exports = {
     featuresDir: 'bdd/features',
     supportDir: 'bdd/support',
     stepsDir: 'bdd/steps',
-    unitDir: 'jest',
-    wolfDir: 'wolf'
+    unitDir: 'unit',
+    waypointDir: 'waypoint'
   }
 }

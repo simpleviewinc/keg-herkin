@@ -1,8 +1,12 @@
 const { createTemplate } = require('../tasks/utils/wolf/createTemplate')
+const path = require('path')
+
+const config = require('./getHerkinConfig').getHerkinConfig()
+const jestTestPath = path.join(config.paths.testsRoot, config.paths.waypointDir)
 
 const {
   JEST_TIMEOUT=(60*1000),
-  JEST_TEST_PATH='/keg/tap/tests/wolf',
+  JEST_TEST_PATH=jestTestPath,
   TEMPLATE_PATH='/keg/tap/tasks/utils/wolf/qawolf-jest.template.js'
 } = process.env
 
