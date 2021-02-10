@@ -43,9 +43,13 @@ export const results = theme => {
 
   return {
     main: {
-      // flexGrow: 0,
       marginTop: theme.margin.size * 2,
       bgC: theme.colors.palette.white01,
+    },
+    row: {
+      flD: 'column',
+      p: theme.padding.size,
+      pT: 0,
     },
     pass: deepMerge(defResult, {
       label: {

@@ -9,7 +9,7 @@ import { AceEditor } from 'SVComponents/aceEditor'
 import { checkCall } from '@keg-hub/jsutils'
 
 export const ToRun = props => {
-  const { styles, tests, editorRef, title, prefix } = props
+  const { styles, tests, editorRef, title, prefix, toggleHandel } = props
 
   return (
     <Surface
@@ -18,6 +18,7 @@ export const ToRun = props => {
       capitalize={false}
       styles={styles.main}
       prefix={prefix || 'Runner'}
+      toggleHandel={toggleHandel}
     >
       <Grid className={`runner-grid`} style={styles?.toRun?.grid} >
         <Row className='runner-torun' style={styles?.toRun?.row} >

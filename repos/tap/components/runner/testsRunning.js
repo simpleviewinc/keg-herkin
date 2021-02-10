@@ -1,3 +1,4 @@
+import React from 'react'
 import { View } from '@keg-hub/keg-components/view'
 import { Text } from '@keg-hub/keg-components/text'
 import { Loading } from '@keg-hub/keg-components/loading'

@@ -5,10 +5,6 @@ import { isFunc } from '@keg-hub/jsutils'
 import { View, Button } from '@keg-hub/keg-components'
 import React, { useCallback, useEffect, useState } from 'react'
 
-// TODO: Setup tabs for displaying test running info
-// Create tabs for:
-// Tests only / Results only / Both
-
 const tabs = []
 
 const TestActions = props => {

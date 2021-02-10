@@ -1,7 +1,16 @@
 import { useCallback } from "react"
-import { isFunc, uuid } from '@keg-hub/jsutils'
+import { isFunc, uuid, checkCall } from '@keg-hub/jsutils'
 
-export const useTestRunner = (setTestResults, setIsRunning, editorRef, parentMethods) => {
+export const useTestRunner = options => {
+  const {
+    setTestResults,
+    setIsRunning,
+    editorRef,
+    parentMethods,
+    toggleToRun,
+    toggleResults
+  } = options
+    
   return useCallback(async () => {
     if(!parentMethods || !editorRef.current) return
 
@@ -15,6 +24,8 @@ export const useTestRunner = (setTestResults, setIsRunning, editorRef, parentMet
     setTestResults([])
 
     setIsRunning(true)
+    checkCall(toggleToRun, true)
+
     const { results } = await parentMethods.runTests(testCode)
     const testResults = results.reduce((withId, result) => {
       result.id = result.id || uuid()
@@ -26,6 +37,8 @@ export const useTestRunner = (setTestResults, setIsRunning, editorRef, parentMet
     setTimeout(() => {
       setTestResults(testResults)
       setIsRunning(false)
+      checkCall(toggleToRun, false)
+      checkCall(toggleResults, true)
     }, 500)
 
   },

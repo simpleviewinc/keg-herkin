@@ -34,12 +34,26 @@ export const Runner = props => {
   const tabSelect = useTabSelect(tab, setTab)
   const [testResults, setTestResults] = useState([])
 
-  const onRunTests = useTestRunner(
-    setTestResults,
-    setIsRunning,
+
+  const toggleToRunRef = useRef(null)
+  const setToggleToRun = useCallback(setToRunToggle => {
+    toggleToRunRef.current = setToRunToggle
+  }, [ toggleToRunRef && toggleToRunRef.current ])
+
+  const toggleResultsRef = useRef(null)
+  const setToggleResults = useCallback(setResultsToggle => {
+    toggleResultsRef.current = setResultsToggle
+  }, [ toggleResultsRef && toggleResultsRef.current ])
+
+
+  const onRunTests = useTestRunner({
     editorRef,
+    setIsRunning,
     parentMethods,
-  )
+    setTestResults,
+    toggleToRun: toggleToRunRef.current,
+    toggleResults: toggleResultsRef.current,
+  })
 
   useEffect(() => {
     autoRun && onRunTests()
@@ -53,17 +67,18 @@ export const Runner = props => {
         editorRef={editorRef}
         title={title}
         prefix={prefix}
+        toggleHandel={setToggleToRun}
       />
       <Results
         results={testResults}
         styles={runnerStyles.results}
+        toggleHandel={setToggleResults}
       />
       <RunnerTabs
         activeTab={tab}
         onTabSelect={tabSelect}
         onRun={onRunTests}
       />
-
       { isRunning && (<TestsRunning styles={runnerStyles} />)}
     </>
   )

@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react'
-import { wordCaps } from '@keg-hub/jsutils'
+import React, { useCallback, useState, useEffect } from 'react'
+import { wordCaps, checkCall, exists } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { DrawerToggle } from './drawerToggle'
 import { Section, ItemHeader, Row, H3, Text } from 'SVComponents'
@@ -57,6 +57,7 @@ export const Surface = props => {
     prefix,
     styles,
     title,
+    toggleHandel,
     initialToggle,
     toggleDisabled,
   } = props
@@ -65,9 +66,15 @@ export const Surface = props => {
 
   const [ toggled, setToggled ] = useState(initialToggle || true)
 
-  const onTogglePress = useCallback(event => {
-    setToggled(!toggled)
+  const onTogglePress = useCallback((event, setValue) => {
+    const value = exists(setValue) ? setValue : !toggled
+
+    setToggled(value)
   }, [ toggled, setToggled ])
+
+  useEffect(() => {
+    checkCall(toggleHandel, setToggled)
+  }, [toggleHandel, setToggled])
 
   return (
     <Section className='surface' style={surfaceStyles?.main} >
