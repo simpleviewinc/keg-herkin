@@ -3,7 +3,7 @@ import { useTheme } from '@keg-hub/re-theme'
 import {
   View,
   Sidebar,
-  FeatureList,
+  TreeList,
   withAppHeader
 } from 'SVComponents'
 import { Screen } from './screens/screen'
@@ -19,7 +19,7 @@ export const RootContainer = withAppHeader('KeGherkin Editor', props => {
         to={0}
         toggled={false}
       >
-        <FeatureList />
+        <TreeList />
       </Sidebar>
       <Screen />
     </View>
