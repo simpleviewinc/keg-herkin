@@ -31,7 +31,7 @@ export const appHeader = theme => {
           mR: 20,
         },
         touch: {
-          opacity: 0.5,
+          opacity: 0.4,
           ...theme.transition([ 'opacity' ], 0.8),
         },
         container: {
