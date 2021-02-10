@@ -2,7 +2,6 @@ const { sharedOptions } = require('@tasks/utils/task/sharedOptions')
 const { launchBrowsers } = require('@tasks/utils/playwright/launchBrowsers')
 const { snakeCase } = require('@keg-hub/jsutils')
 const { validateConfig } = require('@tasks/utils/validation')
-const { validate } = require('webpack')
 
 const getEnvName = pathName => `HERKIN_` + snakeCase(pathName).toUpperCase()
 
