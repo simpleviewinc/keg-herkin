@@ -27,7 +27,12 @@ const loadDefinitions = async config => {
   const { stepsDir, testsRoot } = config.paths
   const pathToSteps = path.join(testsRoot, stepsDir)
   const definitionFiles = stepsDir && await loadDefinitionsFiles(pathToSteps)
-  const definitions = await parseDefinitions(definitionFiles) || []
+  const herkinDefinitionFiles = await loadDefinitionsFiles('/keg/tap/repos/testUtils/bdd/steps')
+  const clientDefinitions = await parseDefinitions(definitionFiles) || []
+  const herkinDefinitions = await parseDefinitions(herkinDefinitionFiles) || []
+
+  // all the definitions
+  const definitions = clientDefinitions.concat(herkinDefinitions)
 
   // Reset the cached definitions
   DefinitionsParser.resetDefinitions()

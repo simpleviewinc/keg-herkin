@@ -2,8 +2,8 @@ const path = require('path')
 const { readFile, removeFile, writeFile } = require('./fileSys')
 
 const deleteTestFile = async (config, testPath) => {
-  const { unitDir, testsRoot } = config.paths
-  const fullPath = path.join(testsRoot, unitDir, testPath)
+  const { testsRoot } = config.paths
+  const fullPath = path.join(testsRoot, testPath)
 
   // TODO: double check that removeFile returns a value
   const deleted = await removeFile(fullPath)
@@ -16,8 +16,8 @@ const deleteTestFile = async (config, testPath) => {
 }
 
 const getTestFile = async (config, testPath) => {
-  const { unitDir, testsRoot } = config.paths
-  const fullPath = path.join(testsRoot, unitDir, testPath)
+  const { testsRoot } = config.paths
+  const fullPath = path.join(testsRoot, testPath)
 
   const [ __, content ] = await readFile(fullPath)
 
@@ -29,8 +29,8 @@ const getTestFile = async (config, testPath) => {
 }
 
 const saveTestFile = async (config, testPath, content) => {
-  const { unitDir, testsRoot } = config.paths
-  const fullPath = path.join(testsRoot, unitDir, testPath)
+  const { testsRoot } = config.paths
+  const fullPath = path.join(testsRoot, testPath)
 
   // TODO: double check that writeFile returns a value
   const saved = await writeFile(fullPath, content)
