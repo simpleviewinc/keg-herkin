@@ -1,8 +1,26 @@
 const { jestAliases } = require('./aliases.config')
+const { getHerkinConfig } = require('./getHerkinConfig')
 const tapRoot = '/keg/tap'
 const rootModules = `${tapRoot}/node_modules`
 const bddUtils = `${tapRoot}/repos/testUtils/bdd`
 const mountPoint = `${tapRoot}/tests`
+const path = require('path')
+const glob = require('glob')
+
+const config = getHerkinConfig()
+
+const getClientSteps = () => {
+  const pattern = path.join(
+    mountPoint, 
+    config.paths.stepsDir, 
+    '**/*.js'
+  )
+  return glob.sync(pattern)
+}
+
+const getClientSupport = () => {
+
+}
 
 module.exports = {
   moduleFileExtensions: [
@@ -20,7 +38,7 @@ module.exports = {
     `${bddUtils}/steps`,
     `${bddUtils}/support/world`,
     `${bddUtils}/support/hooks`,
-    `${mountPoint}/bdd/steps`,
+    ...getClientSteps()
   ],
   transform: {
     '^.+\\.(feature)$': 'cucumber-jest',

@@ -5,6 +5,7 @@ module.exports = {
     rootDir: __dirname,
     testsRoot: path.join(__dirname, 'tests'),
     featuresDir: 'bdd/features',
+    supportDir: 'bdd/support',
     stepsDir: 'bdd/steps',
     unitDir: 'jest',
     wolfDir: 'wolf'

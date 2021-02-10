@@ -1,19 +1,10 @@
 const { isObj, isFunc, mapObj, pipeline } = require('@keg-hub/jsutils')
 const { getHerkinConfig } = require('@configs/getHerkinConfig')
-const { validateConfig } = require('@tasks/utils/validation')
-
-const getValidConfig = params => {
-  return pipeline(
-    params,
-    getHerkinConfig,
-    validateConfig
-  )
-}
 
 const injectHerkinConfig = taskAction => {
   return args => taskAction({
     ...args,
-    herkin: getValidConfig(args.params)
+    herkin: getHerkinConfig(args.params)
   })
 }
 

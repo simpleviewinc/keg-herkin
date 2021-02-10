@@ -5,8 +5,9 @@ const rootDir = path.join(__dirname, '../')
 const {
   HERKIN_FEATURES_DIR,
   HERKIN_STEPS_DIR,
+  HERKIN_SUPPORT_DIR,
+  HERKIN_UNIT_DIR,
   HERKIN_WOLF_DIR,
-  HERKIN_UNIT_DIR
 } = process.env
 
 module.exports = {
@@ -15,6 +16,7 @@ module.exports = {
     testsRoot: path.join(rootDir, 'tests'),
     stepsDir: HERKIN_STEPS_DIR || 'bdd/steps',
     featuresDir: HERKIN_FEATURES_DIR || 'bdd/features',
+    supportDir: HERKIN_SUPPORT_DIR || 'bdd/support',
     unitDir: HERKIN_UNIT_DIR || 'jest',
     wolfDir: HERKIN_WOLF_DIR || 'wolf'
   },
