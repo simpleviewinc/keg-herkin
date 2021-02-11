@@ -17,14 +17,13 @@ const { CATEGORIES } = Values
 
 /**
  * Temp: filter by feature files only for now
- * @param {Array<Obect>} nodes 
+ * @param {Array<Object>} nodes 
  */
 const filterFeature = (nodes) => {
   if (nodes.length === 0) return noPropArr
 
   const bddNode = nodes[0]
   const str = '/features'
-  console.log(bddNode,'bdd')
   const filteredChildren = bddNode?.children.reduce((updatedNodes, node) => {
     node?.fullPath.includes(str) && updatedNodes.push(node)
     return updatedNodes
@@ -52,8 +51,6 @@ export const TreeList = props => {
     const match = features.find(feature => feature.fullPath === node.fullPath)
     match && loadFeature(match)
   }, [ features, setFeatureActive ])
-
-  console.log(fileTree)
   
   return !features
     ? (<Loading />)
