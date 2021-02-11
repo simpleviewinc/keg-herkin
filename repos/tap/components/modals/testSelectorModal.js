@@ -6,7 +6,7 @@ import { createFeatureFile } from 'SVActions/features'
 import { loadFeature } from 'SVActions/features/loadFeature'
 import { setModalVisibility } from 'SVActions/modals'
 import { Values } from 'SVConstants'
-import { mapObj, capitalize, wordCaps } from '@keg-hub/jsutils'
+import { mapObj, capitalize, wordCaps, noPropArr } from '@keg-hub/jsutils'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { useFeature } from 'SVHooks/useFeature'
 import { devLog } from 'SVUtils'
@@ -72,8 +72,10 @@ export const TestSelectorModal = (props) => {
 
   const theme = useTheme()
   const builtStyles = theme.get(`modals.testSelectorModal`)
-  const features = useStoreItems(CATEGORIES.FEATURES) || []
-
+  const { features=noPropArr, activeTab } = useStoreItems([
+    CATEGORIES.ACTIVE_TAB,
+    CATEGORIES.FEATURES,
+  ])
   const [testName, setTestName] = useState(Values.CREATE_NEW_FILE)
   const [selectedTab, setSelectedtab] = useState(SCREENS.EDITOR)
   const { feature } = useFeature(testName)
@@ -96,6 +98,7 @@ export const TestSelectorModal = (props) => {
     <Modal
       visible={visible}
       styles={builtStyles?.modal}
+      onBackdropTouch={() => activeTab.id !== SCREENS.EMPTY && setModalVisibility(false)}
     >
       <ItemHeader
         title={title}
