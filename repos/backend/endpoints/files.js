@@ -75,7 +75,7 @@ const parentNodeExists = (nodes, parentPath, newItem) => {
  * @param {Array<string>} paths - full paths to the folder or file i.e '/keg/tap/tests/bdd/features'
  * 
  * @returns {Array<Object>} - each object has the form: 
- *                            {id, fullPath, children: []}
+ *                            {id, fullPath, children: [], isModified}
  */
 const generateTree = (paths) => {
 
@@ -87,7 +87,8 @@ const generateTree = (paths) => {
     const node = {
       id: path,
       fullPath: path,
-      children: []
+      children: [],
+      isModified: false
     }
 
     const isDir = fs.lstatSync(path).isDirectory()
