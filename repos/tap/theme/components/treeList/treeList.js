@@ -29,14 +29,14 @@ export const treeList = (theme) => ({
     },
     text: {
       ...sharedTextStyle,
-      fontSize: 18
+      fontSize: 17
     }
   },
   icon: {
     position: 'absolute',
     right: 10,
     top: 10,
-    size: 18,
+    size: 16,
     color: tapColors.default
   }
 })

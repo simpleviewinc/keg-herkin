@@ -16,8 +16,11 @@ const deleteTestFile = async (config, testPath) => {
 }
 
 const getTestFile = async (config, testPath) => {
-  const { testsFolder } = config.paths
-  const fullPath = path.join(testsFolder, testPath)
+
+  const { testsRoot } = config.paths
+  const fullPath = testPath.includes(testsRoot)
+    ? testPath
+    : path.join(testsRoot, testPath)
 
   const [ __, content ] = await readFile(fullPath)
 

@@ -10,7 +10,8 @@ export const Values = {
     FEATURE: 'feature',
     SCREEN: 'screen',
     COPY_STEP: 'copy_step',
-    MODALS: 'modals'
+    MODALS: 'modals',
+    FILE_TREE: 'fileTree'
   },
   SUB_CATEGORIES: {
     RUNNER_CONTENT: 'runnerContent'

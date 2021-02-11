@@ -1,85 +1,86 @@
 import React, { useCallback } from 'react'
-import { pickKeys, exists } from '@keg-hub/jsutils'
+import { pickKeys, noPropArr } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'
 import { setFeatureActive } from 'SVActions/features'
+import { loadFeature } from 'SVActions/features/loadFeature'
 import {
   View,
   Loading,
   Text,
 } from 'SVComponents'
 import { Values } from 'SVConstants'
-const { CATEGORIES } = Values
 import TreeView from 'react-native-final-tree-view'
 import { ChevronDown } from 'SVAssets/icons'
 
-// import { reStyle } from '@keg-hub/re-theme/reStyle'
+const { CATEGORIES } = Values
 
-// const ReStyleView = reStyle(
-//   View,
-//   'style'
-// )((__, props) => ({
-//   ...props?.style,
-//   padding: 8,
-// }))
-const testData = [
-  {
-    type: 'folder',
-    id: '/keg/tap/tests/bdd',
-    fullPath: '/keg/tap/tests/bdd',
-    name: 'bdd',
-    children: [
-      {
-        type: 'folder',
-        id: '/keg/tap/tests/features',
-        fullPath: '/keg/tap/tests/bdd/features',
-        name: 'features',
-        children: [
-          {
-            type: 'file',
-            id: '/keg/tap/tests/features',
-            fullPath: '/keg/tap/tests/bdd/features/google.feature',
-            name: 'google.feature',
-          },
-        ],
-      },
-    ],
-  },
-]
+/**
+ * Temp: filter by feature files only for now
+ * @param {Array<Obect>} nodes 
+ */
+const filterFeature = (nodes) => {
+  if (nodes.length === 0) return noPropArr
 
+  const bddNode = nodes[0]
+  const str = '/features'
+  console.log(bddNode,'bdd')
+  const filteredChildren = bddNode?.children.reduce((updatedNodes, node) => {
+    node?.fullPath.includes(str) && updatedNodes.push(node)
+    return updatedNodes
+  }, [])
+
+  bddNode.children = filteredChildren
+  return [bddNode]
+}
+
+
+/**
+ * TreeList
+ * @param {Object} props 
+ */
 export const TreeList = props => {
 
-  const { features, activeFeature } = useSelector(({ items }) => pickKeys(
+  const { features, fileTree=noPropArr } = useSelector(({ items }) => pickKeys(
     items,
-    [ CATEGORIES.FEATURES, CATEGORIES.ACTIVE_FEATURE ]
+    [ CATEGORIES.FEATURES, CATEGORIES.FILE_TREE ]
   ), shallowEqual)
 
-  const onItemPress = useCallback((event, item) => {
-    const match = features.find(feature => feature.feature === item.title)
-    match && setFeatureActive(match)
-    
-  }, [ features ])
+  const filteredData = filterFeature(fileTree)
+  const onItemPress = useCallback(({node}) => {
+    // for now only supporting feature file/content
+    const match = features.find(feature => feature.fullPath === node.fullPath)
+    match && loadFeature(match)
+  }, [ features, setFeatureActive ])
 
-  const feature = exists(activeFeature?.index) && features[activeFeature?.index]
-
-
+  console.log(fileTree)
   
   return !features
     ? (<Loading />)
     : (
         <TreeView
-          data={testData}
+          data={filteredData}
           renderNode={NodeComponent}
-          onNodePress={(props) => {
-            console.log(props)
-          }}
-          getCollapsedNodeHeight={() => 50}
+          onNodePress={onItemPress}
+          getCollapsedNodeHeight={() => 40}
         />
       )
 
 }
 
+/**
+ * Component for list item based on the props
+ * prop ref: https://github.com/zaguiini/react-native-final-tree-view#rendernode
+ * @param {Object} props 
+ * @param {Object} props.node - node object
+ * @param {Boolean} props.isExpanded - if the list item is expanded
+ * @param {Boolean} props.hasChildrenNodes
+ * 
+ */
 const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
+  // don't display empty folders
+  if (level === 0 && node.children.length === 0 && node?.type === 'folder') return null
+
   const theme = useTheme()
   const themeStyles = theme.get('treeList')
   const styles = level === 0
@@ -99,7 +100,7 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
         node?.type === 'folder' &&
         (
           <ChevronDown
-            size={themeStyles?.icon?.size || 20}
+            size={themeStyles?.icon?.size || 16}
             style={[themeStyles?.icon, iconStyles]}
           />
         )
