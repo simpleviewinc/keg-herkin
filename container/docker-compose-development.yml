@@ -2,5 +2,4 @@ version: "3.8"
 services:
   keg-herkin:
     volumes:
-      - ${CLI_PATH}:${DOC_CLI_PATH}
       - ${HERKIN_TESTS_ROOT}:${DOC_APP_PATH}/tests
