@@ -12,7 +12,7 @@ const {
 
 const rootDir = path.join(__dirname, '../')
 const dockerTestsRoot = path.join(rootDir, 'tests')
-const hostTestsRoot = HERKIN_TESTS_ROOT || path.join(rootDir, 'repos', 'example', 'tests')
+const hostTestsRoot = HERKIN_TESTS_ROOT || path.join(rootDir, 'tests')
 
 module.exports = {
   paths: {

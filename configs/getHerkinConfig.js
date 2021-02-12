@@ -105,8 +105,8 @@ const getHerkinConfig = (argsConfig=noOpObj) => {
     )
 
   return deepMerge(
-    get(pkgConfig, ['keg']),
-    get(tapConfig, ['keg']),
+    get(pkgConfig, ['herkin']),
+    get(tapConfig, ['herkin']),
     defaultConfig,
     customConfig || noOpObj
   )
