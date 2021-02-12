@@ -1,11 +1,11 @@
 const { jestAliases } = require('./aliases.config')
 const { getHerkinConfig } = require('./getHerkinConfig')
-const tapRoot = '/keg/tap'
-const rootModules = `${tapRoot}/node_modules`
-const bddUtils = `${tapRoot}/repos/testUtils/bdd`
-const mountPoint = `${tapRoot}/tests`
+const { TEST_UTILS_PATH, HERKIN_ROOT } = require('../constants')
 const path = require('path')
 const glob = require('glob')
+
+const rootModules = path.join(HERKIN_ROOT, 'node_modules')
+const mountPoint = path.join(HERKIN_ROOT, 'tests')
 
 const config = getHerkinConfig()
 
@@ -23,7 +23,7 @@ const getStepDefinitions = () => {
   const clientMatches = glob.sync(clientPattern)
 
   const herkinPattern = path.join(
-    bddUtils,
+    TEST_UTILS_PATH,
     'steps/**/*.js',
   )
   const herkinMatches = glob.sync(herkinPattern)
@@ -40,8 +40,8 @@ const getStepDefinitions = () => {
  * @return {Array<string>} file paths
  */
 const getCucumberSupport = () => {
-  const herkinWorld = `${bddUtils}/support/world`
-  const herkinHooks = `${bddUtils}/support/hooks`
+  const herkinWorld = `${TEST_UTILS_PATH}/support/world`
+  const herkinHooks = `${TEST_UTILS_PATH}/support/hooks`
 
   const pattern = path.join(
     mountPoint, 

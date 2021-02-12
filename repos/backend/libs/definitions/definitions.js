@@ -1,6 +1,7 @@
 const path = require('path')
 const glob = require('glob')
 const { DefinitionsParser } = require('./definitionsParser')
+const { TEST_UTILS_PATH } = require('@globalConstants')
 
 const loadDefinitionsFiles = stepsDir => {
   return new Promise((res, rej) => {
@@ -27,7 +28,7 @@ const loadDefinitions = async config => {
   const { stepsDir, testsRoot } = config.paths
   const pathToSteps = path.join(testsRoot, stepsDir)
   const definitionFiles = stepsDir && await loadDefinitionsFiles(pathToSteps)
-  const herkinDefinitionFiles = await loadDefinitionsFiles('/keg/tap/repos/testUtils/bdd/steps')
+  const herkinDefinitionFiles = await loadDefinitionsFiles(`${TEST_UTILS_PATH}/steps`)
   const clientDefinitions = await parseDefinitions(definitionFiles) || []
   const herkinDefinitions = await parseDefinitions(herkinDefinitionFiles) || []
 
