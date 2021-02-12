@@ -15,7 +15,6 @@ export const ModalManager = () => {
   switch (activeModal) {
     case MODAL_TYPES.TEST_SELECTOR_MODAL:
       return <TestSelectorModal visible={visible} />
-  
     default:
       return null
   }

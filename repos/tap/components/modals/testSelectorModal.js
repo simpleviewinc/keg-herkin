@@ -1,11 +1,10 @@
 import React, { useCallback, useState } from 'react'
-import { Modal, Button, ItemHeader, View} from '@keg-hub/keg-components'
+import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
 import { Select } from 'SVComponents/form/select'
 import { useTheme } from '@keg-hub/re-theme'
 import { createFeatureFile } from 'SVActions/features'
-import { upsertActiveRunnerTest }  from 'SVActions/runner/upsertActiveRunnerTest'
+import { loadFeature } from 'SVActions/features/loadFeature'
 import { setModalVisibility } from 'SVActions/modals'
-import { loadFeature } from 'SVActions/features'
 import { Values } from 'SVConstants'
 import { mapObj, capitalize, wordCaps } from '@keg-hub/jsutils'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
@@ -104,12 +103,12 @@ export const TestSelectorModal = (props) => {
       />
       <View style={builtStyles?.form?.main}>
         <Select
-          title={'Select initial tab:'}
+          title={'Tab'}
           onValueChange={setSelectedtab}
           options={getTabOptions()}
         />
         <Select
-          title={'Select test type:'}
+          title={'Test Type'}
           onValueChange={(props) => console.log(props)}
           options={getTypeOptions()}
         />
@@ -121,7 +120,11 @@ export const TestSelectorModal = (props) => {
         <Button
           themePath='button.contained.primary'
           styles={builtStyles?.form?.button}
-          content={'Start'}
+          content={(
+            <Text style={builtStyles?.form?.buttonText} >
+              Do It
+            </Text>
+          )}
           onPress={loadTests}
         />
       </View>
@@ -143,8 +146,9 @@ const TestNameSelect = ({styles, features, setTestName}) => {
   const onValueChange = useCallback((val) => {
     // fetch the feature file content from redux
     const feature = features.find((feature) => feature.feature === val)
+
     feature 
-      ? upsertActiveRunnerTest(feature?.text)
+      ? loadFeature(feature)
       : devLog(`warn`, `Feature '${val}' does not exist!`)
 
     setTestName(val)
@@ -154,7 +158,7 @@ const TestNameSelect = ({styles, features, setTestName}) => {
     <View style={styles?.main}>
       <Select
         styles={styles?.dropDown}
-        title={'Select test file:'}
+        title={'Test File'}
         onValueChange={onValueChange}
         options={getTestNamesOptions()}
       />

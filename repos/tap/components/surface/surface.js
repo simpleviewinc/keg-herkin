@@ -1,9 +1,22 @@
-import React from 'react'
-import { Section, ItemHeader, Row, H3, Text } from 'SVComponents'
+import React, { useCallback, useState, useEffect } from 'react'
+import { wordCaps, checkCall, exists } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
-import { wordCaps } from '@keg-hub/jsutils'
+import { DrawerToggle } from './drawerToggle'
+import { Section, ItemHeader, Row, H3, Text } from 'SVComponents'
+import { Drawer } from 'SVComponents'
 
-const SurfaceHeader = ({ styles, title, prefix }) => {
+const SurfaceHeader = props => {
+  const {
+    capitalize=true,
+    prefix,
+    styles,
+    title,
+    titleStyle,
+    toggled,
+    onTogglePress,
+    toggleDisabled,
+  } = props
+
   return (
     <ItemHeader
       className='surface-header'
@@ -15,10 +28,24 @@ const SurfaceHeader = ({ styles, title, prefix }) => {
               {prefix}
             </Text>
           )}
-          <Text style={styles?.title}>
-            { wordCaps(`${title}`) }
-          </Text>
+          { title && (
+            <>
+              <Text style={styles?.prefix}> - </Text>
+              <Text style={[styles?.title, titleStyle]}>
+                { capitalize ? wordCaps(`${title}`) : title }
+              </Text>
+            </>
+          )}
         </H3>
+      )}
+      RightComponent={(
+          <DrawerToggle
+            onPress={onTogglePress}
+            toggled={toggled}
+            styles={styles}
+            toggleDisabled={toggleDisabled}
+            icons={true}
+          />
       )}
     />
   )
@@ -26,19 +53,51 @@ const SurfaceHeader = ({ styles, title, prefix }) => {
 
 export const Surface = props => {
   const theme = useTheme()
-  const { title, prefix, styles } = props
+  const {
+    capitalize,
+    prefix,
+    styles,
+    title,
+    titleStyle,
+    toggleHandel,
+    initialToggle,
+    toggleDisabled,
+  } = props
+  
   const surfaceStyles = theme.get(theme.surface, styles)
+
+  const [ toggled, setToggled ] = useState(initialToggle || true)
+
+  const onTogglePress = useCallback((event, setValue) => {
+    const value = exists(setValue) ? setValue : !toggled
+
+    setToggled(value)
+  }, [ toggled, setToggled ])
+
+  useEffect(() => {
+    checkCall(toggleHandel, setToggled)
+  }, [toggleHandel, setToggled])
 
   return (
     <Section className='surface' style={surfaceStyles?.main} >
-      {title && (<SurfaceHeader
+      {(title || prefix) && (<SurfaceHeader
         title={title}
+        titleStyle={titleStyle}
         prefix={prefix}
+        capitalize={capitalize}
         styles={surfaceStyles?.header}
+        toggled={toggled}
+        onTogglePress={onTogglePress}
       />)}
-      <Row className='surface-content' style={surfaceStyles?.content} >
-        {props.children}
-      </Row>
+      <Drawer
+        className='surface-drawer'
+        styles={ surfaceStyles.drawer }
+        toggled={ toggled }
+      >
+        <Row className='surface-content' style={surfaceStyles?.content} >
+          {props.children}
+        </Row>
+      </Drawer>
     </Section>
   )
 }

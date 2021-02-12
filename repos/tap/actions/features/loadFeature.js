@@ -10,6 +10,6 @@ import { upsertActiveRunnerTest } from 'SVActions/runner/upsertActiveRunnerTest'
  */
 export const loadFeature = (feature, screenId) => {
   setFeatureActive(feature)
-  upsertActiveRunnerTest(feature.content)
+  upsertActiveRunnerTest(feature)
   screenId && setScreen(screenId)
 }

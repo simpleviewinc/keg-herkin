@@ -1,5 +1,5 @@
 import React from 'react'
-import { Edit, Times } from 'SVAssets/icons'
+import { Edit, TimesFilled } from 'SVAssets/icons'
 import {
   Button,
   Icon,
@@ -10,7 +10,7 @@ export const StepEditToggle = ({ isEditing, cancelAction, editAction, styles }) 
   const text = isEditing ? `CANCEL` : `EDIT`
   const onPress = isEditing ? cancelAction : editAction
   const buttonStyles = isEditing ? styles.cancelButton : styles.editButton
-  const Element = isEditing ? Times : Edit
+  const Element = isEditing ? TimesFilled : Edit
 
   return (
     <Button
