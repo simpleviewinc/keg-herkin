@@ -12,8 +12,7 @@ export const parent = theme => ({
     $all: {
       position: 'relative',
       zIndex: -1,
-      top: theme?.padding?.size * 2,
-      pH: theme?.padding?.size * 2,
+      pH: theme?.padding?.size,
       backgroundColor: tapColors.appBackground,
     }
   }

@@ -111,15 +111,18 @@ export const Tabbar = props => {
     </Bar>
   )
 
-  tabs && TabComponents[addMethod](
-    <View
-      className='tabview-main'
-      key='tabview-main'
-      style={barStyles.tabview}
-    >
-      <ActiveTabView tab={ CurrentTab } styles={ barStyles } />
-    </View>
-  )
+  tabs &&
+    CurrentTab &&
+    (CurrentTab.View || CurrentTab.view) &&
+    TabComponents[addMethod](
+      <View
+        className='tabview-main'
+        key='tabview-main'
+        style={barStyles.tabview}
+      >
+        <ActiveTabView tab={ CurrentTab } styles={ barStyles } />
+      </View>
+    )
 
   return (
     <View className='tabbar-main' style={ barStyles.main } >

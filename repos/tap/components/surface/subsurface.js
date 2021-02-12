@@ -1,31 +1,10 @@
 import { Drawer } from 'SVComponents'
 import { Subheader } from '../subheader'
-import { useTheme } from '@keg-hub/re-theme'
 import { noOpObj } from 'SVUtils/helpers'
-import { useToggledStyles } from 'SVHooks/useToggledStyles'
+import { useTheme } from '@keg-hub/re-theme'
+import { DrawerToggle } from './drawerToggle'
+import { Grid, Row, View } from '@keg-hub/keg-components'
 import React, { useState, useCallback, useMemo } from 'react'
-import { Grid, Row, View, Touchable, Text, Icon } from '@keg-hub/keg-components'
-// import { Plus, Minus } from 'SVAssets'
-
-const DrawerToggle = ({ onPress, toggled, toggleDisabled, styles }) => {
-  const iconStyles = useToggledStyles(toggled, styles?.toggle)
-
-  return !toggleDisabled && (
-    <Touchable
-      className={`toggle-action`}
-      onPress={onPress}
-      style={iconStyles?.main}
-    >
-      <Text
-        className={`toggle-text`}
-        style={iconStyles?.text}
-      >
-        {toggled ? ' Hide' : ' Show'}
-      </Text>
-    </Touchable>
-  ) || null
-}
-
 
 export const SubSurface = props => {
 

@@ -1,45 +1,15 @@
 import { tapColors } from '../../tapColors'
+import { toggleState } from './toggleState'
 
 const subheaderText = {
   ftSz: 14,
   ftWt: 'bold'
 }
 
-const toggleState = theme => ({
-  default: {
-    main: {},
-    icon: {
-      fontSize: 10,
-      color: tapColors.success,
-    },
-    text: {
-      ftSz: 12,
-      c: tapColors.success,
-    }
-  },
-  open: {
-    icon: {
-      color: tapColors.danger,
-    },
-    text: {
-      color: tapColors.danger,
-    }
-  },
-  closed: {
-    icon: {
-      
-    },
-    text: {
-      
-    }
-  },
-})
-
 export const subsurface = theme => ({
   main: {
     mT: theme.margin.size,
-    p: theme.padding.size,
-    pB: 0,
+    p: 0,
   },
   headerRow: {
     fl: 1,

@@ -1,13 +1,33 @@
 import { devLog } from '../devLog'
 import { getStore } from 'SVStore'
+import { noOpObj } from '../helpers/noop'
 
-const emptyObj = {}
-
+/**
+ * Logs warning message, and returns noop object
+ * @function
+ * @public
+ * @export
+ * @param {string} message - Message to log to the console
+ * @param {*} extra - Extra items to log along with the message
+ *
+ * @return {Object} - Empty noop object
+ */
 const emptyResponse = (message, ...extra) => {
   devLog(`warn`, message, ...extra)
-  return emptyObj
+  return noOpObj
 }
 
+/**
+ * Validates a feature exists within the store and has the correct properties
+ * Checks property based on the passed in type param
+ * @function
+ * @public
+ * @export
+ * @param {Object} feature - Parsed feature object to be validated
+ * @param {string} type - Feature property to validate on the feature
+ *
+ * @return {Object} - Object containing the store features, items, and validated feature
+ */
 export const validateFeatureAction = (feature, type) => {
   if(!feature || !feature[type])
     return emptyResponse(`The ${type} does not exist on the feature.`, feature, type)

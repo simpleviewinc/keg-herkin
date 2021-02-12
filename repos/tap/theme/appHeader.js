@@ -1,6 +1,7 @@
 import { tapColors } from './tapColors'
 import { sharedShadow } from './components/shared/shadow'
 
+
 export const appHeader = theme => {
   return {
     main: {
@@ -10,20 +11,48 @@ export const appHeader = theme => {
         position: 'fixed',
         ...sharedShadow,
         backgroundColor: tapColors.headerBackground,
+        height: 50,
       },
     },
-    side: {},
-    center: {},
     left: {
       main: {
-        padding: theme.padding.size,
+        p: theme.padding.size,
       },
       content: {
         title: {
-          color: tapColors.default,
-          fontWeight: 'bold',
+          c: tapColors.default,
+          ftWt: 'bold',
         }
       }
     },
+    right: {
+      default: {
+        main: {
+          mR: 20,
+        },
+        touch: {
+          opacity: 0.4,
+          ...theme.transition([ 'opacity' ], 0.8),
+        },
+        container: {
+          alI: 'center',
+        },
+        icon: {
+          ftSz: 20,
+          c: tapColors.borderColor,
+          mB: 3,
+        },
+        text: {
+          ftSz: 10,
+          c: tapColors.borderColor,
+        }
+      },
+      hover: {
+        touch: {
+          opacity: 1,
+        },
+      }
+      
+    }
   }
 }
