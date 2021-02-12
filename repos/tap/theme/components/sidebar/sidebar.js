@@ -1,17 +1,17 @@
-import { tapColors } from '../tapColors'
-
+import { tapColors } from '../../tapColors'
+import { sidebarContent } from './sideBarContent'
 export const sidebar = theme => ({
   main: {
     zIndex: 5,
     left: 250,
     position: 'fixed',
   },
-  content: {
+  container: {
     width: 250,
     shadowRadius: 6,
     minHeight: '100vh',
     shadowOpacity: 0.05,
-    pT: 70 + theme.padding.size,
+    pT: 50,
     shadowColor: tapColors.shadowColor,
     shadowOffset: { width: 1, height: 12 },
     backgroundColor: tapColors.sidebarBackground,
@@ -69,4 +69,5 @@ export const sidebar = theme => ({
     }
   },
   closed: {},
+  content: sidebarContent(theme)
 })

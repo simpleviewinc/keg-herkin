@@ -94,11 +94,15 @@ const generateTree = (paths) => {
     const isDir = fs.lstatSync(path).isDirectory()
     node.type = isDir ? 'folder' : 'file'
 
-    const lastIndex = path.lastIndexOf('/')
-    const parentPath = path.substring(0, lastIndex)
-
     // get name after last '/' excluding '/'
+    const lastIndex = path.lastIndexOf('/')
     node.name = path.substring(lastIndex + 1)
+
+    // ignore hidden files
+    if (node.type === 'file' && node.name.startsWith('.')) return nodes
+
+
+    const parentPath = path.substring(0, lastIndex)
 
     // either add new node to node.children, or as a new top level node
     nodes.length > 0
@@ -130,6 +134,7 @@ const getTree = (app, config) => async (req, res) => {
   }
 }
 
+// TODO: make endpoint to expose config file 
 module.exports = (app, config) => {
   app.get('/files/get_tree', getTree(app, config))
   app.get('/files/load', loadFile(app, config))

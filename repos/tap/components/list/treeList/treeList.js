@@ -12,27 +12,28 @@ import {
 import { Values } from 'SVConstants'
 import TreeView from 'react-native-final-tree-view'
 import { ChevronDown } from 'SVAssets/icons'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
 
 const { CATEGORIES } = Values
 
 /**
- * Temp: filter by feature files only for now
- * @param {Array<Object>} nodes 
+ * Finds the node based on given id
+ * @param {string} id 
+ * @param {Array<object>} nodes 
+ * 
+ * @returns {object} node
  */
-const filterFeature = (nodes) => {
-  if (nodes.length === 0) return noPropArr
+const findNode = (id, nodes) => {
+  let foundNode = {}
+  nodes.reduce((__, node) => {
+    if (node.id === id) foundNode = node
+    if (node.children.length > 0) {
+      findNode(id, node.children)
+    }
+  }, {})
 
-  const bddNode = nodes[0]
-  const str = '/features'
-  const filteredChildren = bddNode?.children.reduce((updatedNodes, node) => {
-    node?.fullPath.includes(str) && updatedNodes.push(node)
-    return updatedNodes
-  }, [])
-
-  bddNode.children = filteredChildren
-  return [bddNode]
+  return foundNode
 }
-
 
 /**
  * TreeList
@@ -40,26 +41,29 @@ const filterFeature = (nodes) => {
  */
 export const TreeList = props => {
 
-  const { features, fileTree=noPropArr } = useSelector(({ items }) => pickKeys(
-    items,
-    [ CATEGORIES.FEATURES, CATEGORIES.FILE_TREE ]
-  ), shallowEqual)
+  const { features, fileTree=noPropArr } = useStoreItems([CATEGORIES.FEATURES, CATEGORIES.FILE_TREE])
 
-  const filteredData = filterFeature(fileTree)
   const onItemPress = useCallback(({node}) => {
     // for now only supporting feature file/content
     const match = features.find(feature => feature.fullPath === node.fullPath)
     match && loadFeature(match)
   }, [ features, setFeatureActive ])
   
+  const getCollapsedNodeHeight = useCallback(({id}) => {
+    const node = findNode(id, fileTree)
+    return (node?.children?.length === 0 && node?.type === 'folder')
+      ? 0
+      : 40
+  }, [fileTree])
+
   return !features
     ? (<Loading />)
     : (
         <TreeView
-          data={filteredData}
+          data={fileTree}
           renderNode={NodeComponent}
           onNodePress={onItemPress}
-          getCollapsedNodeHeight={() => 40}
+          getCollapsedNodeHeight={getCollapsedNodeHeight}
         />
       )
 

@@ -8,9 +8,11 @@ import { queryToObj, noOpObj, isEmptyColl } from '@keg-hub/jsutils'
 import { upsertDefinitions }  from './definitions/upsertDefinitions'
 import { upsertActiveRunnerTest }  from './runner/upsertActiveRunnerTest'
 import { setActiveModal } from 'SVActions/modals'
-const { MODAL_TYPES } = Values
+import { setActiveSidebar } from 'SVActions/sidebar'
+import { upsertFileTree } from 'SVActions/files'
+const { MODAL_TYPES, SIDEBAR_TYPES } = Values
 
-const exampleFile = 'example/exampleTests.js'
+const exampleFile = 'tests/example/exampleTests.js'
 
 
 const getQueryData = () => {
@@ -51,6 +53,9 @@ const initTestFile = async (activeFeat, queryFile) => {
 
   // loading example test data from <root>/tests/tests
   await loadApiFile(exampleFile, (testFile) => upsertActiveRunnerTest(testFile))
+
+  // load the file tree from root tests folder
+  upsertFileTree(await apiRequest(`/files/get_tree`) || [])
 }
 
 
@@ -69,6 +74,7 @@ export const init = async () => {
 
   initTestFile(activeFeat, queryObj.file || exampleFile)
 
+  setActiveSidebar(SIDEBAR_TYPES.TEST_FILES)
   // display options modal if no valid querystring passed in
   ;(!queryObj || isEmptyColl(queryObj)) &&
     setActiveModal(MODAL_TYPES.TEST_SELECTOR_MODAL)

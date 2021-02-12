@@ -41,5 +41,6 @@ export const tapColors = {
   inactive: `#a6b0c0`,
   accentBackground: '#f9fafe',
   border: `#e1e7ef`,
+  white: '#ffffff',
   inputHeight,
 }

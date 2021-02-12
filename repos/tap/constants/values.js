@@ -11,13 +11,17 @@ export const Values = {
     SCREEN: 'screen',
     COPY_STEP: 'copy_step',
     MODALS: 'modals',
-    FILE_TREE: 'fileTree'
+    FILE_TREE: 'fileTree',
+    SIDEBAR: 'sidebar'
   },
   SUB_CATEGORIES: {
     RUNNER_CONTENT: 'runnerContent'
   },
   MODAL_TYPES: {
     TEST_SELECTOR_MODAL: 'testSelectorModal',
+  },
+  SIDEBAR_TYPES: {
+    TEST_FILES: 'testFiles'
   },
   STEP_TYPES: [
     'and',
