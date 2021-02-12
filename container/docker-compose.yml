@@ -2,10 +2,12 @@ version: "3.8"
 services:
   keg-herkin:
     privileged: true
-    volumes:
-      - ${CLI_PATH}:${DOC_CLI_PATH}
-      - ${KEG_CONTEXT_PATH}/tests:${DOC_APP_PATH}/tests
     environment:
+      - HERKIN_TESTS_ROOT
+      - HERKIN_STEPS_DIR
+      - HERKIN_FEATURES_DIR
+      - HERKIN_UNIT_DIR
+      - HERKIN_WAYPOINT_DIR
       - DOC_APP_PATH
       - ENV
       - KEG_EXEC_CMD

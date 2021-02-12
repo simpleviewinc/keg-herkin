@@ -1,5 +1,5 @@
-const { dockerExec } = require('../../utils/process/process')
-const { launchBrowser } = require('../../utils/playwright/launchBrowser') 
+const { dockerExec } = require('@tasks/utils/process/process')
+const { launchBrowser } = require('@tasks/utils/playwright/launchBrowser') 
 
 const createTest = async args => {
   const { params } = args

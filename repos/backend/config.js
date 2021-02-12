@@ -1,13 +1,13 @@
 const path = require('path')
 const { deepMerge, noOpObj } = require('@keg-hub/jsutils')
-const appConfig = require('../../configs/app.config')
+const defaultConfig = require('../../configs/herkin.default.config')
 const rootDir = path.join(__dirname, '../../')
 const { EDITOR_CONFIG_PATH } = process.env
 
 let loadedConfig
 
 const mergeConfigs = (argConfig, customConfig) => {
-  loadedConfig = deepMerge(appConfig, customConfig, argConfig)
+  loadedConfig = deepMerge(defaultConfig, customConfig, argConfig)
 
   return loadedConfig
 }

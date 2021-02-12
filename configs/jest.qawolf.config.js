@@ -1,7 +1,7 @@
+const { jestAliases } = require('./aliases.config')
+
 module.exports = {
-  preset: 'jest-playwright-preset',
-  transform: {},
-  testMatch: [
-    '<rootDir>/**/*.steps.js'
-  ]
+  // preset: 'jest-playwright-preset',
+  // transform: {},
+  moduleNameMapper: jestAliases
 }

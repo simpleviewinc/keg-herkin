@@ -1,8 +1,8 @@
-const path = require('path')
-const { dockerExec } = require('../../utils/process/process')
-const { launchBrowsers } = require('../../utils/playwright/launchBrowsers') 
-const { sharedOptions } = require('../../utils/task/sharedOptions')
+const { dockerExec } = require('@tasks/utils/process/process')
+const { launchBrowsers } = require('@tasks/utils/playwright/launchBrowsers') 
+const { sharedOptions } = require('@tasks/utils/task/sharedOptions')
 const { runSeq } = require('@keg-hub/jsutils')
+const path = require('path')
 
 /**
  * Builds the arguments that are passed to jest when the test is run
@@ -75,7 +75,7 @@ module.exports = {
       },
       testDir: {
         description: 'Path to the tests directory within the docker container',
-        default: 'tests/bdd/features'
+        default: 'tests/bdd'
       }
     }, [
       'allBrowsers',

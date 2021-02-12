@@ -88,8 +88,7 @@
     "@babel/preset-env": "7.12.11",
     "babel-jest": "26.6.3",
     "core-js": "3.8.3",
-    "cucumber-jest": "git+https://github.com/mpcarolin/cucumber-jest.git#fork-build",
-    "jest": "26.4.2",
+    "cucumber-jest": "0.1.1",
     "jest-playwright-preset": "1.4.4",
     "rimraf": "3.0.2"
   }
