@@ -1,4 +1,4 @@
-import { apiRequest } from 'SVUtils/apiRequest'
+import { apiRequest } from 'SVUtils/api/apiRequest'
 import { upsertDefinitions } from './upsertDefinitions'
 
 export const getRemoteDefinitions = async () => {

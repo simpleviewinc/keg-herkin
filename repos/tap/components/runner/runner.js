@@ -1,67 +1,17 @@
+import React, { useCallback, useRef, useState, useEffect } from "react"
+import { uuid, checkCall } from '@keg-hub/jsutils'
 import { RunnerTabs } from './runnerTabs'
 import { useTheme } from '@keg-hub/re-theme'
-import { Surface } from 'SVComponents/surface'
 import { useTestRunner } from 'SVHooks/useTestRunner'
-import { Row } from '@keg-hub/keg-components/row'
-import { AceEditor } from 'SVComponents/aceEditor'
 import { View } from '@keg-hub/keg-components/view'
-import { Text } from '@keg-hub/keg-components/text'
-import { Grid } from '@keg-hub/keg-components/grid'
 import { Results } from 'SVComponents/runner/results'
-import { Loading } from '@keg-hub/keg-components/loading'
-import { SubSurface } from 'SVComponents/surface/subsurface'
-import { uuid, checkCall } from '@keg-hub/jsutils'
-import React, { useCallback, useRef, useState, useEffect } from "react"
+import { ToRun } from 'SVComponents/runner/toRun'
+import { TestsRunning } from 'SVComponents/runner/testsRunning'
 
 const useTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
   activeTab !== tab && setActiveTab(tab)
   return true
 }, [activeTab, setActiveTab])
-
-
-const ToRunRow = props => {
-  const { styles, tests, editorRef } = props
-  return (
-    <Row className='runner-torun' style={styles.row} >
-      <SubSurface
-        classNames={'runner-container'}
-        title={`Tests`}
-        styles={styles.subsurface}
-      >
-        <AceEditor
-          aceRef={editorRef}
-          onChange={text => checkCall(props.onChange, text)}
-          editorId={`runner-tests-editor}`}
-          value={tests || ''}
-          style={styles.editor}
-          mode='javascript'
-          editorProps={{
-            wrapBehavioursEnabled: false,
-            animatedScroll: false,
-            dragEnabled: false,
-            tabSize: 2,
-            wrap: true,
-            ...props.editorProps,
-          }}
-        />
-      </SubSurface>
-    </Row>
-  )
-} 
-
-const ResultsRow = ({ styles, results }) => {
-  return (
-    <Row className='runner-results' style={styles.row} >
-      <SubSurface
-        classNames={'runner-container'}
-        title={`Results`}
-        styles={styles.subsurface}
-      >
-        <Results results={results} />
-      </SubSurface>
-    </Row>
-  )
-}
 
 export const Runner = props => {
 
@@ -84,63 +34,52 @@ export const Runner = props => {
   const tabSelect = useTabSelect(tab, setTab)
   const [testResults, setTestResults] = useState([])
 
-  const onRunTests = useTestRunner(
-    setTestResults,
-    setIsRunning,
+
+  const toggleToRunRef = useRef(null)
+  const setToggleToRun = useCallback(setToRunToggle => {
+    toggleToRunRef.current = setToRunToggle
+  }, [ toggleToRunRef && toggleToRunRef.current ])
+
+  const toggleResultsRef = useRef(null)
+  const setToggleResults = useCallback(setResultsToggle => {
+    toggleResultsRef.current = setResultsToggle
+  }, [ toggleResultsRef && toggleResultsRef.current ])
+
+
+  const onRunTests = useTestRunner({
     editorRef,
+    setIsRunning,
     parentMethods,
-  )
+    setTestResults,
+    toggleToRun: toggleToRunRef.current,
+    toggleResults: toggleResultsRef.current,
+  })
 
   useEffect(() => {
     autoRun && onRunTests()
   }, [autoRun, setTestResults, parentMethods])
 
   return (
-    <Surface
-      title={title}
-      styles={runnerStyles.surface}
-      prefix={prefix}
-    >
-      <Grid className={`runner-main`} style={runnerStyles.main} >
-        <ToRunRow
-          tests={tests}
-          styles={runnerStyles}
-          editorRef={editorRef}
-        />
-        <ResultsRow
-          styles={runnerStyles}
-          results={testResults}
-        />
-        <RunnerTabs
-          activeTab={tab}
-          onTabSelect={tabSelect}
-          onRun={onRunTests}
-        />
-        { isRunning && (
-          <>
-            <View
-              className={`runner-isrunning-background`}
-              style={runnerStyles?.isRunning?.background}
-            />
-            <View
-              className={`runner-isrunning-container`}
-              style={runnerStyles?.isRunning?.container}
-            >
-              <Loading
-                className={`runner-isrunning-loading`}
-                styles={runnerStyles?.isRunning}
-                type={'primary'}
-              />
-              <Text
-                className={`runner-isrunning-text`}
-                style={runnerStyles?.isRunning.text}
-              >
-                Running Tests
-              </Text>
-            </View>
-          </>
-        )}
-      </Grid>
-    </Surface>
+    <>
+      <ToRun
+        tests={tests}
+        styles={runnerStyles}
+        editorRef={editorRef}
+        title={title}
+        prefix={prefix}
+        toggleHandel={setToggleToRun}
+      />
+      <Results
+        results={testResults}
+        styles={runnerStyles.results}
+        toggleHandel={setToggleResults}
+      />
+      <RunnerTabs
+        activeTab={tab}
+        onTabSelect={tabSelect}
+        onRun={onRunTests}
+      />
+      { isRunning && (<TestsRunning styles={runnerStyles} />)}
+    </>
   )
 }
