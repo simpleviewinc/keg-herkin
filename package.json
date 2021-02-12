@@ -78,6 +78,7 @@
     "prettier": "2.0.5",
     "qawolf": "1.4.0",
     "react-native-final-tree-view": "2.1.0",
+    "@ltipton/react-gherkin-editor": "https://github.com/lancetipton/react-gherkin-editor.git",
     "rollup": "2.36.1",
     "socket.io": "2.4.0",
     "webpack": "5.13.0"
