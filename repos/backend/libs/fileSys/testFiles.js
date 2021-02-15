@@ -1,5 +1,4 @@
 const path = require('path')
-const { check } = require('prettier')
 const { readFile, removeFile, writeFile, pathExists } = require('./fileSys')
 
 /**
@@ -8,11 +7,12 @@ const { readFile, removeFile, writeFile, pathExists } = require('./fileSys')
  * @throw {Error} if path not found on file system
  */
 const checkPath = async (path) => {
-  const exists = await pathExists(path)
-  if (!exists)
-    throw new Error(
-      `[Backend - Files] Path not found: ${path}`
-    )
+  const [ err, exists ] = await pathExists(path)
+  if (err || !exists) {
+    const pathError = new Error(`[API - Files] Path not found: ${path}`)
+    pathError.status = 404
+    throw pathError
+  }
 }
 
 const deleteTestFile = async (config, testPath) => {
@@ -52,7 +52,6 @@ const saveTestFile = async (config, testPath, content) => {
   const fullPath = path.join(testsRoot, testPath)
 
   await checkPath(fullPath)
-
 
   // TODO: double check that writeFile returns a value
   const saved = await writeFile(fullPath, content)
