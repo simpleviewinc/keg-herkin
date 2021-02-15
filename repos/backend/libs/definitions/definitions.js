@@ -1,7 +1,7 @@
 const path = require('path')
 const glob = require('glob')
 const { DefinitionsParser } = require('./definitionsParser')
-const { TEST_UTILS_PATH } = require('HerkinConstants')
+const { TEST_UTILS_PATH } = require('HerkinBackConstants')
 
 const loadDefinitionsFiles = stepsDir => {
   return new Promise((res, rej) => {

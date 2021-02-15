@@ -1,4 +1,4 @@
-const { HERKIN_ROOT } = require('../constants')
+const { HERKIN_ROOT } = require('../constants/backend')
 const moduleAlias = require('module-alias')
 const { deepFreeze } = require('@keg-hub/jsutils')
 const path = require('path')
@@ -9,7 +9,8 @@ const aliases = deepFreeze({
   "HerkinRepos": path.join(HERKIN_ROOT, 'repos'),
   "HerkinConfigs": path.join(HERKIN_ROOT, 'configs'),
   "HerkinTasks": path.join(HERKIN_ROOT, 'tasks'),
-  "HerkinConstants": path.join(HERKIN_ROOT, 'constants'),
+  "HerkinBackConstants": path.join(HERKIN_ROOT, 'constants', 'backend.js'),
+  "HerkinFrontConstants": path.join(HERKIN_ROOT, 'constants', 'frontend.js'),
 })
 
 // Registers module-alias aliases (done programatically so we can reuse the aliases object for jest)

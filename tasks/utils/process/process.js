@@ -1,6 +1,6 @@
 const { spawnCmd } = require('@keg-hub/spawn-cmd')
 const { isArr } = require('@keg-hub/jsutils')
-const { TAP_ROOT } = require('HerkinConstants')
+const { TAP_ROOT } = require('HerkinBackConstants')
 
 const ensureArray = data => isArr(data) ? data : data.split(' ')
 

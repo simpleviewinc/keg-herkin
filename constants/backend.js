@@ -21,6 +21,9 @@ const repoPaths = repos.reduce(
   {}
 )
 
+/**
+ * Constants that should only be imported in a node runtime environment, the backend
+ */
 module.exports = deepFreeze({
   HERKIN_ROOT: rootDir,
   REPOS_PATH: reposPath,
