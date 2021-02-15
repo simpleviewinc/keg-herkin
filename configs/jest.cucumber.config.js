@@ -1,6 +1,7 @@
 const { jestAliases } = require('./aliases.config')
 const { getHerkinConfig } = require('./getHerkinConfig')
 const { TEST_UTILS_PATH, HERKIN_ROOT } = require('../constants')
+const { uniqArr } = require('@keg-hub/jsutils')
 const path = require('path')
 const glob = require('glob')
 
@@ -28,10 +29,10 @@ const getStepDefinitions = () => {
   )
   const herkinMatches = glob.sync(herkinPattern)
 
-  return [
+  return uniqArr([
     ...clientMatches,
     ...herkinMatches,
-  ]
+  ])
 }
 
 

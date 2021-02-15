@@ -29,6 +29,13 @@ const parseFeatures = (featureFiles, testsRoot) => {
 
 const loadFeatures = async (config, definitions) => {
   const { featuresDir, testsRoot } = config.paths
+  if (!featuresDir || !testsRoot)
+    throw new Error(
+      `Herkin config featuresDir and testsRoot must be defined. Found: 
+        - featuresDir=${featuresDir}
+        - testsRoot=${testsRoot}
+      `
+    )
   const pathToFeatures = path.join(testsRoot, featuresDir)
   const featureFiles = featuresDir && await loadFeatureFiles(pathToFeatures)
   const features = await parseFeatures(featureFiles, pathToFeatures)

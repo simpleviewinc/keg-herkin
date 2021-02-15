@@ -1,4 +1,4 @@
-const { getBrowserContext } = require('@tasks/utils/wolf/setupTestEnvironment')
+const { getBrowserContext } = require('HerkinTasks/utils/wolf/setupTestEnvironment')
 
 module.exports = {
   getBrowserContext

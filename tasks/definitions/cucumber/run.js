@@ -1,6 +1,6 @@
-const { dockerExec } = require('@tasks/utils/process/process')
-const { launchBrowsers } = require('@tasks/utils/playwright/launchBrowsers') 
-const { sharedOptions } = require('@tasks/utils/task/sharedOptions')
+const { dockerExec } = require('HerkinTasks/utils/process/process')
+const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers') 
+const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
 const { runSeq } = require('@keg-hub/jsutils')
 const path = require('path')
 

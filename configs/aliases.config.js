@@ -5,11 +5,11 @@ const path = require('path')
 
 // aliases shared by jest and module-alias
 const aliases = deepFreeze({
-  "@root": HERKIN_ROOT,
-  "@repos": path.join(HERKIN_ROOT, 'repos'),
-  "@configs": path.join(HERKIN_ROOT, 'configs'),
-  "@tasks": path.join(HERKIN_ROOT, 'tasks'),
-  "@globalConstants": path.join(HERKIN_ROOT, 'constants'),
+  "HerkinRoot": HERKIN_ROOT,
+  "HerkinRepos": path.join(HERKIN_ROOT, 'repos'),
+  "HerkinConfigs": path.join(HERKIN_ROOT, 'configs'),
+  "HerkinTasks": path.join(HERKIN_ROOT, 'tasks'),
+  "HerkinConstants": path.join(HERKIN_ROOT, 'constants'),
 })
 
 // Registers module-alias aliases (done programatically so we can reuse the aliases object for jest)
