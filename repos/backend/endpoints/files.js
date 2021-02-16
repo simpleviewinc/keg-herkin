@@ -55,19 +55,28 @@ const deleteFile = (app, config) => async (req, res) => {
  * @returns {Boolean} - whether a parent node exists and push was successful
  */
 const parentNodeExists = (nodes, parentPath, newItem) => {
-  
   const found = nodes.find((node) => {
-    if (node.fullPath === parentPath) {
-      node.children.push(newItem)
-      return true
-    } 
-    else {
-      // check children
-      return node.children.length > 0 && parentNodeExists(node.children, parentPath, newItem)
-    }
+    return node.fullPath === parentPath
+      ? Boolean(node.children.push(newItem))
+      : node.children.length && parentNodeExists(node.children, parentPath, newItem)
   })
 
   return Boolean(found)
+}
+
+/**
+ * Gets the metadata of a path from the local filesystem
+ * @param {string} path - full path to the folder or file i.e '/keg/tap/tests/bdd/features'
+ * 
+ * @returns {Object} - Meta data containing {name, parent, type ( folder || file )} properties
+ */
+const getPathMeta = path => {
+  const pathSplit = path.split('/')
+  return {
+    name: pathSplit.pop(),
+    parent: pathSplit.join('/'),
+    type: fs.lstatSync(path).isDirectory() ? 'folder' : 'file',
+  }
 }
 
 /**
@@ -78,37 +87,29 @@ const parentNodeExists = (nodes, parentPath, newItem) => {
  *                            {id, fullPath, children: [], isModified}
  */
 const generateTree = (paths) => {
-
-  /**
+   /**
    * 1. create new object for each 'path' item
    * 2. if the parent path of current 'path' item exists, add it as the child
    */
   return paths.reduce((nodes, path) => {
+    // Get the meta data for this path
+    const { parent, ...pathMeta } = getPathMeta(path)
+    
+    // Ignore hidden files that start with a .
+    if (pathMeta.type === 'file' && pathMeta.name.startsWith('.')) return nodes
+  
     const node = {
       id: path,
-      fullPath: path,
       children: [],
-      isModified: false
+      fullPath: path,
+      isModified: false,
+      ...pathMeta,
     }
 
-    const isDir = fs.lstatSync(path).isDirectory()
-    node.type = isDir ? 'folder' : 'file'
+    // either push the node or add it to an existing node.children
+    ;(!nodes.length || !parentNodeExists(nodes, parent, node)) &&
+      nodes.push(node)
 
-    // get name after last '/' excluding '/'
-    const lastIndex = path.lastIndexOf('/')
-    node.name = path.substring(lastIndex + 1)
-
-    // ignore hidden files
-    if (node.type === 'file' && node.name.startsWith('.')) return nodes
-
-
-    const parentPath = path.substring(0, lastIndex)
-
-    // either add new node to node.children, or as a new top level node
-    nodes.length > 0
-      ? !parentNodeExists(nodes, parentPath, node) && nodes.push(node)
-      : nodes.push(node)
-    
     return nodes
   }, [])
 
