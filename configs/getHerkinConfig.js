@@ -1,6 +1,6 @@
+
 const fs = require('fs')
 const path = require('path')
-const tapConfig = require('../tap.js')
 const defaultConfig = require('./herkin.default.config.js')
 const pkgConfig = require('../package.json')
 const { deepMerge, get, isStr, isFunc, noOpObj } = require('@keg-hub/jsutils')
@@ -99,19 +99,18 @@ const getHerkinConfig = (argsConfig=noOpObj) => {
   if (!customConfig && argsConfig.warn)
     console.warn(
       '\x1b[33m%s\x1b[0m',
-      `Can\'t find a herkin config file, defaulting to "@configs/herkin.default.config.js".\nTo use your own config, either:
+      `Can\'t find a herkin config file, defaulting to "HerkinConfigs/herkin.default.config.js".\nTo use your own config, either:
        * specify a path with "--config <path>"; or 
        * ensure a config exists in your current working directory or above it`
     )
 
   return deepMerge(
     get(pkgConfig, ['herkin']),
-    get(tapConfig, ['herkin']),
     defaultConfig,
-    customConfig || noOpObj
+    customConfig
   )
 }
 
 module.exports = {
-  getHerkinConfig
+  getHerkinConfig,
 }

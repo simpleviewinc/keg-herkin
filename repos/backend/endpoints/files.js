@@ -17,7 +17,7 @@ const saveFile = (app, config) => async (req, res) => {
     return apiResponse(req, res, meta || {}, 200)
   }
   catch(err){
-    return apiErr(req, res, err, 400)
+    return apiErr(req, res, err, err.status || 400)
   }
 }
 
@@ -29,7 +29,7 @@ const loadFile = (app, config) => async (req, res) => {
     return apiResponse(req, res, meta || {}, 200)
   }
   catch(err){
-    return apiErr(req, res, err, 400)
+    return apiErr(req, res, err, err.status || 400)
   }
 }
 

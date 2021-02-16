@@ -1,5 +1,5 @@
 const { launchBrowser } = require('./launchBrowser')
-const { getBrowsers } = require('@tasks/utils/task/getBrowsers')
+const { getBrowsers } = require('HerkinTasks/utils/task/getBrowsers')
 const { runSeq } = require('@keg-hub/jsutils')
 
 /**

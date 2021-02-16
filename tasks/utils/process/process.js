@@ -1,6 +1,6 @@
 const { spawnCmd } = require('@keg-hub/spawn-cmd')
 const { isArr } = require('@keg-hub/jsutils')
-const { tapRoot } = require('./tapRoot')
+const { TAP_ROOT } = require('HerkinBackConstants')
 
 const ensureArray = data => isArr(data) ? data : data.split(' ')
 
@@ -8,7 +8,7 @@ const runCmd = (cmd, args, env={}) => {
   return spawnCmd(cmd, {
     args,
     options: { env: { ...process.env, ...env } },
-    cwd: tapRoot
+    cwd: TAP_ROOT
   })
 }
 

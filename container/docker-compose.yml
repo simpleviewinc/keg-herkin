@@ -3,6 +3,7 @@ services:
   keg-herkin:
     privileged: true
     environment:
+      - HERKIN_ROOT_DIR
       - HERKIN_TESTS_ROOT
       - HERKIN_STEPS_DIR
       - HERKIN_FEATURES_DIR

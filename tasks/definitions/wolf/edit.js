@@ -1,5 +1,5 @@
-const { dockerExec } = require('@tasks/utils/process/process')
-const { launchBrowser } = require('@tasks/utils/playwright/launchBrowser') 
+const { dockerExec } = require('HerkinTasks/utils/process/process')
+const { launchBrowser } = require('HerkinTasks/utils/playwright/launchBrowser') 
 const { timedRun } = require('@keg-hub/jsutils')
 
 /**
