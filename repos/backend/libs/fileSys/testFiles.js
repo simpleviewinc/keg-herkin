@@ -1,9 +1,25 @@
 const path = require('path')
-const { readFile, removeFile, writeFile } = require('./fileSys')
+const { readFile, removeFile, writeFile, pathExists } = require('./fileSys')
+
+/**
+ * Checks that the file path exists
+ * @param {String} path - file path to check
+ * @throw {Error} if path not found on file system
+ */
+const checkPath = async (path) => {
+  const [ err, exists ] = await pathExists(path)
+  if (err || !exists) {
+    const pathError = new Error(`[API - Files] Path not found: ${path}`)
+    pathError.status = 404
+    throw pathError
+  }
+}
 
 const deleteTestFile = async (config, testPath) => {
-  const { testsFolder } = config.paths
-  const fullPath = path.join(testsFolder, testPath)
+  const { testsRoot } = config.paths
+  const fullPath = path.join(testsRoot, testPath)
+
+  await checkPath(fullPath)
 
   // TODO: double check that removeFile returns a value
   const deleted = await removeFile(fullPath)
@@ -16,8 +32,10 @@ const deleteTestFile = async (config, testPath) => {
 }
 
 const getTestFile = async (config, testPath) => {
-  const { testsFolder } = config.paths
-  const fullPath = path.join(testsFolder, testPath)
+  const { testsRoot } = config.paths
+  const fullPath = path.join(testsRoot, testPath)
+
+  await checkPath(fullPath)
 
   const [ __, content ] = await readFile(fullPath)
 
@@ -28,9 +46,12 @@ const getTestFile = async (config, testPath) => {
   } 
 }
 
+
 const saveTestFile = async (config, testPath, content) => {
-  const { testsFolder } = config.paths
-  const fullPath = path.join(testsFolder, testPath)
+  const { testsRoot } = config.paths
+  const fullPath = path.join(testsRoot, testPath)
+
+  await checkPath(fullPath)
 
   // TODO: double check that writeFile returns a value
   const saved = await writeFile(fullPath, content)

@@ -1,4 +1,4 @@
-
+const { jestAliases } = require('./aliases.config')
 const path = require('path')
 const rootDir = path.join(__dirname, '../')
 
@@ -8,5 +8,6 @@ module.exports = {
   preset: 'jest-playwright-preset',
   rootDir,
   testMatch: ['<rootDir>/tests/tests/**/*.js?(x)'],
-  testPathIgnorePatterns: ['config.js']
+  testPathIgnorePatterns: ['config.js'],
+  moduleNameMapper: jestAliases
 }

@@ -2,13 +2,12 @@ const path = require('path')
 const glob = require('glob')
 const { FeatureParser } = require('./featureParser')
 const { mapToSteps } = require('./mapToSteps')
-const definitions = require('../definitions/definitions')
 
-const loadFeatureFiles = (featuresFolder) => {
+const loadFeatureFiles = featuresDir => {
   return new Promise((res, rej) => {
-    glob(path.join(featuresFolder, '**/*.feature'), {}, async (err, files=[]) => {
+    glob(path.join(featuresDir, '**/*.feature'), {}, async (err, files=[]) => {
       err || !files
-        ? rej('No feature files found in ' + featuresFolder)
+        ? rej('No feature files found in ' + featuresDir)
         : res(files)
     })
   })
@@ -29,9 +28,17 @@ const parseFeatures = (featureFiles, testsRoot) => {
 }
 
 const loadFeatures = async (config, definitions) => {
-  const { featuresFolder, testsRoot } = config.paths
-  const featureFiles = featuresFolder && await loadFeatureFiles(featuresFolder)
-  const features = await parseFeatures(featureFiles, testsRoot)
+  const { featuresDir, testsRoot } = config.paths
+  if (!featuresDir || !testsRoot)
+    throw new Error(
+      `Herkin config featuresDir and testsRoot must be defined. Found: 
+        - featuresDir=${featuresDir}
+        - testsRoot=${testsRoot}
+      `
+    )
+  const pathToFeatures = path.join(testsRoot, featuresDir)
+  const featureFiles = featuresDir && await loadFeatureFiles(pathToFeatures)
+  const features = await parseFeatures(featureFiles, pathToFeatures)
 
   return definitions
     ? mapToSteps(features, definitions)

@@ -1,6 +1,6 @@
 const qawolf = require('qawolf')
-const metadata = require('../playwright/metadata')
-const { chromium, firefox, webkit  } = require('playwright')
+const metadata = require('HerkinTasks/utils/playwright/metadata')
+const { chromium, firefox, webkit } = require('playwright')
 const { isStr } = require('@keg-hub/jsutils')
 
 // QAW_BROWSER is a qawolf-set env, dependent on parameters like --all-browsers or --firefox

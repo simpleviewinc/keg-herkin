@@ -8,6 +8,7 @@ env:
   KEG_DOCKER_FILE: "{{ cli.taps.herkin.path }}/container/Dockerfile"
   KEG_VALUES_FILE: "{{ cli.taps.herkin.path }}/container/values.yml"
   KEG_COMPOSE_DEFAULT: "{{ cli.taps.herkin.path }}/container/docker-compose.yml"
+  KEG_COMPOSE_DEVELOPMENT: "{{ cli.taps.herkin.path }}/container/docker-compose-development.yml"
 
   # The KEG_CONTEXT_PATH env should be the location of the external app being run
   KEG_CONTEXT_PATH: "{{ cli.taps.herkin.path }}"
