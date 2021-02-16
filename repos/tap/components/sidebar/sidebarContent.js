@@ -12,7 +12,14 @@ import { useTheme } from '@keg-hub/re-theme'
 
 const { CATEGORIES, SIDEBAR_TYPES } = Values
 
-const TestFilesHeader = ({styles, title}) => {
+/**
+ * Title with Touchable NoteAdd icon
+ * 
+ * @param {object} props
+ * @param {object} props.styles
+ * @param {string} props.title
+ */
+const FileTreeHeader = ({styles, title}) => {
   return (
     <View style={styles?.main}>
       <View style={styles?.textContainer}>
@@ -47,26 +54,21 @@ export const SidebarContent = () => {
   const { activeId } = useStoreItems(CATEGORIES.SIDEBAR) || {}
   const theme = useTheme()
   const styles = theme.get('sidebar.content')
-  let Content = null
-  let Header = null
+
   switch (activeId) {
-    case SIDEBAR_TYPES.TEST_FILES:
-      Content = () => <TreeList />
-      Header = () => (
-        <TestFilesHeader 
-          styles={styles?.testFiles}
-          title={'TEST FILES'}
-        />
+    case SIDEBAR_TYPES.FILE_TREE:
+      return (
+        <View>
+          <FileTreeHeader 
+            styles={styles?.testFiles}
+            title={'TEST FILES'}
+          />
+          <TreeList />
+        </View>
       )
-      break
   
     default:
-      break
+      return null
   }
-  return (
-    <View>
-      <Header/>
-      <Content/>
-    </View>
-  )
+
 }

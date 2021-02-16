@@ -21,7 +21,7 @@ export const Values = {
     TEST_SELECTOR_MODAL: 'testSelectorModal',
   },
   SIDEBAR_TYPES: {
-    TEST_FILES: 'testFiles'
+    FILE_TREE: 'fileTree'
   },
   STEP_TYPES: [
     'and',

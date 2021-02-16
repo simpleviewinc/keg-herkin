@@ -68,7 +68,7 @@ export const init = async () => {
 
   initTestFile(activeFeat, queryObj?.file)
 
-  setActiveSidebar(SIDEBAR_TYPES.TEST_FILES)
+  setActiveSidebar(SIDEBAR_TYPES.FILE_TREE)
   // display options modal if no valid querystring passed in
   ;(!queryObj || isEmptyColl(queryObj)) &&
     setActiveModal(MODAL_TYPES.TEST_SELECTOR_MODAL)
