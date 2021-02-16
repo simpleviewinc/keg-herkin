@@ -1,6 +1,6 @@
 {
   "name": "@keg-hub/tap-herkin",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Keg and Tap testing",
   "main": "index.js",
   "publishConfig": {
