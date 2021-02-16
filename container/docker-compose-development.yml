@@ -1,0 +1,5 @@
+version: "3.8"
+services:
+  keg-herkin:
+    volumes:
+      - ${HERKIN_TESTS_ROOT}:${DOC_APP_PATH}/tests

@@ -16,6 +16,5 @@ const getFeatures = (app, config) => async (req, res) => {
 
 module.exports = (app, config) => {
   app.get('/features', getFeatures(app, config))
-
   return app
 }

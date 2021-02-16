@@ -1,14 +1,12 @@
 import { networkRequest } from 'SVServices/networkRequest'
 import { isObj } from '@keg-hub/jsutils'
-import { getConfig } from '../getConfig'
-const config = getConfig()
 
 /**
  * Default arguments for an API request
  * @object
  */
 const defRequest = {
-  url: `http://${ config.server.host }:${ config.server.port || ''}`
+  url: `http://${ process.env.SERVER_HOST }:${ process.env.SERVER_PORT }`
 }
 
 /**

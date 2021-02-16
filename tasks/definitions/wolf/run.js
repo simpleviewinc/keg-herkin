@@ -1,7 +1,7 @@
-const { dockerExec } = require('../../utils/process/process')
-const { launchBrowsers } = require('../../utils/playwright/launchBrowsers') 
-const { sharedOptions } = require('../../utils/task/sharedOptions')
-const { buildArguments } = require('../../utils/task/buildArguments')
+const { dockerExec } = require('HerkinTasks/utils/process/process')
+const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers') 
+const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
+const { buildArguments } = require('HerkinTasks/utils/task/buildArguments')
 
 /**
  * Builds the QAwolf test command
@@ -54,6 +54,7 @@ module.exports = {
       context: {
         alias: [ 'name' ],
         description: 'Name of the test to be run. If not passed, all tests are run',
+        default: '.test.js',
       },
       sync: {
         description: 'Run all tests sequentially',
