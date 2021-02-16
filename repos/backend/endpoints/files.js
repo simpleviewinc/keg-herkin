@@ -133,8 +133,7 @@ const getTree = (app, config) => async (req, res) => {
     return apiErr(req, res, err, 400)
   }
 }
-
-// TODO: make endpoint to expose config file 
+ 
 module.exports = (app, config) => {
   app.get('/files/get_tree', getTree(app, config))
   app.get('/files/load', loadFile(app, config))

@@ -56,7 +56,7 @@ export const TreeList = props => {
       : 40
   }, [fileTree])
 
-  return !features
+  return !fileTree
     ? (<Loading />)
     : (
         <TreeView

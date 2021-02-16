@@ -1,5 +1,5 @@
 import { setScreen } from './setScreen'
-import { Values, ActionTypes } from 'SVConstants'
+import { Values } from 'SVConstants'
 import { apiRequest } from 'SVUtils/api/apiRequest'
 import { loadApiFile } from 'SVUtils/api/loadApiFile'
 import { upsertFeatures }  from './features/upsertFeatures'
@@ -11,9 +11,6 @@ import { setActiveModal } from 'SVActions/modals'
 import { setActiveSidebar } from 'SVActions/sidebar'
 import { upsertFileTree } from 'SVActions/files'
 const { MODAL_TYPES, SIDEBAR_TYPES } = Values
-
-const exampleFile = 'tests/example/exampleTests.js'
-
 
 const getQueryData = () => {
   return typeof document === 'undefined'
@@ -51,9 +48,6 @@ const initTestFile = async (activeFeat, queryFile) => {
 
   const testFile = activeFeat && activeFeat.testPath || queryFile
 
-  // loading example test data from <root>/tests/tests
-  await loadApiFile(exampleFile, (testFile) => upsertActiveRunnerTest(testFile))
-
   // load the file tree from root tests folder
   upsertFileTree(await apiRequest(`/files/get_tree`) || [])
 }
@@ -72,7 +66,7 @@ export const init = async () => {
 
   initDefs(definitions)
 
-  initTestFile(activeFeat, queryObj.file || exampleFile)
+  initTestFile(activeFeat, queryObj?.file)
 
   setActiveSidebar(SIDEBAR_TYPES.TEST_FILES)
   // display options modal if no valid querystring passed in
