@@ -95,6 +95,10 @@ const SecondaryEditor = props => {
     : null
 }
 
+/**
+ * MainEditor
+ * @param {Object} props
+ */
 const MainEditor = props => {
   return props?.activeFile?.isFeature
     ? (

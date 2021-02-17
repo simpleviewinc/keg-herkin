@@ -16,6 +16,8 @@ export const setActiveFile = async (path) => {
     const { items } = getStore().getState()
     const features = items[CATEGORIES.FEATURES] || []
     const feature = features.find(feature => feature.fullPath === path)
+    const isFeature = Boolean(feature)
+    isFeature && loadFeature(feature)
 
     const result = await loadApiFile(path)
 
@@ -24,7 +26,7 @@ export const setActiveFile = async (path) => {
       payload: {
         category: CATEGORIES.ACTIVE_FILE,
         items: {
-          isFeature: Boolean(feature),
+          isFeature,
           ...result
         },
       },

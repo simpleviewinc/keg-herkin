@@ -2,8 +2,17 @@ import React from 'react'
 import { checkCall } from '@keg-hub/jsutils'
 import { View } from '@keg-hub/keg-components'
 import { AceEditor } from 'SVComponents/aceEditor'
+import { useFeature } from 'SVHooks/useFeature'
 
-export const DefinitionsEditor = ({ definitions, styles, ...props }) => {
+
+/**
+ * 
+ * @param {Object} props 
+ */
+export const DefinitionsEditor = ({ styles, ...props }) => {
+
+  const { definitions } = useFeature({path: props?.activeFile?.fullPath}) || {}
+
   return (
     <View
       className='definitions-editors-wrapper'
