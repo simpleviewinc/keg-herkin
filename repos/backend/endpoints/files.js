@@ -3,10 +3,10 @@ const {
   deleteTestFile,
   getTestFile,
   saveTestFile,
-  getFolderContentSync
+  getFolderContent
 } = require('../libs/fileSys')
 const fs = require('fs')
-
+const path = require('path')
 
 const saveFile = (app, config) => async (req, res) => {
   try {
@@ -66,16 +66,17 @@ const parentNodeExists = (nodes, parentPath, newItem) => {
 
 /**
  * Gets the metadata of a path from the local filesystem
- * @param {string} path - full path to the folder or file i.e '/keg/tap/tests/bdd/features'
+ * @param {string} filePath - full path to the folder or file i.e '/keg/tap/tests/bdd/features'
  * 
  * @returns {Object} - Meta data containing {name, parent, type ( folder || file )} properties
  */
-const getPathMeta = path => {
-  const pathSplit = path.split('/')
+const getPathMeta = filePath => {
   return {
-    name: pathSplit.pop(),
-    parent: pathSplit.join('/'),
-    type: fs.lstatSync(path).isDirectory() ? 'folder' : 'file',
+    id: filePath,
+    fullPath: filePath,
+    name: path.basename(filePath),
+    parent: path.dirname(filePath),
+    type: fs.lstatSync(filePath).isDirectory() ? 'folder' : 'file',
   }
 }
 
@@ -99,9 +100,7 @@ const generateTree = (paths) => {
     if (pathMeta.type === 'file' && pathMeta.name.startsWith('.')) return nodes
   
     const node = {
-      id: path,
       children: [],
-      fullPath: path,
       isModified: false,
       ...pathMeta,
     }
@@ -123,7 +122,7 @@ const generateTree = (paths) => {
 const getTree = (app, config) => async (req, res) => {
   try {
     const { testsRoot } = config.paths
-    const meta = await getFolderContentSync(testsRoot, {
+    const meta = await getFolderContent(testsRoot, {
       full: true,
       recursive: true,
     })
@@ -136,7 +135,7 @@ const getTree = (app, config) => async (req, res) => {
 }
  
 module.exports = (app, config) => {
-  app.get('/files/get_tree', getTree(app, config))
+  app.get('/files/tree', getTree(app, config))
   app.get('/files/load', loadFile(app, config))
   app.post('/files/save', saveFile(app, config))
   app.delete('/files/delete', deleteFile(app, config))

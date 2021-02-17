@@ -104,14 +104,14 @@ const writeFile = (filePath, data, format='utf8') => {
  * @param {Array} opts.exclude - File or folder to exclude
  * @param {Array} opts.include - File or folder to include
  *
- * @returns {Array} - Array of found file paths
+ * @returns {Promise|Array} - Array of found file paths
  */
-const buildFoundArray = ({ allFound, recurCall, file, fromPath, opts={} }) => {
+const buildFoundArray = async ({ allFound, recurCall, file, fromPath, opts={} }) => {
   
   const { exclude=[], full, include=[], recursive, type } = opts
-
+  const all = await allFound
   // Filter out any folder matching the exclude
-  if(!file || exclude.indexOf(file) !== -1) return allFound
+  if(!file || exclude.indexOf(file) !== -1) return all
 
   // Get the full path of the file or folder
   const fullPath = path.join(fromPath, file)
@@ -120,19 +120,19 @@ const buildFoundArray = ({ allFound, recurCall, file, fromPath, opts={} }) => {
   const found = full ? fullPath : file
 
   // Check if its a directory
-  const isDir = fs.statSync(fullPath).isDirectory()
-
+  const [_, stat] = await limboify(fs.stat, fullPath)
+  const isDir = stat.isDirectory()
   // Check if found should be added to the array based on the passed in arguments
   // Check the for type match or no type
   ;( !type ||
     ( type === 'folder' && isDir ) ||
     ( type !== 'folder' && !isDir )) &&
     ( !include.length || include.indexOf(file) !== -1 ) &&
-    allFound.push(found)
+    all.push(found)
 
   return !isDir || !recursive || !isFunc(recurCall)
-    ? allFound
-    : recurCall(fullPath, opts, allFound)
+    ? all
+    : recurCall(fullPath, opts, all)
 
 }
 
@@ -149,15 +149,15 @@ const buildFoundArray = ({ allFound, recurCall, file, fromPath, opts={} }) => {
  *
  * @returns {Promise|Array} - Array of found items
  */
-const getFolderContentSync = (fromPath, opts={}, foundPaths=[]) => {
-  return fs.readdirSync(fromPath)
-    .reduce((allFound, file) => buildFoundArray({
-      opts,
-      file,
-      fromPath,
-      allFound,
-      recurCall: getFolderContentSync,
-    }), foundPaths)
+const getFolderContent = async (fromPath, opts={}, foundPaths=[]) => {
+  const [ __, results ] = await limboify(fs.readdir, fromPath)
+  return results.reduce((allFound, file) => buildFoundArray({
+    opts,
+    file,
+    fromPath,
+    allFound,
+    recurCall: getFolderContent,
+  }), foundPaths)
 }
 
 module.exports = {
@@ -168,5 +168,5 @@ module.exports = {
   readFile,
   removeFile,
   writeFile,
-  getFolderContentSync
+  getFolderContent
 }
