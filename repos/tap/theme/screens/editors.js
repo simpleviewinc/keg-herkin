@@ -1,34 +1,35 @@
 export const editors = theme => ({
   main: {
-    flexDirection: 'row',
+    flD: 'row',
   },
   feature: {
-    width: `100%`,
-    height: `75vh`,
+    w: `100%`,
+    h: `75vh`,
   },
   definitions: {
     main: {
-      width: `100%`,
-      height: `75vh`,
+      w: `100%`,
+      h: `75vh`,
     },
     editor: {
-      width: `100%`,
-      height: `20vh`,
+      w: `100%`,
+      h: `20vh`,
     }
   },
   split: {
     feature: {
-      width: `calc( 50% - 15px )`,
-      marginRight: 15,
-      height: `75vh`,
+      w: `50%`,
+      h: `75vh`,
+      pR: theme.padding.size / 2,
     },
     definitions: {
       main: {
-        width: `calc( 50% - 15px )`,
-        height: `75vh`,
+        w: `50%`,
+        h: `75vh`,
+        pL: theme.padding.size / 2,
       },
       editor: {
-        width: `100%`,
+        w: `100%`,
       }
     },
   }

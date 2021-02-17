@@ -5,29 +5,16 @@ import { useSelector, shallowEqual } from 'react-redux'
 import ReactGherkinEditor from '@ltipton/react-gherkin-editor'
 
 const { CATEGORIES } = Values
-CATEGORIES.DEFINITIONS
-CATEGORIES.FEATURES
-// const initialValue = `Feature: Serve coffee
-//   As a coffee lover
-//   I can get coffee from the machine
-//   So I can enjoy the rest of the day
 
-//   Scenario: Simple use
-//     # Well, sometimes, you just get a coffee.
-//     Given the coffee machine is started
-//     When I take a coffee
-//     Then coffee should be served
-//     And message "Please take your coffee" should be printed`
-
-// const steps = [
-//   'I start the coffee machine using language "lang"',
-//   'I shutdown the coffee machine',
-//   'message "message" should be displayed'
-// ]
-
+/**
+ * Hook to find the currently loaded step definitions
+ * Uses them to create an auto-complete dropdown for the editor
+ * @param {string} feature 
+ * @returns {Object}
+ */
 const useAutoComplete = (feature, definitions) => useCallback((type, text) => {
-  const typeDefs = definitions[type.toLowerCase()]
-  const matches = typeDefs.filter(def => def.name.startsWith(text))
+  const stepDefs = definitions[type.toLowerCase()]
+  const matches = stepDefs.filter(def => def.name.startsWith(text))
 
   return matches.map(match => ({
     caption: match.name,
@@ -38,7 +25,7 @@ const useAutoComplete = (feature, definitions) => useCallback((type, text) => {
     meta: 'Step Def'
   }))
 
-}, [feature, definitions])
+}, [definitions])
 
 export const GherkinEditor = props => {
   const {
@@ -47,6 +34,7 @@ export const GherkinEditor = props => {
     theme,
     value,
     editorRef,
+    showGutter=true,
     ...args
   } = props
 
@@ -69,6 +57,7 @@ export const GherkinEditor = props => {
       mode={'gherkin_scenario_i18n'}
       language={ language || 'en'}
       hideToolbar={true}
+      showGutter={showGutter}
     />
   )
 }
