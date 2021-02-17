@@ -77,8 +77,9 @@
     "playwright": "1.8.0",
     "prettier": "2.0.5",
     "qawolf": "1.4.0",
+    "@ltipton/react-ace-editor": "0.0.1",
+    "@ltipton/react-gherkin-editor": "0.0.2",
     "react-native-final-tree-view": "2.1.0",
-    "@ltipton/react-gherkin-editor": "https://github.com/lancetipton/react-gherkin-editor.git",
     "rollup": "2.36.1",
     "socket.io": "2.4.0",
     "webpack": "5.13.0"
