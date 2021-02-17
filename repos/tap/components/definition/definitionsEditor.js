@@ -20,7 +20,7 @@ export const DefinitionsEditor = ({ definitions, styles, ...props }) => {
               style={styles.editor}
               mode='javascript'
               editorProps={{
-                wrapBehavioursEnabled: false,
+                wrapBehavioursEnabled: true,
                 animatedScroll: false,
                 dragEnabled: false,
                 tabSize: 2,

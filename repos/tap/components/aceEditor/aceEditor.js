@@ -2,27 +2,16 @@ import React, { useRef, useEffect, useState } from 'react'
 import ReactAce from '@ltipton/react-ace-editor'
 import { useTheme } from '@keg-hub/re-theme'
 import { ThemeOverrides } from './themeOverrides'
-import { isObj, checkCall, deepMerge } from '@keg-hub/jsutils'
+import { isObj, checkCall, deepMerge, pickKeys } from '@keg-hub/jsutils'
 import { useStyleTag } from '@keg-hub/re-theme/styleInjector'
 import { GherkinEditor } from './gherkinEditor'
 
 let addOverrides = true
 const setOverrides = val => (addOverrides = val)
 
-const themeTypes = [
-  `monokai`,
-  `tomorrow`,
-  `xcode`,
-  `dreamweaver`,
-  `github`,
-  `textmate`,
-  `chrome`
-]
-
 const defOptions = {
   value: '',
   maxLines: 500,
-  fontFamily: `'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace`,
   fontSize: '12px',
   scrollMargin: 15,
   showGutter: true,
@@ -35,18 +24,22 @@ const defOptions = {
 const getEditor = editorRef => editorRef?.current?.editor
 
 const useConfigureEditor = (props, editorRef) => {
+  const { aceRef } = props
+
   const {
-    aceRef,
-    fontSize=defOptions.fontSize,
-    maxLines=defOptions.maxLines,
-    fontFamily=defOptions.fontFamily,
-    scrollMargin=defOptions.scrollMargin,
-    scrollPastEnd=defOptions.scrollPastEnd,
-    showLineNumbers=defOptions.showLineNumbers,
-    fixedWidthGutter=defOptions.fixedWidthGutter,
-    showPrintMargin=defOptions.showPrintMargin,
-    value=defOptions.value,
-  } = props
+    fontSize,
+    maxLines,
+    fontFamily,
+    scrollMargin,
+    scrollPastEnd,
+    showLineNumbers,
+    fixedWidthGutter,
+    showPrintMargin,
+    value,
+  } = deepMerge(
+    defOptions,
+    pickKeys(props, Object.keys(defOptions))
+  )
 
   // Set the value and editors separate from the reset of the config
   // This way value updates don't also call all the editor setting over and over again
