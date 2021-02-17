@@ -75,7 +75,7 @@ module.exports = {
       },
       testDir: {
         description: 'Path to the tests directory within the docker container',
-        default: 'tests/bdd'
+        default: 'tests'
       }
     }, [
       'allBrowsers',
