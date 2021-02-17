@@ -32,8 +32,11 @@ const deleteTestFile = async (config, testPath) => {
 }
 
 const getTestFile = async (config, testPath) => {
+
   const { testsRoot } = config.paths
-  const fullPath = path.join(testsRoot, testPath)
+  const fullPath = testPath.includes(testsRoot)
+    ? testPath
+    : path.join(testsRoot, testPath)
 
   await checkPath(fullPath)
 
