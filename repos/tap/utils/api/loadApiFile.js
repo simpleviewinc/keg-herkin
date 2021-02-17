@@ -13,7 +13,7 @@ import { logData, isFunc } from '@keg-hub/jsutils'
  */
 export const loadApiFile = async (path, callback) => {
   const response = path
-    ? await apiRequest(`/files/load?file=${path}`)
+    ? await apiRequest(`/files/load?path=${path}`)
     : logData(`Load File action requires a file path!`)
 
   return isFunc(callback) ? callback(response) : response

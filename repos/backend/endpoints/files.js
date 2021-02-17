@@ -23,8 +23,8 @@ const saveFile = (app, config) => async (req, res) => {
 
 const loadFile = (app, config) => async (req, res) => {
   try {
-    const file = req.query.file
-    const meta = await getTestFile(config, file)
+    const path = req.query.path
+    const meta = await getTestFile(config, path)
     
     return apiResponse(req, res, meta || {}, 200)
   }

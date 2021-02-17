@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
-import { pickKeys, noPropArr } from '@keg-hub/jsutils'
+import { noPropArr } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
-import { useSelector, shallowEqual } from 'react-redux'
 import { setFeatureActive } from 'SVActions/features'
 import { loadFeature } from 'SVActions/features/loadFeature'
 import {
@@ -13,6 +12,8 @@ import { Values } from 'SVConstants'
 import TreeView from 'react-native-final-tree-view'
 import { ChevronDown } from 'SVAssets/icons'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { isEmptyFolderNode } from 'SVUtils/fileTree'
+import { toggleRotationStyle } from 'SVUtils/theme'
 
 const { CATEGORIES } = Values
 
@@ -23,17 +24,13 @@ const { CATEGORIES } = Values
  * 
  * @returns {object} node
  */
-const findNode = (id, nodes) => {
-  let foundNode = {}
-  nodes.reduce((__, node) => {
-    if (node.id === id) foundNode = node
-    if (node.children.length > 0) {
-      findNode(id, node.children)
-    }
+const findNode = (id, nodes) => 
+  nodes.find((node) => {
+    return node.id === id 
+      ? node
+      : node.children.length && findNode(id, node.children)
   }, {})
 
-  return foundNode
-}
 
 /**
  * TreeList
@@ -44,14 +41,13 @@ export const TreeList = props => {
   const { features, fileTree=noPropArr } = useStoreItems([CATEGORIES.FEATURES, CATEGORIES.FILE_TREE])
 
   const onItemPress = useCallback(({node}) => {
-    // for now only supporting feature file/content
     const match = features.find(feature => feature.fullPath === node.fullPath)
     match && loadFeature(match)
   }, [ features, setFeatureActive ])
   
   const getCollapsedNodeHeight = useCallback(({id}) => {
     const node = findNode(id, fileTree)
-    return (node?.children?.length === 0 && node?.type === 'folder')
+    return (isEmptyFolderNode(node))
       ? 0
       : 40
   }, [fileTree])
@@ -80,15 +76,13 @@ export const TreeList = props => {
  */
 const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
   // don't display empty folders
-  if (level === 0 && node.children.length === 0 && node?.type === 'folder') return null
+  if (level === 0 && isEmptyFolderNode(node)) return null
 
   const theme = useTheme()
   const themeStyles = theme.get('treeList')
   const styles = level === 0
     ? themeStyles?.header
     : themeStyles?.item
-
-  const iconStyles = { transform: isExpanded ? 'rotate(180deg)' : 'rotate(360deg)' }
 
   return (
     <View style={[styles?.main, level > 0 && { marginLeft: 10 * level }]}>
@@ -102,7 +96,14 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
         (
           <ChevronDown
             size={themeStyles?.icon?.size || 16}
-            style={[themeStyles?.icon, iconStyles]}
+            style={[
+              themeStyles?.icon, 
+              toggleRotationStyle({
+                isToggled: isExpanded,
+                onValue: 180,
+                offValue: 0
+              })
+            ]}
           />
         )
       }

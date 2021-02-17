@@ -15,7 +15,7 @@ export const sidebarContent = (theme) => ({
     text: {
       ftWt: 'bold',
       ftSz: 20,
-      c: tapColors.white
+      c: theme.colors.palette.white01
     },
     iconContainer: {
       fl: 1, 
@@ -25,7 +25,7 @@ export const sidebarContent = (theme) => ({
     },
     icon: {
       size: 30,
-      fill: tapColors.white,
+      fill: theme.colors.palette.white01,
       opacity: 0.2,
       stroke: tapColors.disabledColor
     }
