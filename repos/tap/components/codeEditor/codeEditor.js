@@ -1,12 +1,13 @@
 import { Values } from 'SVConstants'
 import React, { useCallback, useMemo, useState } from 'react'
-import { pickKeys, checkCall } from '@keg-hub/jsutils'
+import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
-import { View } from '@keg-hub/keg-components'
 import { EditorTabs } from './editorTabs'
 import { AceEditor } from 'SVComponents/aceEditor'
 import { useSelector, shallowEqual } from 'react-redux'
 import { runTests } from 'SVActions'
+import { FeatureEditor } from './featureEditor'
+import { DefinitionsEditor } from './definitionsEditor'
 
 const { CATEGORIES, EDITOR_MODES } = Values
 
@@ -56,44 +57,16 @@ const useMatchingDefinitions = (feature, definitions) => {
   }, [feature, definitions])
 }
 
-const FeatureEditor = props => {
-  return (
-    <AceEditor
-      {...props}
-      mode='gherkin'
-    />
-  )
-}
+const useFeatureData = () => {
+  const { activeData, features, definitions } = useSelector(({ items }) => pickKeys(
+    items,
+    [ CATEGORIES.ACTIVE_DATA, CATEGORIES.FEATURES, CATEGORIES.DEFINITIONS ]
+  ), shallowEqual)
 
-const DefinitionsEditor = ({ definitions, styles, ...props }) => {
-  return (
-    <View
-      className='definitions-editors-wrapper'
-      style={styles.main}
-    >
-      {definitions && definitions.map(def => {
-          return (
-            <AceEditor
-              key={def.uuid}
-              {...props}
-              onChange={text => checkCall(props.onChange, def.uuid, text)}
-              editorId={`definition-editor-${def.uuid}`}
-              value={def.content || ''}
-              style={styles.editor}
-              mode='javascript'
-              editorProps={{
-                wrapBehavioursEnabled: false,
-                animatedScroll: false,
-                dragEnabled: false,
-                tabSize: 2,
-                wrap: true,
-                ...props.editorProps,
-              }}
-            />
-          )
-        })}
-    </View>
-  )
+  const feature = features && features[activeData?.feature]
+  const matchingDefinitions = useMatchingDefinitions(feature, definitions)
+  
+  return { feature, definitions, matchingDefinitions }
 }
 
 const onTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
@@ -104,14 +77,12 @@ const onTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
 export const CodeEditor = props => {
   const theme = useTheme()
 
-  const { activeData, features, definitions } = useSelector(({ items }) => pickKeys(
-    items,
-    [ CATEGORIES.ACTIVE_DATA, CATEGORIES.FEATURES, CATEGORIES.DEFINITIONS ]
-  ), shallowEqual)
+  const {
+    feature,
+    definitions,
+    matchingDefinitions
+  } = useFeatureData()
 
-  const feature = features && features[activeData?.feature]
-
-  const matchingDefinitions = useMatchingDefinitions(feature, definitions)
   const [localFeat, setLocalFeat] = useState(feature)
   const [localDefs, setLocalDefs] = useState(matchingDefinitions)
 

@@ -13,5 +13,12 @@ export const aceThemeOverrides = theme => ({
   },
   'ace-chrome .ace_gutter, .ace-cucumber .ace_gutter': {
     background: tapColors.accentBackground,
+    width: '42px !important',
   },
+  'ace_gutter .ace_gutter-layer': {
+    width: '42px !important',
+  },
+  'ace_gutter .ace_gutter-layer .ace_gutter-active-line': {
+      backgroundColor: '#e3e8f0',
+  }
 })
