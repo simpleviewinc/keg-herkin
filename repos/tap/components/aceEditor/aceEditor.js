@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import ReactAce from 'react-ace-editor'
+import ReactAce from '@ltipton/react-ace-editor'
 import { useTheme } from '@keg-hub/re-theme'
 import { ThemeOverrides } from './themeOverrides'
 import { isObj, checkCall, deepMerge } from '@keg-hub/jsutils'
