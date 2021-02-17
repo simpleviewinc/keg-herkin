@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { noPropArr } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
-import { setFeatureActive } from 'SVActions/features'
+import { setActiveFile } from 'SVActions/files/setActiveFile'
 import { loadFeature } from 'SVActions/features/loadFeature'
 import {
   View,
@@ -38,12 +38,11 @@ const findNode = (id, nodes) =>
  */
 export const TreeList = props => {
 
-  const { features, fileTree=noPropArr } = useStoreItems([CATEGORIES.FEATURES, CATEGORIES.FILE_TREE])
+  const { fileTree=noPropArr } = useStoreItems([CATEGORIES.FILE_TREE])
 
   const onItemPress = useCallback(({node}) => {
-    const match = features.find(feature => feature.fullPath === node.fullPath)
-    match && loadFeature(match)
-  }, [ features, setFeatureActive ])
+    node?.type === 'file' && setActiveFile(node?.fullPath)
+  }, [ loadFeature ])
   
   const getCollapsedNodeHeight = useCallback(({id}) => {
     const node = findNode(id, fileTree)

@@ -78,7 +78,7 @@ export const TestSelectorModal = (props) => {
   ])
   const [testName, setTestName] = useState(Values.CREATE_NEW_FILE)
   const [selectedTab, setSelectedtab] = useState(SCREENS.EDITOR)
-  const { feature } = useFeature(testName)
+  const { feature } = useFeature({name: testName}) || {}
 
   const loadTests = useCallback(() => {
 

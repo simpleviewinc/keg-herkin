@@ -8,6 +8,7 @@ export const Values = {
     ACTIVE_DATA: 'activeData',
     ACTIVE_RUNNER_TESTS: 'activeRunnerTests',
     FEATURE: 'feature',
+    ACTIVE_FILE: 'activeFile',
     SCREEN: 'screen',
     COPY_STEP: 'copy_step',
     MODALS: 'modals',

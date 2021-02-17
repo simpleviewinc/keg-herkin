@@ -14,16 +14,14 @@ export const RunnerScreen = props => {
   const parentMethods = useParentMethods()
   const [ tests, setTests ] = useState('')
 
-  const {runnerContent} = useStoreItems(CATEGORIES.ACTIVE_RUNNER_TESTS) || {}
-  useEffect(() => {
-    exists(runnerContent) &&
-    runnerContent !== tests &&
-      setTests(runnerContent)
-  
-  }, [ tests, setTests, runnerContent ])
+  const { activeFile } = useStoreItems([CATEGORIES.ACTIVE_FILE]) || {}
 
-  // TODO: Update to be the selected test type, instead of hard coded
-  const title = 'Features'
+  useEffect(() => {
+    exists(activeFile?.content) &&
+    activeFile?.content !== tests &&
+      setTests(activeFile?.content)
+  
+  }, [ tests, setTests, activeFile?.content ])
 
   return (
     <View
