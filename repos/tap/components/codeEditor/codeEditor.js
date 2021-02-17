@@ -6,8 +6,8 @@ import { EditorTabs } from './editorTabs'
 import { AceEditor } from 'SVComponents/aceEditor'
 import { useSelector, shallowEqual } from 'react-redux'
 import { runTests } from 'SVActions'
-import { FeatureEditor } from './featureEditor'
-import { DefinitionsEditor } from './definitionsEditor'
+import { FeatureEditor } from 'SVComponents/feature/featureEditor'
+import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
 
 const { CATEGORIES, EDITOR_MODES } = Values
 

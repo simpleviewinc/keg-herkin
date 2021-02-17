@@ -18,11 +18,9 @@ const useAutoComplete = (feature, definitions) => useCallback((type, text) => {
 
   return matches.map(match => ({
     caption: match.name,
-    // TODO: update steps to return the match string separate from the name
-    // That way we can properly display it here for the user
     value: match.name,
     score: Math.floor(Math.random() * Math.floor(100)),
-    meta: 'Step Def'
+    meta: match.type || 'Step'
   }))
 
 }, [definitions])
@@ -31,6 +29,7 @@ export const GherkinEditor = props => {
   const {
     onChange,
     language,
+    style,
     theme,
     value,
     editorRef,
@@ -53,11 +52,12 @@ export const GherkinEditor = props => {
       onValueChange={onChange}
       autoCompleteFunction={autoComplete}
       uniqueId={args.editorId}
-      theme={'cucumber'}
-      mode={'gherkin_scenario_i18n'}
+      theme={'herkin'}
+      mode={'gherkin_i18n'}
       language={ language || 'en'}
       hideToolbar={true}
       showGutter={showGutter}
+      style={style}
     />
   )
 }
