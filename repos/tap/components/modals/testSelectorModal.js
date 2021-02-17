@@ -3,13 +3,14 @@ import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
 import { Select } from 'SVComponents/form/select'
 import { useTheme } from '@keg-hub/re-theme'
 import { createFeatureFile } from 'SVActions/features'
-import { loadFeature } from 'SVActions/features/loadFeature'
+import { setActiveFile } from 'SVActions/files/setActiveFile'
 import { setModalVisibility } from 'SVActions/modals'
 import { Values } from 'SVConstants'
 import { mapObj, capitalize, wordCaps, noPropArr } from '@keg-hub/jsutils'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { useFeature } from 'SVHooks/useFeature'
 import { devLog } from 'SVUtils'
+import { setScreen } from 'SVActions/setScreen'
 
 const { TEST_TYPE, CATEGORIES, SCREENS } = Values
 
@@ -84,7 +85,7 @@ export const TestSelectorModal = (props) => {
 
     testName === Values.CREATE_NEW_FILE
       ? createFeatureFile(selectedTab)
-      : loadFeature(feature, selectedTab)
+      : setActiveFile(feature.fullPath) && setScreen(selectedTab)
 
       setModalVisibility(false)
   }, 
@@ -151,7 +152,7 @@ const TestNameSelect = ({styles, features, setTestName}) => {
     const feature = features.find((feature) => feature.feature === val)
 
     feature 
-      ? loadFeature(feature)
+      ? setActiveFile(feature.fullPath)
       : devLog(`warn`, `Feature '${val}' does not exist!`)
 
     setTestName(val)
