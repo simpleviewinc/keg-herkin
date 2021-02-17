@@ -15,16 +15,22 @@ const { CATEGORIES, EDITOR_TABS } = Values
 
 const useEditorActions = (feature, setFeature, definitions, setDefinitions) => {
 
-  const [localFeat, setLocalFeat] = useState(feature)
+  return (
+    <AceEditor
+      {...props}
+      onChange={() => {}}
+      mode={'gherkin'}
+    />
+  )
+}
+const DefinitionsEditor = ({ styles, activeFile, ...props }) => {
+  console.log(activeFile, 'activeFile')
 
-  const onFeatureEdit = useCallback((text) => {
-    text !== localFeat?.content &&
-      !text.trim() &&
-      setLocalFeat({ ...feature, text }) // warning when switching 
-      
-  }, [feature, setLocalFeat])
-
-  const onDefinitionEdit = useCallback((uuid, text, change) => {
+  const { definitions } = useFeature({path: activeFile?.fullPath}) || {}
+  const [localDefs, setLocalDefs] = useState(definitions)
+  console.log(localDefs,'localdef')
+  console.log(definitions,' deffies')
+  const onDefinitionEdit = useCallback((uuid, text) => {
     if(!text || !text.trim()) return
 
     const defs = definitions.map(def => {
