@@ -7,12 +7,19 @@ const result = theme => ({
     flD: 'row',
     alI: 'baseline',
   },
+  icon: {
+    color: theme?.colors?.palette?.white01,
+    ftSz: 14,
+    mR: 8,
+  },
   label: {
     mR: 4,
     p: theme?.padding?.size / 2,
     c: theme?.colors?.palette?.white01,
     bRad: tapColors.borderRadius,
     ftF: 'Consolas, monaco, monospace'
+  },
+  row: {
   },
   block: {
     c: tapColors?.default,
@@ -41,6 +48,13 @@ export const results = theme => {
 
   return {
     main: {
+      marginTop: theme.margin.size * 2,
+      bgC: theme.colors.palette.white01,
+    },
+    row: {
+      flD: 'column',
+      p: theme.padding.size,
+      pT: 0,
     },
     pass: deepMerge(defResult, {
       label: {

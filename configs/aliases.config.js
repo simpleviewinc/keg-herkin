@@ -1,13 +1,16 @@
+const { HERKIN_ROOT } = require('../constants/backend')
 const moduleAlias = require('module-alias')
-const tapRoot = require('app-root-path').path
 const { deepFreeze } = require('@keg-hub/jsutils')
+const path = require('path')
 
 // aliases shared by jest and module-alias
 const aliases = deepFreeze({
-  "@root": tapRoot,
-  "@repos": `${tapRoot}/repos`,
-  "@configs": `${tapRoot}/configs`,
-  "@tasks": `${tapRoot}/tasks`
+  "HerkinRoot": HERKIN_ROOT,
+  "HerkinRepos": path.join(HERKIN_ROOT, 'repos'),
+  "HerkinConfigs": path.join(HERKIN_ROOT, 'configs'),
+  "HerkinTasks": path.join(HERKIN_ROOT, 'tasks'),
+  "HerkinBackConstants": path.join(HERKIN_ROOT, 'constants', 'backend.js'),
+  "HerkinFrontConstants": path.join(HERKIN_ROOT, 'constants', 'frontend.js'),
 })
 
 // Registers module-alias aliases (done programatically so we can reuse the aliases object for jest)

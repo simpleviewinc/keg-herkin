@@ -1,10 +1,12 @@
 import { tapColors } from '../../tapColors'
+import { toggleState } from './toggleState'
 
 const titleSize = 16
 export const surface = theme => ({
   main: {
     borderTopLeftRadius: tapColors.borderRadius,
     borderTopRightRadius: tapColors.borderRadius,
+    minHeight: 0,
   },
   header: {
     // Overrides
@@ -26,18 +28,19 @@ export const surface = theme => ({
         },
         center: {
           main: {
-            width: '90%',
+            width: '70%',
             alI: 'start',
-            pH: theme.padding.size,
+            pL: theme.padding.size,
           }
         },
         right: {
           main: {
-            d: 'none',
+            pR: theme.padding.size,
           }
         }
       }
     },
+    toggle: toggleState(theme),
     heading: {
       ftWt: 'bold',
       ftSz: titleSize,

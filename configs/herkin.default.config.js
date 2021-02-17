@@ -11,8 +11,12 @@ const {
 } = process.env
 
 const rootDir = path.join(__dirname, '../')
+
+// absolute path to tests volume inside the container
 const dockerTestsRoot = path.join(rootDir, 'tests')
-const hostTestsRoot = HERKIN_TESTS_ROOT || path.join(rootDir, 'repos', 'example', 'tests')
+
+// absolute path to the tests folder on host machine
+const hostTestsRoot = HERKIN_TESTS_ROOT || dockerTestsRoot
 
 module.exports = {
   paths: {

@@ -17,6 +17,8 @@ import React, {
 // TODO - More to utility method when migrated to keg-components
 /**
  * Checks if the animation should NOT run
+ * @function
+ * @private
  * @param {boolean} toggled - Current state of the Drawer toggled open
  * @param {number} current - Current height of the Drawer / animated.value
  * @param {number} heights - Ref that holds the initial and max heights of the slider
@@ -123,6 +125,7 @@ export const Sidebar = props => {
         { isValidComponent(ToggleComponent) && (
           <ToggleComponent
             toggled={isToggled}
+            setIsToggled={setIsToggled}
             styles={sidebarStyles?.toggle}
             onPress={onTogglePress}
           />

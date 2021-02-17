@@ -1,5 +1,5 @@
 const { isObj } = require('@keg-hub/jsutils')
-const defaultConfig = require('@configs/herkin.default.config.js')
+const defaultConfig = require('HerkinConfigs/herkin.default.config.js')
 const fs = require('fs')
 const path = require('path')
 

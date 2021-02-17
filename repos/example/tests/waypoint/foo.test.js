@@ -1,5 +1,5 @@
 const qawolf = require('qawolf')
-const { setupTestEnvironment } = require('@tasks/utils/wolf/setupTestEnvironment')
+const { setupTestEnvironment } = require('HerkinRepos/testUtils/playwright/setupTestEnvironment')
 
 setupTestEnvironment()
 

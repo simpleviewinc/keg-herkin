@@ -1,4 +1,4 @@
-import { apiRequest } from 'SVUtils/apiRequest'
+import { apiRequest } from 'SVUtils/api/apiRequest'
 import { upsertFeatures } from './upsertFeatures'
 
 // Just here for now to test, should remove later

@@ -10,13 +10,13 @@ const { CATEGORIES, SUB_CATEGORIES } = Values
  * 
  * @param {string} data
  */
-export const upsertActiveRunnerTest = (data) => {
-  data && dispatch({
+export const upsertActiveRunnerTest = ({ content }) => {
+  content && dispatch({
     type: ActionTypes.UPSERT_ITEM,
     payload: {
       category: CATEGORIES.ACTIVE_RUNNER_TESTS,
       key: SUB_CATEGORIES.RUNNER_CONTENT,
-      item: data,
+      item: content,
     },
   })
 }

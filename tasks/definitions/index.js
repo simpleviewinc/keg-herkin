@@ -1,5 +1,5 @@
-const { isObj, isFunc, mapObj, pipeline } = require('@keg-hub/jsutils')
-const { getHerkinConfig } = require('@configs/getHerkinConfig')
+const { isObj, isFunc, mapObj } = require('@keg-hub/jsutils')
+const { getHerkinConfig } = require('HerkinConfigs/getHerkinConfig')
 
 const injectHerkinConfig = taskAction => {
   return args => taskAction({

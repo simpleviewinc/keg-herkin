@@ -3,8 +3,7 @@
 const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
-// const { getConfig } = require('./config')
-const { getHerkinConfig } = require('@configs/getHerkinConfig')
+const { getHerkinConfig } = require('HerkinConfigs/getHerkinConfig')
 const rootPath = path.join(path.normalize(__dirname), '..')
 const apiEndpoints = require('./endpoints')
 
