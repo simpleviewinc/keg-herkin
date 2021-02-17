@@ -1,5 +1,6 @@
 import { Values } from 'SVConstants'
-import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
+import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { EditorTabs } from './editorTabs'
 import { AceEditor } from 'SVComponents/aceEditor'
@@ -23,60 +24,53 @@ const useEditorActions = (feature, setFeature, definitions, setDefinitions) => {
       
   }, [feature, setLocalFeat])
 
-  return (
-    <AceEditor
-      {...props}
-      // onChange={() => {}}
-      onChange={onFeatureEdit}
-      mode={'gherkin'}
-    />
-  )
-}
-const DefinitionsEditor = ({ styles, activeFile, ...props }) => {
-  console.log(activeFile, 'activeFile')
-
-  const { definitions } = useFeature({path: activeFile?.fullPath}) || {}
-  const [localDefs, setLocalDefs] = useState(definitions)
-  console.log(localDefs,'localdef')
-  console.log(definitions,' deffies')
-  const onDefinitionEdit = useCallback((uuid, text) => {
+  const onDefinitionEdit = useCallback((uuid, text, change) => {
     if(!text || !text.trim()) return
 
-    const defs = localDefs.map(def => {
+    const defs = definitions.map(def => {
       return def.uuid === uuid ? { ...def, text } : def
     })
 
-    setLocalDefs(defs)
-  }, [localDefs, setLocalDefs])
+    setDefinitions(defs)
+  }, [definitions, setDefinitions])
+  
+  const onRunTests = useCallback(() => {
+    
+    runTests(feature, definitions)
+  }, [ feature, definitions ])
 
-  return (
-    <View
-      className='definitions-editors-wrapper'
-      style={styles.main}
-    >
-      {definitions && definitions.map(def => {
-          return (
-            <AceEditor
-              key={def.uuid}
-              {...props}
-              // onChange={text => onDefinitionEdit(def.uuid, text)}
-              editorId={`definition-editor-${def.uuid}`}
-              value={def.content || ''}
-              style={styles.editor}
-              mode='javascript'
-              editorProps={{
-                wrapBehavioursEnabled: false,
-                animatedScroll: false,
-                dragEnabled: false,
-                tabSize: 2,
-                wrap: true,
-                ...props.editorProps,
-              }}
-            />
-          )
-        })}
-    </View>
-  )
+  return { onFeatureEdit, onDefinitionEdit, onRunTests }
+}
+
+const useMatchingDefinitions = (feature, definitions) => {
+  return useMemo(() => {
+    let mappedDefs = []
+    if(!feature || !feature.scenarios) return mappedDefs
+    feature.scenarios.map(scenario => {
+      scenario.steps && scenario.steps.map(step => {
+        const uuid = step.definition
+        const type = step.type
+        if(!definitions || !definitions[type]) return
+
+        const foundDef = definitions[type].find(def => def.uuid === step.definition)
+        foundDef && mappedDefs.push(foundDef)
+      })
+    })
+
+    return mappedDefs
+  }, [feature, definitions])
+}
+
+const useFeatureData = () => {
+  const { activeData, features, definitions } = useSelector(({ items }) => pickKeys(
+    items,
+    [ CATEGORIES.ACTIVE_DATA, CATEGORIES.FEATURES, CATEGORIES.DEFINITIONS ]
+  ), shallowEqual)
+
+  const feature = features && features[activeData?.feature]
+  const matchingDefinitions = useMatchingDefinitions(feature, definitions)
+  
+  return { feature, definitions, matchingDefinitions }
 }
 
 const SecondaryEditor = props => {
