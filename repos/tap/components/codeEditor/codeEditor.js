@@ -1,6 +1,5 @@
 import { Values } from 'SVConstants'
-import React, { useCallback, useMemo, useState } from 'react'
-import { pickKeys } from '@keg-hub/jsutils'
+import React, { useCallback, useState, useRef } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import { EditorTabs } from './editorTabs'
 import { AceEditor } from 'SVComponents/aceEditor'
@@ -24,28 +23,35 @@ const useEditorActions = (feature, setFeature, definitions, setDefinitions) => {
   )
 }
 const DefinitionsEditor = ({ styles, activeFile, ...props }) => {
-  console.log(activeFile, 'activeFile')
-
   const { definitions } = useFeature({path: activeFile?.fullPath}) || {}
-  const [localDefs, setLocalDefs] = useState(definitions)
-  console.log(localDefs,'localdef')
-  console.log(definitions,' deffies')
-  const onDefinitionEdit = useCallback((uuid, text) => {
-    if(!text || !text.trim()) return
-
-    const defs = definitions.map(def => {
-      return def.uuid === uuid ? { ...def, text } : def
-    })
-
-    setDefinitions(defs)
-  }, [definitions, setDefinitions])
-  
-  const onRunTests = useCallback(() => {
-    
-    runTests(feature, definitions)
-  }, [ feature, definitions ])
-
-  return { onFeatureEdit, onDefinitionEdit, onRunTests }
+  return (
+    <View
+      className='definitions-editors-wrapper'
+      style={styles.main}
+    >
+      {definitions && definitions.map(def => {
+          return (
+            <AceEditor
+              key={def.uuid}
+              {...props}
+              onChange={text => console.log(def.uuid, text)}
+              editorId={`definition-editor-${def.uuid}`}
+              value={def.content || ''}
+              style={styles.editor}
+              mode='javascript'
+              editorProps={{
+                wrapBehavioursEnabled: false,
+                animatedScroll: false,
+                dragEnabled: false,
+                tabSize: 2,
+                wrap: true,
+                ...props.editorProps,
+              }}
+            />
+          )
+        })}
+    </View>
+  )
 }
 
 const useMatchingDefinitions = (feature, definitions) => {
