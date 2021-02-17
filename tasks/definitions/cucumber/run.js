@@ -74,8 +74,8 @@ module.exports = {
         default: 'configs/jest.cucumber.config.js'
       },
       testDir: {
-        description: 'Path to the tests directory within the docker container',
-        default: 'tests/bdd'
+        description: 'Path to the tests mount within the docker container',
+        default: 'tests'
       }
     }, [
       'allBrowsers',
