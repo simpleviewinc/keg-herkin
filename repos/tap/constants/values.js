@@ -41,9 +41,14 @@ export const Values = {
     EMPTY: 'empty',
     RUNNER: 'runner',
   },
-  EDITOR_MODES: {
+  EDITOR_TABS: {
     SPLIT: 'split',
     FEATURE: 'feature',
     DEFINITIONS: 'definitions',
+    ALL_DEFINITIONS: 'all-definitions',
   },
+  DEFINITION_TABS: {
+    ACTIVE: 'active-definitions',
+    LIST: 'list-definitions'
+  }
 }

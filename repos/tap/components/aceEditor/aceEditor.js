@@ -141,7 +141,7 @@ export const AceEditor = props => {
           editorId={editorId}
           onChange={onChange}
           showGutter={showGutter}
-          style={tapTheme.get(`aceEditor.main`, style)}
+          style={style}
           theme={theme}
           value={value}
         />

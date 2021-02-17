@@ -1,35 +1,40 @@
-import React from 'react'
-import { checkCall } from '@keg-hub/jsutils'
-import { View } from '@keg-hub/keg-components'
-import { AceEditor } from 'SVComponents/aceEditor'
+import React, { useState } from 'react'
+import { Values } from 'SVConstants'
+import { DefinitionList } from './definitionList'
+import { DefinitionEditorTabs } from './definitionEditorTabs'
+import { ActiveDefinitionsEditor } from './activeDefinitionsEditor'
+import { useActiveTab } from 'SVHooks/useActiveTab'
 
-export const DefinitionsEditor = ({ definitions, styles, ...props }) => {
-  return (
-    <View
-      className='definitions-editors-wrapper'
-      style={styles.main}
-    >
-      {definitions && definitions.map(def => {
-          return (
-            <AceEditor
-              key={def.uuid}
-              {...props}
-              onChange={text => checkCall(props.onChange, def.uuid, text)}
-              editorId={`definition-editor-${def.uuid}`}
-              value={def.content || ''}
-              style={styles.editor}
-              mode='javascript'
-              editorProps={{
-                wrapBehavioursEnabled: true,
-                animatedScroll: false,
-                dragEnabled: false,
-                tabSize: 2,
-                wrap: true,
-                ...props.editorProps,
-              }}
-            />
-          )
-        })}
-    </View>
-  )
+const { DEFINITION_TABS } = Values
+
+export const DefinitionsEditor = props => {
+  const {
+    activeTab=DEFINITION_TABS.ACTIVE,
+    active,
+    list,
+    styles,
+    ...args
+  } = props
+
+  const [tab, setTab] = useActiveTab(activeTab)
+  
+  return (<>
+    { tab === DEFINITION_TABS.ACTIVE  && (
+      <ActiveDefinitionsEditor
+        styles={styles}
+        definitions={active}
+      />
+    )}
+    { tab === DEFINITION_TABS.LIST  && (
+      <DefinitionList
+        styles={styles}
+        definitions={list}
+      />
+    )}
+    <DefinitionEditorTabs
+      activeTab={tab}
+      onTabSelect={setTab}
+    />
+  </>)
+
 }

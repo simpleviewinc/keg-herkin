@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { useTheme } from '@keg-hub/re-theme'
 import { Values, ActionTypes } from 'SVConstants'
 import { noPropArr, noOpObj, pickKeys } from '@keg-hub/jsutils'
 import { useSelector, shallowEqual } from 'react-redux'
@@ -26,6 +27,8 @@ const useAutoComplete = (feature, definitions) => useCallback((type, text) => {
 }, [definitions])
 
 export const GherkinEditor = props => {
+  const tapTheme = useTheme()
+
   const {
     onChange,
     language,
@@ -45,6 +48,7 @@ export const GherkinEditor = props => {
   const feature = features && features[activeData?.feature]
   const autoComplete = useAutoComplete(feature, definitions)
 
+
   return (
     <ReactGherkinEditor
       ref={editorRef}
@@ -57,7 +61,7 @@ export const GherkinEditor = props => {
       language={ language || 'en'}
       hideToolbar={true}
       showGutter={showGutter}
-      style={style}
+      style={tapTheme.get(style, `aceEditor.gherkin`)}
     />
   )
 }

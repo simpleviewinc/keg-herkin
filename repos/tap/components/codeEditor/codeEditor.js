@@ -8,8 +8,10 @@ import { useSelector, shallowEqual } from 'react-redux'
 import { runTests } from 'SVActions'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
+import { useActiveTab } from 'SVHooks/useActiveTab'
 
-const { CATEGORIES, EDITOR_MODES } = Values
+
+const { CATEGORIES, EDITOR_TABS } = Values
 
 const useEditorActions = (feature, setFeature, definitions, setDefinitions) => {
 
@@ -69,11 +71,6 @@ const useFeatureData = () => {
   return { feature, definitions, matchingDefinitions }
 }
 
-const onTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
-  activeTab !== tab && setActiveTab(tab)
-  return true
-}, [activeTab, setActiveTab])
-
 export const CodeEditor = props => {
   const theme = useTheme()
 
@@ -83,43 +80,43 @@ export const CodeEditor = props => {
     matchingDefinitions
   } = useFeatureData()
 
-  const [localFeat, setLocalFeat] = useState(feature)
-  const [localDefs, setLocalDefs] = useState(matchingDefinitions)
+  const [activeFeat, setActiveFeat] = useState(feature)
+  const [activeDefs, setActiveDefs] = useState(matchingDefinitions)
 
   const { onFeatureEdit, onDefinitionEdit, onRunTests } = useEditorActions(
-    localFeat,
-    setLocalFeat,
-    localDefs,
-    setLocalDefs
+    activeFeat,
+    setActiveFeat,
+    activeDefs,
+    setActiveDefs
   )
 
-  const [tab, setTab] = useState(props.activeTab || EDITOR_MODES.SPLIT)
-  const tabSelect = onTabSelect(tab, setTab)
+  const [ tab, setTab ] = useActiveTab(props.activeTab || EDITOR_TABS.SPLIT)
   const builtStyles = theme.get(`screens.editors.${tab}`)
 
-  if(!localFeat || !localDefs) return null
+  if(!activeFeat || !activeDefs) return null
 
   return (
     <>
-      {(tab === 'feature' || tab === `split`) && (
+      {(tab === EDITOR_TABS.FEATURE || tab === EDITOR_TABS.SPLIT) && (
         <FeatureEditor
           key={`${tab}-feature`}
           editorId={`feature-editor`}
           onChange={onFeatureEdit}
-          value={localFeat.content || ''}
+          value={activeFeat.content || ''}
           style={builtStyles.feature || builtStyles}
         />
       )}
-      {(tab === 'definitions' || tab === `split`) && (
+      {(tab === EDITOR_TABS.DEFINITIONS ||tab === EDITOR_TABS.SPLIT) && (
         <DefinitionsEditor
           key={`${tab}-definitions`}
           editorId={`definitions-editor`}
           onChange={onDefinitionEdit}
-          definitions={localDefs}
+          active={activeDefs}
+          list={definitions}
           styles={builtStyles.definitions || builtStyles}
         />
       )}
-      <EditorTabs activeTab={tab} onTabSelect={tabSelect} onRun={onRunTests} />
+      <EditorTabs activeTab={tab} onTabSelect={setTab} onRun={onRunTests} />
     </>
   )
 }
