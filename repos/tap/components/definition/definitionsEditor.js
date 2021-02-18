@@ -1,6 +1,6 @@
 import { Values } from 'SVConstants'
 import React, { useState } from 'react'
-import { noPropObj } from '@keg-hub/jsutils'
+import { noOpObj } from '@keg-hub/jsutils'
 import { View } from '@keg-hub/keg-components'
 import { DefinitionList } from './definitionList'
 import { DefinitionTabs } from './definitionTabs'
@@ -15,7 +15,7 @@ export const DefinitionsEditor = props => {
     activeTab=DEFINITION_TABS.LIST,
     active,
     list,
-    styles=noPropObj,
+    styles=noOpObj,
     ...args
   } = props
 
@@ -32,13 +32,13 @@ export const DefinitionsEditor = props => {
       />
       { tab === DEFINITION_TABS.ACTIVE  && (
         <ActiveDefinitionsEditor
-          styles={styles}
+          styles={styles.active}
           definitions={active}
         />
       )}
       { tab === DEFINITION_TABS.LIST  && (
         <DefinitionList
-          styles={styles}
+          styles={styles.list}
           definitions={list}
         />
       )}

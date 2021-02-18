@@ -1,6 +1,6 @@
 import { exists } from '@keg-hub/jsutils'
 import { useParentMethods } from 'SVHooks'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components'
 import React, { useState, useEffect } from 'react'
 import { Runner } from 'SVComponents/runner/runner'
@@ -10,8 +10,7 @@ import { Values } from 'SVConstants'
 const { CATEGORIES } = Values
 
 export const RunnerScreen = props => {
-  const theme = useTheme()
-  const builtStyles = theme.get(`screens.runner`)
+  const builtStyles = useStyle(`screens.runner`)
   const parentMethods = useParentMethods()
   const [ tests, setTests ] = useState('')
 

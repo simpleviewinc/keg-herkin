@@ -1,12 +1,19 @@
 import React from 'react'
-import { checkCall, noPropObj } from '@keg-hub/jsutils'
+import { useStyle } from '@keg-hub/re-theme'
+import { checkCall, noOpObj } from '@keg-hub/jsutils'
 import { View, H5 } from '@keg-hub/keg-components'
 import { AceEditor } from 'SVComponents/aceEditor'
 
-const NoActiveDefinitions = props => {
+const NoActiveDefinitions = ({ style=noOpObj }) => {
   return (
-    <View>
-      <H5>
+    <View
+      className={'empty-definitions-main'}
+      style={style.main}
+    >
+      <H5
+        className={'empty-definitions-text'}
+        style={style.text}
+      >
         No Active Definitions
       </H5>
     </View>
@@ -16,9 +23,11 @@ const NoActiveDefinitions = props => {
 export const ActiveDefinitionsEditor = props => {
   const {
     definitions,
-    styles=noPropObj,
+    styles=noOpObj,
     ...args
   } = props
+
+  const activeStyles = useStyle(`definitions.active`, styles)
 
   return definitions
     ? definitions.map(def => {

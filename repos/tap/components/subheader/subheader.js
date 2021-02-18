@@ -1,7 +1,6 @@
 import React from 'react'
-import { get } from '@keg-hub/jsutils'
-import { useTheme } from '@keg-hub/re-theme'
-import { noOpObj } from 'SVUtils/helpers/noop'
+import { get, noOpObj } from '@keg-hub/jsutils'
+import { useStyle } from '@keg-hub/re-theme'
 import { useClassList, H2, H3, H4, H5, H6, Text } from '@keg-hub/keg-components'
 
 const headers = { h2: H2, h3: H3, h4: H4, h5: H5, h6: H6 }
@@ -17,9 +16,8 @@ export const Subheader = props => {
     classNames=noOpObj,
   } = props
 
-  const theme = useTheme()
-  const typeStyles = get(theme, `typography.${type}`)
-  const headerStyles = theme.get( `subheader`, styles)
+  const typeStyles = useStyle(`typography.${type}`)
+  const headerStyles = useStyle( `subheader`, styles)
   const Header = Component || headers[type]
 
   return Header && children && (

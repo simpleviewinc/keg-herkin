@@ -1,9 +1,9 @@
-import React, { useMemo, useCallback } from 'react'
 import { Values } from 'SVConstants'
-import { useTheme } from '@keg-hub/re-theme'
-import { View, SimpleList } from 'SVComponents'
-
+import { noOpObj } from '@keg-hub/jsutils'
 import { reduceObj } from '@keg-hub/jsutils'
+import { View, SimpleList } from 'SVComponents'
+import React, { useMemo, useCallback } from 'react'
+import { useStyle } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'
 const { CATEGORIES, EDITOR_TABS } = Values
 
@@ -24,16 +24,22 @@ const useDefinitionGroups = definitions => {
   }, [ definitions ])
 }
 
-export const DefinitionList = ({ definitions, styles }) => {
+export const DefinitionList = ({ definitions, styles=noOpObj }) => {
   const { lookup, ...groupedDefs } = useDefinitionGroups(definitions)
 
   const onItemPress = useCallback(() => {
-    console.log(`---------- item press ----------`)
+    // TODO: Add select step definition to the currently active feature
   }, [])
 
+  const listStyles = useStyle(`definitions.list`, styles)
+
   return (
-    <View>
+    <View
+      className={`definition-list-main`}
+      style={listStyles.main}
+    >
       <SimpleList
+        styles={listStyles.list}
         items={groupedDefs}
         toggled={false}
         onItemPress={ onItemPress }

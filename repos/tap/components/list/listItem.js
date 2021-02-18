@@ -2,10 +2,10 @@ import React from 'react'
 import { isStr, capitalize } from '@keg-hub/jsutils'
 import { Icon, View, Row, Text, Touchable } from 'SVComponents'
 import { renderCustomOrDefault } from 'SVUtils'
-import { useStyles } from 'SVHooks'
-import { useThemeHover, useTheme } from '@keg-hub/re-theme'
+import { useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { ListItemAction } from './listItemAction'
 import { noOpObj } from 'SVUtils/helpers/noop'
+
 
 const RenderActions = ({ actions, styles, ...props }) => {
   const { actions:actionStyles } = styles
@@ -56,10 +56,6 @@ const RenderTitle = ({ style, title, ...props }) => {
   ) || null
 }
 
-const buildStyles = (theme, styles) => {
-  return theme.get('list.item', styles)
-}
-
 export const ListItem = props => {
   const {
     active,
@@ -73,10 +69,10 @@ export const ListItem = props => {
     title,
   } = props
 
-  const theme = useTheme()
-  const mergeStyles = useStyles(styles, props, buildStyles)
+  const mergeStyles = useStyle('list.item', styles)
   const activeStyle = active ? mergeStyles.active : noOpObj
   const [ rowRef, itemStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
+  const rowStyles = useStyle(itemStyles.row, activeStyle?.row)
 
   return (
       <Touchable
@@ -87,7 +83,7 @@ export const ListItem = props => {
       >
       <Row
         className='list-item-row'
-        style={theme.get(itemStyles.row, activeStyle?.row)}
+        style={rowStyles}
       >
         { children || ([
           avatar && renderCustomOrDefault(
