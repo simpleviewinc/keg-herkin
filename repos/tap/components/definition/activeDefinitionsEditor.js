@@ -1,22 +1,27 @@
 import React from 'react'
-import { checkCall } from '@keg-hub/jsutils'
-import { View } from '@keg-hub/keg-components'
+import { checkCall, noPropObj } from '@keg-hub/jsutils'
+import { View, H5 } from '@keg-hub/keg-components'
 import { AceEditor } from 'SVComponents/aceEditor'
 
+const NoActiveDefinitions = props => {
+  return (
+    <View>
+      <H5>
+        No Active Definitions
+      </H5>
+    </View>
+  )
+}
 
 export const ActiveDefinitionsEditor = props => {
   const {
     definitions,
-    styles,
+    styles=noPropObj,
     ...args
   } = props
 
-  return (
-    <View
-      className='definitions-editors-wrapper'
-      style={styles.main}
-    >
-      {definitions && definitions.map(def => {
+  return definitions
+    ? definitions.map(def => {
           return (
             <AceEditor
               key={def.uuid}
@@ -36,7 +41,6 @@ export const ActiveDefinitionsEditor = props => {
               }}
             />
           )
-        })}
-    </View>
-  )
+        })
+      : (<NoActiveDefinitions style={styles.empty} />)
 }
