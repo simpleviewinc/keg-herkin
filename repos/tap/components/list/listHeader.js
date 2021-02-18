@@ -17,17 +17,17 @@ import { Animated } from 'react-native'
 const buildIconProps = (icon, theme) => {
   return {
     name: 'chevron-down',
-    color: theme.colors.palette.gray01,
+    color: theme?.colors?.palette?.gray01,
     size: 20,
     ...(icon ? isStr(icon) ? { name: icon } : icon : null)
   }
 }
 
-const HeaderIcon = ({ icon, styles, theme, toggled }) => {
+const HeaderIcon = ({ Icon, iconProps, styles, theme, toggled }) => {
 
-  const iconProps = useMemo(
-    () => buildIconProps(icon, theme),
-    [ icon, theme ]
+  const builtProps = useMemo(
+    () => buildIconProps(iconProps, theme),
+    [ iconProps, theme ]
   )
 
   const { animation } = useToggleAnimate({
@@ -51,18 +51,17 @@ const HeaderIcon = ({ icon, styles, theme, toggled }) => {
         }
       ]}
     >
-      <Icon { ...iconProps } styles={ styles } />
+      <Icon { ...builtProps } styles={ styles } />
     </Animated.View>
   )
 
 }
 
 export const ListHeader = props => {
+  const { onPress, styles, title, Icon, iconProps, toggled } = props
 
-  const { onPress, styles, title, icon, toggled } = props
   const theme = useTheme()
   const mergeStyles = useStyle('list.header', styles)
-  
   const [ rowRef, listStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
 
   const activeStyle = toggled ? mergeStyles.active : noOpObj
@@ -86,9 +85,10 @@ export const ListHeader = props => {
       >
         { wordCaps(title) }
       </H6>
-      { icon && (
+      { Icon && (
         <HeaderIcon
-          icon={ icon }
+          Icon={ Icon }
+          iconProps={iconProps}
           styles={[listStyles.toggle, activeStyle?.toggle]}
           theme={ theme }
           toggled={ toggled }
