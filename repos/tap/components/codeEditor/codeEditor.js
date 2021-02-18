@@ -3,13 +3,12 @@ import React from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import { EditorTabs } from './editorTabs'
 import { AceEditor } from 'SVComponents/aceEditor'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 
 
-const { CATEGORIES, EDITOR_TABS } = Values
+const { EDITOR_TABS } = Values
 
 /**
  * MainEditor
@@ -36,14 +35,18 @@ const MainEditor = props => {
  * CodeEditor
  * @param {Object} props
  * @param {String} props.activeTab
+ * @param {Object} props.activeFile - test file to load
  */
 export const CodeEditor = props => {
-  const theme = useTheme()
-  const { activeFile } = useStoreItems([CATEGORIES.ACTIVE_FILE])
+  const {
+    activeTab,
+    activeFile
+  } = props
   if (!activeFile) return null
 
-  const [ tab, setTab ] = useActiveTab(props.activeTab || EDITOR_TABS.SPLIT)
-  const codeStyles = useStyle(`screens.editors.${tab}`)
+  const theme = useTheme()
+  const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.SPLIT)
+  const builtStyles = theme.get(`screens.editors.${tab}`)
 
   return (
     <>
