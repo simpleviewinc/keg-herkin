@@ -1,12 +1,13 @@
 import { Values } from 'SVConstants'
-import React, { useState } from 'react'
+import React from 'react'
 import { noOpObj } from '@keg-hub/jsutils'
 import { View } from '@keg-hub/keg-components'
 import { DefinitionList } from './definitionList'
 import { DefinitionTabs } from './definitionTabs'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 import { ActiveDefinitionsEditor } from './activeDefinitionsEditor'
-import { useActiveTab } from 'SVHooks/useActiveTab'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { useFeature } from 'SVHooks/useFeature'
 
 const { DEFINITION_TABS, CATEGORIES } = Values
 
