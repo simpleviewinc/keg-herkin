@@ -1,7 +1,7 @@
 import React,  { useState, useCallback } from 'react'
 import { useStyles } from 'SVHooks'
-import { checkCall } from '@keg-hub/jsutils'
-import { useTheme } from '@keg-hub/re-theme'
+import { checkCall, noPropArr, deepMerge } from '@keg-hub/jsutils'
+import { useStylesCallback } from '@keg-hub/re-theme'
 import {
   Grid,
   ListHeader,
@@ -10,36 +10,29 @@ import {
 } from 'SVComponents'
 
 const buildStyles = (theme, styles={}) => {
-  return {
+  return deepMerge({
     main: {
-      ...styles.main,
       ...theme.flex.column,
     },
-    content: {
-      header: {},
-      drawer: {
-        backgroundColor: theme?.tapColors?.backGround,
-      },
-      item: {}
-    }
-  }
+    header: {},
+    drawer: {
+      backgroundColor: theme?.tapColors?.backGround,
+    },
+    item: {}
+  }, styles)
 }
 
-// Need to add an Item Render method
-// This will allow passing in the render method for each item
-// That We can define the ListItem separately and make this component reusable
-// Should do the same for ListHeader
-const RenderListItems = ({ items, group, onItemPress }) => {
 
-  const itemPress = item => event => checkCall(onItemPress, event, item)
-  
+const RenderListItems = ({ items, renderItem, group, onItemPress }) => {
   return Object.entries(items)
     .map(([ key, meta ]) => {
       return (
           <ListItem
             key={`${group}-${key}`}
             title={ key }
-            onItemPress={ itemPress(meta) }
+            renderItem={renderItem}
+            onItemPress={onItemPress}
+            item={meta}
             { ...meta }
           />
         )
@@ -51,9 +44,12 @@ const RenderList = props => {
     drawer=true,
     group,
     header=true,
+    HeaderIcon,
+    iconProps,
     items,
     onHeaderPress,
     onItemPress,
+    renderItem,
     styles,
     initialToggle,
     drawerProps
@@ -70,8 +66,9 @@ const RenderList = props => {
     <RenderListItems
       items={ items }
       group={ group }
+      renderItem={renderItem}
       onItemPress={ onItemPress }
-      listStyles={ styles?.content?.item }
+      listStyles={ styles?.item }
     />
   )
 
@@ -79,10 +76,12 @@ const RenderList = props => {
     <>
       { header && (
         <ListHeader
+          Icon={HeaderIcon}
+          iconProps={iconProps}
           toggled={ toggled }
           onPress={ onTogglePress }
           title={ group }
-          styles={styles?.content?.header }
+          styles={styles?.header }
         />
       )}
       { header && drawer
@@ -90,7 +89,7 @@ const RenderList = props => {
             <Drawer
               {...drawerProps}
               className='sub-items-drawer'
-              styles={ styles?.content?.drawer }
+              styles={ styles?.drawer }
               toggled={ toggled }
             >
             { RenderedItems }
@@ -108,9 +107,7 @@ const RenderList = props => {
 // Which will make this component reuseable
 export const SimpleList = (props) => {
   const { items, styles, toggled } = props
-  
-  const theme = useTheme()
-  const listStyles = useStyles(styles, props, buildStyles)
+  const listStyles = useStylesCallback(buildStyles, noPropArr, styles)
 
   return Object.entries(items)
     .map(([ key, meta ]) => {

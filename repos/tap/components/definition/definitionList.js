@@ -1,10 +1,11 @@
 import { Values } from 'SVConstants'
 import { noOpObj } from '@keg-hub/jsutils'
 import { reduceObj } from '@keg-hub/jsutils'
-import { View, SimpleList } from 'SVComponents'
+import { SimpleList, Text, View } from 'SVComponents'
 import React, { useMemo, useCallback } from 'react'
 import { useStyle } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'
+import { ChevronDown } from 'SVAssets/icons'
 const { CATEGORIES, EDITOR_TABS } = Values
 
 const useDefinitionGroups = definitions => {
@@ -24,6 +25,16 @@ const useDefinitionGroups = definitions => {
   }, [ definitions ])
 }
 
+const renderItem = props => {
+
+  return (
+    <View>
+      <Text>Item</Text>
+    </View>
+  )
+
+}
+
 export const DefinitionList = ({ definitions, styles=noOpObj }) => {
   const { lookup, ...groupedDefs } = useDefinitionGroups(definitions)
 
@@ -32,6 +43,11 @@ export const DefinitionList = ({ definitions, styles=noOpObj }) => {
   }, [])
 
   const listStyles = useStyle(`definitions.list`, styles)
+  const drawerProps = useMemo(() => {
+    return {
+      
+    }
+  }, [])
 
   return (
     <View
@@ -41,9 +57,11 @@ export const DefinitionList = ({ definitions, styles=noOpObj }) => {
       <SimpleList
         styles={listStyles.list}
         items={groupedDefs}
+        renderItem={renderItem}
         toggled={false}
         onItemPress={ onItemPress }
-        drawerProps={{}}
+        drawerProps={drawerProps}
+        HeaderIcon={ChevronDown}
       />
     </View>
   )

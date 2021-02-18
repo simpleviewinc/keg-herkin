@@ -67,32 +67,23 @@ const item = (theme, shared) => {
     ...shared,
     default: {
       ...shared.default,
-      main: {
-        ...shared.default.main,
-      },
+      main: shared.default.main,
       row: {
         ...shared.default.row,
         padding: theme.padding.size,
         pL: theme.padding.size * 2,
       },
-      avatar: {
-        
-      },
-      icon: {
-        
-      },
+      avatar: {},
+      icon: {},
       title: {
         ...shared.default.title,
         fontSize: 12,
         color: tapColors.inactive,
       },
       actions: {
-        main: {
-          
-        },
+        main: {},
         action: {
           main: {},
-          content: {}
         }
       }
     }
