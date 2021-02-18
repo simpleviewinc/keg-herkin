@@ -35,13 +35,18 @@ const findNode = (id, nodes) =>
 /**
  * TreeList
  * @param {Object} props 
+ * @param {Function} props.onSidebarToggled - function to toggle on/off the sidebar if needed
+ * 
  */
 export const TreeList = props => {
 
   const { fileTree=noPropArr } = useStoreItems([CATEGORIES.FILE_TREE])
+  const { onSidebarToggled } = props
 
   const onItemPress = useCallback(({node}) => {
-    node?.type === 'file' && setActiveFile(node?.fullPath)
+    if (node?.type !== 'file') return
+    setActiveFile(node?.fullPath)
+    onSidebarToggled(false)
   }, [ loadFeature ])
   
   const getCollapsedNodeHeight = useCallback(({id}) => {
@@ -82,8 +87,6 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
   const styles = level === 0
     ? themeStyles?.header
     : themeStyles?.item
-
-  const iconStyles = { transform: isExpanded ? 'rotate(180deg)' : 'rotate(360deg)' }
 
   return (
     <View style={[styles?.main, level > 0 && { marginLeft: 10 * level }]}>

@@ -60,7 +60,7 @@ export const FileTreePanel = (props) => {
         styles={styles?.testFiles}
         title={props?.title}
       />
-      <TreeList />
+      <TreeList {...props}/>
     </View>
   )
 }
