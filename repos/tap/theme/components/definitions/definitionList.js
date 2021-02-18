@@ -33,18 +33,62 @@ const listHeader = theme => {
 const drawer = theme => {
   return {
     main: {
-    }
+    },
+    content: {
+      pV: theme.padding.size / 2,
+      backgroundColor: tapColors?.accentBackground,
+    },
   }
 }
 
 const listItem = theme => {
   return {
+    default: {
+      main: {
+        ...theme.transition([ 'backgroundColor' ], 0.8),
+      },
+      row: {
+        pV: theme.padding.size / 2,
+        paddingLeft: theme.padding.size,
+        
+      },
+      title: {
+      },
+      actions: {
+        main: {
+          ...theme.transition([ 'opacity' ], 0.8),
+          opacity: 0,
+        },
+        action: {
+          touchable: {
+          },
+          name: {
+            ftSz: 12,
+            ftWt: 'bold',
+            c: tapColors?.success,
+          }
+        }
+      }
+    },
+    hover: {
+      main: {
+        backgroundColor: tapColors.headerBackground
+      },
+      actions: {
+        main: {
+          opacity: 1,
+        },
+        action: {
+          touchable: {},
+          name: {}
+        }
+      }
+    }
   }
 }
 
 export const definitionList = theme => {
   return {
-    main: {},
     list: {
       header: listHeader(theme),
       drawer: drawer(theme),

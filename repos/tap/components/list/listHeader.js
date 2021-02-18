@@ -58,21 +58,34 @@ const HeaderIcon = ({ Icon, iconProps, styles, theme, toggled }) => {
 }
 
 export const ListHeader = props => {
-  const { onPress, styles, title, Icon, iconProps, toggled } = props
+  const {
+    first,
+    onPress,
+    styles,
+    title,
+    Icon,
+    iconProps,
+    toggled
+  } = props
 
   const theme = useTheme()
   const mergeStyles = useStyle('list.header', styles)
   const [ rowRef, listStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
 
-  const activeStyle = toggled ? mergeStyles.active : noOpObj
-  const rowStyle = useStyle(listStyles.row, activeStyle?.row)
+  const toggledStyle = toggled ? mergeStyles.active : noOpObj
+  const rowStyle = useStyle(listStyles.row, toggledStyle?.row)
 
   return (
     <Touchable
       className="list-header-main"
       activeOpacity={ get(mergeStyles, 'active.main.opacity') }
       touchRef={ rowRef }
-      style={[listStyles.main, activeStyle?.main]}
+      style={[
+        listStyles?.main,
+        toggledStyle?.main,
+        first && listStyles?.first?.main,
+        first && toggledStyle?.first?.main,
+      ]}
       onPress={ onPress }
     >
     <Row
@@ -80,7 +93,7 @@ export const ListHeader = props => {
       className="list-header-row"
     >
       <H6
-        style={[listStyles.title, activeStyle?.title]}
+        style={[listStyles.title, toggledStyle?.title]}
         className="list-header-title"
       >
         { wordCaps(title) }
@@ -89,7 +102,7 @@ export const ListHeader = props => {
         <HeaderIcon
           Icon={ Icon }
           iconProps={iconProps}
-          styles={[listStyles.toggle, activeStyle?.toggle]}
+          styles={[listStyles.toggle, toggledStyle?.toggle]}
           theme={ theme }
           toggled={ toggled }
         />
