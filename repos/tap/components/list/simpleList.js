@@ -47,7 +47,17 @@ const RenderListItems = ({ items, group, onItemPress }) => {
 }
 
 const RenderList = props => {
-  const { group, items, onHeaderPress, onItemPress, styles, initialToggle, drawerProps } = props
+  const {
+    drawer=true,
+    group,
+    header=true,
+    items,
+    onHeaderPress,
+    onItemPress,
+    styles,
+    initialToggle,
+    drawerProps
+  } = props
 
   const [ toggled, setToggled ] = useState(initialToggle || false)
 
@@ -56,27 +66,38 @@ const RenderList = props => {
     setToggled(!toggled)
   }, [ items, toggled, group, onHeaderPress ])
 
+  const RenderedItems = (
+    <RenderListItems
+      items={ items }
+      group={ group }
+      onItemPress={ onItemPress }
+      listStyles={ styles?.content?.item }
+    />
+  )
+
   return (
     <>
-      <ListHeader
-        toggled={ toggled }
-        onPress={ onTogglePress }
-        title={ group }
-        styles={styles?.content?.header }
-      />
-      <Drawer
-        {...drawerProps}
-        className='sub-items-drawer'
-        styles={ styles?.content?.drawer }
-        toggled={ toggled }
-      >
-        <RenderListItems
-          items={ items }
-          group={ group }
-          onItemPress={ onItemPress }
-          listStyles={ styles?.content?.item }
+      { header && (
+        <ListHeader
+          toggled={ toggled }
+          onPress={ onTogglePress }
+          title={ group }
+          styles={styles?.content?.header }
         />
-      </Drawer>
+      )}
+      { header && drawer
+        ? (
+            <Drawer
+              {...drawerProps}
+              className='sub-items-drawer'
+              styles={ styles?.content?.drawer }
+              toggled={ toggled }
+            >
+            { RenderedItems }
+            </Drawer>
+          )
+        : RenderedItems
+      }
     </>
   )
 

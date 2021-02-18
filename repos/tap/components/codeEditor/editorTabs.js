@@ -61,11 +61,9 @@ export const EditorTabs = props => {
       setTab(activeTab)
   }, [activeTab, onTabSelect, tab, setTab])
 
-  
-  
   return (
     <Tabbar
-      type='editor'
+      type='code'
       tabs={[ ...tabs, { onRun, id: `test-actions`, Tab: TestActions }]}
       activeTab={tab}
       location='bottom'

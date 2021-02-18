@@ -5,20 +5,17 @@ import { isFunc } from '@keg-hub/jsutils'
 import { View, Button } from '@keg-hub/keg-components'
 import React, { useCallback, useEffect, useState } from 'react'
 
-const tabs = []
+const { DEFINITION_TABS } = Values
 
 const TestActions = props => {
-  const theme = useTheme()
-  const styles = theme.get('runner.tabs')
-
   return (
-    <View className='runner-tab-action-save' style={styles.main} >
-      <View style={styles.actions.save} >
+    <View style={{ flexDirection: 'row' }} >
+      <View style={{ marginRight: 15 }} >
         <Button type='primary'>
           Save
         </Button>
       </View>
-      <View className='runner-tab-action-run' style={styles.actions.run} >
+      <View >
         <Button
           type='secondary'
           onClick={props.onRun}
@@ -30,16 +27,27 @@ const TestActions = props => {
   )
 }
 
+const tabs = [
+  {
+    id: DEFINITION_TABS.ACTIVE,
+    title: `Active`,
+    // View: 
+  },
+  {
+    id: DEFINITION_TABS.LIST,
+    title: `List`,
+    // View: 
+  }
+]
+
 const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
-  if(newTab ===  `test-actions`) return
-
-  return isFunc(onTabSelect)
-    ? onTabSelect(newTab, tab)
-    : (tab !== newTab && setTab(newTab)) || true
-
+    return isFunc(onTabSelect)
+      ? onTabSelect(newTab, tab)
+      : (tab !== newTab && setTab(newTab)) || true
 }, [ tab, setTab, onTabSelect ])
 
-export const RunnerTabs = props => {
+export const DefinitionTabs = props => {
+
   const { activeTab, onTabSelect, onRun } = props
   const [tab, setTab] = useState(activeTab)
   const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
@@ -52,10 +60,10 @@ export const RunnerTabs = props => {
 
   return (
     <Tabbar
-      type='code'
-      tabs={[ ...tabs, { onRun, id: `test-actions`, Tab: TestActions }]}
+      type='definitions'
+      tabs={tabs}
       activeTab={tab}
-      location='bottom'
+      location='top'
       onTabSelect={tabSelect}
     />
   )

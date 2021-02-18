@@ -1,32 +1,18 @@
 import { tapColors } from '../../tapColors'
 import { deepMerge } from '@keg-hub/jsutils'
-import { codeTabs } from './codeTabs'
-import { screenTabs } from './screenTabs'
-import { definitionTabs } from './definitionTabs'
+import { sharedShadow } from '../shared/shadow'
 
-const defTabbar = theme => ({
-  main: {},
-  fixed: {
-    main: {
-      position: 'fixed',
-    },
-    top: {
-      top: 0,
-    },
-    bottom: {
-      bottom: 0
-    }
-  },
-  container: {
-  },
-  tabview: {
-    flex: 1,
-  },
+
+export const screenTabs = (theme, defTabbar) => deepMerge(defTabbar, {
   bar: {
     main: {
-      cursor: 'pointer',
-      flexDirection: 'row',
-      zIndex: 6,
+      top: 50,
+      minHeight: 45,
+      bgC: tapColors.headerBackground,
+      left: (theme.padding.size * 2) * -1,
+      width: `calc( 100% + ${theme.padding.size * 4}px)`,
+      ...sharedShadow,
+      position: 'fixed',
     },
     bottom: {},
     top: {}
@@ -80,14 +66,3 @@ const defTabbar = theme => ({
     },
   }
 })
-
-export const tabbar = theme => {
-  const builtTabbar = defTabbar(theme)
-  return {
-    default: builtTabbar,
-    code: codeTabs(theme, builtTabbar),
-    screens: screenTabs(theme, builtTabbar),
-    definitions: definitionTabs(theme, builtTabbar),
-    
-  }
-}
