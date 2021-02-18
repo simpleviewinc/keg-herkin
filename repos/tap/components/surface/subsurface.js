@@ -1,7 +1,7 @@
 import { Drawer } from 'SVComponents'
 import { Subheader } from '../subheader'
 import { noOpObj } from 'SVUtils/helpers'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 import { DrawerToggle } from './drawerToggle'
 import { Grid, Row, View } from '@keg-hub/keg-components'
 import React, { useState, useCallback, useMemo } from 'react'
@@ -18,8 +18,7 @@ export const SubSurface = props => {
     classNames=noOpObj,
   } = props
 
-  const theme = useTheme()
-  const surfaceStyles = theme.get('subsurface', styles)
+  const surfaceStyles = useStyle('subsurface', styles)
 
   const [ toggled, setToggled ] = useState(initialToggle || true)
 

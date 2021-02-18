@@ -8,15 +8,11 @@ import {
   View,
 } from 'SVComponents'
 import { noOpObj } from 'SVUtils/helpers/noop'
-import { useStyles, useToggleAnimate } from 'SVHooks'
-import { useTheme, useThemeHover } from '@keg-hub/re-theme'
+import { useToggleAnimate } from 'SVHooks'
+import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import { Animated } from 'react-native'
 
-
-const buildStyles = (theme, styles, props) => {
-  return theme.get('list.header', styles)
-}
 
 const buildIconProps = (icon, theme) => {
   return {
@@ -65,11 +61,12 @@ export const ListHeader = props => {
 
   const { onPress, styles, title, icon, toggled } = props
   const theme = useTheme()
-  const mergeStyles = useStyles(styles, props, buildStyles)
+  const mergeStyles = useStyle('list.header', styles)
   
   const [ rowRef, listStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
 
   const activeStyle = toggled ? mergeStyles.active : noOpObj
+  const rowStyle = useStyle(listStyles.row, activeStyle?.row)
 
   return (
     <Touchable
@@ -80,7 +77,7 @@ export const ListHeader = props => {
       onPress={ onPress }
     >
     <Row
-      style={theme.get(listStyles.row, activeStyle?.row)}
+      style={rowStyle}
       className="list-header-row"
     >
       <H6

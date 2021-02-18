@@ -16,7 +16,7 @@ export const editors = theme => {
       },
       editor: {
         w: `100%`,
-        h: `20vh`,
+        minH: `100px`,
       }
     },
     split: {
@@ -33,6 +33,7 @@ export const editors = theme => {
         },
         editor: {
           w: `100%`,
+          minH: `100px`,
         }
       },
     }

@@ -1,7 +1,7 @@
 import { Values } from 'SVConstants'
 import React, { useCallback, useMemo, useState } from 'react'
 import { pickKeys } from '@keg-hub/jsutils'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 import { EditorTabs } from './editorTabs'
 import { AceEditor } from 'SVComponents/aceEditor'
 import { useSelector, shallowEqual } from 'react-redux'
@@ -72,7 +72,6 @@ const useFeatureData = () => {
 }
 
 export const CodeEditor = props => {
-  const theme = useTheme()
 
   const {
     feature,
@@ -91,7 +90,7 @@ export const CodeEditor = props => {
   )
 
   const [ tab, setTab ] = useActiveTab(props.activeTab || EDITOR_TABS.SPLIT)
-  const builtStyles = theme.get(`screens.editors.${tab}`)
+  const codeStyles = useStyle(`screens.editors.${tab}`)
 
   if(!activeFeat || !activeDefs) return null
 
@@ -103,7 +102,7 @@ export const CodeEditor = props => {
           editorId={`feature-editor`}
           onChange={onFeatureEdit}
           value={activeFeat.content || ''}
-          style={builtStyles.feature || builtStyles}
+          style={codeStyles.feature || codeStyles}
         />
       )}
       {(tab === EDITOR_TABS.DEFINITIONS ||tab === EDITOR_TABS.SPLIT) && (
@@ -113,7 +112,7 @@ export const CodeEditor = props => {
           onChange={onDefinitionEdit}
           active={activeDefs}
           list={definitions}
-          styles={builtStyles.definitions || builtStyles}
+          styles={codeStyles.definitions || codeStyles}
         />
       )}
       <EditorTabs activeTab={tab} onTabSelect={setTab} onRun={onRunTests} />

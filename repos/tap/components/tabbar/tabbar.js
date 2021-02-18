@@ -1,5 +1,5 @@
 import { Tab } from './tab'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 import { checkCall, mapColl, noOpObj } from '@keg-hub/jsutils'
 import React, { useMemo, useCallback, useState, useLayoutEffect } from 'react'
 import { View, isValidComponent, renderFromType } from '@keg-hub/keg-components'
@@ -80,8 +80,12 @@ export const Tabbar = props => {
   
   const addMethod = location === 'bottom' ? 'unshift' : 'push'
 
-  const theme = useTheme()
-  const barStyles = theme.get(`tabbar.default`, `tabbar.${type}`)
+  const barStyles = useStyle(`tabbar.default`, `tabbar.${type}`)
+  const mainStyles = useStyle(
+    fixed && { ...barStyles.fixed.main, ...barStyles.fixed[location] },
+    barStyles.bar.main,
+    barStyles.bar[location],
+  )
 
   const [ activeId, setActiveId ] = useState(activeTab)
   const CurrentTab = useCurrentTab(tabs, activeId)
@@ -95,11 +99,7 @@ export const Tabbar = props => {
     <Bar
       className='tabbar-bar'
       key={'tabbar'}
-      styles={theme.get(
-        fixed && { ...barStyles.fixed.main, ...barStyles.fixed[location] },
-        barStyles.bar.main,
-        barStyles.bar[location],
-      )}
+      styles={mainStyles}
     >
     { tabs && (
       <Tabs 

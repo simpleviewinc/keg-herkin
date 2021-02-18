@@ -1,14 +1,13 @@
 import React from "react"
 import { wordCaps } from '@keg-hub/jsutils'
-import { useTheme } from '@keg-hub/re-theme'
+import { Surface } from 'SVComponents/surface'
+import { Row } from '@keg-hub/keg-components/row'
+import { Icon } from '@keg-hub/keg-components/icon'
 import { View } from '@keg-hub/keg-components/view'
 import { Text } from '@keg-hub/keg-components/text'
-import { Row } from '@keg-hub/keg-components/row'
 import { Grid } from '@keg-hub/keg-components/grid'
-import { Icon } from '@keg-hub/keg-components/icon'
-import { Surface } from 'SVComponents/surface'
 import { CheckFilled, TimesFilled } from 'SVAssets/icons'
-
+import { useStyle, useTheme } from '@keg-hub/re-theme'
 
 const TestResult = ({ block, errors, styles, test, type }) => {
 
@@ -65,8 +64,7 @@ const TestResult = ({ block, errors, styles, test, type }) => {
 }
 
 const BuildResults = ({ results }) => {
-  const theme = useTheme()
-  const styles = theme.get(`runner.results`)
+  const styles = useStyle(`runner.results`)
 
   return results.map((result) => {
     const { testPath, errors, id } = result
@@ -90,6 +88,7 @@ export const Results = ({ results, title, prefix, styles }) => {
   const theme = useTheme()
   const failedCount = results.reduce((count, result) => (count + result.errors.length), 0)
 
+  // TODO: Update titleStyle to have a consistent identity
   return results && results.length
     ? (
         <Surface
