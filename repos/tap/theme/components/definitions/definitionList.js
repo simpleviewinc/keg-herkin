@@ -50,17 +50,26 @@ const listItem = theme => {
       row: {
         pV: theme.padding.size / 2,
         paddingLeft: theme.padding.size,
-        
+        flexWrap: 'nowrap',
       },
-      title: {
-      },
+      title: {},
       actions: {
         main: {
           ...theme.transition([ 'opacity' ], 0.8),
           opacity: 0,
         },
         action: {
+          main: {
+            pointerEvents: 'none',
+          },
           touchable: {
+            flD: 'row',
+          },
+          icon: {
+            icon: {
+              c: tapColors?.success,
+              mR: 5,
+            },
           },
           name: {
             ftSz: 12,
@@ -73,6 +82,9 @@ const listItem = theme => {
     hover: {
       main: {
         backgroundColor: tapColors.headerBackground
+      },
+      title: {
+        c: tapColors?.success,
       },
       actions: {
         main: {

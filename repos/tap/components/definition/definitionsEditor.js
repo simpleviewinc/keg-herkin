@@ -14,6 +14,8 @@ export const DefinitionsEditor = props => {
     // activeTab=DEFINITION_TABS.ACTIVE,
     activeTab=DEFINITION_TABS.LIST,
     active,
+    feature,
+    featureEditorRef,
     list,
     styles=noOpObj,
     ...args
@@ -32,14 +34,18 @@ export const DefinitionsEditor = props => {
       />
       { tab === DEFINITION_TABS.ACTIVE  && (
         <ActiveDefinitionsEditor
-          styles={styles.active}
+          feature={feature}
           definitions={active}
+          styles={styles.active}
+          featureEditorRef={featureEditorRef}
         />
       )}
       { tab === DEFINITION_TABS.LIST  && (
         <DefinitionList
-          styles={styles.list}
+          feature={feature}
           definitions={list}
+          styles={styles.list}
+          contextRef={featureEditorRef}
         />
       )}
     </View>
