@@ -26,6 +26,7 @@ const repoPaths = repos.reduce(
  */
 module.exports = deepFreeze({
   HERKIN_ROOT: rootDir,
+  TESTS_MOUNT: path.join(rootDir, 'tests'),
   REPOS_PATH: reposPath,
   ...repoPaths,
 })

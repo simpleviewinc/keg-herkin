@@ -1,4 +1,4 @@
-const { When } = require("cucumber")
+const { When } = require('HerkinParkin')
 const { capitalize } = require('@keg-hub/jsutils')
 const { getBrowserContext } = require('../../support/setup')
 const { getPage } = getBrowserContext()

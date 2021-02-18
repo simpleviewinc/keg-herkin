@@ -5,7 +5,6 @@ const { uniqArr } = require('@keg-hub/jsutils')
 const path = require('path')
 const glob = require('glob')
 
-const rootModules = path.join(HERKIN_ROOT, 'node_modules')
 const mountPoint = path.join(HERKIN_ROOT, 'tests')
 
 const config = getHerkinConfig()
@@ -62,6 +61,7 @@ const getCucumberSupport = () => {
 }
 
 module.exports = {
+  rootDir: HERKIN_ROOT,
   moduleFileExtensions: [
     'feature',
     'js',
@@ -70,16 +70,14 @@ module.exports = {
     'tsx'
   ],
   setupFilesAfterEnv: [
-    `${rootModules}/cucumber-jest/dist/init.js`,
     ...getCucumberSupport(),
     ...getStepDefinitions()
   ],
   transform: {
-    '^.+\\.(feature)$': 'cucumber-jest',
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
   testMatch: [
-    '/keg/tap/**/*.feature'
+    '<rootDir>/repos/**/*.js'
   ],
   moduleNameMapper: jestAliases
 }
