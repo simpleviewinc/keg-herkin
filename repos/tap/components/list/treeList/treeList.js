@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import { noPropArr } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { setActiveFile } from 'SVActions/files/setActiveFile'
-import { loadFeature } from 'SVActions/features/loadFeature'
 import {
   View,
   Loading,
@@ -47,7 +46,7 @@ export const TreeList = props => {
     if (node?.type !== 'file') return
     setActiveFile(node?.fullPath)
     onSidebarToggled(false)
-  }, [ loadFeature ])
+  }, [ setActiveFile, onSidebarToggled ])
   
   const getCollapsedNodeHeight = useCallback(({id}) => {
     const node = findNode(id, fileTree)
