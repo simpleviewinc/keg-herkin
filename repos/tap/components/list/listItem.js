@@ -1,28 +1,28 @@
 import React, { useCallback, useMemo } from 'react'
-import { isStr, capitalize, checkCall, isFunc } from '@keg-hub/jsutils'
+import { isStr, capitalize, checkCall, isFunc, noOpObj, noPropArr } from '@keg-hub/jsutils'
 import { Icon, View, Row, Text, Touchable } from 'SVComponents'
 import { renderCustomOrDefault } from 'SVUtils'
 import { useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { ListItemAction } from './listItemAction'
-import { noOpObj } from 'SVUtils/helpers/noop'
 
-
-const RenderActions = ({ actions, styles, ...props }) => {
-  const { actions:actionStyles } = styles
-
+const RenderActions = ({ actions=noPropArr, styles=noOpObj, ...props }) => {
   return actions && (
-    <View className='list-item-actions' style={ actionStyles.main } >
+    <View
+      className='list-item-actions'
+      style={ styles.main }
+      >
       { actions.map(action => action && (
         <ListItemAction
-          key={ action.name }
+          key={ action.name || action.title }
+          actionStyles={styles.action}
           { ...props }
           { ...action }
-          styles={ actionStyles.action }
         />
       ))}
     </View>
   ) || null
 }
+
 
 const RenderAvatar = ({ avatar, ...props }) => {
   return avatar && (
@@ -85,10 +85,11 @@ export const ListItem = props => {
     return {
       item,
       onItemPress,
+      itemRef: rowRef,
       styles: {
-        custom: styles,
+        propStyles: styles,
+        ...itemStyles,
         row: rowStyles,
-        item: itemStyles
       }
     } 
   }, [item, onItemPress, styles, rowStyles, itemStyles])
