@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
-import { noPropArr, capitalize } from '@keg-hub/jsutils'
-import { useTheme } from '@keg-hub/re-theme'
+import { noPropArr } from '@keg-hub/jsutils'
+import { useTheme, useThemeHover } from '@keg-hub/re-theme'
 import { setActiveFile } from 'SVActions/files/setActiveFile'
 import {
   View,
@@ -83,12 +83,20 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
 
   const theme = useTheme()
   const themeStyles = theme.get('treeList')
+  const [ styleRef, mainStyles ] = useThemeHover(themeStyles?.default, themeStyles?.hover)
+
   const styles = level === 0
-    ? themeStyles?.header
-    : themeStyles?.item
+    ? mainStyles?.header
+    : mainStyles?.item
 
   return (
-    <View style={[styles?.main, level > 0 && { marginLeft: 10 * level }]}>
+    <View 
+      ref={styleRef}
+      style={[
+        styles?.main,
+        level > 0 && { paddingLeft: 10 * level }
+      ]}
+    >
       <Text
         style={styles?.text}
       >
@@ -102,9 +110,9 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
         node?.type === 'folder' &&
         (
           <ChevronDown
-            size={themeStyles?.icon?.size || 16}
+            size={mainStyles?.icon?.size || 16}
             style={[
-              themeStyles?.icon, 
+              mainStyles?.icon, 
               toggleRotationStyle({
                 isToggled: isExpanded,
                 onValue: 180,
