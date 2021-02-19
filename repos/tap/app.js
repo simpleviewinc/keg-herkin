@@ -5,7 +5,7 @@ import { ReThemeProvider, getDefaultTheme } from '@keg-hub/re-theme'
 import { Provider } from 'react-redux'
 import { getStore } from 'SVStore'
 import { initAppAction } from 'SVActions'
-import { View } from 'SVComponents'
+import { View, ModalManager } from 'SVComponents'
 import { Router } from 'SVComponents/router'
 import { checkCall, get } from '@keg-hub/jsutils'
 import { ContainerRoutes } from 'SVNavigation/containerRoutes'
@@ -13,7 +13,6 @@ import { keg } from 'SVConfig'
 import { getHistory } from 'SVNavigation'
 import { isNative } from 'SVUtils/platform'
 import { init } from 'SVActions'
-import { ModalManager } from 'SVComponents'
 
 const checkAppInit = async setInit => {
   await init()

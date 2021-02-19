@@ -1,28 +1,28 @@
-import React from 'react'
-import { isStr, capitalize } from '@keg-hub/jsutils'
+import React, { useCallback, useMemo } from 'react'
+import { isStr, capitalize, checkCall, isFunc, noOpObj, noPropArr } from '@keg-hub/jsutils'
 import { Icon, View, Row, Text, Touchable } from 'SVComponents'
 import { renderCustomOrDefault } from 'SVUtils'
-import { useStyles } from 'SVHooks'
-import { useThemeHover, useTheme } from '@keg-hub/re-theme'
+import { useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { ListItemAction } from './listItemAction'
-import { noOpObj } from 'SVUtils/helpers/noop'
 
-const RenderActions = ({ actions, styles, ...props }) => {
-  const { actions:actionStyles } = styles
-
+const RenderActions = ({ actions=noPropArr, styles=noOpObj, ...props }) => {
   return actions && (
-    <View className='list-item-actions' style={ actionStyles.main } >
+    <View
+      className='list-item-actions'
+      style={ styles.main }
+      >
       { actions.map(action => action && (
         <ListItemAction
-          key={ action.name }
+          key={ action.name || action.title }
+          parentStyles={styles.action}
           { ...props }
           { ...action }
-          styles={ actionStyles.action }
         />
       ))}
     </View>
   ) || null
 }
+
 
 const RenderAvatar = ({ avatar, ...props }) => {
   return avatar && (
@@ -56,10 +56,6 @@ const RenderTitle = ({ style, title, ...props }) => {
   ) || null
 }
 
-const buildStyles = (theme, styles) => {
-  return theme.get('list.item', styles)
-}
-
 export const ListItem = props => {
   const {
     active,
@@ -68,50 +64,73 @@ export const ListItem = props => {
     children,
     components=noOpObj,
     icon,
+    item,
     onItemPress,
+    renderItem,
     styles=noOpObj,
     title,
   } = props
 
-  const theme = useTheme()
-  const mergeStyles = useStyles(styles, props, buildStyles)
+  const mergeStyles = useStyle('list.item', styles)
   const activeStyle = active ? mergeStyles.active : noOpObj
   const [ rowRef, itemStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
+  const rowStyles = useStyle(itemStyles.row, activeStyle?.row)
 
-  return (
-      <Touchable
-        className='list-item'
-        touchRef={ rowRef }
-        style={[itemStyles.main, activeStyle?.main]}
-        onPress={onItemPress}
-      >
-      <Row
-        className='list-item-row'
-        style={theme.get(itemStyles.row, activeStyle?.row)}
-      >
-        { children || ([
-          avatar && renderCustomOrDefault(
-            components.avatar,
-            RenderAvatar,
-            { key: 'list-item-avatar', avatar, style: itemStyles.avatar },
-          ),
-          icon && renderCustomOrDefault(
-            components.icon,
-            RenderIcon,
-            { key: 'list-item-icon', icon, style: itemStyles.icon }
-          ),
-          title && renderCustomOrDefault(
-            components.title,
-            RenderTitle,
-            { key: 'list-item-title', title, style: [ itemStyles.title, activeStyle?.title ] }
-          ),
-          actions && renderCustomOrDefault(
-            components.actions,
-            RenderActions,
-            { key: 'list-item-actions', actions, styles: itemStyles.actions }
-          )
-        ])}
-      </Row>
-    </Touchable>
+  const onPress = useCallback(
+    event => checkCall(onItemPress, item, event),
+    [item, onItemPress]
   )
+
+  const renderProps = useMemo(() => {
+    return {
+      item,
+      onItemPress,
+      itemRef: rowRef,
+      styles: {
+        propStyles: styles,
+        ...itemStyles,
+        row: rowStyles,
+      }
+    } 
+  }, [item, onItemPress, styles, rowStyles, itemStyles])
+
+  return isFunc(renderItem)
+    ? renderItem(renderProps)
+    : (
+        <Touchable
+          showFeedback={item.showFeedback || true}
+          className='list-item'
+          touchRef={ rowRef }
+          style={[itemStyles.main, activeStyle?.main]}
+          onPress={onPress}
+        >
+          <Row
+            className='list-item-row'
+            style={rowStyles}
+          >
+            { children || ([
+              avatar && renderCustomOrDefault(
+                components.avatar,
+                RenderAvatar,
+                { key: 'list-item-avatar', avatar, style: itemStyles.avatar },
+              ),
+              icon && renderCustomOrDefault(
+                components.icon,
+                RenderIcon,
+                { key: 'list-item-icon', icon, style: itemStyles.icon }
+              ),
+              title && renderCustomOrDefault(
+                components.title,
+                RenderTitle,
+                { key: 'list-item-title', title, style: [ itemStyles.title, activeStyle?.title ] }
+              ),
+              actions && renderCustomOrDefault(
+                components.actions,
+                RenderActions,
+                { key: 'list-item-actions', actions, styles: itemStyles.actions }
+              )
+            ])}
+          </Row>
+        </Touchable>
+      )
 }

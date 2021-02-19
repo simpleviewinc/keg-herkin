@@ -2,8 +2,7 @@ import React from 'react'
 import { Icon, Text, Touchable } from 'SVComponents'
 import { renderCustomOrDefault } from 'SVUtils'
 import { isStr } from '@keg-hub/jsutils'
-import { useStyles } from 'SVHooks'
-import { useThemeHover } from '@keg-hub/re-theme'
+import { useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { noOpObj } from 'SVUtils/helpers/noop'
 
 const RenderIcon = ({ icon, style, ...props }) => {
@@ -30,10 +29,6 @@ const RenderText = ({ style, text, ...props }) => {
   ) || null
 }
 
-const buildStyles = (theme, styles) => {
-  return theme.get('chip', styles)
-}
-
 export const Chip = props => {
   const {
     active,
@@ -45,7 +40,7 @@ export const Chip = props => {
     text,
   } = props
 
-  const mergeStyles = useStyles(styles, props, buildStyles)
+  const mergeStyles = useStyle('chip', styles)
   const activeStyle = active ? mergeStyles.active : noOpObj
   const [ chipRef, chipStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
 

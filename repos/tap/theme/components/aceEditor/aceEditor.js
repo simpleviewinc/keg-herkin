@@ -1,6 +1,9 @@
 export const aceEditor = theme => ({
   main: {
-    width: '100%',
-    fontSize: '14px'
+    w: '100%',
+    ftSz: '12px'
+  },
+  gherkin: {
+    w: '100%',
   }
 })

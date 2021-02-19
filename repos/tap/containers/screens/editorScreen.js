@@ -1,18 +1,22 @@
 import React from 'react'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components'
 import { CodeEditor } from 'SVComponents/codeEditor'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { Values } from 'SVConstants'
 
+const { CATEGORIES } = Values
 
 export const EditorScreen = props => {
-  const theme = useTheme()
+  const styles = useStyle(`screens.editors.main`)
+  const { activeFile } = useStoreItems([CATEGORIES.ACTIVE_FILE])
 
   return (
     <View
       className={`editors-screen`}
-      style={theme.get(`screens.editors.main`)}
+      style={styles}
     >
-      <CodeEditor />
+      <CodeEditor activeFile={activeFile} />
     </View>
   )
 }

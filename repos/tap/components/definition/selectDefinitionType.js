@@ -2,12 +2,11 @@ import React from 'react'
 import { Values } from 'SVConstants'
 import { capitalize } from '@keg-hub/jsutils'
 import { Option, Select } from '@keg-hub/keg-components'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 const { STEP_TYPES } = Values
 
 export const SelectDefinitionType = ({ styles, step, typeAction }) => {
-  const theme = useTheme()
-  const selectStyles = theme.get(`definitions.selectType`, styles)
+  const selectStyles = useStyle(`definitions.selectType`, styles)
 
   return (
     <Select

@@ -1,4 +1,5 @@
 import { tapColors } from '../tapColors'
+import { deepMerge } from '@keg-hub/jsutils'
 
 const shared = theme => {
   return {
@@ -37,20 +38,14 @@ const shared = theme => {
 }
 
 const header = (theme, shared) => {
-  return {
-    ...shared,
+  return deepMerge(shared, {
     default: {
-      ...shared.default,
       main: {
-        ...shared.default.main,
         backgroundColor: tapColors.headerBackground,
-        ...theme.transition([ 'borderBottomColor' ], 0.5),
-        // Update to tap colors
-        borderBottomColor: tapColors.border,
-        borderBottomWidth: 1,
+        borderTopColor: tapColors.border,
+        borderTopWidth: 1,
       },
       title: {
-        ...shared.default.title,
         color: tapColors.inactive,
       },
       toggle: {
@@ -58,8 +53,19 @@ const header = (theme, shared) => {
           color: tapColors.inactive,
         }
       },
+      first: {
+        main: {
+          borderTopWidth: 0,
+        }
+      }
+    },
+    active: {
+      main: {
+        borderBottomColor: tapColors.border,
+        borderBottomWidth: 1,
+      }
     }
-  }
+  })
 }
 
 const item = (theme, shared) => {
@@ -67,32 +73,23 @@ const item = (theme, shared) => {
     ...shared,
     default: {
       ...shared.default,
-      main: {
-        ...shared.default.main,
-      },
+      main: shared.default.main,
       row: {
         ...shared.default.row,
         padding: theme.padding.size,
         pL: theme.padding.size * 2,
       },
-      avatar: {
-        
-      },
-      icon: {
-        
-      },
+      avatar: {},
+      icon: {},
       title: {
         ...shared.default.title,
         fontSize: 12,
         color: tapColors.inactive,
       },
       actions: {
-        main: {
-          
-        },
+        main: {},
         action: {
           main: {},
-          content: {}
         }
       }
     }
