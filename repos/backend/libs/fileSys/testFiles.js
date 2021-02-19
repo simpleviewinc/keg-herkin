@@ -64,7 +64,8 @@ const saveTestFile = async (config, fullPath, content) => {
   const [err, success] = await writeFile(fullPath, content)
 
   if (err) {
-    const pathError = new Error(`[API - Files] Save failed: ${fullPath}`)
+    console.log(err)
+    const pathError = new Error(`[API - Files] Save failed: ${fullPath} - ${err.message}`)
     pathError.status = 404
     throw pathError
   }
