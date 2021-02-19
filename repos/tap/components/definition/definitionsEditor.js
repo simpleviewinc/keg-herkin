@@ -11,8 +11,7 @@ const { DEFINITION_TABS } = Values
 
 export const DefinitionsEditor = props => {
   const {
-    // activeTab=DEFINITION_TABS.ACTIVE,
-    activeTab=DEFINITION_TABS.LIST,
+    activeTab,
     active,
     feature,
     featureEditorRef,
@@ -21,7 +20,7 @@ export const DefinitionsEditor = props => {
     ...args
   } = props
 
-  const [tab, setTab] = useActiveTab(activeTab)
+  const [tab, setTab] = useActiveTab(activeTab || DEFINITION_TABS.ACTIVE)
 
   return (
     <View
