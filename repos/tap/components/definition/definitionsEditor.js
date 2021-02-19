@@ -19,6 +19,8 @@ const { DEFINITION_TABS, CATEGORIES } = Values
  * @param {Object=} props.list - list of all definitions
  * @param {Object=} props.styles
  * @param {Object=} props.activeFile
+ * @param {Object} props.featureEditorRef
+ * @param {Object} props.feature
  */
 export const DefinitionsEditor = props => {
   const {
