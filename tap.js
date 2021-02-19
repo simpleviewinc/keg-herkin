@@ -12,6 +12,23 @@ module.exports = {
     cli: {
       link: {
         name: 'herkin'
+      },
+      publish: {
+        herkin: {
+          tasks: {
+            install: true,
+            test: true,
+            build: true,
+            publish: true,
+            commit: true
+          },
+          tap: true,
+          name: 'herkin',
+          dependent: false,
+          order: {
+            '0': '@keg-hub/keg-herkin',
+          }
+        }
       }
     },
     routes: {

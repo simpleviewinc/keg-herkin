@@ -8,30 +8,26 @@ import {
   View,
 } from 'SVComponents'
 import { noOpObj } from 'SVUtils/helpers/noop'
-import { useStyles, useToggleAnimate } from 'SVHooks'
-import { useTheme, useThemeHover } from '@keg-hub/re-theme'
+import { useToggleAnimate } from 'SVHooks'
+import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { get } from '@keg-hub/jsutils'
 import { Animated } from 'react-native'
 
 
-const buildStyles = (theme, styles, props) => {
-  return theme.get('list.header', styles)
-}
-
 const buildIconProps = (icon, theme) => {
   return {
     name: 'chevron-down',
-    color: theme.colors.palette.gray01,
+    color: theme?.colors?.palette?.gray01,
     size: 20,
     ...(icon ? isStr(icon) ? { name: icon } : icon : null)
   }
 }
 
-const HeaderIcon = ({ icon, styles, theme, toggled }) => {
+const HeaderIcon = ({ Icon, iconProps, styles, theme, toggled }) => {
 
-  const iconProps = useMemo(
-    () => buildIconProps(icon, theme),
-    [ icon, theme ]
+  const builtProps = useMemo(
+    () => buildIconProps(iconProps, theme),
+    [ iconProps, theme ]
   )
 
   const { animation } = useToggleAnimate({
@@ -55,44 +51,58 @@ const HeaderIcon = ({ icon, styles, theme, toggled }) => {
         }
       ]}
     >
-      <Icon { ...iconProps } styles={ styles } />
+      <Icon { ...builtProps } styles={ styles } />
     </Animated.View>
   )
 
 }
 
 export const ListHeader = props => {
+  const {
+    first,
+    onPress,
+    styles,
+    title,
+    Icon,
+    iconProps,
+    toggled
+  } = props
 
-  const { onPress, styles, title, icon, toggled } = props
   const theme = useTheme()
-  const mergeStyles = useStyles(styles, props, buildStyles)
-  
+  const mergeStyles = useStyle('list.header', styles)
   const [ rowRef, listStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
 
-  const activeStyle = toggled ? mergeStyles.active : noOpObj
+  const toggledStyle = toggled ? mergeStyles.active : noOpObj
+  const rowStyle = useStyle(listStyles.row, toggledStyle?.row)
 
   return (
     <Touchable
       className="list-header-main"
       activeOpacity={ get(mergeStyles, 'active.main.opacity') }
       touchRef={ rowRef }
-      style={[listStyles.main, activeStyle?.main]}
+      style={[
+        listStyles?.main,
+        toggledStyle?.main,
+        first && listStyles?.first?.main,
+        first && toggledStyle?.first?.main,
+      ]}
       onPress={ onPress }
     >
     <Row
-      style={theme.get(listStyles.row, activeStyle?.row)}
+      style={rowStyle}
       className="list-header-row"
     >
       <H6
-        style={[listStyles.title, activeStyle?.title]}
+        style={[listStyles.title, toggledStyle?.title]}
         className="list-header-title"
       >
         { wordCaps(title) }
       </H6>
-      { icon && (
+      { Icon && (
         <HeaderIcon
-          icon={ icon }
-          styles={[listStyles.toggle, activeStyle?.toggle]}
+          Icon={ Icon }
+          iconProps={iconProps}
+          styles={[listStyles.toggle, toggledStyle?.toggle]}
           theme={ theme }
           toggled={ toggled }
         />

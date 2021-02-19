@@ -1,5 +1,5 @@
 {
-  "name": "@keg-hub/tap-herkin",
+  "name": "@keg-hub/keg-herkin",
   "version": "1.1.0",
   "description": "Keg and Tap testing",
   "main": "index.js",
@@ -60,6 +60,8 @@
     "@keg-hub/jsutils": "8.2.0",
     "@keg-hub/messenger": "file:repos/messenger",
     "@keg-hub/spawn-cmd": "0.1.0",
+    "@ltipton/react-ace-editor": "0.0.1",
+    "@ltipton/react-gherkin-editor": "0.0.2",
     "ansi-html": "0.0.7",
     "app-root-path": "3.0.0",
     "axios": "0.21.1",
@@ -75,7 +77,6 @@
     "playwright": "1.8.0",
     "prettier": "2.0.5",
     "qawolf": "1.4.0",
-    "react-ace-editor": "https://github.com/lancetipton/react-ace-editor.git",
     "react-native-final-tree-view": "2.1.0",
     "rollup": "2.36.1",
     "socket.io": "2.4.0",
@@ -89,6 +90,7 @@
     "babel-jest": "26.6.3",
     "core-js": "3.8.3",
     "cucumber-jest": "0.1.1",
+    "jest": "26.4.2",
     "jest-playwright-preset": "1.4.4",
     "rimraf": "3.0.2"
   }

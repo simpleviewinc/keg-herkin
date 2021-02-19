@@ -82,3 +82,19 @@
 ​
 # Done?
 [ x ] it needs a server that runs on the host machine, not in docker container, for launching the browser
+
+
+
+
+TODO:
+* Integrate parkin library from NPM
+* Fix Definitions editors
+  * Have the definition editor show based on the selected step ( maybe? )
+* Add saving and deleting test files
+  * Needed for features / steps, unit, and waypoint
+* Add web-socket
+  * Add UI for running tests from backend server 
+* Add browser tab manager
+  * Open test site in new browser tab
+  * Run tests in browser tab for the opened site
+    * Investigate injecting messenger into the opened browser tab

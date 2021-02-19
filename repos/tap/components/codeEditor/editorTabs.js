@@ -5,8 +5,7 @@ import { isFunc } from '@keg-hub/jsutils'
 import { View, Button } from '@keg-hub/keg-components'
 import React, { useCallback, useEffect, useState } from 'react'
 
-
-const { EDITOR_MODES } = Values
+const { EDITOR_TABS } = Values
 
 const TestActions = props => {
   return (
@@ -30,23 +29,21 @@ const TestActions = props => {
 
 const tabs = [
   {
-    id: EDITOR_MODES.SPLIT,
+    id: EDITOR_TABS.SPLIT,
     title: `Split`,
   },
   {
-    id: EDITOR_MODES.FEATURE,
+    id: EDITOR_TABS.FEATURE,
     title: `Feature`,
   },
   {
-    id: EDITOR_MODES.DEFINITIONS,
+    id: EDITOR_TABS.DEFINITIONS,
     title: `Definitions`,
-  },
+  }
 ]
 
-
-
 const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
-  if(newTab ===  `test-actions`) return
+  if(newTab === `test-actions`) return
   
     return isFunc(onTabSelect)
       ? onTabSelect(newTab, tab)
@@ -55,7 +52,7 @@ const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
 
 export const EditorTabs = props => {
   const { activeTab, onTabSelect, onRun } = props
-  const [tab, setTab] = useState(activeTab || EDITOR_MODES.SPLIT)
+  const [tab, setTab] = useState(activeTab || EDITOR_TABS.SPLIT)
   const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
   
   useEffect(() => {
@@ -64,11 +61,9 @@ export const EditorTabs = props => {
       setTab(activeTab)
   }, [activeTab, onTabSelect, tab, setTab])
 
-  
-  
   return (
     <Tabbar
-      type='editor'
+      type='code'
       tabs={[ ...tabs, { onRun, id: `test-actions`, Tab: TestActions }]}
       activeTab={tab}
       location='bottom'
