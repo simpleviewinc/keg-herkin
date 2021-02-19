@@ -1,26 +1,42 @@
 import { Values } from 'SVConstants'
-import React, { useState } from 'react'
+import React from 'react'
 import { noOpObj } from '@keg-hub/jsutils'
 import { View } from '@keg-hub/keg-components'
 import { DefinitionList } from './definitionList'
 import { DefinitionTabs } from './definitionTabs'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 import { ActiveDefinitionsEditor } from './activeDefinitionsEditor'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { useFeature } from 'SVHooks/useFeature'
 
-const { DEFINITION_TABS } = Values
+const { DEFINITION_TABS, CATEGORIES } = Values
 
+/**
+ * DefinitionsEditor
+ * @param {Object} props 
+ * @param {Array=} props.active - list of active definitions
+ * @param {String} props.activeTab
+ * @param {Object=} props.list - list of all definitions
+ * @param {Object=} props.styles
+ * @param {Object=} props.activeFile
+ * @param {Object} props.featureEditorRef
+ * @param {Object} props.feature
+ */
 export const DefinitionsEditor = props => {
   const {
     activeTab,
     active,
-    feature,
     featureEditorRef,
+    feature,
+    activeFile,
     list,
     styles=noOpObj,
     ...args
   } = props
 
+  const { definitions } = useStoreItems([ CATEGORIES.DEFINITIONS ])
   const [tab, setTab] = useActiveTab(activeTab || DEFINITION_TABS.ACTIVE)
+  const { definitions: activeDefs } = useFeature({path: activeFile?.fullPath}) || {}
 
   return (
     <View
@@ -34,17 +50,17 @@ export const DefinitionsEditor = props => {
       { tab === DEFINITION_TABS.ACTIVE  && (
         <ActiveDefinitionsEditor
           feature={feature}
-          definitions={active}
-          styles={styles.active}
           featureEditorRef={featureEditorRef}
+          styles={styles.active}
+          definitions={active || activeDefs}
         />
       )}
       { tab === DEFINITION_TABS.LIST  && (
         <DefinitionList
           feature={feature}
-          definitions={list}
-          styles={styles.list}
           contextRef={featureEditorRef}
+          styles={styles.list}
+          definitions={list || definitions}
         />
       )}
     </View>

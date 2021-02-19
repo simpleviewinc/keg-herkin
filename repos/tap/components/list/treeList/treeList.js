@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
 import { noPropArr } from '@keg-hub/jsutils'
-import { useTheme } from '@keg-hub/re-theme'
-import { setFeatureActive } from 'SVActions/features'
-import { loadFeature } from 'SVActions/features/loadFeature'
+import { useTheme, useThemeHover } from '@keg-hub/re-theme'
+import { setActiveFile } from 'SVActions/files/setActiveFile'
 import {
   View,
   Loading,
@@ -35,15 +34,19 @@ const findNode = (id, nodes) =>
 /**
  * TreeList
  * @param {Object} props 
+ * @param {Function} props.onSidebarToggled - function to toggle on/off the sidebar if needed
+ * 
  */
 export const TreeList = props => {
 
-  const { features, fileTree=noPropArr } = useStoreItems([CATEGORIES.FEATURES, CATEGORIES.FILE_TREE])
+  const { fileTree=noPropArr } = useStoreItems([CATEGORIES.FILE_TREE])
+  const { onSidebarToggled } = props
 
   const onItemPress = useCallback(({node}) => {
-    const match = features.find(feature => feature.fullPath === node.fullPath)
-    match && loadFeature(match)
-  }, [ features, setFeatureActive ])
+    if (node?.type !== 'file') return
+    setActiveFile(node?.fullPath)
+    onSidebarToggled(false)
+  }, [ setActiveFile, onSidebarToggled ])
   
   const getCollapsedNodeHeight = useCallback(({id}) => {
     const node = findNode(id, fileTree)
@@ -80,24 +83,36 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
 
   const theme = useTheme()
   const themeStyles = theme.get('treeList')
+  const [ styleRef, mainStyles ] = useThemeHover(themeStyles?.default, themeStyles?.hover)
+
   const styles = level === 0
-    ? themeStyles?.header
-    : themeStyles?.item
+    ? mainStyles?.header
+    : mainStyles?.item
 
   return (
-    <View style={[styles?.main, level > 0 && { marginLeft: 10 * level }]}>
+    <View 
+      ref={styleRef}
+      style={[
+        styles?.main,
+        level > 0 && { paddingLeft: 10 * level }
+      ]}
+    >
       <Text
         style={styles?.text}
       >
-        {node.name}
+        {
+          node?.type === 'folder'
+            ? node.name?.toUpperCase()
+            : node.name
+        }
       </Text>
       {
         node?.type === 'folder' &&
         (
           <ChevronDown
-            size={themeStyles?.icon?.size || 16}
+            size={mainStyles?.icon?.size || 16}
             style={[
-              themeStyles?.icon, 
+              mainStyles?.icon, 
               toggleRotationStyle({
                 isToggled: isExpanded,
                 onValue: 180,
