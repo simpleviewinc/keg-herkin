@@ -1,25 +1,12 @@
 const glob = require('glob')
 const fs = require('fs')
-const path = require('path')
-
-const { 
-  DOC_APP_PATH,
-  HERKIN_FEATURES_DIR 
-} = process.env
 
 /**
  * Finds all step definition files in client's step directory and
  * also in the herkin testUtils repo
  * @return {Array<string>} file paths
  */
-const getFeaturePaths = () => {
-  const pattern = path.join(
-    DOC_APP_PATH,
-    'tests',
-    HERKIN_FEATURES_DIR,
-    '**/*.feature'
-  )
-
+const getFeaturePaths = pattern => {
   return glob.sync(pattern)
 }
 
@@ -38,11 +25,12 @@ const readFeature = path => {
 }
 
 /**
+ * @param {string} globPattern - glob pattern pointing to feature files
  * @return {Array<string>} array of features as strings
  */
-const loadFeatures = () => {
-  const paths = getFeaturePaths()
-  return paths.map(readFeature)
+const loadFeatures = globPattern => {
+  const paths = getFeaturePaths(globPattern)
+  return paths.map(readFeature).filter(Boolean)
 }
 
 module.exports = { loadFeatures }
