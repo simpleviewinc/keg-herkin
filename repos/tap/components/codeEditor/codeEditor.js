@@ -1,7 +1,8 @@
 import { Values } from 'SVConstants'
-import React from 'react'
+import React, { useRef } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import { EditorTabs } from './editorTabs'
+import { useStyle } from '@keg-hub/re-theme'
 import { AceEditor } from 'SVComponents/aceEditor'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
@@ -44,28 +45,29 @@ export const CodeEditor = props => {
   } = props
   if (!activeFile) return null
 
-  const theme = useTheme()
   const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.SPLIT)
-  const builtStyles = theme.get(`screens.editors.${tab}`)
-
+  const codeStyles = useStyle(`screens.editors.${tab}`)
+  const editorRef = useRef(null)
   return (
     <>
       {(tab === EDITOR_TABS.FEATURE || tab === EDITOR_TABS.SPLIT) && (
         <MainEditor
+          aceRef={editorRef}
           key={`${tab}-feature`}
           activeFile={activeFile}
           setTab={setTab}
           value={activeFile?.content || ''}
-          style={builtStyles.feature || builtStyles}
+          style={codeStyles.feature || codeStyles}
         />
       )}
       {(tab === EDITOR_TABS.DEFINITIONS ||tab === EDITOR_TABS.SPLIT) &&
         activeFile?.isFeature && (
           <DefinitionsEditor
+            featureEditorRef={editorRef}
             activeFile={activeFile}
             key={`${tab}-definitions`}
             editorId={`definitions-editor`}
-            styles={builtStyles.definitions || builtStyles}
+            styles={codeStyles.definitions || codeStyles}
           />
       )}
       <EditorTabs activeTab={tab} onTabSelect={setTab} onRun={() => console.log('---Run tests---')} />

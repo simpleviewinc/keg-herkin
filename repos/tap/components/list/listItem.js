@@ -14,7 +14,7 @@ const RenderActions = ({ actions=noPropArr, styles=noOpObj, ...props }) => {
       { actions.map(action => action && (
         <ListItemAction
           key={ action.name || action.title }
-          actionStyles={styles.action}
+          parentStyles={styles.action}
           { ...props }
           { ...action }
         />
@@ -76,10 +76,10 @@ export const ListItem = props => {
   const [ rowRef, itemStyles ] = useThemeHover(mergeStyles.default, mergeStyles.hover)
   const rowStyles = useStyle(itemStyles.row, activeStyle?.row)
 
-  useCallback(event => {
-    // TODO: clean this up
-    checkCall(onItemPress, event, item)
-  }, [item, onItemPress])
+  const onPress = useCallback(
+    event => checkCall(onItemPress, item, event),
+    [item, onItemPress]
+  )
 
   const renderProps = useMemo(() => {
     return {
@@ -98,10 +98,11 @@ export const ListItem = props => {
     ? renderItem(renderProps)
     : (
         <Touchable
+          showFeedback={item.showFeedback || true}
           className='list-item'
           touchRef={ rowRef }
           style={[itemStyles.main, activeStyle?.main]}
-          onPress={onItemPress}
+          onPress={onPress}
         >
           <Row
             className='list-item-row'
