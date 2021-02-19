@@ -50,7 +50,7 @@ const getTestFile = async (config, testPath) => {
 }
 
 /**
- * 
+ * Save file at a given location. file should be located in the test root path
  * @param {Object} config 
  * @param {string} fullPath
  * @param {string} content 
