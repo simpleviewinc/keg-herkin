@@ -49,20 +49,30 @@ const getTestFile = async (config, testPath) => {
   } 
 }
 
+/**
+ * 
+ * @param {Object} config 
+ * @param {string} fullPath
+ * @param {string} content 
+ */
+const saveTestFile = async (config, fullPath, content) => {
 
-const saveTestFile = async (config, testPath, content) => {
   const { testsRoot } = config.paths
-  const fullPath = path.join(testsRoot, testPath)
+  const inTestRoot = fullPath.startsWith(testsRoot)
+  if (!inTestRoot) throw new Error(`[API - Files] Filepath must be within '${testsRoot}': received '${fullPath}'`)
 
-  await checkPath(fullPath)
+  const [err, success] = await writeFile(fullPath, content)
 
-  // TODO: double check that writeFile returns a value
-  const saved = await writeFile(fullPath, content)
+  if (err) {
+    const pathError = new Error(`[API - Files] Save failed: ${fullPath}`)
+    pathError.status = 404
+    throw pathError
+  }
 
   return {
     fullPath,
-    testPath,
-    success: Boolean(saved),
+    fileName: path.basename(fullPath),
+    success: Boolean(success),
   }
 }
 

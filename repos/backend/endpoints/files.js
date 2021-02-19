@@ -10,10 +10,9 @@ const path = require('path')
 
 const saveFile = (app, config) => async (req, res) => {
   try {
-    const file = req.params.file
-    const content = req.params.content
-    const meta = await saveTestFile(config, file)
-
+    const path = req.body.path
+    const content = req.body.content
+    const meta = await saveTestFile(config, path, content)
     return apiResponse(req, res, meta || {}, 200)
   }
   catch(err){
