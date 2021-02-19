@@ -4,11 +4,19 @@ import { reduceObj } from '@keg-hub/jsutils'
 import { useStyle } from '@keg-hub/re-theme'
 import React, { useMemo, useCallback } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
-import { ChevronDown, PlusCircle } from 'SVAssets/icons'
+import { ChevronDown, Copy } from 'SVAssets/icons'
 import { SimpleList, Row, Text, View, Touchable } from 'SVComponents'
 import { addStepFromDefinition } from 'SVActions/features/addStepFromDefinition'
 const { CATEGORIES, EDITOR_TABS } = Values
 
+/**
+ * Maps the definitions to a format that can be loaded by the SimpleList Component
+ * Separates them by type, and creates a lookup map
+ * @private
+ * @param {Object} definitions - Groups of step definitions to search separated by type
+ *
+ * @return {Object} - Mapped definitions into SimpleList formatted object
+ */
 const useDefinitionGroups = definitions => {
   return useMemo(() => {
     return reduceObj(definitions, (key, defs, grouped) => {
@@ -19,12 +27,12 @@ const useDefinitionGroups = definitions => {
           title: `${def.type} ${def.name}`,
           uuid: def.uuid,
           actions: [{
-            name: 'add',
-            key: `action-add`,
+            name: 'Copy to Clipboard',
+            key: `action-copy`,
             showFeedback: false,
             iconProps: {
               size: 14,
-              Component: PlusCircle,
+              Component: Copy,
             },
           }]
         }
@@ -44,11 +52,18 @@ export const DefinitionList = props => {
   const { lookup, ...groupedDefs } = useDefinitionGroups(definitions)
 
   const onItemPress = useCallback((item, event) => {
+    // TODO: feature and context are not currently used
+    // Right now it just copies the text to the clipboard
     // Lookup the definition from the lookup table using the uuid
     // Then add it to the active feature by calling the addStepFromDefinition action
     const definition = lookup[item.uuid]
     definition
-      ? addStepFromDefinition(definition, contextRef.current, feature)
+      ? addStepFromDefinition({
+          feature,
+          definition,
+          clipboard: true,
+          context: contextRef.current,
+        })
       : console.warn(`Could not find matching definition for item:`, item)
   }, [lookup, feature, contextRef.current])
 
