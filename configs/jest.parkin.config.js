@@ -77,9 +77,7 @@ module.exports = {
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
   testMatch: [
-    // '<rootDir>/repos/**/*.js'
     '<rootDir>/scripts/*.js'
-    // '/keg/tap/scripts/**/*.js'
   ],
   moduleNameMapper: jestAliases
 }

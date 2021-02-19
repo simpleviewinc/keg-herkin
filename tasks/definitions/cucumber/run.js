@@ -10,18 +10,32 @@ const path = require('path')
  *                          See options section of the task definition below
  */
 const buildCmdArgs = params => {
-  const { context: name, jestConfig, testDir, timeout } = params
+  const { jestConfig, timeout } = params
 
   const cmdArgs = [ 'npx', 'jest', '--detectOpenHandles' ]
   const docTapPath = '/keg/tap'
   jestConfig && cmdArgs.push(`--config=${path.join(docTapPath, jestConfig)}`)
-  // testDir && cmdArgs.push(`--rootDir=${path.join(docTapPath, testDir)}`)
   timeout && cmdArgs.push(`--testTimeout=${timeout}`)
-  // name && cmdArgs.push(name)
+
+  // see <root>/scripts/runParkin.js
   cmdArgs.push('runParkin.js')
 
   return cmdArgs
 }
+
+/**
+ * Builds the envs set in the command that runs a test
+ * @param {String} browser - playwright browser name
+ * @param {Object} params - `run` task params
+ * @return {Object} dockerExec options object, with envs
+ */
+const buildCmdEnvs = (browser, params) => ({
+  envs: {
+    HOST_BROWSER: browser,
+    ...(params.context && { HERKIN_FEATURE_NAME: params.context }),
+    ...(params.tags && { HERKIN_FEATURE_TAGS: params.tags })
+  }
+})
 
 /**
  * Run cucumber tests in container
@@ -33,13 +47,7 @@ const runTest = async args => {
   const cmdArgs = buildCmdArgs(params)
 
   const commands = browsers.map(browser => 
-    () => dockerExec(params.container, cmdArgs, { 
-      envs: {
-        HOST_BROWSER: browser,
-        ...(params.context && { HERKIN_FEATURE_NAME: params.context }),
-        ...(params.tags && { HERKIN_FEATURE_TAGS: params.tags })
-      }
-    })
+    () => dockerExec(params.container, cmdArgs, buildCmdEnvs(browser, params))
   )
 
   return runSeq(commands)
@@ -56,6 +64,7 @@ module.exports = {
       context: {
         alias: [ 'name' ],
         description: 'Name of the test to be run. If not passed-in, all tests are run',
+        default: null
       },
       sync: {
         description: 'Run all tests sequentially',
@@ -74,7 +83,7 @@ module.exports = {
       },
       jestConfig: {
         description: 'Path to jest config within the docker container',
-        default: 'configs/jest.cucumber.config.js'
+        default: 'configs/jest.parkin.config.js'
       },
       testDir: {
         description: 'Path to the tests directory within the docker container',
@@ -82,9 +91,9 @@ module.exports = {
       },
       tags: {
         alias: ['tag'],
-        description: 'Tags for filtering the features. Should be comma separated values',
+        description: 'Tags for filtering the features',
         example: '--tags @foo,@bar,@baz',
-        default: null 
+        default: null
       }
 
     }, [

@@ -1,8 +1,6 @@
 const glob = require('glob')
 const fs = require('fs')
 const path = require('path')
-const { parkin } = require('./instance')
-const { isArr, isObj } = require('@keg-hub/jsutils')
 
 const { 
   DOC_APP_PATH,
@@ -27,6 +25,7 @@ const getFeaturePaths = () => {
 
 /**
  * @param {string} path - path to feature
+ * @return {string?} the feature content as string
  */
 const readFeature = path => {
   try {
@@ -39,24 +38,11 @@ const readFeature = path => {
 }
 
 /**
- * @return {Array<string>} array of features 
+ * @return {Array<string>} array of features as strings
  */
 const loadFeatures = () => {
   const paths = getFeaturePaths()
-
   return paths.map(readFeature)
-
-  // return paths.reduce((features, path) => {
-  //   const feature = readFeature(path)
-  //   const parsed = feature && parkin.parse.feature(feature)
-  //   const featureToPush = isArr(parsed) 
-  //     ? parsed[0]
-  //     : isObj(parsed)
-  //       ? parsed
-  //       : null
-  //   featureToPush && features.push(featureToPush)
-  //   return features
-  // }, [])
 }
 
 module.exports = { loadFeatures }
