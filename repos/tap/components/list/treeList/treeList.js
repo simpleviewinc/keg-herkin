@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { noPropArr } from '@keg-hub/jsutils'
+import { noPropArr, capitalize } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { setActiveFile } from 'SVActions/files/setActiveFile'
 import {
@@ -92,7 +92,11 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
       <Text
         style={styles?.text}
       >
-        {node.name}
+        {
+          node?.type === 'folder'
+            ? node.name?.toUpperCase()
+            : node.name
+        }
       </Text>
       {
         node?.type === 'folder' &&

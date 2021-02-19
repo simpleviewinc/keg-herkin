@@ -17,10 +17,10 @@ export const FeatureEditor = props => {
   const { feature } = useFeature({path: activeFile?.fullPath}) || {}
   const [activeFeat, setActiveFeat] = useState(feature)
 
-  const onFeatureEdit = useCallback((text) => {
-    text !== feature.content &&
-      !text.trim() &&
-      setFeature({ ...feature, text })
+  const onFeatureEdit = useCallback((content) => {
+    content !== feature.content &&
+      !content.trim() &&
+      setFeature({ ...feature, content })
       
   }, [activeFeat, setActiveFeat])
 
