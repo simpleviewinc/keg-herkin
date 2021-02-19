@@ -59,7 +59,7 @@ const saveTestFile = async (config, fullPath, content) => {
 
   const { testsRoot } = config.paths
   const inTestRoot = fullPath.startsWith(testsRoot)
-  if (!inTestRoot) throw new Error(`[API - Files] Filepath must be within '${testsRoot}': received '${fullPath}'`)
+  if (!inTestRoot) throw new Error(`[API - Files] Filepath must have rootPath '${testsRoot}': received '${fullPath}'`)
 
   const [err, success] = await writeFile(fullPath, content)
 
