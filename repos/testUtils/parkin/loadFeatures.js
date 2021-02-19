@@ -44,17 +44,19 @@ const readFeature = path => {
 const loadFeatures = () => {
   const paths = getFeaturePaths()
 
-  return paths.reduce((features, path) => {
-    const feature = readFeature(path)
-    const parsed = feature && parkin.parse.feature(feature)
-    const featureToPush = isArr(parsed) 
-      ? parsed[0]
-      : isObj(parsed)
-        ? parsed
-        : null
-    featureToPush && features.push(featureToPush)
-    return features
-  }, [])
+  return paths.map(readFeature)
+
+  // return paths.reduce((features, path) => {
+  //   const feature = readFeature(path)
+  //   const parsed = feature && parkin.parse.feature(feature)
+  //   const featureToPush = isArr(parsed) 
+  //     ? parsed[0]
+  //     : isObj(parsed)
+  //       ? parsed
+  //       : null
+  //   featureToPush && features.push(featureToPush)
+  //   return features
+  // }, [])
 }
 
 module.exports = { loadFeatures }

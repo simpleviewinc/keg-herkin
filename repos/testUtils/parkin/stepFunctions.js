@@ -1,7 +1,12 @@
 const { parkin } = require('./instance')
 
+const getStepHandler = (parkin, name) =>
+  parkin[name].bind(parkin)
+
 module.exports = {
-  Given: parkin.Given.bind(parkin),
-  When: parkin.When.bind(parkin),
-  Then: parkin.Then.bind(parkin)
+  Given: getStepHandler(parkin, 'Given'),
+  When: getStepHandler(parkin, 'When'),
+  Then: getStepHandler(parkin, 'Then'),
+  And: getStepHandler(parkin, 'And'),
+  But: getStepHandler(parkin, 'But'),
 }

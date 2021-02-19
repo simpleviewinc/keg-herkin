@@ -15,9 +15,10 @@ const buildCmdArgs = params => {
   const cmdArgs = [ 'npx', 'jest', '--detectOpenHandles' ]
   const docTapPath = '/keg/tap'
   jestConfig && cmdArgs.push(`--config=${path.join(docTapPath, jestConfig)}`)
-  testDir && cmdArgs.push(`--rootDir=${path.join(docTapPath, testDir)}`)
+  // testDir && cmdArgs.push(`--rootDir=${path.join(docTapPath, testDir)}`)
   timeout && cmdArgs.push(`--testTimeout=${timeout}`)
-  name && cmdArgs.push(name)
+  // name && cmdArgs.push(name)
+  cmdArgs.push('runParkin.js')
 
   return cmdArgs
 }
@@ -34,7 +35,9 @@ const runTest = async args => {
   const commands = browsers.map(browser => 
     () => dockerExec(params.container, cmdArgs, { 
       envs: {
-        HOST_BROWSER: browser
+        HOST_BROWSER: browser,
+        ...(params.context && { HERKIN_FEATURE_NAME: params.context }),
+        ...(params.tags && { HERKIN_FEATURE_TAGS: params.tags })
       }
     })
   )
@@ -76,7 +79,14 @@ module.exports = {
       testDir: {
         description: 'Path to the tests directory within the docker container',
         default: 'tests/bdd'
+      },
+      tags: {
+        alias: ['tag'],
+        description: 'Tags for filtering the features. Should be comma separated values',
+        example: '--tags @foo,@bar,@baz',
+        default: null 
       }
+
     }, [
       'allBrowsers',
       'chromium',
