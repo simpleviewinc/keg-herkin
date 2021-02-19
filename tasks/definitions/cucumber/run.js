@@ -85,17 +85,12 @@ module.exports = {
         description: 'Path to jest config within the docker container',
         default: 'configs/jest.parkin.config.js'
       },
-      testDir: {
-        description: 'Path to the tests directory within the docker container',
-        default: 'tests/bdd'
-      },
       tags: {
         alias: ['tag'],
         description: 'Tags for filtering the features',
         example: '--tags @foo,@bar,@baz',
         default: null
       }
-
     }, [
       'allBrowsers',
       'chromium',
