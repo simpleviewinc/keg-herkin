@@ -11,6 +11,14 @@ const path = require('path')
 const saveFile = (app, config) => async (req, res) => {
   try {
     const path = req.body.path
+    if (!path)
+    return apiErr(
+      req, 
+      res, 
+      new Error(`[API - Files] Save failed: 'path' required`), 
+      400
+    )
+
     const content = req.body.content
     const meta = await saveTestFile(config, path, content)
     return apiResponse(req, res, meta || {}, 200)
