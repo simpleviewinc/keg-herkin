@@ -24,8 +24,7 @@ const { DEFINITION_TABS, CATEGORIES } = Values
  */
 export const DefinitionsEditor = props => {
   const {
-    // activeTab=DEFINITION_TABS.ACTIVE,
-    activeTab=DEFINITION_TABS.LIST,
+    activeTab,
     active,
     featureEditorRef,
     feature,
@@ -36,7 +35,7 @@ export const DefinitionsEditor = props => {
   } = props
 
   const { definitions } = useStoreItems([ CATEGORIES.DEFINITIONS ])
-  const [tab, setTab] = useActiveTab(activeTab)
+  const [tab, setTab] = useActiveTab(activeTab || DEFINITION_TABS.ACTIVE)
   const { definitions: activeDefs } = useFeature({path: activeFile?.fullPath}) || {}
 
   return (
