@@ -100,7 +100,7 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
           ? activeStyle?.main
           : styles?.main
         ,
-        level > 0 && { paddingLeft: 15 * level }
+        level && { paddingLeft: 15 * level }
       ]}
     >
       <Text
