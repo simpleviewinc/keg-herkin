@@ -38,7 +38,16 @@ const buildCmdEnvs = (browser, params) => ({
 })
 
 /**
- * Run cucumber tests in container
+ * Exits the process, once the tests are complete
+ * @param {Array<string|number>} exitCodes - exit code of each test in container
+ */
+const exitProcess = (exitCodes=[]) => {
+  const codeSum = exitCodes.reduce((sum, code) => sum + parseInt(code), 0)
+  process.exit(codeSum)
+}
+
+/**
+ * Run parkin tests in container
  * @param {Object} args 
  */
 const runTest = async args => {
@@ -50,7 +59,9 @@ const runTest = async args => {
     () => dockerExec(params.container, cmdArgs, buildCmdEnvs(browser, params))
   )
 
-  return runSeq(commands)
+  const codes = await runSeq(commands)
+
+  exitProcess(codes)
 }
 
 module.exports = {
