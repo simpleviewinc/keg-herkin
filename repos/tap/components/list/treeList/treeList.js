@@ -72,7 +72,7 @@ export const TreeList = props => {
  * Component for list item based on the props
  * prop ref: https://github.com/zaguiini/react-native-final-tree-view#rendernode
  * @param {Object} props 
- * @param {Object} props.node - node object
+ * @param {Object} props.node - node object: { children, fullPath, id, isModified, name, type }
  * @param {Boolean} props.isExpanded - if the list item is expanded
  * @param {Boolean} props.hasChildrenNodes
  * 
@@ -81,24 +81,34 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
   // don't display empty folders
   if (level === 0 && isEmptyFolderNode(node)) return null
 
+  const { activeFile } = useStoreItems([CATEGORIES.ACTIVE_FILE])
   const theme = useTheme()
   const themeStyles = theme.get('treeList')
   const [ styleRef, mainStyles ] = useThemeHover(themeStyles?.default, themeStyles?.hover)
+  // check if active file or expanded folder
+  const isNodeActive = (isExpanded && node?.type === 'folder') || (activeFile?.fullPath === node?.fullPath)
 
-  const styles = level === 0
-    ? mainStyles?.header
-    : mainStyles?.item
+  const nodeLevel = level === 0 ? 'root' : 'child'
+  const styles = mainStyles?.[nodeLevel][node?.type]
+  const activeStyle = themeStyles?.active?.[nodeLevel][node?.type]
 
   return (
     <View 
       ref={styleRef}
       style={[
-        styles?.main,
-        level > 0 && { paddingLeft: 10 * level }
+        isNodeActive
+          ? activeStyle?.main
+          : styles?.main
+        ,
+        level > 0 && { paddingLeft: 15 * level }
       ]}
     >
       <Text
-        style={styles?.text}
+        style={
+          isNodeActive 
+            ? activeStyle?.text
+            : styles?.text
+        }
       >
         {
           node?.type === 'folder'
