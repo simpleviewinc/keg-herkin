@@ -14,7 +14,7 @@ export const SidebarContent = (props) => {
 
   switch (activeId) {
     case SIDEBAR_TYPES.FILE_TREE:
-      return <FileTreePanel title={'TEST FILES'} {...props}/>  
+      return <FileTreePanel title={'Test Files'} {...props}/>  
     default:
       return null
   }
