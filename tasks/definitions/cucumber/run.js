@@ -10,20 +10,47 @@ const path = require('path')
  *                          See options section of the task definition below
  */
 const buildCmdArgs = params => {
-  const { context: name, jestConfig, testDir, timeout } = params
+  const { jestConfig, timeout } = params
 
   const cmdArgs = [ 'npx', 'jest', '--detectOpenHandles' ]
   const docTapPath = '/keg/tap'
   jestConfig && cmdArgs.push(`--config=${path.join(docTapPath, jestConfig)}`)
-  testDir && cmdArgs.push(`--rootDir=${path.join(docTapPath, testDir)}`)
   timeout && cmdArgs.push(`--testTimeout=${timeout}`)
-  name && cmdArgs.push(name)
+
+  // see <root>/scripts/runParkin.js
+  cmdArgs.push('runParkin.js')
 
   return cmdArgs
 }
 
 /**
- * Run cucumber tests in container
+ * Builds the envs set in the command that runs a test
+ * @param {String} browser - playwright browser name
+ * @param {Object} params - `run` task params
+ * @return {Object} dockerExec options object, with envs
+ */
+const buildCmdEnvs = (browser, params) => ({
+  envs: {
+    HOST_BROWSER: browser,
+    ...(params.context && { HERKIN_FEATURE_NAME: params.context }),
+    ...(params.tags && { HERKIN_FEATURE_TAGS: params.tags })
+  }
+})
+
+/**
+ * Exits the process, once the tests are complete
+ * @param {Array<string|number>} exitCodes - exit code of each test in container
+ */
+const exitProcess = (exitCodes=[]) => {
+  const codeSum = exitCodes.reduce((sum, code) => sum + parseInt(code), 0)
+
+  // TODO: this seems to not be actually setting the exitCode. Maybe something
+  // in the keg-cli process is intercepting?
+  process.exit(codeSum)
+}
+
+/**
+ * Run parkin tests in container
  * @param {Object} args 
  */
 const runTest = async args => {
@@ -32,14 +59,12 @@ const runTest = async args => {
   const cmdArgs = buildCmdArgs(params)
 
   const commands = browsers.map(browser => 
-    () => dockerExec(params.container, cmdArgs, { 
-      envs: {
-        HOST_BROWSER: browser
-      }
-    })
+    () => dockerExec(params.container, cmdArgs, buildCmdEnvs(browser, params))
   )
 
-  return runSeq(commands)
+  const codes = await runSeq(commands)
+
+  exitProcess(codes)
 }
 
 module.exports = {
@@ -53,6 +78,7 @@ module.exports = {
       context: {
         alias: [ 'name' ],
         description: 'Name of the test to be run. If not passed-in, all tests are run',
+        default: null
       },
       sync: {
         description: 'Run all tests sequentially',
@@ -71,11 +97,13 @@ module.exports = {
       },
       jestConfig: {
         description: 'Path to jest config within the docker container',
-        default: 'configs/jest.cucumber.config.js'
+        default: 'configs/jest.parkin.config.js'
       },
-      testDir: {
-        description: 'Path to the tests mount within the docker container',
-        default: 'tests'
+      tags: {
+        alias: ['tag'],
+        description: 'Tags for filtering the features',
+        example: '--tags @foo,@bar,@baz',
+        default: null
       }
     }, [
       'allBrowsers',
