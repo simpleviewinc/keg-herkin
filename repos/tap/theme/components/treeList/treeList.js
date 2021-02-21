@@ -60,6 +60,7 @@ const activeStyles = (theme, isChildNode) => {
     file: {
       main: {
         ...sharedMainStyle(theme), 
+        bgC: tapColors?.accentBackground,
         borderBottomWidth: 0
       },
       text: {
