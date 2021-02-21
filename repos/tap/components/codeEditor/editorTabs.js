@@ -1,28 +1,40 @@
-import { useTheme } from '@keg-hub/re-theme'
 import { Tabbar } from 'SVComponents'
 import { Values } from 'SVConstants'
-import { isFunc } from '@keg-hub/jsutils'
+import { isFunc, noOpObj, deepMerge } from '@keg-hub/jsutils'
 import { View, Button } from '@keg-hub/keg-components'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useMemo } from 'react'
 
 const { EDITOR_TABS } = Values
 
-const TestActions = props => {
+const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs }) => {
   return (
-    <View style={{ flexDirection: 'row' }} >
-      <View style={{ marginRight: 15 }} >
-        <Button type='primary'>
+    <View className={`editor-tab-actions`} style={actionStyles.main} >
+      <View
+        style={actionStyles.save}
+        className={`editor-tab-actions-save`}
+      >
+        <Button
+          type='primary'
+          onClick={onSave}
+          className={`editor-tab-actions-save-button`}
+        >
           Save
         </Button>
       </View>
-      <View >
-        <Button
-          type='secondary'
-          onClick={props.onRun}
+      { showFeatureTabs && (
+        <View
+          style={actionStyles.run}
+          className={`editor-tab-actions-save`}
         >
-          Run
-        </Button>
-      </View>
+          <Button
+            type='secondary'
+            onClick={onRun}
+            className={`editor-tab-actions-run-button`}
+          >
+            Run
+          </Button>
+        </View>
+      )}
     </View>
   )
 }
@@ -42,6 +54,33 @@ const tabs = [
   }
 ]
 
+const useActionsTab = (
+  tabs,
+  TestActions,
+  { onRun, onSave, showFeatureTabs, styles }
+) => useMemo(() => {
+  const extraActionTabs = [{
+    onRun,
+    onSave,
+    showFeatureTabs,
+    id: `test-actions`,
+    Tab: TestActions,
+    actionStyles: deepMerge(styles?.default, showFeatureTabs ? styles?.feature : null),
+  }]
+
+  return showFeatureTabs
+    ? tabs.concat(extraActionTabs)
+    : extraActionTabs
+
+}, [
+  tabs,
+  onRun,
+  onSave,
+  styles,
+  TestActions,
+  showFeatureTabs,
+])
+
 const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
   if(newTab === `test-actions`) return
   
@@ -51,20 +90,30 @@ const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
 }, [ tab, setTab, onTabSelect ])
 
 export const EditorTabs = props => {
-  const { activeTab, onTabSelect, onRun } = props
+  const {
+    activeTab,
+    onTabSelect,
+    onRun,
+    onSave,
+    styles,
+    showFeatureTabs,
+  } = props
+
   const [tab, setTab] = useState(activeTab || EDITOR_TABS.SPLIT)
   const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
-  
+
   useEffect(() => {
     isFunc(onTabSelect) &&
       activeTab !== tab &&
       setTab(activeTab)
   }, [activeTab, onTabSelect, tab, setTab])
 
+  const barTabs = useActionsTab(tabs, TestActions, props)
+
   return (
     <Tabbar
       type='code'
-      tabs={[ ...tabs, { onRun, id: `test-actions`, Tab: TestActions }]}
+      tabs={barTabs}
       activeTab={tab}
       location='bottom'
       onTabSelect={tabSelect}

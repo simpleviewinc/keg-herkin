@@ -1,12 +1,12 @@
 import { Values } from 'SVConstants'
-import React, { useRef } from 'react'
-import { useTheme } from '@keg-hub/re-theme'
 import { EditorTabs } from './editorTabs'
-import { useStyle } from '@keg-hub/re-theme'
+import { noOpObj, exists } from '@keg-hub/jsutils'
 import { AceEditor } from 'SVComponents/aceEditor'
+import React, { useRef, useCallback } from 'react'
+import { useActiveTab } from 'SVHooks/useActiveTab'
+import { useTheme, useStyle } from '@keg-hub/re-theme'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
-import { useActiveTab } from 'SVHooks/useActiveTab'
 
 
 const { EDITOR_TABS } = Values
@@ -32,6 +32,18 @@ const MainEditor = props => {
     )
 }
 
+const useTabActions = () => {
+  const onRun = useCallback(event => {
+    console.log('---Run tests---')
+  }, [])
+
+  const onSave = useCallback(event => {
+    console.log('---Save file---')
+  }, [])
+
+  return { onRun, onSave }
+}
+
 /**
  * CodeEditor
  * @param {Object} props
@@ -41,14 +53,20 @@ const MainEditor = props => {
 export const CodeEditor = props => {
   const {
     activeTab,
-    activeFile
+    activeFile=noOpObj
   } = props
 
   const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.SPLIT)
-  const codeStyles = useStyle(`screens.editors.${tab}`)
-  const editorRef = useRef(null)
+  const forceFull = !activeFile.isFeature && (tab === EDITOR_TABS.SPLIT || tab === EDITOR_TABS.DEFINITIONS)
+  const checkTab = forceFull ? EDITOR_TABS.FEATURE : tab
 
-  if (!activeFile) return null
+  const editorRef = useRef(null)
+  const tabActions = useTabActions(props)
+  const editorStyles = useStyle(`screens.editors`)
+  const codeStyles = editorStyles?.[checkTab]
+  const actionsStyles = editorStyles?.actions
+  
+  if (!exists(activeFile.content)) return null
 
   return (
     <>
@@ -73,10 +91,11 @@ export const CodeEditor = props => {
           />
       )}
       <EditorTabs
-        activeTab={tab}
+        activeTab={checkTab}
         onTabSelect={setTab}
-        onSave={() => console.log('---Save file---')}
-        onRun={() => console.log('---Run tests---')}
+        showFeatureTabs={activeFile.isFeature}
+        styles={actionsStyles}
+        { ...tabActions }
       />
     </>
   )

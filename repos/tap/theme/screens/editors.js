@@ -36,6 +36,18 @@ export const editors = theme => {
           minH: `100px`,
         }
       },
+    },
+    actions: {
+      default: {
+        main: {
+          flD: 'row',
+          alS: 'flex-end',
+          mR: theme.margin.size,
+        },
+      },
+      feature: {
+        save: { mR: 15 },
+      }
     }
   }
 }
