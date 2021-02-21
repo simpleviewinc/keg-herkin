@@ -93,14 +93,7 @@ const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
 }, [ tab, setTab, onTabSelect ])
 
 export const EditorTabs = props => {
-  const {
-    activeTab,
-    onTabSelect,
-    onRun,
-    onSave,
-    styles,
-    showFeatureTabs,
-  } = props
+  const { activeTab, onTabSelect } = props
 
   const [tab, setTab] = useState(activeTab || EDITOR_TABS.SPLIT)
   const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
