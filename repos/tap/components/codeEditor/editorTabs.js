@@ -8,7 +8,10 @@ const { EDITOR_TABS } = Values
 
 const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs }) => {
   return (
-    <View className={`editor-tab-actions`} style={actionStyles.main} >
+    <View
+      style={actionStyles.main}
+      className={`editor-tab-actions`}
+    >
       <View
         style={actionStyles.save}
         className={`editor-tab-actions-save`}
