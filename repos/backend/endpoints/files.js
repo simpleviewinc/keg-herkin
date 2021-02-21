@@ -25,7 +25,7 @@ const loadFile = (app, config) => async (req, res) => {
   try {
     const filePath = req.query.path
     const meta = await getTestFile(config, filePath)
-    
+
     return apiResponse(req, res, meta || {}, 200)
   }
   catch(err){

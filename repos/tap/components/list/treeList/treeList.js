@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react'
-import { noPropArr } from '@keg-hub/jsutils'
-import { useTheme, useThemeHover } from '@keg-hub/re-theme'
+import React, { useCallback, useMemo } from 'react'
+import { noPropArr, deepMerge } from '@keg-hub/jsutils'
+import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { setActiveFile } from 'SVActions/files/setActiveFile'
 import {
   View,
@@ -29,6 +29,71 @@ const findNode = (id, nodes) =>
       ? node
       : node.children.length && findNode(id, node.children)
   }, {})
+
+/**
+ * Hook to get the correct styles for the tree node
+ * @param {number} level - Current location within the tree of the nodes to be rendered
+ * @param {string} nodeType - The type of node being checked ( Folder || File )
+ * @param {boolean} isNodeActive - Is the node currently active
+ * 
+ * @returns {Object} - Reg for the root node, and the styles to be applied
+ */
+const useTreeStyles = (level, nodeType, isNodeActive) => {
+  const theme = useTheme()
+  const themeStyles = useStyle('treeList')
+  const [ styleRef, mainStyles ] = useThemeHover(themeStyles?.default, themeStyles?.hover)
+  const padSize = theme.padding.size
+
+  return useMemo(() => {
+    const nodeLevel = level === 0 ? 'root' : 'child'
+    const styles = mainStyles?.[nodeLevel][nodeType]
+    const activeStyle = themeStyles?.active?.[nodeLevel][nodeType]
+
+    return {
+      styleRef,
+      mainStyles,
+      styles: deepMerge(
+        (isNodeActive ? activeStyle : styles),
+        level && { main: { paddingLeft: padSize * level } },
+      )
+    }
+
+  }, [
+    theme,
+    level,
+    padSize,
+    styleRef,
+    nodeType,
+    mainStyles,
+    themeStyles,
+    isNodeActive,
+  ])
+}
+
+/**
+ * Hook to memoize is a node is active base on it's path and the current active file path
+ * @param {boolean} isExpanded - Is the node currently expanded
+ * @param {string} nodeType - The type of node being checked ( Folder || File )
+ * @param {Object} nodePath - Path to the node on the local file system
+ * @param {Object} filePath - Path to the active file on the local file system
+ * 
+ * @returns {boolean} - True if the node is active
+ */
+const useNodeActive = (isExpanded, nodeType, nodePath, filePath) => useMemo(() => {
+  return (isExpanded && nodeType === 'folder') || (filePath === nodePath)
+}, [isExpanded, nodeType, nodePath, filePath])
+
+/**
+ * Hook to memoize the name of the node based on it's type
+ * @param {Object} node - node object: { children, fullPath, id, isModified, name, type }
+ * 
+ * @returns {string} - Name of the node
+ */
+const useNodeName = node => useMemo(() => {
+  return node?.type === 'folder'
+    ? node.name?.toUpperCase()
+    : node.name
+}, [ node?.type, node?.name ])
 
 
 /**
@@ -78,48 +143,40 @@ export const TreeList = props => {
  * 
  */
 const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
-  // don't display empty folders
-  if (level === 0 && isEmptyFolderNode(node)) return null
 
   const { activeFile } = useStoreItems([CATEGORIES.ACTIVE_FILE])
-  const theme = useTheme()
-  const themeStyles = theme.get('treeList')
-  const [ styleRef, mainStyles ] = useThemeHover(themeStyles?.default, themeStyles?.hover)
-  // check if active file or expanded folder
-  const isNodeActive = (isExpanded && node?.type === 'folder') || (activeFile?.fullPath === node?.fullPath)
+  const nodeName = useNodeName(node)
+  const nodeType = node?.type
 
-  const nodeLevel = level === 0 ? 'root' : 'child'
-  const styles = mainStyles?.[nodeLevel][node?.type]
-  const activeStyle = themeStyles?.active?.[nodeLevel][node?.type]
+  // Check if active file or expanded folder
+  const isNodeActive = useNodeActive(isExpanded, nodeType, node?.fullPath, activeFile?.fullPath)
+
+  const {
+    styles,
+    styleRef,
+    mainStyles,
+  } = useTreeStyles(level, nodeType, isNodeActive)
+  
+  // Don't display empty folders
+  if (level === 0 && isEmptyFolderNode(node)) return null
 
   return (
     <View 
+      className={[`tree-node-main`, isExpanded ? `tree-node-expanded` : ``]}
       ref={styleRef}
-      style={[
-        isNodeActive
-          ? activeStyle?.main
-          : styles?.main
-        ,
-        level && { paddingLeft: 15 * level }
-      ]}
+      style={styles?.main}
     >
       <Text
-        style={
-          isNodeActive 
-            ? activeStyle?.text
-            : styles?.text
-        }
+        className={`tree-node-name`}
+        style={styles?.text}
       >
-        {
-          node?.type === 'folder'
-            ? node.name?.toUpperCase()
-            : node.name
-        }
+        { nodeName }
       </Text>
       {
-        node?.type === 'folder' &&
+        nodeType === 'folder' &&
         (
           <ChevronDown
+            className={`tree-node-icon`}
             size={mainStyles?.icon?.size || 16}
             style={[
               mainStyles?.icon, 

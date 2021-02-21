@@ -43,11 +43,13 @@ export const CodeEditor = props => {
     activeTab,
     activeFile
   } = props
-  if (!activeFile) return null
 
   const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.SPLIT)
   const codeStyles = useStyle(`screens.editors.${tab}`)
   const editorRef = useRef(null)
+
+  if (!activeFile) return null
+
   return (
     <>
       {(tab === EDITOR_TABS.FEATURE || tab === EDITOR_TABS.SPLIT) && (
@@ -70,7 +72,12 @@ export const CodeEditor = props => {
             styles={codeStyles.definitions || codeStyles}
           />
       )}
-      <EditorTabs activeTab={tab} onTabSelect={setTab} onRun={() => console.log('---Run tests---')} />
+      <EditorTabs
+        activeTab={tab}
+        onTabSelect={setTab}
+        onSave={() => console.log('---Save file---')}
+        onRun={() => console.log('---Run tests---')}
+      />
     </>
   )
 }

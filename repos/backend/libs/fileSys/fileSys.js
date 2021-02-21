@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { limbo, isFunc } = require('@keg-hub/jsutils')
+const { limbo, isFunc, exists } = require('@keg-hub/jsutils')
 
 /**
  * Wraps a method with a callback into a promise
@@ -13,7 +13,7 @@ const { limbo, isFunc } = require('@keg-hub/jsutils')
 const limboify = (cb, ...args) => {
   return limbo(
     new Promise((res, rej) => cb(...args, (err, success) => 
-      err? rej(err) : res(success || true) 
+      err? rej(err) : res(exists(success) ? success : true) 
     ))
   )
 }

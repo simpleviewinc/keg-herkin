@@ -22,7 +22,7 @@ const deleteTestFile = async (config, testPath) => {
   await checkPath(fullPath)
 
   // TODO: double check that removeFile returns a value
-  const deleted = await removeFile(fullPath)
+  const [__, deleted] = await removeFile(fullPath)
 
   return {
     fullPath,
