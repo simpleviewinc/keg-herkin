@@ -1,63 +1,119 @@
 import { tapColors } from '../../tapColors'
 
-const sharedMainStyle = (theme, isHover) => ({
+const sharedMainStyle = (theme) => ({
   ...theme.transition([ 'borderBottomColor' ], 0.5),
   borderBottomColor: tapColors.border,
   borderBottomWidth: 1,
-  pL: 10,
-  pB: 5,
+  height: 40,
+  pL: 8,
   flD: 'row',
-  bgC: isHover ? tapColors.defaultLight : tapColors.headerBackground
+  bgC: theme?.colors?.palette?.white01
 })
 
-const sharedTextStyle = (theme, isHover) => ({
-  color: isHover ? theme.colors.palette.white01 : tapColors.inactive,
-  fontWeight: 'bold',
-  fontSize: 17,
-  pT: 10
+const sharedTextStyle = (isChildNode) => ({
+  color: tapColors?.inactive,
+  ftWt: 'bold',
+  ftSz: isChildNode ? 14 : 17,
+  alS: 'center'
 })
 
-const iconStyle = (theme, isHover) => ({
+const iconStyle = (theme) => ({
   position: 'absolute',
   right: 10,
   top: 10,
   size: 16,
-  c: isHover ? theme.colors.palette.white01 : tapColors.default
+  c: theme?.colors?.palette?.gray01
 })
 
-export const treeList = (theme) => ({
-  default: {
-    header: {
-      main: sharedMainStyle(theme),
-      text: sharedTextStyle(theme),
-    },
-    item: {
+const defaultStyles = (theme, isChildNode) => {
+  const childDefaultStyle = isChildNode && {
+    bgC: tapColors?.accentBackground,
+    borderBottomWidth: 0
+  }
+  return {
+    folder: {
       main: {
         ...sharedMainStyle(theme),
+        ...childDefaultStyle
+      },
+      text: sharedTextStyle(isChildNode),
+    },
+    file: {
+      main: {
+        ...sharedMainStyle(theme),
+        ...childDefaultStyle
+      },
+      text: sharedTextStyle(isChildNode)
+    }
+  }
+}
+
+const activeStyles = (theme, isChildNode) => {
+  return {
+    folder: {
+      main: sharedMainStyle(theme),
+      text: {
+        ...sharedTextStyle(isChildNode),
+        c: tapColors?.primary,
+      }
+    },
+    file: {
+      main: {
+        ...sharedMainStyle(theme), 
+        bgC: tapColors?.accentBackground,
         borderBottomWidth: 0
       },
       text: {
-        ...sharedTextStyle(theme),
-        fontSize: 14,
+        ...sharedTextStyle(isChildNode),
+        c: tapColors?.success,
+      }
+    }
+  }
+}
+
+const hoverStyles = (theme, isChildNode) => {
+  const childHoverStyle = isChildNode && {
+    bgC: tapColors?.headerBackground,
+    borderBottomWidth: 0
+  }
+  return {
+    folder: {
+      main: {
+        ...sharedMainStyle(theme),
+        ...childHoverStyle
+      },
+      text: {
+        ...sharedTextStyle(isChildNode),
+        c: tapColors?.primary,
       }
     },
+    file: {
+      main: {
+        ...sharedMainStyle(theme),
+        ...childHoverStyle
+      },
+      text: {
+        ...sharedTextStyle(isChildNode),
+        c: tapColors?.success,
+      }
+    }
+  }
+}
+
+export const treeList = (theme) => ({
+  default: {
+    root: defaultStyles(theme),
+    child: defaultStyles(theme, true),
     icon: iconStyle(theme)
   },
   hover: {
-    header: {
-      main: sharedMainStyle(theme, true),
-      text: sharedTextStyle(theme, true),
-    },
-    item: {
-      main: {
-        ...sharedMainStyle(theme, true),
-        borderBottomWidth: 0,
-      },
-      text: {
-        ...sharedTextStyle(theme, true),
-        fontSize: 14,
-      }
-    },
-    icon: iconStyle(theme, true)
+    root: hoverStyles(theme),
+    child: hoverStyles(theme, true),
+    icon: iconStyle(theme)
   },
+  active: {
+    root: activeStyles(theme),
+    child: activeStyles(theme, true),
+    icon: iconStyle(theme)
+  }
 })

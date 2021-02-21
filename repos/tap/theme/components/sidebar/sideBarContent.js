@@ -5,7 +5,7 @@ export const sidebarContent = (theme) => ({
     main: {
       flD: 'row',
       bgC: tapColors.defaultDark,
-      minH: 60
+      minH: 50
     },
     textContainer: {
       fl:1, 

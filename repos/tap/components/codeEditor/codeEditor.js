@@ -1,13 +1,12 @@
 import { Values } from 'SVConstants'
-import React, { useRef } from 'react'
-import { useTheme } from '@keg-hub/re-theme'
 import { EditorTabs } from './editorTabs'
-import { useStyle } from '@keg-hub/re-theme'
+import { noOpObj, exists } from '@keg-hub/jsutils'
 import { AceEditor } from 'SVComponents/aceEditor'
+import React, { useRef, useCallback } from 'react'
+import { useActiveTab } from 'SVHooks/useActiveTab'
+import { useTheme, useStyle } from '@keg-hub/re-theme'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
-import { useActiveTab } from 'SVHooks/useActiveTab'
-
 
 const { EDITOR_TABS } = Values
 
@@ -33,6 +32,21 @@ const MainEditor = props => {
 }
 
 /**
+ * Hook to run the active files tests, or save changes to the active file
+ */
+const useTabActions = () => {
+  const onRun = useCallback(event => {
+    console.log('---Run tests---')
+  }, [])
+
+  const onSave = useCallback(event => {
+    console.log('---Save file---')
+  }, [])
+
+  return { onRun, onSave }
+}
+
+/**
  * CodeEditor
  * @param {Object} props
  * @param {String} props.activeTab
@@ -41,13 +55,35 @@ const MainEditor = props => {
 export const CodeEditor = props => {
   const {
     activeTab,
-    activeFile
+    activeFile=noOpObj
   } = props
-  if (!activeFile) return null
 
   const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.SPLIT)
-  const codeStyles = useStyle(`screens.editors.${tab}`)
+  const forceFull = !activeFile.isFeature && (tab === EDITOR_TABS.SPLIT || tab === EDITOR_TABS.DEFINITIONS)
+  const checkTab = forceFull ? EDITOR_TABS.FEATURE : tab
+
   const editorRef = useRef(null)
+  const tabActions = useTabActions(props)
+  const editorStyles = useStyle(`screens.editors`)
+  const codeStyles = editorStyles?.[checkTab]
+  const actionsStyles = editorStyles?.actions
+  
+  if (!exists(activeFile.content)) return null
+
+  /* TODO: Clean up constants and Actions tab
+    * Constants
+      * FEATURE should be it's own constant
+        * Currently used for features && non-definition files
+      * Need to add constants for waypoint and jest test files
+        * Should show the Run and save action in the Actions tab
+      * Need to add constant for non-test and non-definition files
+        * Should show only save action in the Actions tab
+    * Actions Tab ( In the EditorTabs component )
+      * Run action should be disabled only for test files
+        * feature / waypoint / jest
+        * Currently hidden for all except feature files
+  */
+
   return (
     <>
       {(tab === EDITOR_TABS.FEATURE || tab === EDITOR_TABS.SPLIT) && (
@@ -70,7 +106,13 @@ export const CodeEditor = props => {
             styles={codeStyles.definitions || codeStyles}
           />
       )}
-      <EditorTabs activeTab={tab} onTabSelect={setTab} onRun={() => console.log('---Run tests---')} />
+      <EditorTabs
+        activeTab={checkTab}
+        onTabSelect={setTab}
+        showFeatureTabs={activeFile.isFeature}
+        styles={actionsStyles}
+        { ...tabActions }
+      />
     </>
   )
 }
