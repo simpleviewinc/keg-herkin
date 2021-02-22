@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { wordCaps, checkCall, exists } from '@keg-hub/jsutils'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 import { DrawerToggle } from './drawerToggle'
 import { Section, ItemHeader, Row, H3, Text } from 'SVComponents'
 import { Drawer } from 'SVComponents'
@@ -52,7 +52,6 @@ const SurfaceHeader = props => {
 }
 
 export const Surface = props => {
-  const theme = useTheme()
   const {
     capitalize,
     prefix,
@@ -64,7 +63,7 @@ export const Surface = props => {
     toggleDisabled,
   } = props
   
-  const surfaceStyles = theme.get(theme.surface, styles)
+  const surfaceStyles = useStyle('surface', styles)
 
   const [ toggled, setToggled ] = useState(initialToggle || true)
 

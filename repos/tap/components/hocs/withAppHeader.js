@@ -2,12 +2,10 @@ import React, { useCallback } from 'react'
 import { useStyles } from 'SVHooks'
 import { Cog } from 'SVAssets/icons'
 import { setActiveModal } from 'SVActions/modals'
-import { useThemeHover } from '@keg-hub/re-theme'
+import { useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { AppHeader, View, Text, H5, Button, TouchableIcon } from 'SVComponents'
 import { Values } from 'SVConstants'
 const { MODAL_TYPES } = Values
-
-const buildStyles = (theme, styles) => theme.get('appHeader', styles)
 
 const IconComponent = ({ styles, size, stroke, fill }) => {
   return (
@@ -64,7 +62,7 @@ const ToggleSettings = ({ styles }) => {
  */
 export const withAppHeader = (title, Component) => {
   const AppHeaderHoc = props => {
-    const styles = useStyles(props.styles, props, buildStyles)
+    const styles = useStyle('appHeader', props.styles)
     return (
       <>
         <AppHeader

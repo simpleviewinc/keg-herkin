@@ -65,6 +65,23 @@ actions:
       privileged: true
       cmds:
         - yarn install
+  parkin:
+    install:
+      location: /keg/tap/node_modules/@ltipton/parkin
+      privileged: true
+      cmds:
+        - yarn install
+    build:
+      location: /keg/tap/node_modules/@ltipton/parkin
+      privileged: true
+      cmds:
+        - yarn build
+    start:
+      location: /keg/tap/node_modules/@ltipton/parkin
+      privileged: true
+      detach: true
+      cmds:
+        - yarn dev
   jsutils:
     install:
       location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils

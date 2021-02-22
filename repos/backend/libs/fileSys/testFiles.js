@@ -22,7 +22,7 @@ const deleteTestFile = async (config, testPath) => {
   await checkPath(fullPath)
 
   // TODO: double check that removeFile returns a value
-  const deleted = await removeFile(fullPath)
+  const [__, deleted] = await removeFile(fullPath)
 
   return {
     fullPath,
@@ -32,8 +32,11 @@ const deleteTestFile = async (config, testPath) => {
 }
 
 const getTestFile = async (config, testPath) => {
+
   const { testsRoot } = config.paths
-  const fullPath = path.join(testsRoot, testPath)
+  const fullPath = testPath.includes(testsRoot)
+    ? testPath
+    : path.join(testsRoot, testPath)
 
   await checkPath(fullPath)
 

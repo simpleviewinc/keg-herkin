@@ -6,14 +6,14 @@ import { logData, isFunc } from '@keg-hub/jsutils'
  * @function
  * @export
  * @public
- * @param {string} file - Path to the file to be loaded on the backend
+ * @param {string} path - Path to the file to be loaded on the backend
  * @param {function} [callback=undefined] - Callback function called after the request is made
  *
  * @returns {*} - Response from the Backend API or callback function when it exists
  */
-export const loadApiFile = async (file, callback) => {
-  const response = file
-    ? await apiRequest(`/files/load?file=${file}`)
+export const loadApiFile = async (path, callback) => {
+  const response = path
+    ? await apiRequest(`/files/load?path=${path}`)
     : logData(`Load File action requires a file path!`)
 
   return isFunc(callback) ? callback(response) : response

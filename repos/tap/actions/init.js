@@ -1,5 +1,5 @@
 import { setScreen } from './setScreen'
-import { Values, ActionTypes } from 'SVConstants'
+import { Values } from 'SVConstants'
 import { apiRequest } from 'SVUtils/api/apiRequest'
 import { loadApiFile } from 'SVUtils/api/loadApiFile'
 import { upsertFeatures }  from './features/upsertFeatures'
@@ -8,10 +8,9 @@ import { queryToObj, noOpObj, isEmptyColl } from '@keg-hub/jsutils'
 import { upsertDefinitions }  from './definitions/upsertDefinitions'
 import { upsertActiveRunnerTest }  from './runner/upsertActiveRunnerTest'
 import { setActiveModal } from 'SVActions/modals'
-const { MODAL_TYPES } = Values
-
-const exampleFile = 'example/exampleTests.js'
-
+import { setActiveSidebar } from 'SVActions/sidebar'
+import { upsertFileTree } from 'SVActions/files'
+const { MODAL_TYPES, SIDEBAR_TYPES } = Values
 
 const getQueryData = () => {
   return typeof document === 'undefined'
@@ -49,8 +48,8 @@ const initTestFile = async (activeFeat, queryFile) => {
 
   const testFile = activeFeat && activeFeat.testPath || queryFile
 
-  // loading example test data from <root>/tests/tests
-  await loadApiFile(exampleFile, (testFile) => upsertActiveRunnerTest(testFile))
+  // load the file tree from root tests folder
+  upsertFileTree(await apiRequest(`/files/tree`) || [])
 }
 
 
@@ -67,8 +66,9 @@ export const init = async () => {
 
   initDefs(definitions)
 
-  initTestFile(activeFeat, queryObj.file || exampleFile)
+  initTestFile(activeFeat, queryObj?.file)
 
+  setActiveSidebar(SIDEBAR_TYPES.FILE_TREE)
   // display options modal if no valid querystring passed in
   ;(!queryObj || isEmptyColl(queryObj)) &&
     setActiveModal(MODAL_TYPES.TEST_SELECTOR_MODAL)

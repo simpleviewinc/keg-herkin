@@ -1,6 +1,6 @@
 import React from 'react'
 import { Values } from 'SVConstants'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 import { useSelector } from 'SVHooks'
 import {
   Label,
@@ -16,8 +16,7 @@ export const SelectDefinition = props => {
   const { definitions } = useSelector(CATEGORIES.DEFINITIONS)
   const definitionsFromType = step.type && definitions[step.altType || step.type]
 
-  const theme = useTheme()
-  const selectStyles = theme.get('definitions.select', styles)
+  const selectStyles = useStyle('definitions.select', styles)
 
   return (
     <View

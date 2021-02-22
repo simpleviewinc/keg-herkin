@@ -1,4 +1,4 @@
-const { Then } = require("cucumber")
+const { Then } = require('HerkinParkin')
 const { getBrowserContext } = require('../../support/setup')
 const { getPage } = getBrowserContext()
 const expect = require('expect')

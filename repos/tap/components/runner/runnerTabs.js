@@ -1,15 +1,14 @@
-import { useTheme } from '@keg-hub/re-theme'
 import { Tabbar } from 'SVComponents'
 import { Values } from 'SVConstants'
 import { isFunc } from '@keg-hub/jsutils'
+import { useStyle } from '@keg-hub/re-theme'
 import { View, Button } from '@keg-hub/keg-components'
 import React, { useCallback, useEffect, useState } from 'react'
 
 const tabs = []
 
 const TestActions = props => {
-  const theme = useTheme()
-  const styles = theme.get('runner.tabs')
+  const styles = useStyle('runner.tabs')
 
   return (
     <View className='runner-tab-action-save' style={styles.main} >
@@ -52,7 +51,7 @@ export const RunnerTabs = props => {
 
   return (
     <Tabbar
-      type='editor'
+      type='code'
       tabs={[ ...tabs, { onRun, id: `test-actions`, Tab: TestActions }]}
       activeTab={tab}
       location='bottom'
