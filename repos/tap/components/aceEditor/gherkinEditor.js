@@ -53,7 +53,7 @@ export const GherkinEditor = props => {
     <ReactGherkinEditor
       ref={editorRef}
       initialValue={value}
-      onValueChange={onChange}
+      onChange={onChange}
       autoCompleteFunction={autoComplete}
       uniqueId={args.editorId}
       theme={'herkin'}
