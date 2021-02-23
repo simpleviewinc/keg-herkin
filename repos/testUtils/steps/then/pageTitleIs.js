@@ -1,8 +1,13 @@
 const { Then } = require('HerkinParkin')
-const { getBrowserContext } = require('../../support/setup')
+const { getBrowserContext } = require('HerkinSetup')
 const { getPage } = getBrowserContext()
 
-Then('the title is (\S+) ', async (title) => {
+const pageTitleIs = async (title) => {
   const page = await getPage()
   expect(await page.title()).toBe(title)
-})
+  return page
+}
+
+Then('the title is {string}', pageTitleIs)
+
+module.exports = { pageTitleIs }

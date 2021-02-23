@@ -1,4 +1,4 @@
-export * from './pressEnter'
-export * from './setInput'
+export * from './pressKey'
+export * from './setInputText'
 export * from './waitForNavigation'
 export * from './clickElement'

@@ -1,5 +1,5 @@
 const { Given } = require('HerkinParkin')
-const { getBrowserContext } = require('../../support/setup')
+const { getBrowserContext } = require('HerkinSetup')
 const { getPage } = getBrowserContext()
 const { wordsToNumbers } = require('words-to-numbers')
 
@@ -8,7 +8,7 @@ const validTypes = [
   'parent'
 ]
 
-Given('the {word} {string} element exists as {word}', async (numberWord, selector, type, world) => {
+const isAncestor = async (numberWord, selector, type, world) => {
   if (!validTypes.includes(type))
     throw new Error(`Element relationship must be one of ${JSON.stringify(validTypes, null, 2)}`)
 
@@ -28,4 +28,12 @@ Given('the {word} {string} element exists as {word}', async (numberWord, selecto
     type,
     combinator: type === 'parent' ? '>' : '>>'
   }
-})
+
+  return page
+}
+
+Given('the {word} {string} element is {word}', isAncestor)
+
+module.exports = {
+  isAncestor
+}

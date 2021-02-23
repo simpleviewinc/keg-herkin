@@ -1,5 +1,5 @@
 const { Then } = require('HerkinParkin')
-const { getBrowserContext } = require('../../support/setup')
+const { getBrowserContext } = require('HerkinSetup')
 const { getPage } = getBrowserContext()
 
 Then('the descendent {string} contains the text {string}', async (selector, data, world) => {

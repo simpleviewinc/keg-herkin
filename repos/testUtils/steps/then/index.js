@@ -1,4 +1,4 @@
 export * from './containsText'
-export * from './getInput'
+export * from './inputContainsText'
 export * from './pageTitleIs'
 export * from './pageTitleIsNot'
