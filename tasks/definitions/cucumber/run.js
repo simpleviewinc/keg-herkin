@@ -10,7 +10,7 @@ const path = require('path')
  *                          See options section of the task definition below
  */
 const buildCmdArgs = params => {
-  const { jestConfig, timeout } = params
+  const { jestConfig, timeout, debug } = params
 
   const cmdArgs = [ 'npx', 'jest', '--detectOpenHandles' ]
   const docTapPath = '/keg/tap'
@@ -33,7 +33,8 @@ const buildCmdEnvs = (browser, params) => ({
   envs: {
     HOST_BROWSER: browser,
     ...(params.context && { HERKIN_FEATURE_NAME: params.context }),
-    ...(params.tags && { HERKIN_FEATURE_TAGS: params.tags })
+    ...(params.tags && { HERKIN_FEATURE_TAGS: params.tags }),
+    ...(params.debug && { DEBUG: 'pw:api' })
   }
 })
 
@@ -104,6 +105,11 @@ module.exports = {
         description: 'Tags for filtering the features',
         example: '--tags @foo,@bar,@baz',
         default: null
+      },
+      debug: {
+        description: 'Runs with playwright debug mode activated',
+        example: 'keg herkin cr test --debug',
+        default: false
       }
     }, [
       'allBrowsers',
