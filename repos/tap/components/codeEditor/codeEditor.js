@@ -2,20 +2,24 @@ import { Values } from 'SVConstants'
 import { EditorTabs } from './editorTabs'
 import { noOpObj, exists } from '@keg-hub/jsutils'
 import { AceEditor } from 'SVComponents/aceEditor'
-import React, { useRef, useCallback } from 'react'
+import React, { useRef, useCallback, useState } from 'react'
 import { useActiveTab } from 'SVHooks/useActiveTab'
-import { useTheme, useStyle } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
-
+import { saveFile } from 'SVActions/files'
 const { EDITOR_TABS } = Values
 
 /**
  * MainEditor
  * @param {Object} props
+ * @param {Object} props.activeFile
+ * @param {Function} props.setPendingContent
  */
 const MainEditor = props => {
-  return props?.activeFile?.isFeature
+  const { activeFile, setPendingContent } = props
+
+  return activeFile?.isFeature
     ? (
       <FeatureEditor
         {...props}
@@ -25,6 +29,7 @@ const MainEditor = props => {
     : (
       <AceEditor
         {...props}
+        onChange={setPendingContent}
         editorId={`code-editor`}
         mode={'javascript'}
       />
@@ -34,14 +39,16 @@ const MainEditor = props => {
 /**
  * Hook to run the active files tests, or save changes to the active file
  */
-const useTabActions = () => {
+const useTabActions = (props) => {
+  const { pendingContent } = props
   const onRun = useCallback(event => {
-    console.log('---Run tests---')
-  }, [])
+    saveFile({content: pendingContent})
+  }, [pendingContent])
 
-  const onSave = useCallback(event => {
-    console.log('---Save file---')
-  }, [])
+  const onSave = useCallback(event => 
+    saveFile({content: pendingContent}), 
+    [ pendingContent ]
+  )
 
   return { onRun, onSave }
 }
@@ -57,13 +64,13 @@ export const CodeEditor = props => {
     activeTab,
     activeFile=noOpObj
   } = props
-
+  const [pendingContent, setPendingContent] = useState(activeFile?.content)
   const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.SPLIT)
   const forceFull = !activeFile.isFeature && (tab === EDITOR_TABS.SPLIT || tab === EDITOR_TABS.DEFINITIONS)
   const checkTab = forceFull ? EDITOR_TABS.FEATURE : tab
 
   const editorRef = useRef(null)
-  const tabActions = useTabActions(props)
+  const tabActions = useTabActions({...props, pendingContent})
   const editorStyles = useStyle(`screens.editors`)
   const codeStyles = editorStyles?.[checkTab]
   const actionsStyles = editorStyles?.actions
@@ -92,6 +99,7 @@ export const CodeEditor = props => {
           key={`${tab}-feature`}
           activeFile={activeFile}
           setTab={setTab}
+          setPendingContent={setPendingContent}
           value={activeFile?.content || ''}
           style={codeStyles.feature || codeStyles}
         />
