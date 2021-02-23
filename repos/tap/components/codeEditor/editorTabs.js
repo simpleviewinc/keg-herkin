@@ -68,6 +68,7 @@ const useActionsTab = (
     showFeatureTabs,
     id: `test-actions`,
     Tab: TestActions,
+    disableTab: true,
     actionStyles: deepMerge(styles?.default, showFeatureTabs ? styles?.feature : null),
   }]
 

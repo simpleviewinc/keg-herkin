@@ -84,8 +84,17 @@ const BuildChildren = (props) => {
 
 }
 
+/**
+ * 
+ * @param {Object} props
+ * @param {Boolean} props.active
+ * @param {string} props.id
+ * @param {Function} props.onTabSelect
+ * @param {Object} props.styles
+ * @param {Boolean=} props.disabled
+ */
 export const Tab = props => {
-  const { active, id, onTabSelect, styles } = props
+  const { active, id, onTabSelect, styles, disabled=false } = props
   const [ styleRef, themeStyles ] = useThemeHover(styles.default, styles.hover)
   
   const mergedStyles = active
@@ -94,7 +103,8 @@ export const Tab = props => {
 
   return (
     <Touchable
-      touchRef={styleRef}
+      disabled={disabled}
+      touchRef={!disabled && styleRef}
       className="tabbar-tab"
       style={ mergedStyles.main }
       onPress={() => onTabSelect(id)}
