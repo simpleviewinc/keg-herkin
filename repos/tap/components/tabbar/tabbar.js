@@ -38,13 +38,14 @@ const Bar = ({ children, styles }) => {
 
 const Tabs = ({ activeId, tabs, styles, onTabSelect }) => {
   return mapColl(tabs, (index, tab) => {
-    const { Tab:Component, tab:component, id, key, title, ...tabProps } = tab
+    const { Tab:Component, tab:component, id, key, title, disableTab, ...tabProps } = tab
 
     const keyId = key || id || index
     return !Component && !component && !title
       ? null
       : (
           <Tab
+            disabled={disableTab}
             className='tabbar-tab'
             key={ keyId }
             id={ id }
@@ -67,6 +68,16 @@ const ActiveTabView = ({ tab, styles }) => {
     : null
 }
 
+/**
+ * 
+ * @param {Object} props
+ * @param {string} props.activeTab - active tab id
+ * @param {Object} props.location - default 'bottom'
+ * @param {Boolean} props.fixed
+ * @param {Function} props.onTabSelect
+ * @param {Array} props.tabs
+ * @param {string} props.type
+ */
 export const Tabbar = props => {
   const {
     activeTab,
@@ -102,7 +113,7 @@ export const Tabbar = props => {
       styles={mainStyles}
     >
     { tabs && (
-      <Tabs 
+      <Tabs
         tabs={ tabs }
         activeId={ activeId }
         styles={ barStyles.tab }
