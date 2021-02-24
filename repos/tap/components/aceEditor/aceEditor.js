@@ -122,7 +122,7 @@ export const AceEditor = props => {
     value=defOptions.value,
   } = props
 
-  const editorRef = useRef(null)
+  const editorRef = aceRef || useRef(null)
 
   useConfigureEditor(props, editorRef)
 
