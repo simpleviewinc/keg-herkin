@@ -48,7 +48,7 @@
     "task": "node ./tasks/runTask.js",
     "web": "yarn web:dev",
     "web:build": "cd node_modules/keg-core; yarn build:web",
-    "web:dev": "nodemon --watch node_modules/keg-core/core/base/configs --watch package.json --watch node_modules/keg-core/app.json --watch node_modules/keg-core/package.json --watch configs --exec 'cd node_modules/keg-core && yarn web'",
+    "web:dev": "nodemon --watch ./package.json --watch ./configs --exec 'cd node_modules/keg-core && yarn web'",
     "cucumber": "./node_modules/.bin/cucumber-js"
   },
   "dependencies": {
@@ -77,7 +77,6 @@
     "qawolf": "1.4.0",
     "react-native-final-tree-view": "2.1.0",
     "rollup": "2.36.1",
-    "socket.io": "2.4.0",
     "webpack": "5.13.0",
     "words-to-numbers": "1.5.1"
   },
