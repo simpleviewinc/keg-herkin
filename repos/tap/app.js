@@ -45,7 +45,7 @@ const App = props => {
         <SafeAreaView>
           <Provider store={getStore()}>
             <ReThemeProvider theme={ activeTheme } >
-              <WebSocketProvider config={socketConfig} >
+              <WebSocketProvider config={socketConfig} debug={true} >
                 <View style={activeTheme.app.main} >
                   <ContainerRoutes navigationConfigs={keg.routes}/>
                   <ModalManager />
