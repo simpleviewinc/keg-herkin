@@ -1,4 +1,5 @@
 const path = require('path')
+const { socketConfig } = require('./socket.config.js')
 
 const {
   DOC_APP_PATH,
@@ -19,6 +20,7 @@ const dockerTestsRoot = path.join(rootDir, 'tests')
 const hostTestsRoot = HERKIN_TESTS_ROOT || dockerTestsRoot
 
 module.exports = {
+  ...socketConfig,
   paths: {
     rootDir,
 
@@ -33,8 +35,4 @@ module.exports = {
     unitDir: HERKIN_UNIT_DIR || 'unit',
     waypointDir: HERKIN_WAYPOINT_DIR || 'waypoint'
   },
-  server: {
-    port: '5005',
-    host: '0.0.0.0'
-  }
 }
