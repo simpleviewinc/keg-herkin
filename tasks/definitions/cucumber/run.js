@@ -1,7 +1,7 @@
 const { dockerExec } = require('HerkinTasks/utils/process/process')
 const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers') 
 const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
-const { runSeq } = require('@keg-hub/jsutils')
+const { runSeq, isNum } = require('@keg-hub/jsutils')
 const path = require('path')
 
 /**
@@ -10,7 +10,7 @@ const path = require('path')
  *                          See options section of the task definition below
  */
 const buildCmdArgs = params => {
-  const { jestConfig, timeout, debug } = params
+  const { jestConfig, timeout } = params
 
   const cmdArgs = [ 'npx', 'jest', '--detectOpenHandles' ]
   const docTapPath = '/keg/tap'
@@ -51,12 +51,25 @@ const exitProcess = (exitCodes=[]) => {
 }
 
 /**
+ * @param {Object} params - task params
+ * @return {Object} launchParams - the task params with any updates needed 
+ * to be compatible with browser launch params
+ */
+const buildLaunchParams = params => ({
+  ...params,
+  slowMo: isNum(params.slowMo)
+    ? params.slowMo * 1000  // seconds to ms conversion
+    : undefined
+})
+
+/**
  * Run parkin tests in container
  * @param {Object} args 
  */
 const runTest = async args => {
   const { params } = args
-  const { browsers } = await launchBrowsers(params)
+  const launchParams = buildLaunchParams(params)
+  const { browsers } = await launchBrowsers(launchParams)
   const cmdArgs = buildCmdArgs(params)
 
   const commands = browsers.map(browser => 
@@ -112,8 +125,8 @@ module.exports = {
         default: false
       },
       slowMo: {
-        description: 'Playwright slow mo option, value in milliseconds',
-        example: 'keg herkin cr test --slowMo 230',
+        description: 'Playwright slow mo option, value in seconds',
+        example: 'keg herkin cr test --slowMo 2.5',
       }
     }, [
       'allBrowsers',
