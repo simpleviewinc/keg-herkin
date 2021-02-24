@@ -1,6 +1,6 @@
 const path = require('path')
 const { readFile, removeFile, writeFile, pathExists } = require('./fileSys')
-
+const { validFilename } = require('@keg-hub/jsutils')
 /**
  * Checks that the file path exists
  * @param {String} path - file path to check
@@ -58,6 +58,7 @@ const getTestFile = async (config, testPath) => {
 const saveTestFile = async (config, fullPath, content) => {
 
   const { testsRoot } = config.paths
+  if (!validFilename(path.basename(fullPath))) throw new Error(`[API - Files] Filename is invalid!`)
   const inTestRoot = fullPath.startsWith(testsRoot)
   if (!inTestRoot) throw new Error(`[API - Files] File must be saved to the mounted test folder!`)
 
