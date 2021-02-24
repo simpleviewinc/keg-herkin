@@ -47,6 +47,7 @@ const launchBrowsers = launchParams => {
   // get the array of async functions for launching each chosen browser
   const launchFunctions = browsers.map(browser =>
     () => launchBrowser({
+      ...browserParams,
       browser,
       headless,
       log

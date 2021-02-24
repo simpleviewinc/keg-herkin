@@ -11,8 +11,10 @@ const aliases = deepFreeze({
   "HerkinTasks": path.join(HERKIN_ROOT, 'tasks'),
   "HerkinBackConstants": path.join(HERKIN_ROOT, 'constants', 'backend'),
   "HerkinFrontConstants": path.join(HERKIN_ROOT, 'constants', 'frontend'),
-  "HerkinParkin": path.join(TEST_UTILS_PATH, 'parkin', 'index.js'),
-  "HerkinSetup": path.join(TEST_UTILS_PATH, 'playwright', 'setupTestEnvironment')
+  "HerkinParkin": path.join(TEST_UTILS_PATH, 'parkin'),
+  "HerkinSetup": path.join(TEST_UTILS_PATH, 'playwright', 'setupTestEnvironment'),
+  "HerkinPlaywright": path.join(TEST_UTILS_PATH, 'playwright'),
+  "HerkinSteps": path.join(TEST_UTILS_PATH, 'steps'),
 })
 
 // Registers module-alias aliases (done programatically so we can reuse the aliases object for jest)

@@ -1,14 +1,29 @@
 const { Then } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinSetup')
-const { getPage } = getBrowserContext()
+const { evalElement } = require('HerkinPlaywright')
+const { isObj } = require('@keg-hub/jsutils')
 
-Then('the descendent {string} contains the text {string}', async (selector, data, world) => {
-  const page = await getPage()
-  const { ancestor } = world
+const validateWorld = world => {
+  if (!isObj(world.meta) || !isObj(world.meta.ancestor))
+    throw new Error('Use an ancestor-registration step before running this step')
+}
 
-  const content = await ancestor.element.$eval(selector, el => el.textContent)
-  // const content = await page.$eval(ancestor.getFullSelector(selector), el => el.textContent)
-
+const descendentContainsText = async (selector, data, world) => {
+  validateWorld(world)
+  const content = await evalElement(`${world.meta.ancestorSelector} ${selector}`, elem => elem.textContent)
   expect(content).toEqual(expect.stringContaining(data))
-})
+}
+
+const childContainsText = async (selector, data, world) => {
+  validateWorld(world)
+  const content = await ancestor.$eval(selector, elem => elem.textContent)
+  expect(content).toEqual(expect.stringContaining(data))
+}
+
+Then('the descendent {string} contains text {string}', descendentContainsText)
+Then('the child {string} contains text {string}', childContainsText)
+
+module.exports = {
+  childContainsText,
+  descendentContainsText
+}
 

@@ -77,8 +77,8 @@ module.exports = {
     alias: ['test'],
     options: sharedOptions('run', {
       context: {
-        alias: [ 'name' ],
-        description: 'Name of the test to be run. If not passed-in, all tests are run',
+        alias: [ 'name', 'filter' ],
+        description: 'Filters test (feature and scenario names) by this substring. If not passed, all tests are run',
         default: null
       },
       sync: {
@@ -94,7 +94,7 @@ module.exports = {
       },
       timeout: {
         description: 'Test timeout. Defaults to no timeout, so that async playwright tasks have sufficient time to complete.',
-        default: Math.pow(10, 10) // jest accepts neither Infinity nor -1 nor null to disable timeout, so we just default to 32 years
+        default: 4 * 1000 // 4 seconds
       },
       jestConfig: {
         description: 'Path to jest config within the docker container',
@@ -110,6 +110,10 @@ module.exports = {
         description: 'Runs with playwright debug mode activated',
         example: 'keg herkin cr test --debug',
         default: false
+      },
+      slowMo: {
+        description: 'Playwright slow mo option, value in milliseconds',
+        example: 'keg herkin cr test --slowMo 230',
       }
     }, [
       'allBrowsers',

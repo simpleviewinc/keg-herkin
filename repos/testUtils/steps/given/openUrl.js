@@ -11,5 +11,6 @@ const openUrl = async site => {
 Given('I open the site {string}', openUrl)
 Given('I am on {string}', openUrl)
 Given('the page url is {string}', openUrl)
+Given('the user navigates to {string}', openUrl)
 
 module.exports = { openUrl }

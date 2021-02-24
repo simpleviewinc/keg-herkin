@@ -4,8 +4,7 @@ const { getPage } = getBrowserContext()
 
 const clickElement = async selector => {
   const page = await getPage()
-  await page.click(selector)
-  return page
+  return page.click(selector)
 }
 
 When('I click the element {string}', clickElement)

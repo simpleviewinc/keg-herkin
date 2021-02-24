@@ -5,5 +5,6 @@ const wait = num => {
 }
 
 When('I wait {float} seconds', wait)
+When('I wait {float} second', wait)
 
 module.exports = { wait }
