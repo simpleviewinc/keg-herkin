@@ -1,5 +1,6 @@
 import { networkRequest } from 'SVServices/networkRequest'
 import { isObj } from '@keg-hub/jsutils'
+import { devLog } from 'SVUtils'
 
 /**
  * Default arguments for an API request
@@ -34,5 +35,5 @@ export const apiRequest = async request => {
 
   return success
     ? isObj(data) && data.data || data
-    : []
+    : devLog(`warn`, `ERROR: ${data?.error?.message}`) && []
 }

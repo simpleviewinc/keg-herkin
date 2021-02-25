@@ -16,7 +16,8 @@ export const Values = {
     SIDEBAR: 'sidebar'
   },
   SUB_CATEGORIES: {
-    RUNNER_CONTENT: 'runnerContent'
+    RUNNER_CONTENT: 'runnerContent',
+    PENDING_CONTENT: 'pendingContent'
   },
   MODAL_TYPES: {
     TEST_SELECTOR_MODAL: 'testSelectorModal',
