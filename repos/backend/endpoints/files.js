@@ -12,12 +12,12 @@ const saveFile = (app, config) => async (req, res) => {
   try {
     const location = req.body.path
     if (!location)
-    return apiErr(
-      req, 
-      res, 
-      new Error(`[API - Files] Save failed: location required`), 
-      400
-    )
+      return apiErr(
+        req,
+        res,
+        new Error(`[API - Files] Save failed: location required`), 
+        400
+      )
 
     const content = req.body.content
     const meta = await saveTestFile(config, location, content)
