@@ -1,22 +1,7 @@
 const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
 const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers')
-const { snakeCase } = require('@keg-hub/jsutils')
+const { setMountEnvs } = require('HerkinTasks/utils/envs/setMountEnvs')
 const { validateConfig } = require('HerkinTasks/utils/validation')
-
-const getEnvName = pathName => `HERKIN_` + snakeCase(pathName).toUpperCase()
-
-/**
- * Sets the env variables needed for mounting the
- * test directories into the container.
- * @see `container/docker-compose.yml`, `volumes` group
- * @param {Object} paths - object of keys and values
- */
-const setMountEnvs = paths => {
-  Object.entries(paths).map(([pathName, value]) => {
-    const envName = getEnvName(pathName)
-    process.env[envName] = value
-  })
-}
 
 /**
  * Starts all the Keg-Herkin services needed to run tests
@@ -38,7 +23,7 @@ const startHerkin = async (args) => {
 
   params.launch && await launchBrowsers(params)
 
-  setMountEnvs(herkin.paths)
+  setMountEnvs(herkin, { env: params.env })
 
   args.task.cliTask(args)
 }

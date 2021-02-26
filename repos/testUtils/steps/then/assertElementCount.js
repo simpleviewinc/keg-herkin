@@ -9,6 +9,6 @@ const assertElementCount = async (selector, count) => {
   return page
 }
 
-Then('the count of element {string} is {int}', assertElementCount)
+Then('the count of (the )(element ){string} is {int}', assertElementCount)
 
 module.exports = { assertElementCount }

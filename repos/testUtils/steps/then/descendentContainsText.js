@@ -15,7 +15,7 @@ const descendentContainsText = async (selector, data, world) => {
 
 const childContainsText = async (selector, data, world) => {
   validateWorld(world)
-  const content = await ancestor.$eval(selector, elem => elem.textContent)
+  const content = await world.meta.ancestor.$eval(selector, elem => elem.textContent)
   expect(content).toEqual(expect.stringContaining(data))
 }
 

@@ -1,4 +1,3 @@
-
 const fs = require('fs')
 const path = require('path')
 const defaultConfig = require('./herkin.default.config.js')
@@ -8,6 +7,7 @@ const { deepMerge, get, isStr, isFunc, noOpObj } = require('@keg-hub/jsutils')
 const { KEG_HERKIN_CONFIG_PATH } = process.env
 
 /**
+ * TODO: replace with jsutils' tryRequire once its PR is merged in
  * Tries to require the path, returning null if unable to.
  * Does not throw.
  * @param {string} path 

@@ -36,5 +36,8 @@ module.exports = {
   server: {
     port: '5005',
     host: '0.0.0.0'
+  },
+  urls: {
+    app: 'http://www.google.com'
   }
 }

@@ -10,12 +10,14 @@ const path = require('path')
  *                          See options section of the task definition below
  */
 const buildCmdArgs = params => {
-  const { jestConfig, timeout } = params
+  const { jestConfig, timeout, bail } = params
 
   const cmdArgs = [ 'npx', 'jest', '--detectOpenHandles' ]
   const docTapPath = '/keg/tap'
   jestConfig && cmdArgs.push(`--config=${path.join(docTapPath, jestConfig)}`)
   timeout && cmdArgs.push(`--testTimeout=${timeout}`)
+  bail && cmdArgs.push('--bail')
+
 
   // see <root>/scripts/runParkin.js
   cmdArgs.push('runParkin.js')
@@ -127,6 +129,10 @@ module.exports = {
       slowMo: {
         description: 'Playwright slow mo option, value in seconds',
         example: 'keg herkin cr test --slowMo 2.5',
+      },
+      bail: {
+        description: 'Stops all tests once a single step fails',
+        default: true
       }
     }, [
       'allBrowsers',
