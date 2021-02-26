@@ -16,15 +16,15 @@ const setMountEnvs = (config, options={}) => {
   const [ valid ] = validate({ config, options }, { $default: isObj })
   if (!valid) return
 
+  // paths envs
   Object.entries(config.paths).map(([pathName, value]) => {
     const envName = getEnvName(pathName)
     process.env[envName] = replaceTemplateVars(value, config, options)
   })
-  Object.entries(config.urls).map(([urlName, value]) => {
-    const envName = getEnvName(urlName + 'Url')
-    process.env[envName] = replaceTemplateVars(value, config, options)
-    console.log(`url env ${envName}=`, replaceTemplateVars(value, config, options))
-  })
+
+  // app envs
+  const appUrlEnv = getEnvName('appUrl')
+  process.env[appUrlEnv] = replaceTemplateVars(config.app.url, config, options)
 }
 
 module.exports = {
