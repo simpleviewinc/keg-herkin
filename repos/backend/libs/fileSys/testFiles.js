@@ -1,6 +1,6 @@
 const path = require('path')
 const { readFile, removeFile, writeFile, pathExists } = require('./fileSys')
-
+const { validFilename } = require('@keg-hub/jsutils')
 /**
  * Checks that the file path exists
  * @param {String} path - file path to check
@@ -49,20 +49,32 @@ const getTestFile = async (config, testPath) => {
   } 
 }
 
+/**
+ * Save file at a given location. file should be located in the test root path
+ * @param {Object} config 
+ * @param {string} fullPath
+ * @param {string} content 
+ */
+const saveTestFile = async (config, fullPath, content) => {
 
-const saveTestFile = async (config, testPath, content) => {
   const { testsRoot } = config.paths
-  const fullPath = path.join(testsRoot, testPath)
+  if (!validFilename(path.basename(fullPath))) throw new Error(`[API - Files] Filename is invalid!`)
+  const inTestRoot = fullPath.startsWith(testsRoot)
+  if (!inTestRoot) throw new Error(`[API - Files] File must be saved to the mounted test folder!`)
 
-  await checkPath(fullPath)
+  const [err, success] = await writeFile(fullPath, content)
 
-  // TODO: double check that writeFile returns a value
-  const saved = await writeFile(fullPath, content)
+  if (err) {
+    console.log(err)
+    const pathError = new Error(`[API - Files] Save failed: ${fullPath} - ${err.message}`)
+    pathError.status = 404
+    throw pathError
+  }
 
   return {
     fullPath,
-    testPath,
-    success: Boolean(saved),
+    fileName: path.basename(fullPath),
+    success: Boolean(success),
   }
 }
 
