@@ -64,8 +64,8 @@ const deleteFile = (app, config) => async (req, res) => {
 const parentNodeExists = (nodes, parentPath, newItem) => {
   const found = nodes.find((node) => {
     return node.fullPath === parentPath
-      ? Boolean(node.children.push(newItem))
-      : node.children.length && parentNodeExists(node.children, parentPath, newItem)
+    ? Boolean(node.children.push(newItem?.id)) && nodes.push(newItem)
+    : node.children?.length && parentNodeExists(node.children, parentPath, newItem)
   })
 
   return Boolean(found)
@@ -94,7 +94,7 @@ const getPathMeta = filePath => {
  * @returns {Array<Object>} - each object has the form: 
  *                            {id, fullPath, children: [], isModified}
  */
-const generateTree = (paths) => {
+const getPathNodes = (paths) => {
    /**
    * 1. create new object for each 'path' item
    * 2. if the parent path of current 'path' item exists, add it as the child
@@ -122,9 +122,24 @@ const generateTree = (paths) => {
 }
 
 /**
+ * Returns an array of root paths
+ * @param {Array<string>} fullPaths
+ * @param {string} testsRootPath
+ * 
+ * @returns {Array<string>}
+ */
+const getRootPaths = (fullPaths, testsRootPath) => {
+  return fullPaths.filter(fullPath => 
+    path.dirname(fullPath) === testsRootPath
+  )
+}
+
+/**
  * iterates through the mounted test root folder and returns a tree like structure of all the folders/files
  * @param {Object} app 
  * @param {object} config - shared config
+ * 
+ * @returns {Object} - { rootPaths: array of root paths, nodes: array of all valid node object }
  */
 const getTree = (app, config) => async (req, res) => {
   try {
@@ -133,8 +148,12 @@ const getTree = (app, config) => async (req, res) => {
       full: true,
       recursive: true,
     })
-    const dataTree = generateTree(meta)
-    return apiResponse(req, res, dataTree || {}, 200)
+    const nodes = getPathNodes(meta)
+
+    return apiResponse(req, res, { 
+      rootPaths: getRootPaths(meta, testsRoot), 
+      nodes 
+    } || {}, 200)
   }
   catch(err){
     return apiErr(req, res, err, 400)

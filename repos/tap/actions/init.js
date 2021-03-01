@@ -49,7 +49,7 @@ const initTestFile = async (activeFeat, queryFile) => {
   const testFile = activeFeat && activeFeat.testPath || queryFile
 
   // load the file tree from root tests folder
-  upsertFileTree(await apiRequest(`/files/tree`) || [])
+  upsertFileTree(await apiRequest(`/files/tree`) || {})
 }
 
 
