@@ -108,7 +108,7 @@ const getPathNodes = (paths) => {
   
     const node = {
       children: [],
-      isModified: false,
+      pendingContent: false,
       ...pathMeta,
     }
 
