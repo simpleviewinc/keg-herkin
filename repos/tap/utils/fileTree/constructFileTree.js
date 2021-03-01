@@ -1,4 +1,4 @@
-import { noPropArr } from '@keg-hub/jsutils'
+import { noPropArr, applyToCloneOf } from '@keg-hub/jsutils'
 import { findNode } from 'SVUtils/fileTree'
 /**
  * Recursively constructs the fileTree array
@@ -10,7 +10,9 @@ import { findNode } from 'SVUtils/fileTree'
 export const constructFileTree = (rootPaths=noPropArr, nodes=noPropArr) => {
   return rootPaths?.map(path => {
     const node = findNode(path, nodes)
-    node.children = (node.children?.length && constructFileTree(node.children, nodes)) || []
-    return node
+    const result = applyToCloneOf(node, (clone) => {
+      clone.children = (node.children?.length && constructFileTree(node?.children, nodes)) || []
+    })
+    return result
   })
 }
