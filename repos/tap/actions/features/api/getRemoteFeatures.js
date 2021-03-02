@@ -1,15 +1,14 @@
 import { apiRequest } from 'SVUtils/api/apiRequest'
 import { upsertFeatures } from '../local/upsertFeatures'
 
-// Just here for now to test, should remove later
-import { setFeatureActive } from '../local/setFeatureActive'
-
+/**
+ * Calls the API backend to load the parsed feature definitions
+ * Then calls upsertFeatures, to add them to the Store
+ * @type function
+ *
+ * @returns {void}
+ */
 export const getRemoteFeatures = async () => {
   const features = await apiRequest(`/features`)
-
   upsertFeatures(features)
-
-  // Just here for now to test, should remove later
-  features.length && setFeatureActive(features[0])
-
 }

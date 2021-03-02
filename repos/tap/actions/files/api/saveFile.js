@@ -1,8 +1,6 @@
-import { getStore } from 'SVStore'
 import { devLog } from 'SVUtils'
-
+import { dispatch, getStore } from 'SVStore'
 import { saveApiFile } from 'SVUtils/api'
-
 
 /**
  * Save the content to the given file. if no filePath passed in. it will save it on the currently active file
