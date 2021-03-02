@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useState, useMemo } from 'react'
 const { EDITOR_TABS } = Values
 
 const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs }) => {
+  const [ isSaving, setIsSaving ] = useState(false)
   return (
     <View
       style={actionStyles.main}
@@ -18,10 +19,15 @@ const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs }) => {
       >
         <Button
           type='primary'
-          onClick={onSave}
+          disabled={isSaving}
+          onClick={() => onSave(setIsSaving)}
           className={`editor-tab-actions-save-button`}
         >
-          Save
+          {
+            isSaving
+              ? 'Saving in progress..'
+              : 'Save'
+          }
         </Button>
       </View>
       { showFeatureTabs && (

@@ -1,4 +1,4 @@
-import { dispatch, getStore } from 'SVStore'
+import { getStore } from 'SVStore'
 import { devLog } from 'SVUtils'
 
 import { saveApiFile } from 'SVUtils/api'
@@ -9,12 +9,14 @@ import { saveApiFile } from 'SVUtils/api'
  * @param {Object} props
  * @param {Object} props.filePath
  * @param {Object} props.content
+ * 
+ * @returns {Object} - api response { location, name, success }
  */
 export const saveFile = async ({filePath, content}) => {
   if (!content) return devLog(`warn`, 'Content is required')
 
   const { items } = getStore().getState()
   const path = filePath || items?.activeFile?.location
-  const result = await saveApiFile(path, content)
-  console.log(result)
+
+  return await saveApiFile(path, content)
 }

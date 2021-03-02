@@ -9,7 +9,7 @@ import { useStyle } from '@keg-hub/re-theme'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
 import { saveFile } from 'SVActions/files'
-import { setContentModified } from 'SVActions/files/local'
+import { removePendingFile, setPendingFile } from 'SVActions/files/local'
 
 const { EDITOR_TABS } = Values
 
@@ -20,14 +20,15 @@ const { EDITOR_TABS } = Values
  */
 const MainEditor = props => {
   const { activeFile } = props
+
   const onChange = useCallback((text) => {
     // it's possible that the local activeFile is not in sync with the store's activeFile when this callback is called
     // * this happens when you switch files
     // so fetch from the store to ensure latest value 
     const { items } = getStore().getState()
-    text === items?.activeFile?.content
-      ? setContentModified(false)
-      : setContentModified(text)
+    text && text === items?.activeFile?.content
+      ? removePendingFile()
+      : setPendingFile(text)
   }, [])
 
   return activeFile?.fileType === 'feature'
@@ -58,8 +59,14 @@ const useTabActions = (props) => {
     console.log('---Run tests---')
   }, [])
 
-  const onSave = useCallback(event => {
-    editorRef.current && saveFile({content: editorRef.current?.editor?.getValue()})
+  const onSave = useCallback(async setIsSaving => {
+    // saves file and remove it from the pending store if successful
+    if (editorRef.current) {
+      setIsSaving(true)
+      const result = await saveFile({content: editorRef.current?.editor?.getValue()})
+      result?.success && removePendingFile(result?.location)
+    }
+    setIsSaving(false)
   }
     , 
     [ editorRef.current ]
@@ -112,7 +119,7 @@ export const CodeEditor = props => {
           key={`${tab}-feature`}
           activeFile={activeFile}
           setTab={setTab}
-          value={activeFile?.content || ''}
+          value={activeFile?.modified || activeFile?.content || ''}
           style={codeStyles.feature || codeStyles}
         />
       )}
