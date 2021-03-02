@@ -35,22 +35,10 @@ const loadDefinitions = async config => {
 
   // all the definition file models
   const defFileModels = clientDefinitions.concat(herkinDefinitions)
-
   // Reset the cached definitions
   DefinitionsParser.resetDefinitions()
-  
-  return defFileModels.reduce((organized, fileModel) => {
-  
-    get(fileModel, 'ast.definitions').map(definition => {
-      if(!definition || !definition.type) return
-      
-      const type = definition.type.toLowerCase()
-      organized[type] = organized[type] || []
-      organized[type].push(definition)
-    })
 
-    return organized
-  }, {})
+  return defFileModels
 }
 
 module.exports = {
