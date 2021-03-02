@@ -84,16 +84,21 @@ const useNodeName = node => useMemo(() => {
 /**
  * Hook to memoize to check which tree node has pending changes
  * @param {Object} activeFile - activeFile object: { pendingContent, activeFilePath, ...other }
- * @param {string} nodePath
+ * @param {string} node
  * 
  * @returns {string} - Name of the node
  */
-const usePendingContent = (activeFile, nodePath) => useMemo(() => {
-  return activeFile?.pendingContent && (activeFile?.fullPath === nodePath)
+const usePendingContent = (activeFile, node) => useMemo(() => {
+  // console.log(activeFile,'activeFIle')
+  // console.log(node, 'node')
+  // return activeFile?.pendingContent !== activeFile?.content && activeFile?.pendingContent !== node?.pendingContent
+  //   && (activeFile?.fullPath === node?.fullPath)
+  return node?.pendingContent
 }, [
   activeFile?.pendingContent,
-  activeFile?.activeFilePath,
-  nodePath
+  activeFile?.fullPath,
+  node?.pendingContent,
+  node?.fullPath
 ])
 
 /**
@@ -112,7 +117,7 @@ export const TreeList = props => {
 
   const onItemPress = useCallback(({node}) => {
     if (node?.type !== 'file') return
-    setActiveFile(node?.fullPath)
+    setActiveFile(node?.fullPath, node?.pendingContent)
     onSidebarToggled(false)
   }, [ setActiveFile, onSidebarToggled ])
   
@@ -153,7 +158,7 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
 
   // Check if active file or expanded folder
   const isNodeActive = useNodeActive(isExpanded, nodeType, activeFile?.fullPath, node?.fullPath)
-  const showPending = usePendingContent(activeFile, node?.fullPath)
+  const showPending = usePendingContent(activeFile, node)
   const {
     styles,
     styleRef,
