@@ -22,7 +22,7 @@ export const useFeature = ({ name, path }) => {
 
   const feature = features.find((feature) => {
     return name
-      ? feature?.ast?.feature === name
+      ? feature.name === name
       : path && feature?.location === path
   })
 

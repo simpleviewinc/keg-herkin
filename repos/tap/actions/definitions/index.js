@@ -1,2 +1,2 @@
-export * from './getRemoteDefinitions'
-export * from './upsertDefinitions'
+export * from './local'
+export * from './api'

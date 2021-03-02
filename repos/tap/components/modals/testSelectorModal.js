@@ -2,8 +2,8 @@ import React, { useCallback, useState } from 'react'
 import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
 import { Select } from 'SVComponents/form/select'
 import { useTheme } from '@keg-hub/re-theme'
-import { createFeatureFile } from 'SVActions/features'
-import { setActiveFile } from 'SVActions/files/local/setActiveFile'
+import { setFeatureActive } from 'SVActions/features/local/setFeatureActive'
+import { createFeatureFile } from 'SVActions/features/local/createFeatureFile'
 import { setModalVisibility } from 'SVActions/modals'
 import { Values } from 'SVConstants'
 import { mapObj, capitalize, wordCaps, noPropArr } from '@keg-hub/jsutils'
@@ -85,7 +85,7 @@ export const TestSelectorModal = (props) => {
 
     testName === Values.CREATE_NEW_FILE
       ? createFeatureFile(selectedTab)
-      : setActiveFile(feature.location) && setScreen(selectedTab)
+      : setFeatureActive(feature) && setScreen(selectedTab)
 
       setModalVisibility(false)
   }, 
@@ -152,7 +152,7 @@ const TestNameSelect = ({styles, features, setTestName}) => {
     const feature = features.find((feature) => feature?.ast?.feature === val)
 
     feature 
-      ? setActiveFile(feature.location)
+      ? setFeatureActive(feature)
       : devLog(`warn`, `Feature '${val}' does not exist!`)
 
     setTestName(val)

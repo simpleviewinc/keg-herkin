@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { noOpObj, deepMerge } from '@keg-hub/jsutils'
 import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
-import { setActiveFile } from 'SVActions/files/local/setActiveFile'
+import { loadTestFile } from 'SVActions/files/api/loadTestFile'
 import {
   View,
   Loading,
@@ -115,11 +115,14 @@ export const TreeList = props => {
 
   const tree = useMemo(() => constructFileTree(rootPaths, nodes), [rootPaths, nodes])
 
-  const onItemPress = useCallback(({node}) => {
+  const onItemPress = useCallback( async ({node}) => {
     if (node?.type !== 'file') return
-    setActiveFile(node?.location, node?.modified)
+
+    await loadTestFile(node)
+
     onSidebarToggled(false)
-  }, [ setActiveFile, onSidebarToggled ])
+
+  }, [ loadTestFile, onSidebarToggled ])
   
   const getCollapsedNodeHeight = useCallback(({id}) => {
     const node = findNode(id, nodes)
