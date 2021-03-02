@@ -1,12 +1,15 @@
+const fs = require('fs')
+const path = require('path')
 const { apiErr, apiResponse } = require('./handler')
+const { treeNodeModel } = require('HerkinModels')
 const {
+  isDirectory,
   deleteTestFile,
   getTestFile,
   saveTestFile,
   getFolderContent
 } = require('../libs/fileSys')
-const fs = require('fs')
-const path = require('path')
+
 
 const saveFile = (app, config) => async (req, res) => {
   try {
@@ -63,9 +66,9 @@ const deleteFile = (app, config) => async (req, res) => {
  */
 const parentNodeExists = (nodes, parentPath, newItem) => {
   const found = nodes.find((node) => {
-    return node.fullPath === parentPath
-    ? Boolean(node.children.push(newItem?.id)) && nodes.push(newItem)
-    : node.children?.length && parentNodeExists(node.children, parentPath, newItem)
+    return node.location === parentPath
+      ? Boolean(node.children.push(newItem?.id)) && nodes.push(newItem)
+      : node.children?.length && parentNodeExists(node.children, parentPath, newItem)
   })
 
   return Boolean(found)
@@ -77,13 +80,15 @@ const parentNodeExists = (nodes, parentPath, newItem) => {
  * 
  * @returns {Object} - Meta data containing {name, parent, type ( folder || file )} properties
  */
-const getPathMeta = filePath => {
+const getPathMeta = async filePath => {
+  const isDir = await isDirectory(filePath)
+
   return {
     id: filePath,
-    fullPath: filePath,
+    location: filePath,
     name: path.basename(filePath),
     parent: path.dirname(filePath),
-    type: fs.lstatSync(filePath).isDirectory() ? 'folder' : 'file',
+    type: isDir ? 'folder' : 'file',
   }
 }
 
@@ -92,32 +97,34 @@ const getPathMeta = filePath => {
  * @param {Array<string>} paths - full paths to the folder or file i.e '/keg/tap/tests/bdd/features'
  * 
  * @returns {Array<Object>} - each object has the form: 
- *                            {id, fullPath, children: [], isModified}
+ *                            {id, location, children: [], modified}
  */
-const getPathNodes = (paths) => {
+const getPathNodes = async paths => {
    /**
    * 1. create new object for each 'path' item
    * 2. if the parent path of current 'path' item exists, add it as the child
    */
-  return paths.reduce((nodes, path) => {
+  return await paths.reduce(async (toResolve, path) => {
+    const nodes = await toResolve
+
     // Get the meta data for this path
-    const { parent, ...pathMeta } = getPathMeta(path)
+    const { parent, ...pathMeta } = await getPathMeta(path)
     
     // Ignore hidden files that start with a .
     if (pathMeta.type === 'file' && pathMeta.name.startsWith('.')) return nodes
   
-    const node = {
+    const node = treeNodeModel({
       children: [],
-      pendingContent: false,
+      modified: false,
       ...pathMeta,
-    }
+    })
 
     // either push the node or add it to an existing node.children
     ;(!nodes.length || !parentNodeExists(nodes, parent, node)) &&
       nodes.push(node)
 
     return nodes
-  }, [])
+  }, Promise.resolve([]))
 
 }
 
@@ -148,7 +155,7 @@ const getTree = (app, config) => async (req, res) => {
       full: true,
       recursive: true,
     })
-    const nodes = getPathNodes(meta)
+    const nodes = await getPathNodes(meta)
 
     return apiResponse(req, res, { 
       rootPaths: getRootPaths(meta, testsRoot), 

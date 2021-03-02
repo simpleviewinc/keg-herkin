@@ -118,10 +118,10 @@ const parseFeature = (content, featureMeta) => {
 class FeatureParser {
 
   getFeatures(featureMeta=noOpObj) {
-    const { fullPath, testPath } = featureMeta
+    const { location } = featureMeta
 
     return new Promise((res, rej) => {
-      fs.readFile(fullPath, (err, data) =>
+      fs.readFile(location, (err, data) =>
         err
           ? rej(err)
           : res(parseFeature(data.toString(), featureMeta))

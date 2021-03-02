@@ -71,7 +71,7 @@ const useNodeActive = (isExpanded, nodeType, nodePath, filePath) => useMemo(() =
 
 /**
  * Hook to memoize the name of the node based on it's type
- * @param {Object} node - node object: { children, location, id, isModified, name, type }
+ * @param {Object} node - node object: { children, location, id, modified, name, type }
  * 
  * @returns {string} - Name of the node
  */
@@ -145,7 +145,7 @@ export const TreeList = props => {
  * Component for list item based on the props
  * prop ref: https://github.com/zaguiini/react-native-final-tree-view#rendernode
  * @param {Object} props 
- * @param {Object} props.node - node object: { children, location, id, isModified, name, type }
+ * @param {Object} props.node - node object: { children, location, id, modified, name, type }
  * @param {Boolean} props.isExpanded - if the list item is expanded
  * @param {Boolean} props.hasChildrenNodes
  * 

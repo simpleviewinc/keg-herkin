@@ -174,8 +174,22 @@ const getLastModified = async filePath => {
   return metaData ? metaData.mtimeMs : Date.now()
 }
 
+/**
+ * Checks if the passed in path is a directory
+ * @function
+ * @param {string} fullPath - Path to check if it's a directory
+ *
+ * @returns {Promise|boolean} - True if fullPath a directory
+ */
+const isDirectory = async fullPath => {
+  // Check if its a directory
+  const [_, stat] = await limboify(fs.stat, fullPath)
+  return stat.isDirectory()
+}
+
 module.exports = {
   copyFile,
+  isDirectory,
   mkDir,
   readDir,
   pathExists,

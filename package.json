@@ -17,7 +17,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "api": "nodemon --watch ./repos/backend --watch ./config --exec 'node ./repos/backend/index.js'",
+    "api": "nodemon --watch ./repos/backend --watch ./repos/shared --watch ./config --exec 'node --trace-warnings ./repos/backend/index.js'",
     "clean": "cd node_modules/keg-core; yarn clean",
     "clean:install": "yarn clean:full; yarn install",
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
