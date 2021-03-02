@@ -40,6 +40,9 @@ class DefinitionsParser {
       const definition = this.definitions[match] || new Definition(match, type, variant, content)
       !this.definitions[match] && (this.definitions[match] = definition)
       
+      // Add a reference back to the parent
+      definition.parentUuid = fileModel.uuid
+
       // Add the definition to the fileModels ast.definition array
       fileModel.ast.definitions.push(definition)
       
