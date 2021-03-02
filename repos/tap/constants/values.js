@@ -17,7 +17,7 @@ export const Values = {
   },
   SUB_CATEGORIES: {
     RUNNER_CONTENT: 'runnerContent',
-    PENDING_CONTENT: 'pendingContent',
+    MODIFIED_CONTENT: 'modified',
     NODES: 'nodes'
   },
   MODAL_TYPES: {

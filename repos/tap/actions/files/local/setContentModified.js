@@ -9,7 +9,7 @@ const { CATEGORIES, SUB_CATEGORIES } = Values
  * @param {string} content
  * @param {string} location
  */
-export const setNodePendingContent = (content, location) => {
+export const setContentModified = (content, location) => {
   const { items } = getStore().getState()
   const { fileTree, activeFile } = items
   const { nodes } = fileTree
@@ -19,7 +19,7 @@ export const setNodePendingContent = (content, location) => {
   // update the item in the array
   const updated = nodes?.map(node => {
     return applyToCloneOf(node, (clone) => {
-      clone?.id === nodePath && (clone.pendingContent = content)
+      clone?.id === nodePath && (clone.modified = content)
     })
   })
 

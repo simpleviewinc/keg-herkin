@@ -28,13 +28,14 @@ const loadInitScreen = async queryObj => {
  * @return {void}
  */
 const loadInitTestFile = async queryObj => {
-  if(activeFeat && activeFeat.content)
-    return upsertActiveRunnerTest(activeFeat)
+  // if(activeFeat && activeFeat.content)
+  //   return upsertActiveRunnerTest(activeFeat)
 
-  const testFile = activeFeat && activeFeat.testPath || queryFile
+  // const testFile = activeFeat && activeFeat.testPath || queryFile
 
+  const filesTree = await apiRequest(`/files/tree`) || {}
   // load the file tree from root tests folder
-  upsertFileTree(await apiRequest(`/files/tree`) || {})
+  upsertFileTree(filesTree)
 }
 
 /**

@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { noOpObj, deepMerge } from '@keg-hub/jsutils'
 import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
-import { setActiveFile } from 'SVActions/files/setActiveFile'
+import { setActiveFile } from 'SVActions/files/local/setActiveFile'
 import {
   View,
   Loading,
@@ -83,7 +83,7 @@ const useNodeName = node => useMemo(() => {
 
 /**
  * Hook to memoize to check which tree node has pending changes
- * @param {Object} activeFile - activeFile object: { pendingContent, activeFilePath, ...other }
+ * @param {Object} activeFile - activeFile object: { modified, activeFilePath, ...other }
  * @param {string} node
  * 
  * @returns {string} - Name of the node
@@ -91,13 +91,13 @@ const useNodeName = node => useMemo(() => {
 const usePendingContent = (activeFile, node) => useMemo(() => {
   // console.log(activeFile,'activeFIle')
   // console.log(node, 'node')
-  // return activeFile?.pendingContent !== activeFile?.content && activeFile?.pendingContent !== node?.pendingContent
+  // return activeFile?.modified !== activeFile?.content && activeFile?.modified !== node?.modified
   //   && (activeFile?.location === node?.location)
-  return node?.pendingContent
+  return node?.modified
 }, [
-  activeFile?.pendingContent,
+  activeFile?.modified,
   activeFile?.location,
-  node?.pendingContent,
+  node?.modified,
   node?.location
 ])
 
@@ -117,7 +117,7 @@ export const TreeList = props => {
 
   const onItemPress = useCallback(({node}) => {
     if (node?.type !== 'file') return
-    setActiveFile(node?.location, node?.pendingContent)
+    setActiveFile(node?.location, node?.modified)
     onSidebarToggled(false)
   }, [ setActiveFile, onSidebarToggled ])
   
