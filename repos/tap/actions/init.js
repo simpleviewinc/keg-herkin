@@ -36,7 +36,7 @@ const loadInitTestFiles = async queryObj => {
   await loadBddTests()
 
   // Load the initial test file 
-  await loadTestFile(queryObj?.file)
+  queryObj?.file && await loadTestFile(queryObj?.file)
 }
 
 /**

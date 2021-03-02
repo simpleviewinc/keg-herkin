@@ -15,7 +15,7 @@ export const setActiveFile = async (model, content) => {
       type: ActionTypes.SET_ITEMS,
       payload: {
         category: CATEGORIES.ACTIVE_FILE,
-        items: { ...model, content: content || model.content },
+        items: { ...model, modified: content || model.modified },
       },
     })
   } 

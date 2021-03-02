@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
 import { Select } from 'SVComponents/form/select'
 import { useTheme } from '@keg-hub/re-theme'
-import { setFeatureActive } from 'SVActions/features/local/setFeatureActive'
+import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
 import { createFeatureFile } from 'SVActions/features/local/createFeatureFile'
 import { setModalVisibility } from 'SVActions/modals'
 import { Values } from 'SVConstants'
@@ -53,8 +53,8 @@ const getTestNamesOptions = () => {
   const features = useStoreItems(CATEGORIES.FEATURES) || []
   const options = features.map((feature) => {
     return {
-      label: feature?.ast?.feature,
-      value: feature?.ast?.feature
+      label: feature.name,
+      value: feature.location
     }
   })
   return [newFileOption, ...options]
@@ -85,7 +85,7 @@ export const TestSelectorModal = (props) => {
 
     testName === Values.CREATE_NEW_FILE
       ? createFeatureFile(selectedTab)
-      : setFeatureActive(feature) && setScreen(selectedTab)
+      : setActiveFileFromType(feature) && setScreen(selectedTab)
 
       setModalVisibility(false)
   }, 
@@ -147,15 +147,15 @@ export const TestSelectorModal = (props) => {
  */
 const TestNameSelect = ({styles, features, setTestName}) => {
 
-  const onValueChange = useCallback((val) => {
+  const onValueChange = useCallback((location) => {
     // fetch the feature file content from redux
-    const feature = features.find((feature) => feature?.ast?.feature === val)
+    const feature = features.find((feature) => feature.location === location)
 
     feature 
-      ? setFeatureActive(feature)
-      : devLog(`warn`, `Feature '${val}' does not exist!`)
+      ? setActiveFileFromType(feature)
+      : devLog(`warn`, `Feature from '${location}' does not exist!`)
 
-    setTestName(val)
+    setTestName(feature.name)
   }, [features, setTestName])
 
   return (
