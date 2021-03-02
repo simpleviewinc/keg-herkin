@@ -1,5 +1,5 @@
 module.exports = {
-  ...require('./fileModel')
-  ...require('./screenModel')
+  ...require('./fileModel'),
+  ...require('./screenModel'),
   ...require('./testsModel')
 }
