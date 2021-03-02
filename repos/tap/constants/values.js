@@ -13,7 +13,8 @@ export const Values = {
     COPY_STEP: 'copy_step',
     MODALS: 'modals',
     FILE_TREE: 'fileTree',
-    SIDEBAR: 'sidebar'
+    SIDEBAR: 'sidebar',
+    PENDING_FILES: 'pendingFiles'
   },
   SUB_CATEGORIES: {
     RUNNER_CONTENT: 'runnerContent',
