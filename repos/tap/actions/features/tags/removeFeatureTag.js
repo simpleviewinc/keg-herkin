@@ -3,6 +3,14 @@ import { Values, ActionTypes } from 'SVConstants'
 import { validateFeatureAction } from 'SVUtils'
 const { CATEGORIES } = Values
 
+/**
+ * Removes a tag from a parent fileModels ast for features
+ * @type function
+ * @param {Object} parent - Item to remove the tag from
+ * @param {Object} tag - Tag to be removed from the parent
+ *
+ * @return {void}
+ */
 export const  removeFeatureTag = (parent, tag) => {
   const { feature, index } = validateFeatureAction(parent, 'tags')
 
