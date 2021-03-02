@@ -1,35 +1,47 @@
 import { Values } from 'SVConstants'
+import { getStore } from 'SVStore'
 import { EditorTabs } from './editorTabs'
 import { noOpObj, exists } from '@keg-hub/jsutils'
 import { AceEditor } from 'SVComponents/aceEditor'
-import React, { useRef, useCallback, useState } from 'react'
+import React, { useRef, useCallback } from 'react'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 import { useStyle } from '@keg-hub/re-theme'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
 import { saveFile } from 'SVActions/files'
+import { setNodePendingContent } from 'SVActions/files/fileTree'
+
 const { EDITOR_TABS } = Values
 
 /**
  * MainEditor
  * @param {Object} props
  * @param {Object} props.activeFile
- * @param {Function} props.setPendingContent
  */
 const MainEditor = props => {
-  const { activeFile, setPendingContent } = props
+  const { activeFile } = props
+  const onChange = useCallback((text) => {
+    // it's possible that the local activeFile is not in sync with the store's activeFile when this callback is called
+    // * this happens when you switch files
+    // so fetch from the store to ensure latest value 
+    const { items } = getStore().getState()
+    text === items?.activeFile?.content
+      ? setNodePendingContent(false)
+      : setNodePendingContent(text)
+  }, [])
 
   return activeFile?.isFeature
     ? (
       <FeatureEditor
         {...props}
+        // onChange={setActiveFilePendingContent}
         editorId={`feature-editor`}
       />
     )
     : (
       <AceEditor
         {...props}
-        onChange={setPendingContent}
+        onChange={onChange}
         editorId={`code-editor`}
         mode={'javascript'}
       />
@@ -40,14 +52,17 @@ const MainEditor = props => {
  * Hook to run the active files tests, or save changes to the active file
  */
 const useTabActions = (props) => {
-  const { pendingContent } = props
+  const { editorRef } = props
+  
   const onRun = useCallback(event => {
-    saveFile({content: pendingContent})
-  }, [pendingContent])
+    console.log('---Run tests---')
+  }, [])
 
-  const onSave = useCallback(event => 
-    saveFile({content: pendingContent}), 
-    [ pendingContent ]
+  const onSave = useCallback(event => {
+    editorRef.current && saveFile({content: editorRef.current?.editor?.getValue()})
+  }
+    , 
+    [ editorRef.current ]
   )
 
   return { onRun, onSave }
@@ -64,13 +79,11 @@ export const CodeEditor = props => {
     activeTab,
     activeFile=noOpObj
   } = props
-  const [pendingContent, setPendingContent] = useState(activeFile?.content)
   const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.SPLIT)
   const forceFull = !activeFile.isFeature && (tab === EDITOR_TABS.SPLIT || tab === EDITOR_TABS.DEFINITIONS)
   const checkTab = forceFull ? EDITOR_TABS.FEATURE : tab
-
   const editorRef = useRef(null)
-  const tabActions = useTabActions({...props, pendingContent})
+  const tabActions = useTabActions({...props, editorRef})
   const editorStyles = useStyle(`screens.editors`)
   const codeStyles = editorStyles?.[checkTab]
   const actionsStyles = editorStyles?.actions
@@ -99,7 +112,6 @@ export const CodeEditor = props => {
           key={`${tab}-feature`}
           activeFile={activeFile}
           setTab={setTab}
-          setPendingContent={setPendingContent}
           value={activeFile?.content || ''}
           style={codeStyles.feature || codeStyles}
         />

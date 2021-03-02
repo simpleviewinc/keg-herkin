@@ -15,5 +15,6 @@ export const saveFile = async ({filePath, content}) => {
 
   const { items } = getStore().getState()
   const path = filePath || items?.activeFile?.fullPath
-  await saveApiFile(path, content)
+  const result = await saveApiFile(path, content)
+  console.log(result)
 }

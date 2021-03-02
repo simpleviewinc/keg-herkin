@@ -9,8 +9,9 @@ const { CATEGORIES } = Values
 /**
  * setActiveFile
  * @param {string} path 
+ * @param {string=} content - use as content as opposed to pulling from api
  */
-export const setActiveFile = async (path) => {
+export const setActiveFile = async (path, content) => {
   try {
     // if file is a feature, also set active feature
     const { items } = getStore().getState()
@@ -19,7 +20,17 @@ export const setActiveFile = async (path) => {
     const isFeature = Boolean(feature)
     isFeature && loadFeature(feature)
 
-    const result = await loadApiFile(path)
+    // if pending/custom content passed in, show that. otherwise load from file
+    let result = {}
+    if (content) {
+      result.fullPath = path
+      result.content = content
+    }
+    else {
+      console.log('loading fresh file-------')
+      result = await loadApiFile(path)
+    }
+      
 
     dispatch({
       type: ActionTypes.SET_ITEMS,
@@ -27,7 +38,7 @@ export const setActiveFile = async (path) => {
         category: CATEGORIES.ACTIVE_FILE,
         items: {
           isFeature,
-          ...result
+          ...result,
         },
       },
     })
