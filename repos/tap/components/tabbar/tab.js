@@ -37,8 +37,8 @@ const BuildChildren = (props) => {
   if(props.children) return renderByType(props.children, props)
 
 
-  const { active, styles, icon, Title, title } = props
-  const TitleComp = Title || title
+  const { active, styles, icon, Title, title='', showIndicator=false } = props
+  const TitleComp = Title || `${title} ${showIndicator ? '*' : ''}`
   const Components = []
 
   // If there's a title component || title string add it to the components array
