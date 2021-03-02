@@ -1,4 +1,4 @@
-const { deepMerge, pickKeys } = require('@keg-hub/jsutils')
+const { buildModel } = require('./buildModel')
 
 /**
  * Models a file loaded into memory
@@ -27,7 +27,7 @@ const Model = {
   uuid: '',
 }
 
-const fileModel = overrides => deepMerge(Model, pickKeys(overrides, Object.keys(Model)))
+const fileModel = buildModel(overrides, Model)
 
 module.exports = {
   fileModel
