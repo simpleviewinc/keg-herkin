@@ -10,7 +10,7 @@ import { mapObj, capitalize, wordCaps, noPropArr } from '@keg-hub/jsutils'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { useFeature } from 'SVHooks/useFeature'
 import { devLog } from 'SVUtils'
-import { setScreen } from 'SVActions/setScreen'
+import { setScreen } from 'SVActions/screens/setScreen'
 
 const { TEST_TYPE, CATEGORIES, SCREENS } = Values
 
