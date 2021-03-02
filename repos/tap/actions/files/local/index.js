@@ -1,4 +1,5 @@
 export * from './setActiveFile'
 export * from './setActiveFileFromType'
-export * from './setContentModified'
+export * from './setPendingFile'
 export * from './upsertFileTree'
+export * from './removePendingFile'

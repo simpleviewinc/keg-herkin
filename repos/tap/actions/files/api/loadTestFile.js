@@ -14,13 +14,13 @@ export const loadTestFile = async testFile => {
   if(!items) return
 
   const fileTree = items[CATEGORIES.FILE_TREE]
+  const pendingFiles = items[CATEGORIES.PENDING_FILES] || {}
 
   const nodeToLoad = findFileInTree(fileTree.nodes, testFile)
   if(!nodeToLoad)
     return console.warn(`Could not load file ${testFile}. It does not exist in the file tree`)
   
-  const fileModel = await loadApiFile(nodeToLoad.location)
-
+  const fileModel = pendingFiles[nodeToLoad.location] || await loadApiFile(nodeToLoad.location)
   return fileModel
     ? setActiveFileFromType(fileModel)
     : console.warn(`Could not load file ${testFile} from the API!`)
