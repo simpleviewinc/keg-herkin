@@ -10,7 +10,7 @@ const { CATEGORIES } = Values
 export const removePendingFile = (location) => {
   const { items } = getStore().getState()
   const { activeFile } = items
-
+  !location && (activeFile.modified = false)
   dispatch({
     type: ActionTypes.REMOVE_ITEM,
     payload: {
