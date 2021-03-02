@@ -1,4 +1,4 @@
-import { dispatch, getStore } from 'SVStore'
+import { dispatch } from 'SVStore'
 import { Values, ActionTypes } from 'SVConstants'
 import { devLog } from 'SVUtils'
 

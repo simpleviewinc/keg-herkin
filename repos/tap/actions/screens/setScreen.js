@@ -1,24 +1,31 @@
-import { dispatch } from 'SVStore'
-import { Values, ActionTypes } from 'SVConstants'
 import { devLog } from 'SVUtils'
+import { dispatch, getStore } from 'SVStore'
+import { Values, ActionTypes } from 'SVConstants'
+import { setScreenInactive } from './setScreenInactive'
 
 const { CATEGORIES, SCREENS } = Values
 
 /**
  * Sets the active tab screen
- * @param {string} id - screen id 
+ * @type function
+ * @param {string} screenId - Id of the screen to make active
+ *
+ * @returns {void}
  */
-export const setScreen = (id='') => {
-  const screenId = id && SCREENS[id.toUpperCase()]
-  !screenId
-  ? devLog(`warn`, `Screen ${screenId} does not exist!`, SCREENS)
-  : dispatch({
-      type: ActionTypes.SET_ITEMS,
-      payload: {
-        category: CATEGORIES.ACTIVE_TAB,
-        items: {
-          id: screenId
-        },
-      },
-    })
+export const setScreen = screenId => {
+  const { items } = getStore().getState()
+  const screenModel = items[CATEGORIES.SCREENS][screenId]
+
+  if(!screenModel) return devLog(`warn`, `Screen ${screenId} does not exist!`, SCREENS)
+
+  setScreenInactive()
+
+  dispatch({
+    type: ActionTypes.SET_ITEM,
+    payload: {
+      category: CATEGORIES.SCREENS,
+      key: screenId,
+      item: { ...screenModel, active: true },
+    },
+  })
 }

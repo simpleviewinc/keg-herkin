@@ -18,7 +18,7 @@ const { MODAL_TYPES, SIDEBAR_TYPES } = Values
  * @return {void}
  */
 const loadInitScreen = async queryObj => {
-  setScreen(queryObj.tab || 'empty')
+  setScreen(queryObj.screen || 'empty')
 }
 
 /**
