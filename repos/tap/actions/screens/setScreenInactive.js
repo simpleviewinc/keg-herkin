@@ -1,5 +1,6 @@
 import { dispatch, getStore } from 'SVStore'
 import { Values, ActionTypes } from 'SVConstants'
+import { getActiveScreen } from 'SVUtils/helpers/getActiveScreen'
 
 const { CATEGORIES } = Values
 
@@ -11,7 +12,7 @@ const { CATEGORIES } = Values
  */
 export const setScreenInactive = () => {
   const { items } = getStore().getState()
-  const activeScreen = Object.values(items[CATEGORIES.SCREENS]).find(screen => screen.active)
+  const activeScreen = getActiveScreen(items)
 
   activeScreen &&
     dispatch({
