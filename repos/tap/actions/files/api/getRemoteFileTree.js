@@ -4,5 +4,5 @@ import { apiRequest } from 'SVUtils/api/apiRequest'
 export const getRemoteFileTree = async () => {
   const fileTree = await apiRequest(`/files/tree`) || {}
   // load the file tree from root tests folder
-  upsertFileTree(fileTree)
+  return upsertFileTree(fileTree)
 }

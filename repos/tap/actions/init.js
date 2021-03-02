@@ -1,10 +1,10 @@
 import { Values } from 'SVConstants'
 import { setScreen } from 'SVActions/screens'
 import { isEmptyColl } from '@keg-hub/jsutils'
-import { upsertFileTree } from 'SVActions/files'
 import { setActiveModal } from 'SVActions/modals'
-import { apiRequest } from 'SVUtils/api/apiRequest'
 import { setActiveSidebar } from 'SVActions/sidebar'
+import { loadTestFile } from './files/api/loadTestFile'
+import { loadBddTests } from './files/api/loadBddTests'
 import { getQueryData } from 'SVUtils/helpers/getQueryData'
 import { getRemoteFileTree } from './files/api/getRemoteFileTree'
 
@@ -29,13 +29,14 @@ const loadInitScreen = async queryObj => {
  * @return {void}
  */
 const loadInitTestFiles = async queryObj => {
-
-
-  const testFile = queryObj?.file
-  
   // Load the file tree from root tests folder
   await getRemoteFileTree()
 
+  // Load all features and definitions
+  await loadBddTests()
+
+  // Load the initial test file 
+  await loadTestFile(queryObj?.file)
 }
 
 /**

@@ -9,7 +9,7 @@ const { CATEGORIES } = Values
  * @param {Array} nodes
  */
 export const upsertFileTree = ({rootPaths, nodes}) => {
-  dispatch({
+  return dispatch({
     type: ActionTypes.UPSERT_ITEMS,
     payload: {
       category: CATEGORIES.FILE_TREE,

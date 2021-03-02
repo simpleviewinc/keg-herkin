@@ -30,7 +30,7 @@ const MainEditor = props => {
       : setContentModified(text)
   }, [])
 
-  return activeFile?.isFeature
+  return activeFile?.fileType === 'feature'
     ? (
       <FeatureEditor
         {...props}
