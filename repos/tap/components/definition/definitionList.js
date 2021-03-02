@@ -6,7 +6,7 @@ import React, { useMemo, useCallback } from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 import { ChevronDown, Copy } from 'SVAssets/icons'
 import { SimpleList, Row, Text, View, Touchable } from 'SVComponents'
-import { addStepFromDefinition } from 'SVActions/features/addStepFromDefinition'
+import { addStepFromDefinition } from 'SVActions/features/local/addStepFromDefinition'
 const { CATEGORIES, EDITOR_TABS } = Values
 
 /**

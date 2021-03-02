@@ -1,8 +1,8 @@
 import { apiRequest } from 'SVUtils/api/apiRequest'
-import { upsertFeatures } from './upsertFeatures'
+import { upsertFeatures } from '../local/upsertFeatures'
 
 // Just here for now to test, should remove later
-import { setFeatureActive } from './setFeatureActive'
+import { setFeatureActive } from '../local/setFeatureActive'
 
 export const getRemoteFeatures = async () => {
   const features = await apiRequest(`/features`)

@@ -15,7 +15,7 @@ const Model = {
   waypoint: []
 }
 
-const testsModel = buildModel(overrides, Model)
+const testsModel = overrides => buildModel(overrides, Model)
 
 module.exports = {
   testsModel

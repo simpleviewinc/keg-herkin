@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { pickKeys, exists } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'
-import { setFeatureActive } from 'SVActions/features'
+import { setFeatureActive } from 'SVActions/features/local/setFeatureActive'
 import {
   View,
   SimpleList,
@@ -19,8 +19,8 @@ const builtFeatureList = (features, activeFeature={}) => {
     features: {
       group: 'Features',
       items: features.map(feature => ({
-        title: feature.feature,
-        active: feature.feature === activeFeature.feature
+        title: feature?.ast?.feature,
+        active: feature?.ast?.feature === activeFeature?.ast?.feature
       }))
     }
   }
@@ -37,7 +37,7 @@ export const FeatureList = props => {
   ), shallowEqual)
 
   const onItemPress = useCallback((event, item) => {
-    const match = features.find(feature => feature.feature === item.title)
+    const match = features.find(feature => feature?.ast?.feature === item.title)
     match && setFeatureActive(match)
     
   }, [ features ])

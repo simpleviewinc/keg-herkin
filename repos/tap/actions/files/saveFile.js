@@ -14,7 +14,7 @@ export const saveFile = async ({filePath, content}) => {
   if (!content) return devLog(`warn`, 'Content is required')
 
   const { items } = getStore().getState()
-  const path = filePath || items?.activeFile?.fullPath
+  const path = filePath || items?.activeFile?.location
   const result = await saveApiFile(path, content)
   console.log(result)
 }

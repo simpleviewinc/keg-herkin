@@ -10,7 +10,7 @@ export const setFeatureActive = feature => {
     return devLog(`warn`, `No features exist in the store!`, items)
 
   const { features } = items
-  const index = features.findIndex(feat => feat.feature === feature.feature)
+  const index = features.findIndex(feat => feat?.ast?.feature === feature?.ast?.feature)
   if(index === -1) return devLog(`warn`, `Feature does not exist in the items store!`, items)
 
   dispatch({

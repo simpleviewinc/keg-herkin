@@ -14,7 +14,7 @@ export const FeatureEditor = props => {
     onChange=noOp
   } = props
   
-  const { feature } = useFeature({path: activeFile?.fullPath}) || {}
+  const { feature } = useFeature({ path: activeFile?.location }) || {}
   const [activeFeat, setActiveFeat] = useState(feature)
 
   const onFeatureEdit = useCallback((content) => {
