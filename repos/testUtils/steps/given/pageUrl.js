@@ -1,4 +1,4 @@
-const { Given } = require("cucumber")
+const { Given } = require('HerkinParkin')
 const { getBrowserContext } = require('../../support/setup')
 const { getPage } = getBrowserContext()
 

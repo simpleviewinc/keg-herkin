@@ -1,154 +1,118 @@
 import { Values } from 'SVConstants'
-import React, { useCallback, useMemo, useState } from 'react'
-import { pickKeys, checkCall } from '@keg-hub/jsutils'
-import { useTheme } from '@keg-hub/re-theme'
-import { View } from '@keg-hub/keg-components'
 import { EditorTabs } from './editorTabs'
+import { noOpObj, exists } from '@keg-hub/jsutils'
 import { AceEditor } from 'SVComponents/aceEditor'
-import { useSelector, shallowEqual } from 'react-redux'
-import { runTests } from 'SVActions'
+import React, { useRef, useCallback } from 'react'
+import { useActiveTab } from 'SVHooks/useActiveTab'
+import { useTheme, useStyle } from '@keg-hub/re-theme'
+import { FeatureEditor } from 'SVComponents/feature/featureEditor'
+import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
 
-const { CATEGORIES, EDITOR_MODES } = Values
+const { EDITOR_TABS } = Values
 
-const useEditorActions = (feature, setFeature, definitions, setDefinitions) => {
-
-  const onFeatureEdit = useCallback((text, change) => {
-    text !== feature.content &&
-      !text.trim() &&
-      setFeature({ ...feature, text })
-      
-  }, [feature, setFeature])
-
-  const onDefinitionEdit = useCallback((uuid, text, change) => {
-    if(!text || !text.trim()) return
-
-    const defs = definitions.map(def => {
-      return def.uuid === uuid ? { ...def, text } : def
-    })
-
-    setDefinitions(defs)
-  }, [definitions, setDefinitions])
-  
-  const onRunTests = useCallback(() => {
-    
-    runTests(feature, definitions)
-  }, [ feature, definitions ])
-
-  return { onFeatureEdit, onDefinitionEdit, onRunTests }
+/**
+ * MainEditor
+ * @param {Object} props
+ */
+const MainEditor = props => {
+  return props?.activeFile?.isFeature
+    ? (
+      <FeatureEditor
+        {...props}
+        editorId={`feature-editor`}
+      />
+    )
+    : (
+      <AceEditor
+        {...props}
+        editorId={`code-editor`}
+        mode={'javascript'}
+      />
+    )
 }
 
-const useMatchingDefinitions = (feature, definitions) => {
-  return useMemo(() => {
-    let mappedDefs = []
-    if(!feature || !feature.scenarios) return mappedDefs
-    feature.scenarios.map(scenario => {
-      scenario.steps && scenario.steps.map(step => {
-        const uuid = step.definition
-        const type = step.type
-        if(!definitions || !definitions[type]) return
+/**
+ * Hook to run the active files tests, or save changes to the active file
+ */
+const useTabActions = () => {
+  const onRun = useCallback(event => {
+    console.log('---Run tests---')
+  }, [])
 
-        const foundDef = definitions[type].find(def => def.uuid === step.definition)
-        foundDef && mappedDefs.push(foundDef)
-      })
-    })
+  const onSave = useCallback(event => {
+    console.log('---Save file---')
+  }, [])
 
-    return mappedDefs
-  }, [feature, definitions])
+  return { onRun, onSave }
 }
 
-const FeatureEditor = props => {
-  return (
-    <AceEditor
-      {...props}
-      mode='gherkin'
-    />
-  )
-}
-
-const DefinitionsEditor = ({ definitions, styles, ...props }) => {
-  return (
-    <View
-      className='definitions-editors-wrapper'
-      style={styles.main}
-    >
-      {definitions && definitions.map(def => {
-          return (
-            <AceEditor
-              key={def.uuid}
-              {...props}
-              onChange={text => checkCall(props.onChange, def.uuid, text)}
-              editorId={`definition-editor-${def.uuid}`}
-              value={def.content || ''}
-              style={styles.editor}
-              mode='javascript'
-              editorProps={{
-                wrapBehavioursEnabled: false,
-                animatedScroll: false,
-                dragEnabled: false,
-                tabSize: 2,
-                wrap: true,
-                ...props.editorProps,
-              }}
-            />
-          )
-        })}
-    </View>
-  )
-}
-
-const onTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
-  activeTab !== tab && setActiveTab(tab)
-  return true
-}, [activeTab, setActiveTab])
-
+/**
+ * CodeEditor
+ * @param {Object} props
+ * @param {String} props.activeTab
+ * @param {Object} props.activeFile - test file to load
+ */
 export const CodeEditor = props => {
-  const theme = useTheme()
+  const {
+    activeTab,
+    activeFile=noOpObj
+  } = props
 
-  const { activeData, features, definitions } = useSelector(({ items }) => pickKeys(
-    items,
-    [ CATEGORIES.ACTIVE_DATA, CATEGORIES.FEATURES, CATEGORIES.DEFINITIONS ]
-  ), shallowEqual)
+  const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.SPLIT)
+  const forceFull = !activeFile.isFeature && (tab === EDITOR_TABS.SPLIT || tab === EDITOR_TABS.DEFINITIONS)
+  const checkTab = forceFull ? EDITOR_TABS.FEATURE : tab
 
-  const feature = features && features[activeData?.feature]
+  const editorRef = useRef(null)
+  const tabActions = useTabActions(props)
+  const editorStyles = useStyle(`screens.editors`)
+  const codeStyles = editorStyles?.[checkTab]
+  const actionsStyles = editorStyles?.actions
+  
+  if (!exists(activeFile.content)) return null
 
-  const matchingDefinitions = useMatchingDefinitions(feature, definitions)
-  const [localFeat, setLocalFeat] = useState(feature)
-  const [localDefs, setLocalDefs] = useState(matchingDefinitions)
-
-  const { onFeatureEdit, onDefinitionEdit, onRunTests } = useEditorActions(
-    localFeat,
-    setLocalFeat,
-    localDefs,
-    setLocalDefs
-  )
-
-  const [tab, setTab] = useState(props.activeTab || EDITOR_MODES.SPLIT)
-  const tabSelect = onTabSelect(tab, setTab)
-  const builtStyles = theme.get(`screens.editors.${tab}`)
-
-  if(!localFeat || !localDefs) return null
+  /* TODO: Clean up constants and Actions tab
+    * Constants
+      * FEATURE should be it's own constant
+        * Currently used for features && non-definition files
+      * Need to add constants for waypoint and jest test files
+        * Should show the Run and save action in the Actions tab
+      * Need to add constant for non-test and non-definition files
+        * Should show only save action in the Actions tab
+    * Actions Tab ( In the EditorTabs component )
+      * Run action should be disabled only for test files
+        * feature / waypoint / jest
+        * Currently hidden for all except feature files
+  */
 
   return (
     <>
-      {(tab === 'feature' || tab === `split`) && (
-        <FeatureEditor
+      {(tab === EDITOR_TABS.FEATURE || tab === EDITOR_TABS.SPLIT) && (
+        <MainEditor
+          aceRef={editorRef}
           key={`${tab}-feature`}
-          editorId={`feature-editor`}
-          onChange={onFeatureEdit}
-          value={localFeat.content || ''}
-          style={builtStyles.feature || builtStyles}
+          activeFile={activeFile}
+          setTab={setTab}
+          value={activeFile?.content || ''}
+          style={codeStyles.feature || codeStyles}
         />
       )}
-      {(tab === 'definitions' || tab === `split`) && (
-        <DefinitionsEditor
-          key={`${tab}-definitions`}
-          editorId={`definitions-editor`}
-          onChange={onDefinitionEdit}
-          definitions={localDefs}
-          styles={builtStyles.definitions || builtStyles}
-        />
+      {(tab === EDITOR_TABS.DEFINITIONS ||tab === EDITOR_TABS.SPLIT) &&
+        activeFile?.isFeature && (
+          <DefinitionsEditor
+            featureEditorRef={editorRef}
+            activeFile={activeFile}
+            key={`${tab}-definitions`}
+            editorId={`definitions-editor`}
+            styles={codeStyles.definitions || codeStyles}
+          />
       )}
-      <EditorTabs activeTab={tab} onTabSelect={tabSelect} onRun={onRunTests} />
+      <EditorTabs
+        activeTab={checkTab}
+        onTabSelect={setTab}
+        showFeatureTabs={activeFile.isFeature}
+        styles={actionsStyles}
+        { ...tabActions }
+      />
     </>
   )
 }

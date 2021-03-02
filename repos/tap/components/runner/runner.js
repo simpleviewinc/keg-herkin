@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState, useEffect } from "react"
 import { uuid, checkCall } from '@keg-hub/jsutils'
 import { RunnerTabs } from './runnerTabs'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 import { useTestRunner } from 'SVHooks/useTestRunner'
 import { View } from '@keg-hub/keg-components/view'
 import { Results } from 'SVComponents/runner/results'
@@ -24,8 +24,7 @@ export const Runner = props => {
     title,
   } = props
 
-  const theme = useTheme()
-  const runnerStyles = theme.get('runner')
+  const runnerStyles = useStyle('runner')
 
   const editorRef = useRef(null)
   const [tab, setTab] = useState(activeTab)

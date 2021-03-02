@@ -8,15 +8,21 @@ export const Values = {
     ACTIVE_DATA: 'activeData',
     ACTIVE_RUNNER_TESTS: 'activeRunnerTests',
     FEATURE: 'feature',
+    ACTIVE_FILE: 'activeFile',
     SCREEN: 'screen',
     COPY_STEP: 'copy_step',
-    MODALS: 'modals'
+    MODALS: 'modals',
+    FILE_TREE: 'fileTree',
+    SIDEBAR: 'sidebar'
   },
   SUB_CATEGORIES: {
     RUNNER_CONTENT: 'runnerContent'
   },
   MODAL_TYPES: {
     TEST_SELECTOR_MODAL: 'testSelectorModal',
+  },
+  SIDEBAR_TYPES: {
+    FILE_TREE: 'fileTree'
   },
   STEP_TYPES: [
     'and',
@@ -36,9 +42,14 @@ export const Values = {
     EMPTY: 'empty',
     RUNNER: 'runner',
   },
-  EDITOR_MODES: {
+  EDITOR_TABS: {
     SPLIT: 'split',
     FEATURE: 'feature',
     DEFINITIONS: 'definitions',
+    ALL_DEFINITIONS: 'all-definitions',
   },
+  DEFINITION_TABS: {
+    ACTIVE: 'active-definitions',
+    LIST: 'list-definitions'
+  }
 }

@@ -1,7 +1,12 @@
-import React,  { useState, useCallback } from 'react'
+import React,  { useState, useCallback, useMemo } from 'react'
 import { useStyles } from 'SVHooks'
-import { checkCall } from '@keg-hub/jsutils'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStylesCallback } from '@keg-hub/re-theme'
+import {
+  checkCall,
+  noPropArr,
+  deepMerge,
+  noOpObj
+} from '@keg-hub/jsutils'
 import {
   Grid,
   ListHeader,
@@ -10,73 +15,114 @@ import {
 } from 'SVComponents'
 
 const buildStyles = (theme, styles={}) => {
-  return {
+  return deepMerge({
     main: {
-      ...styles.main,
       ...theme.flex.column,
     },
-    content: {
-      header: {},
-      drawer: {
+    drawer: {
+      content: {
         backgroundColor: theme?.tapColors?.backGround,
       },
-      item: {}
-    }
-  }
+    },
+  }, styles)
 }
 
-// Need to add an Item Render method
-// This will allow passing in the render method for each item
-// That We can define the ListItem separately and make this component reusable
-// Should do the same for ListHeader
-const RenderListItems = ({ items, group, onItemPress }) => {
 
-  const itemPress = item => event => checkCall(onItemPress, event, item)
-  
+const RenderListItems = ({ items, renderItem, group, onItemPress, styles }) => {
   return Object.entries(items)
     .map(([ key, meta ]) => {
       return (
-          <ListItem
-            key={`${group}-${key}`}
-            title={ key }
-            onItemPress={ itemPress(meta) }
-            { ...meta }
-          />
-        )
+        <ListItem
+          key={`${group}-${key}`}
+          title={ key }
+          renderItem={renderItem}
+          onItemPress={onItemPress}
+          item={meta}
+          styles={styles}
+          { ...meta }
+        />
+      )
     })
 }
 
 const RenderList = props => {
-  const { group, items, onHeaderPress, onItemPress, styles, initialToggle, drawerProps } = props
+  const {
+    drawer=true,
+    first,
+    header=true,
+    groupKey,
+    HeaderIcon,
+    iconProps,
+    last,
+    meta=noOpObj,
+    onHeaderPress,
+    onItemPress,
+    renderItem,
+    styles,
+    drawerProps=noOpObj
+  } = props
 
-  const [ toggled, setToggled ] = useState(initialToggle || false)
+  const group = meta.group || groupKey
+  const initialToggle = meta.toggled || drawerProps[groupKey]?.toggled || props.toggled || false
+
+  const [ toggled, setToggled ] = useState(initialToggle)
 
   const onTogglePress = useCallback(event => {
     checkCall(onHeaderPress, event)
     setToggled(!toggled)
-  }, [ items, toggled, group, onHeaderPress ])
+  }, [ toggled, onHeaderPress ])
+
+  const drawerStyles = useMemo(() => {
+    return deepMerge(
+      {},
+      styles?.drawer,
+      drawerProps?.styles,
+      toggled && styles?.drawer?.toggled,
+      toggled && drawerProps?.styles?.toggled,
+    )
+  }, [styles?.drawer, drawerProps.styles, toggled])
+
+  const RenderedItems = (
+    <RenderListItems
+      first={first}
+      last={last}
+      items={ meta.items || noPropArr }
+      group={ group }
+      renderItem={renderItem}
+      onItemPress={ onItemPress }
+      styles={ styles?.item }
+    />
+  )
 
   return (
     <>
-      <ListHeader
-        toggled={ toggled }
-        onPress={ onTogglePress }
-        title={ group }
-        styles={styles?.content?.header }
-      />
-      <Drawer
-        {...drawerProps}
-        className='sub-items-drawer'
-        styles={ styles?.content?.drawer }
-        toggled={ toggled }
-      >
-        <RenderListItems
-          items={ items }
-          group={ group }
-          onItemPress={ onItemPress }
-          listStyles={ styles?.content?.item }
+      { header && (
+        <ListHeader
+          first={first}
+          last={last}
+          Icon={HeaderIcon}
+          iconProps={iconProps}
+          toggled={ toggled }
+          onPress={ onTogglePress }
+          title={ group }
+          styles={styles?.header }
         />
-      </Drawer>
+      )}
+      { header && drawer
+        ? (
+            <Drawer
+              {...drawerProps}
+              first={first}
+              last={last}
+              className='sub-items-drawer'
+              styles={ drawerStyles }
+              toggled={ toggled }
+            >
+            { RenderedItems }
+            </Drawer>
+          )
+        : RenderedItems
+      }
     </>
   )
 
@@ -86,13 +132,12 @@ const RenderList = props => {
 // Should create a RenderTasks component, and use this inside it
 // Which will make this component reuseable
 export const SimpleList = (props) => {
-  const { items, styles, toggled } = props
-  
-  const theme = useTheme()
-  const listStyles = useStyles(styles, props, buildStyles)
+  const { items, styles } = props
+  const listStyles = useStylesCallback(buildStyles, noPropArr, styles)
+  const itemsLength = items.length - 1
 
   return Object.entries(items)
-    .map(([ key, meta ]) => {
+    .map(([ key, meta ], index) => {
       return (
         <Grid
           className="simple-list"
@@ -101,10 +146,12 @@ export const SimpleList = (props) => {
         >
           <RenderList
             { ...props }
-            group={ key }
-            items={ meta.items }
+            first={index === 0}
+            last={itemsLength === index}
+            index={index}
+            groupKey={key}
+            meta={meta}
             styles={ listStyles }
-            initialToggle={ toggled }
           />
         </Grid>
       )

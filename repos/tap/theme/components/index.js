@@ -15,6 +15,7 @@ import { tabbar } from './tabbar'
 import { table } from './table'
 import { tags } from './tags'
 import { modals } from './modals'
+import { treeList } from './treeList'
 
 export const components = theme => ({
   aceEditor: aceEditor(theme),
@@ -32,6 +33,7 @@ export const components = theme => ({
   table: table(theme),
   tags: tags(theme),
   modals: modals(theme),
+  treeList: treeList(theme),
   ...header(theme),
   ...step(theme),
   ...surface(theme),

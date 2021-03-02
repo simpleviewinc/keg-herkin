@@ -56,8 +56,10 @@ export const Screen = props => {
       style={theme?.screens?.parent?.main}
     >
       <Tabbar
-        location='top'
+        location={'top'}
         tabs={tabs}
+        fixed
+        type={'screens'}
         activeTab={screen.id}
         onTabSelect={onTabSelect}
       />

@@ -1,3 +1,4 @@
 module.exports = {
-  ...require('testFiles'),
+  ...require('./testFiles'),
+  ...require('./fileSys')
 }

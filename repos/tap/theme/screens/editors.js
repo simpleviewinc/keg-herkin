@@ -1,35 +1,53 @@
-export const editors = theme => ({
-  main: {
-    flexDirection: 'row',
-  },
-  feature: {
-    width: `100%`,
-    height: `75vh`,
-  },
-  definitions: {
+export const editors = theme => {
+  const halfMargin = theme.margin.size / 2
+
+  return {
     main: {
-      width: `100%`,
-      height: `75vh`,
+      flD: 'row',
     },
-    editor: {
-      width: `100%`,
-      height: `20vh`,
-    }
-  },
-  split: {
     feature: {
-      width: `calc( 50% - 15px )`,
-      marginRight: 15,
-      height: `75vh`,
+      w: `100%`,
+      h: `75vh`,
     },
     definitions: {
       main: {
-        width: `calc( 50% - 15px )`,
-        height: `75vh`,
+        w: `100%`,
+        h: `75vh`,
       },
       editor: {
-        width: `100%`,
+        w: `100%`,
+        minH: `100px`,
       }
     },
+    split: {
+      feature: {
+        w: `calc( 50% - ${halfMargin}px )`,
+        h: `75vh`,
+        mR: halfMargin,
+      },
+      definitions: {
+        main: {
+          w: `calc( 50% - ${halfMargin}px )`,
+          h: `75vh`,
+          mL: halfMargin,
+        },
+        editor: {
+          w: `100%`,
+          minH: `100px`,
+        }
+      },
+    },
+    actions: {
+      default: {
+        main: {
+          flD: 'row',
+          alS: 'flex-end',
+          mR: theme.margin.size,
+        },
+      },
+      feature: {
+        save: { mR: 15 },
+      }
+    }
   }
-})
+}

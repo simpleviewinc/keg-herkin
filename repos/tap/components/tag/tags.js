@@ -1,5 +1,5 @@
 import { Tag } from './tag'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 import React, { useCallback, useRef } from 'react'
 import { Button, Grid, Icon, Input, Row, Text, View } from 'SVComponents'
 import { PlusCircle } from 'SVAssets/icons'
@@ -36,8 +36,7 @@ export const Tags = props => {
     title,
   } = props
 
-  const theme = useTheme()
-  const tagsStyles = theme.get(theme?.tags, get(theme, `${type}.tags`))
+  const tagsStyles = useStyle('tags', `tags.${type}`)
   const inputRef = useRef(null)
   const onAddTag = useCallback(() => {
 

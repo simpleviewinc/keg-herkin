@@ -118,7 +118,7 @@ export const Sidebar = props => {
       >
         <View 
           className='sidebar-main'
-          style={sidebarStyles?.content}
+          style={sidebarStyles?.container}
         >
           { children }
         </View>
