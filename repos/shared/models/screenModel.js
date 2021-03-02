@@ -8,7 +8,7 @@ const { buildModel } = require('./buildModel')
  * @property {name} name - Name of the screen
  */
 const Model = {
-  file: '',
+  activeFile: {},
   isActive: false,
   name: '',
 }

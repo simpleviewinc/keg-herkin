@@ -3,7 +3,7 @@ const { buildModel } = require('./buildModel')
 /**
  * Models a file loaded into memory
  * @typedef FileModel
- * @property {string} Name - Name of the file on disk
+ * @property {string} name - Name of the file on disk
  * @property {string} location - Absolute path of the file on dist
  * @property {string} relative - Relative path to the root of keg-herkin
  * @property {string} content - Text content of the file

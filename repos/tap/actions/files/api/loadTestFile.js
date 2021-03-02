@@ -22,7 +22,7 @@ export const loadTestFile = async testFile => {
   const fileModel = await loadApiFile(nodeToLoad.location)
 
   return fileModel
-    ? setActiveFileFromType(fileModel, items)
+    ? setActiveFileFromType(fileModel)
     : console.warn(`Could not load file ${testFile} from the API!`)
 
 }
