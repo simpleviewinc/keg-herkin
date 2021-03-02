@@ -57,28 +57,28 @@ const getTestFile = async (config, testPath) => {
 /**
  * Save file at a given location. file should be located in the test root path
  * @param {Object} config 
- * @param {string} fullPath
+ * @param {string} location
  * @param {string} content 
  */
-const saveTestFile = async (config, fullPath, content) => {
+const saveTestFile = async (config, location, content) => {
 
   const { testsRoot } = config.paths
-  if (!validFilename(path.basename(fullPath))) throw new Error(`[API - Files] Filename is invalid!`)
-  const inTestRoot = fullPath.startsWith(testsRoot)
+  if (!validFilename(path.basename(location))) throw new Error(`[API - Files] Filename is invalid!`)
+  const inTestRoot = location.startsWith(testsRoot)
   if (!inTestRoot) throw new Error(`[API - Files] File must be saved to the mounted test folder!`)
 
-  const [err, success] = await writeFile(fullPath, content)
+  const [err, success] = await writeFile(location, content)
 
   if (err) {
     console.log(err)
-    const pathError = new Error(`[API - Files] Save failed: ${fullPath} - ${err.message}`)
+    const pathError = new Error(`[API - Files] Save failed: ${location} - ${err.message}`)
     pathError.status = 404
     throw pathError
   }
 
   return {
     location,
-    name: path.basename(fullPath),
+    name: path.basename(location),
     success: Boolean(success),
   }
 }
