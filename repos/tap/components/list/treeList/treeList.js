@@ -71,7 +71,7 @@ const useNodeActive = (isExpanded, nodeType, nodePath, filePath) => useMemo(() =
 
 /**
  * Hook to memoize the name of the node based on it's type
- * @param {Object} node - node object: { children, fullPath, id, isModified, name, type }
+ * @param {Object} node - node object: { children, location, id, isModified, name, type }
  * 
  * @returns {string} - Name of the node
  */
@@ -92,13 +92,13 @@ const usePendingContent = (activeFile, node) => useMemo(() => {
   // console.log(activeFile,'activeFIle')
   // console.log(node, 'node')
   // return activeFile?.pendingContent !== activeFile?.content && activeFile?.pendingContent !== node?.pendingContent
-  //   && (activeFile?.fullPath === node?.fullPath)
+  //   && (activeFile?.location === node?.location)
   return node?.pendingContent
 }, [
   activeFile?.pendingContent,
-  activeFile?.fullPath,
+  activeFile?.location,
   node?.pendingContent,
-  node?.fullPath
+  node?.location
 ])
 
 /**
@@ -117,7 +117,7 @@ export const TreeList = props => {
 
   const onItemPress = useCallback(({node}) => {
     if (node?.type !== 'file') return
-    setActiveFile(node?.fullPath, node?.pendingContent)
+    setActiveFile(node?.location, node?.pendingContent)
     onSidebarToggled(false)
   }, [ setActiveFile, onSidebarToggled ])
   
@@ -145,7 +145,7 @@ export const TreeList = props => {
  * Component for list item based on the props
  * prop ref: https://github.com/zaguiini/react-native-final-tree-view#rendernode
  * @param {Object} props 
- * @param {Object} props.node - node object: { children, fullPath, id, isModified, name, type }
+ * @param {Object} props.node - node object: { children, location, id, isModified, name, type }
  * @param {Boolean} props.isExpanded - if the list item is expanded
  * @param {Boolean} props.hasChildrenNodes
  * 
@@ -157,7 +157,7 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
   const nodeType = node?.type
 
   // Check if active file or expanded folder
-  const isNodeActive = useNodeActive(isExpanded, nodeType, activeFile?.fullPath, node?.fullPath)
+  const isNodeActive = useNodeActive(isExpanded, nodeType, activeFile?.location, node?.location)
   const showPending = usePendingContent(activeFile, node)
   const {
     styles,

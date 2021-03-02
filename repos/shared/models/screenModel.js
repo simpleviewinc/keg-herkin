@@ -13,7 +13,7 @@ const Model = {
   name: '',
 }
 
-const testsModel = buildModel(overrides, Model)
+const testsModel = overrides => buildModel(overrides, Model)
 
 module.exports = {
   testsModel

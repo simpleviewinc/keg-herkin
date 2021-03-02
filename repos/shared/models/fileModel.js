@@ -27,7 +27,7 @@ const Model = {
   uuid: '',
 }
 
-const fileModel = buildModel(overrides, Model)
+const fileModel = overrides => buildModel(overrides, Model)
 
 module.exports = {
   fileModel

@@ -11,18 +11,20 @@ const { CATEGORIES } = Values
  * @param {string=} props.path 
  * @returns {Object}
  */
-export const useFeature = ({name, path}) => {
+export const useFeature = ({ name, path }) => {
   if (!name && !path) return
-  const { features=[], definitions } = useStoreItems([ 
-    CATEGORIES.ACTIVE_DATA, 
-    CATEGORIES.FEATURES, 
-    CATEGORIES.DEFINITIONS 
+  const { features=[], definitions } = useStoreItems([
+    CATEGORIES.ACTIVE_DATA,
+    CATEGORIES.FEATURES,
+    CATEGORIES.DEFINITIONS
   ])
 
-  const feature = features.filter((feature) => {
-    if (name) return feature?.feature === name
-    if (path) return feature?.fullPath === path
-  })[0]
+  const feature = features.select((feature) => {
+    return name
+      ? feature?.ast?.feature === name
+      : path && feature?.location === path
+  })
+
   const defs = useDefinitions(feature, definitions)
 
   return { feature, definitions: defs }

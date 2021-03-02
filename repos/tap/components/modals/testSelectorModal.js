@@ -53,8 +53,8 @@ const getTestNamesOptions = () => {
   const features = useStoreItems(CATEGORIES.FEATURES) || []
   const options = features.map((feature) => {
     return {
-      label: feature?.feature,
-      value: feature?.feature
+      label: feature?.ast?.feature,
+      value: feature?.ast?.feature
     }
   })
   return [newFileOption, ...options]
@@ -79,13 +79,13 @@ export const TestSelectorModal = (props) => {
   ])
   const [testName, setTestName] = useState(Values.CREATE_NEW_FILE)
   const [selectedTab, setSelectedtab] = useState(SCREENS.EDITOR)
-  const { feature } = useFeature({name: testName}) || {}
+  const { feature } = useFeature({ name: testName }) || {}
 
   const loadTests = useCallback(() => {
 
     testName === Values.CREATE_NEW_FILE
       ? createFeatureFile(selectedTab)
-      : setActiveFile(feature.fullPath) && setScreen(selectedTab)
+      : setActiveFile(feature.location) && setScreen(selectedTab)
 
       setModalVisibility(false)
   }, 
@@ -149,10 +149,10 @@ const TestNameSelect = ({styles, features, setTestName}) => {
 
   const onValueChange = useCallback((val) => {
     // fetch the feature file content from redux
-    const feature = features.find((feature) => feature.feature === val)
+    const feature = features.find((feature) => feature?.ast?.feature === val)
 
     feature 
-      ? setActiveFile(feature.fullPath)
+      ? setActiveFile(feature.location)
       : devLog(`warn`, `Feature '${val}' does not exist!`)
 
     setTestName(val)
