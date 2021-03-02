@@ -1,9 +1,9 @@
 import React, { useCallback, useRef, useState, useEffect } from "react"
-import { uuid, checkCall } from '@keg-hub/jsutils'
+import { getStore } from 'SVStore'
+import { removePendingFile, setPendingFile } from 'SVActions/files/local'
 import { RunnerTabs } from './runnerTabs'
 import { useStyle } from '@keg-hub/re-theme'
 import { useTestRunner } from 'SVHooks/useTestRunner'
-import { View } from '@keg-hub/keg-components/view'
 import { Results } from 'SVComponents/runner/results'
 import { ToRun } from 'SVComponents/runner/toRun'
 import { TestsRunning } from 'SVComponents/runner/testsRunning'
@@ -67,6 +67,13 @@ export const Runner = props => {
         title={title}
         prefix={prefix}
         toggleHandel={setToggleToRun}
+        onChange={text => {
+          const { items } = getStore().getState()
+
+          text && text === items?.activeFile?.content
+            ? removePendingFile()
+            : setPendingFile(text)
+        }}
       />
       <Results
         results={testResults}
