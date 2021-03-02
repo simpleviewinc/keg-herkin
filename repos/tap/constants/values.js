@@ -10,6 +10,7 @@ export const Values = {
     FEATURE: 'feature',
     ACTIVE_FILE: 'activeFile',
     SCREEN: 'screen',
+    SCREENS: 'screens',
     COPY_STEP: 'copy_step',
     MODALS: 'modals',
     FILE_TREE: 'fileTree',

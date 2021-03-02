@@ -1,6 +1,11 @@
+const { fileModel } = require('./fileModel')
+const { screenModel } = require('./screenModel')
+const { testsModel } = require('./testsModel')
+const { treeNodeModel } = require('./treeNodeModel')
+
 module.exports = {
-  ...require('./fileModel'),
-  ...require('./screenModel'),
-  ...require('./testsModel'),
-  ...require('./treeNodeModel'),
+  fileModel,
+  screenModel,
+  testsModel,
+  treeNodeModel,
 }
