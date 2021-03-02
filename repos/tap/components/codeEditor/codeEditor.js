@@ -9,7 +9,7 @@ import { useStyle } from '@keg-hub/re-theme'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
 import { saveFile } from 'SVActions/files'
-import { setNodePendingContent } from 'SVActions/files/fileTree'
+import { setContentModified } from 'SVActions/files/local'
 
 const { EDITOR_TABS } = Values
 
@@ -26,8 +26,8 @@ const MainEditor = props => {
     // so fetch from the store to ensure latest value 
     const { items } = getStore().getState()
     text === items?.activeFile?.content
-      ? setNodePendingContent(false)
-      : setNodePendingContent(text)
+      ? setContentModified(false)
+      : setContentModified(text)
   }, [])
 
   return activeFile?.isFeature
