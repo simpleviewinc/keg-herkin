@@ -1,4 +1,5 @@
 import { Values } from 'SVConstants'
+import { noPropArr } from '@keg-hub/jsutils'
 import { useDefinitions } from './useDefinitions'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 
@@ -13,13 +14,13 @@ const { CATEGORIES } = Values
  */
 export const useFeature = ({ name, path }) => {
   if (!name && !path) return
-  const { features=[], definitions } = useStoreItems([
+  const { features=noPropArr, definitions } = useStoreItems([
     CATEGORIES.ACTIVE_DATA,
     CATEGORIES.FEATURES,
     CATEGORIES.DEFINITIONS
   ])
 
-  const feature = features.select((feature) => {
+  const feature = features.find((feature) => {
     return name
       ? feature?.ast?.feature === name
       : path && feature?.location === path
