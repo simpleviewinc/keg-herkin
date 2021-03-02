@@ -1,4 +1,4 @@
-import { setScreen } from 'SVActions/setScreen'
+import { setScreen } from 'SVActions/screens/setScreen'
 import { setFeatureActive } from './setFeatureActive'
 import { upsertActiveRunnerTest } from 'SVActions/runner/upsertActiveRunnerTest'
 

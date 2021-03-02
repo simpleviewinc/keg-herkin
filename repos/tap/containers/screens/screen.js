@@ -6,9 +6,9 @@ import { EmptyScreen } from './emptyScreen'
 import { BuilderScreen } from './builderScreen'
 import { EditorScreen } from './editorScreen'
 import { RunnerScreen } from './runnerScreen'
-import { setScreen } from 'SVActions'
 import { pickKeys } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
+import { setScreen } from 'SVActions/screens/setScreen'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 
 const { CATEGORIES, SCREENS } = Values
