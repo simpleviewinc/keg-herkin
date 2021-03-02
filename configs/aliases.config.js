@@ -9,6 +9,7 @@ const aliases = deepFreeze({
   "HerkinRepos": path.join(HERKIN_ROOT, 'repos'),
   "HerkinConfigs": path.join(HERKIN_ROOT, 'configs'),
   "HerkinTasks": path.join(HERKIN_ROOT, 'tasks'),
+  HerkinModels: path.join(HERKIN_ROOT, 'repos/shared/models'),
   "HerkinBackConstants": path.join(HERKIN_ROOT, 'constants', 'backend'),
   "HerkinFrontConstants": path.join(HERKIN_ROOT, 'constants', 'frontend'),
   "HerkinParkin": path.join(TEST_UTILS_PATH, 'parkin'),

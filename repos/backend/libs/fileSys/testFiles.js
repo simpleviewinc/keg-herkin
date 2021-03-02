@@ -1,6 +1,14 @@
 const path = require('path')
-const { readFile, removeFile, writeFile, pathExists } = require('./fileSys')
 const { validFilename } = require('@keg-hub/jsutils')
+const { buildFileModel } = require('../../utils/buildFileModel')
+const {
+  readFile,
+  removeFile,
+  writeFile,
+  pathExists,
+} = require('./fileSys')
+
+
 /**
  * Checks that the file path exists
  * @param {String} path - file path to check
@@ -42,11 +50,11 @@ const getTestFile = async (config, testPath) => {
 
   const [ __, content ] = await readFile(fullPath)
 
-  return {
+  // Build the file model for the test file
+  return buildFileModel({
     content,
-    fullPath,
-    testPath,
-  } 
+    location: fullPath,
+  })
 }
 
 /**
