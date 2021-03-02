@@ -6,6 +6,7 @@ import { setActiveModal } from 'SVActions/modals'
 import { apiRequest } from 'SVUtils/api/apiRequest'
 import { setActiveSidebar } from 'SVActions/sidebar'
 import { getQueryData } from 'SVUtils/helpers/getQueryData'
+import { getRemoteFileTree } from './files/api/getRemoteFileTree'
 
 const { MODAL_TYPES, SIDEBAR_TYPES } = Values
 
@@ -27,15 +28,14 @@ const loadInitScreen = async queryObj => {
  *
  * @return {void}
  */
-const loadInitTestFile = async queryObj => {
-  // if(activeFeat && activeFeat.content)
-  //   return upsertActiveRunnerTest(activeFeat)
+const loadInitTestFiles = async queryObj => {
 
-  // const testFile = activeFeat && activeFeat.testPath || queryFile
 
-  const filesTree = await apiRequest(`/files/tree`) || {}
-  // load the file tree from root tests folder
-  upsertFileTree(filesTree)
+  const testFile = queryObj?.file
+  
+  // Load the file tree from root tests folder
+  await getRemoteFileTree()
+
 }
 
 /**
@@ -61,7 +61,7 @@ export const init = async () => {
   const queryObj = getQueryData()
 
   // Load the initial test file
-  await loadInitTestFile(queryObj)
+  await loadInitTestFiles(queryObj)
 
   // Load the initial screen
   await loadInitScreen(queryObj)

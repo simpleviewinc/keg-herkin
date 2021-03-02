@@ -20,8 +20,8 @@ const parseFeatures = (featureFiles, testsRoot) => {
     if(!file) return loaded
 
     const features = await FeatureParser.getFeatures({
-      fullPath: file,
-      testPath: file.replace(`${testsRoot}/`, '')
+      location: file,
+      relative: file.replace(`${testsRoot}/`, '')
     })
 
     return loaded.concat(features)
@@ -46,11 +46,11 @@ const loadFeatures = async (config, definitions) => {
     : features
   
   const featuresFiles = featuresWDefs.map(async feat => {
-    const { testPath, fullPath, content, feature, ...ast } = feat
+    const { relative, location, content, feature, ...ast } = feat
     return await buildFileModel({
       ast,
       content,
-      location: feat.fullPath,
+      location,
     })
   })
 

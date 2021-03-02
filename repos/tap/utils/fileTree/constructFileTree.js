@@ -3,7 +3,7 @@ import { findNode } from 'SVUtils/fileTree'
 /**
  * Recursively constructs the fileTree array
  * @param {Array<string>} rootPaths - array of path strings
- * @param {Array<Object>} nodes - { children, id, fullPath, name, type }
+ * @param {Array<Object>} nodes - { children, id, location, name, type }
  * 
  * @param {Array}
  */

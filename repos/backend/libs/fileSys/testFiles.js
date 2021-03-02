@@ -23,18 +23,15 @@ const checkPath = async (path) => {
   }
 }
 
-const deleteTestFile = async (config, testPath) => {
+const deleteTestFile = async (config, location) => {
   const { testsRoot } = config.paths
-  const fullPath = path.join(testsRoot, testPath)
-
-  await checkPath(fullPath)
+  await checkPath(location)
 
   // TODO: double check that removeFile returns a value
-  const [__, deleted] = await removeFile(fullPath)
+  const [__, deleted] = await removeFile(location)
 
   return {
-    fullPath,
-    testPath,
+    location,
     success: Boolean(deleted),
   }
 }
@@ -80,8 +77,8 @@ const saveTestFile = async (config, fullPath, content) => {
   }
 
   return {
-    fullPath,
-    fileName: path.basename(fullPath),
+    location,
+    name: path.basename(fullPath),
     success: Boolean(success),
   }
 }
