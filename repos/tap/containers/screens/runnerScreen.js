@@ -6,14 +6,15 @@ import { Runner } from 'SVComponents/runner/runner'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { Values } from 'SVConstants'
 import { capitalize } from '@keg-hub/jsutils'
+import { useActiveFile } from 'SVHooks/useActiveFile'
+
 
 const { CATEGORIES } = Values
 
 export const RunnerScreen = props => {
   const builtStyles = useStyle(`screens.runner`)
   const parentMethods = useParentMethods()
-
-  const { activeFile } = useStoreItems([CATEGORIES.ACTIVE_FILE]) || {}
+  const activeFile = useActiveFile()
 
   return (
     <View
@@ -21,6 +22,7 @@ export const RunnerScreen = props => {
       style={builtStyles.main}
     >
       <Runner
+        activeFile={activeFile}
         tests={activeFile?.modified || activeFile?.content || ''}
         title={capitalize(activeFile?.fileType || '')}
         parentMethods={parentMethods}

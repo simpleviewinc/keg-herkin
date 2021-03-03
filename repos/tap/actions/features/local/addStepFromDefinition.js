@@ -2,7 +2,6 @@ import { dispatch } from 'SVStore'
 import { uuid, noOpObj } from '@keg-hub/jsutils'
 import { Values, ActionTypes } from 'SVConstants'
 import { copyToDefinitionClipboard } from 'SVUtils/definitions'
-import { getActiveFeature, validateFeatureAction } from 'SVUtils/features'
 
 const { CATEGORIES } = Values
 

@@ -15,7 +15,6 @@ const { CATEGORIES } = Values
 export const useFeature = ({ name, path }) => {
   if (!name && !path) return
   const { features=noPropArr, definitions } = useStoreItems([
-    CATEGORIES.ACTIVE_DATA,
     CATEGORIES.FEATURES,
     CATEGORIES.DEFINITIONS
   ])

@@ -10,6 +10,7 @@ import {
 import { Values } from 'SVConstants'
 import TreeView from 'react-native-final-tree-view'
 import { ChevronDown } from 'SVAssets/icons'
+import { useActiveFile } from 'SVHooks/useActiveFile'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { isEmptyFolderNode, findNode, constructFileTree } from 'SVUtils/fileTree'
 import { toggleRotationStyle } from 'SVUtils/theme'
@@ -148,7 +149,8 @@ export const TreeList = props => {
  */
 const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
 
-  const { activeFile, pendingFiles } = useStoreItems([CATEGORIES.ACTIVE_FILE, CATEGORIES.PENDING_FILES])
+  const activeFile = useActiveFile()
+  const { pendingFiles } = useStoreItems([CATEGORIES.PENDING_FILES])
   const nodeName = useNodeName(node)
   const nodeType = node?.type
 

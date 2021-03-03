@@ -1,5 +1,4 @@
 import { Values } from 'SVConstants'
-import { getStore } from 'SVStore'
 import { EditorTabs } from './editorTabs'
 import { noOpObj, exists } from '@keg-hub/jsutils'
 import { AceEditor } from 'SVComponents/aceEditor'
@@ -9,9 +8,10 @@ import { useStyle } from '@keg-hub/re-theme'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
 import { saveFile } from 'SVActions/files'
-import { removePendingFile, setPendingFile } from 'SVActions/files/local'
+import { useActiveFile } from 'SVHooks/useActiveFile'
+import { usePendingCallback } from 'SVHooks/usePendingCallback'
 
-const { EDITOR_TABS } = Values
+const { EDITOR_TABS, SCREENS } = Values
 
 /**
  * MainEditor
@@ -20,16 +20,8 @@ const { EDITOR_TABS } = Values
  */
 const MainEditor = props => {
   const { activeFile } = props
+  const onChange = usePendingCallback(activeFile, SCREENS.EDITOR)
 
-  const onChange = useCallback((text) => {
-    // it's possible that the local activeFile is not in sync with the store's activeFile when this callback is called
-    // * this happens when you switch files
-    // so fetch from the store to ensure latest value 
-    const { items } = getStore().getState()
-    text && text === items?.activeFile?.content
-      ? removePendingFile()
-      : setPendingFile(text)
-  }, [])
 
   return activeFile?.fileType === 'feature'
     ? (
@@ -53,24 +45,23 @@ const MainEditor = props => {
  * Hook to run the active files tests, or save changes to the active file
  */
 const useTabActions = (props) => {
-  const { editorRef } = props
+  const { editorRef, activeFile } = props
   
   const onRun = useCallback(event => {
     console.log('---Run tests---')
   }, [])
 
   const onSave = useCallback(async setIsSaving => {
-    // saves file and remove it from the pending store if successful
-    if (editorRef.current) {
-      setIsSaving(true)
-      const result = await saveFile({content: editorRef.current?.editor?.getValue()})
-      result?.success && removePendingFile(result?.location)
-    }
+    if(!editorRef.current) return setIsSaving(false)
+
+    setIsSaving(true)
+
+    const content = editorRef.current?.editor?.getValue()
+    content && await saveFile({ ...activeFile, content })
+
     setIsSaving(false)
-  }
-    , 
-    [ editorRef.current ]
-  )
+
+  }, [ editorRef.current, activeFile, SCREENS.EDITOR ])
 
   return { onRun, onSave }
 }
@@ -86,8 +77,12 @@ export const CodeEditor = props => {
     activeTab,
     activeFile=noOpObj
   } = props
+
   const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.SPLIT)
-  const forceFull = !activeFile.isFeature && (tab === EDITOR_TABS.SPLIT || tab === EDITOR_TABS.DEFINITIONS)
+  
+  const forceFull = !activeFile.isFeature &&
+    (tab === EDITOR_TABS.SPLIT || tab === EDITOR_TABS.DEFINITIONS)
+
   const checkTab = forceFull ? EDITOR_TABS.FEATURE : tab
   const editorRef = useRef(null)
   const tabActions = useTabActions({...props, editorRef})
