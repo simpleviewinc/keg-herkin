@@ -79,18 +79,19 @@ export const CodeEditor = props => {
     activeFile=noOpObj
   } = props
 
-  const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.SPLIT)
-  
-  const forceFull = !activeFile.isFeature &&
-    (tab === EDITOR_TABS.SPLIT || tab === EDITOR_TABS.DEFINITIONS)
+  const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.BDD_SPLIT.id)
+  const isFeature = Boolean(activeFile.fileType === EDITOR_TABS.FEATURE.id)
 
-  const checkTab = forceFull ? EDITOR_TABS.FEATURE : tab
+  const forceFull = !isFeature &&
+    (tab === EDITOR_TABS.BDD_SPLIT.id || tab === EDITOR_TABS.DEFINITIONS.id)
+
+  const checkTab = forceFull ? EDITOR_TABS.FEATURE.id : tab
   const editorRef = useRef(null)
   const tabActions = useTabActions({...props, editorRef})
   const editorStyles = useStyle(`screens.editors`)
-  const codeStyles = editorStyles?.[checkTab]
+  const codeStyles = editorStyles?.[checkTab] || noOpObj
   const actionsStyles = editorStyles?.actions
-  
+
   if (!exists(activeFile.content)) return null
 
   /* TODO: Clean up constants and Actions tab
@@ -109,7 +110,7 @@ export const CodeEditor = props => {
 
   return (
     <>
-      {(tab === EDITOR_TABS.FEATURE || tab === EDITOR_TABS.SPLIT) && (
+      {(tab === EDITOR_TABS.FEATURE.id || tab === EDITOR_TABS.BDD_SPLIT.id) && (
         <MainEditor
           aceRef={editorRef}
           key={`${tab}-feature`}
@@ -119,8 +120,8 @@ export const CodeEditor = props => {
           style={codeStyles.feature || codeStyles}
         />
       )}
-      {(tab === EDITOR_TABS.DEFINITIONS ||tab === EDITOR_TABS.SPLIT) &&
-        activeFile?.isFeature && (
+      {(tab === EDITOR_TABS.DEFINITIONS.id ||tab === EDITOR_TABS.BDD_SPLIT.id) &&
+        isFeature && (
           <DefinitionsEditor
             featureEditorRef={editorRef}
             activeFile={activeFile}
@@ -132,7 +133,7 @@ export const CodeEditor = props => {
       <EditorTabs
         activeTab={checkTab}
         onTabSelect={setTab}
-        showFeatureTabs={activeFile.isFeature}
+        showFeatureTabs={isFeature}
         styles={actionsStyles}
         { ...tabActions }
       />

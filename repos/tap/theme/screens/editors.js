@@ -19,7 +19,7 @@ export const editors = theme => {
         minH: `100px`,
       }
     },
-    split: {
+    bddSplit: {
       feature: {
         w: `calc( 50% - ${halfMargin}px )`,
         h: `75vh`,
