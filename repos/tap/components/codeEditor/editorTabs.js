@@ -49,18 +49,9 @@ const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs }) => {
 }
 
 const tabs = [
-  {
-    id: EDITOR_TABS.SPLIT,
-    title: `Split`,
-  },
-  {
-    id: EDITOR_TABS.FEATURE,
-    title: `Feature`,
-  },
-  {
-    id: EDITOR_TABS.DEFINITIONS,
-    title: `Definitions`,
-  }
+  EDITOR_TABS.FEATURE,
+  EDITOR_TABS.DEFINITIONS,
+  EDITOR_TABS.BDD_SPLIT,
 ]
 
 const useActionsTab = (
@@ -102,7 +93,7 @@ const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
 export const EditorTabs = props => {
   const { activeTab, onTabSelect } = props
 
-  const [tab, setTab] = useState(activeTab || EDITOR_TABS.SPLIT)
+  const [tab, setTab] = useState(activeTab || EDITOR_TABS.BDD_SPLIT.id)
   const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
 
   useEffect(() => {

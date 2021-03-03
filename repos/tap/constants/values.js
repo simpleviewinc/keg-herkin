@@ -49,10 +49,12 @@ export const Values = {
     RUNNER: 'runner',
   },
   EDITOR_TABS: {
-    SPLIT: 'split',
-    FEATURE: 'feature',
-    DEFINITIONS: 'definitions',
-    ALL_DEFINITIONS: 'all-definitions',
+    BDD_SPLIT: { id: 'bddSplit', title: `Split` },
+    FEATURE: { id: 'feature', title: `Feature` },
+    DEFINITIONS: { id: 'definitions', title: `Definitions` },
+    OTHER: { id: 'other', title: `Non Test File` },
+    UNIT: { id: 'unit', title: `Unit Tests` },
+    WAYPOINT: { id: 'waypoint', title: `Waypoint Tests` },
   },
   DEFINITION_TABS: {
     ACTIVE: 'active-definitions',

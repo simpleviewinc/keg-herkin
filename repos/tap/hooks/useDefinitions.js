@@ -10,9 +10,6 @@ import { noOpObj } from '@keg-hub/jsutils'
  * @returns {Array} - Definitions that exist in the feature files ast
  */
 export const useDefinitions = (feature=noOpObj, definitionTypes=noOpObj) => {
-
-  console.log(feature.ast)
-
   return useMemo(() => {
     let mappedDefs = []
     if(!feature?.ast || !feature?.ast?.scenarios) return mappedDefs
