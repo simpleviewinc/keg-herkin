@@ -12,7 +12,6 @@ const { CATEGORIES, SCREENS } = Values
  */
 export const useActiveScreenTab = id => {
   const screenModels = useStoreItems(CATEGORIES.SCREENS)
-  console.log(screenModels[SCREENS.EMPTY])
   return useMemo(() => {
     if (screenModels && screenModels[id]) return screenModels[id]
     const model = reduceObj(screenModels, (__, screenModel, obj) => {
