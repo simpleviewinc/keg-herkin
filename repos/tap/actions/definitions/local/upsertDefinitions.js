@@ -1,6 +1,6 @@
 import { devLog } from 'SVUtils'
 import { dispatch } from 'SVStore'
-import { isArr, noPropArr } from '@keg-hub/jsutils'
+import { isArr, noPropArr, noOpObj } from '@keg-hub/jsutils'
 import { Values, ActionTypes } from 'SVConstants'
 import { organizeByType } from 'SVUtils/definitions/organizeByType'
 
@@ -13,7 +13,7 @@ const { CATEGORIES } = Values
  *
  * @returns {void}
  */
-export const upsertDefinitions = (definitions=noPropArr) => {
+export const upsertDefinitions = (definitions=noPropArr, definitionTypes) => {
   if(!isArr(definitions))
     return devLog(
       `warn`,
@@ -29,15 +29,13 @@ export const upsertDefinitions = (definitions=noPropArr) => {
     },
   })
 
-  const organizedDefs = organizeByType(definitions)
-
   // Sort the definitions by type ( given | then | etc... )
   // This makes it easier to match to features when editing
   dispatch({
     type: ActionTypes.UPSERT_ITEMS,
     payload: {
       category: CATEGORIES.DEFINITION_TYPES,
-      items: organizeByType(definitions),
+      items: definitionTypes || organizeByType(definitions),
     },
   })
 
