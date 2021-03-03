@@ -15,6 +15,60 @@ import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
 const { EDITOR_TABS, SCREENS, CATEGORIES } = Values
 
 /**
+ * MainEditor
+ * @param {Object} props
+ * @param {Object} props.activeFile
+ */
+const MainEditor = props => {
+  const { activeFile } = props
+
+  const onChange = usePendingCallback(SCREENS.EDITOR)
+
+  return activeFile?.fileType === 'feature'
+    ? (
+      <FeatureEditor
+        {...props}
+        // onChange={setActiveFilePendingContent}
+        editorId={`feature-editor`}
+      />
+    )
+    : (
+      <AceEditor
+        {...props}
+        fileId={activeFile.location}
+        onChange={onChange}
+        editorId={`code-editor`}
+        mode={'javascript'}
+      />
+    )
+}
+
+/**
+ * Hook to run the active files tests, or save changes to the active file
+ */
+const useTabActions = (props) => {
+  const { editorRef, activeFile } = props
+  
+  const onRun = useCallback(event => {
+    console.log('---Run tests---')
+  }, [])
+
+  const onSave = useCallback(async setIsSaving => {
+    if(!editorRef.current) return setIsSaving(false)
+
+    setIsSaving(true)
+
+    const content = editorRef.current?.editor?.getValue()
+    content && await saveFile({ ...activeFile, content })
+
+    setIsSaving(false)
+
+  }, [ editorRef.current, activeFile, SCREENS.EDITOR ])
+
+  return { onRun, onSave }
+}
+
+/**
  * CodeEditor
  * @param {Object} props
  * @param {String} props.initialTab - Initial tab to start as active
@@ -32,6 +86,7 @@ export const CodeEditor = props => {
   const editorRef = useRef(null)
   
   const tabActions = useEditorActions(activeFile, editorRef)
+  const { pendingFiles=noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
 
   const editorStyles = useStyle(`screens.editors`)
   const actionsStyles = editorStyles?.actions
@@ -63,7 +118,7 @@ export const CodeEditor = props => {
           activeFile={activeFile}
           setTab={setTab}
           editorId={`${activeFile.fileType}-editor`}
-          value={activeFile?.modified || activeFile?.content || ''}
+          value={pendingFiles[activeFile?.location] || activeFile?.content || ''}
           style={codeStyles.feature || codeStyles}
         />
       )}

@@ -23,7 +23,6 @@ const Model = {
   mime: 'text/plain',
   ast: {},
   lastModified: 0,
-  modified: false,
   uuid: '',
 }
 

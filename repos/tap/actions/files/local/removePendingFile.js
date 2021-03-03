@@ -14,7 +14,6 @@ export const removePendingFile = (activeFile, screenId) => {
   // Update active file to not be modified
   activeFile &&
     screenId &&
-    activeFile.modified &&
     setActiveFile({ ...activeFile, modified: false }, false, screenId)
 
   dispatch({
