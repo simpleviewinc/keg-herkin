@@ -10,7 +10,7 @@ import { upsertDefinitions } from '../../definitions/local'
  * @return {void}
  */
 export const loadBddTests = async () => {
-  const { features, definitions } = await apiRequest('/bdd')
+  const { features, definitions, definitionTypes } = await apiRequest('/bdd')
   upsertFeatures(features)
-  upsertDefinitions(definitions)
+  upsertDefinitions(definitions, definitionTypes)
 }
