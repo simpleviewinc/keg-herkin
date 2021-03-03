@@ -1,13 +1,13 @@
-import { Values } from 'SVConstants'
 import React from 'react'
+import { Values } from 'SVConstants'
 import { noOpObj } from '@keg-hub/jsutils'
 import { View } from '@keg-hub/keg-components'
+import { useFeature } from 'SVHooks/useFeature'
 import { DefinitionList } from './definitionList'
 import { DefinitionTabs } from './definitionTabs'
+import { useSelector } from 'SVHooks/useSelector'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 import { ActiveDefinitionsEditor } from './activeDefinitionsEditor'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { useFeature } from 'SVHooks/useFeature'
 
 const { DEFINITION_TABS, CATEGORIES } = Values
 
@@ -34,7 +34,7 @@ export const DefinitionsEditor = props => {
     ...args
   } = props
 
-  const { definitions } = useStoreItems([ CATEGORIES.DEFINITIONS ])
+  const { definitionTypes } = useSelector(CATEGORIES.DEFINITION_TYPES)
   const [tab, setTab] = useActiveTab(activeTab || DEFINITION_TABS.ACTIVE)
   const { definitions: activeDefs } = useFeature({ path: activeFile?.location }) || {}
 
@@ -60,7 +60,7 @@ export const DefinitionsEditor = props => {
           feature={feature}
           contextRef={featureEditorRef}
           styles={styles.list}
-          definitions={list || definitions}
+          definitions={list || definitionTypes}
         />
       )}
     </View>

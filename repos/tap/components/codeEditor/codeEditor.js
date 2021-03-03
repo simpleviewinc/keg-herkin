@@ -20,10 +20,6 @@ const { EDITOR_TABS, SCREENS } = Values
  */
 const MainEditor = props => {
   const { activeFile } = props
-  
-  console.log(`---------- Main editor activeFile.location ----------`)
-  console.log(activeFile.location)
-  
   const onChange = usePendingCallback(activeFile, SCREENS.EDITOR)
 
 

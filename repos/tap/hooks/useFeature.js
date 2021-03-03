@@ -14,9 +14,10 @@ const { CATEGORIES } = Values
  */
 export const useFeature = ({ name, path }) => {
   if (!name && !path) return
-  const { features=noPropArr, definitions } = useStoreItems([
+
+  const { features=noPropArr, definitionTypes } = useStoreItems([
     CATEGORIES.FEATURES,
-    CATEGORIES.DEFINITIONS
+    CATEGORIES.DEFINITION_TYPES
   ])
 
   const feature = features.find((feature) => {
@@ -25,7 +26,7 @@ export const useFeature = ({ name, path }) => {
       : path && feature?.location === path
   })
 
-  const defs = useDefinitions(feature, definitions)
+  const definitions = useDefinitions(feature, definitionTypes)
 
-  return { feature, definitions: defs }
+  return { feature, definitions }
 }

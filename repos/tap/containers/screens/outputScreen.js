@@ -4,7 +4,6 @@ import { useStyle } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components'
 import { AceEditor } from 'SVComponents/aceEditor'
 import { useActiveFile } from 'SVHooks/useActiveFile'
-import { useSelector, shallowEqual } from 'react-redux'
 import React, { useCallback, useMemo, useState } from 'react'
 
 const { CATEGORIES } = Values

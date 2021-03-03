@@ -3,6 +3,7 @@ export const Values = {
     STEPS: 'steps',
     FEATURES: 'features',
     DEFINITIONS: 'definitions',
+    DEFINITION_TYPES: 'definitionTypes',
     UNIT: 'unit',
     WAYPOINT: 'waypoint',
     ACTIVE_FEATURE: 'activeFeature',

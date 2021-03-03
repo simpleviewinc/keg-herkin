@@ -1,7 +1,7 @@
 import React from 'react'
 import { Values } from 'SVConstants'
 import { useStyle } from '@keg-hub/re-theme'
-import { useSelector } from 'SVHooks'
+import { useSelector } from 'SVHooks/useSelector'
 import {
   Label,
   Option,
@@ -13,8 +13,8 @@ const { CATEGORIES, EMPTY_STEP } = Values
 
 export const SelectDefinition = props => {
   const { styles, step, selectAction } = props
-  const { definitions } = useSelector(CATEGORIES.DEFINITIONS)
-  const definitionsFromType = step.type && definitions[step.altType || step.type]
+  const { definitionTypes } = useSelector(CATEGORIES.DEFINITION_TYPES)
+  const definitionsFromType = step.type && definitionTypes[step.altType || step.type]
 
   const selectStyles = useStyle('definitions.select', styles)
 
