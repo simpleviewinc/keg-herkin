@@ -24,12 +24,8 @@ const getScreen = screenId => {
  */
 export const setActiveFile = (fileModel, content, screenId) => {
   const screenModel = getScreen(screenId)
-
-  // If no screen is found, then we can't set the file
-  // So log an error and return
   if(!screenModel) return devLog(`error`, `Can not find screen from id`, screenId)
-  
-  const updatedFile = { ...fileModel, modified: content || fileModel.modified }
+  const updatedFile = { ...fileModel, modified: content }
 
   dispatch({
     type: ActionTypes.SET_ITEM,
