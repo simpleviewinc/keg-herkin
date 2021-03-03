@@ -83,10 +83,11 @@ export const TestSelectorModal = (props) => {
   const { feature } = useFeature({ name: testName }) || {}
 
   const loadTests = useCallback(() => {
-
     testName === Values.CREATE_NEW_FILE
       ? createFeatureFile(selectedTab)
-      : setActiveFileFromType(feature) && setScreen(selectedTab)
+      : feature 
+        ? setActiveFileFromType(feature, selectedTab) && setScreen(selectedTab)
+        : devLog(`warn`, `Feature from '${location}' does not exist!`)
 
       setModalVisibility(false)
   }, 
@@ -151,12 +152,7 @@ const TestNameSelect = ({styles, features, setTestName}) => {
   const onValueChange = useCallback((location) => {
     // fetch the feature file content from redux
     const feature = features.find((feature) => feature.location === location)
-
-    feature 
-      ? setActiveFileFromType(feature)
-      : devLog(`warn`, `Feature from '${location}' does not exist!`)
-
-    setTestName(feature.name)
+    setTestName(feature?.name)
   }, [features, setTestName])
 
   return (
