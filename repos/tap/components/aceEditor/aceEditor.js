@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useCallback } from 'react'
 import ReactAce from '@ltipton/react-ace-editor'
 import { useTheme } from '@keg-hub/re-theme'
 import { ThemeOverrides } from './themeOverrides'
@@ -19,6 +19,7 @@ const defOptions = {
   scrollPastEnd: true,
   fixedWidthGutter: true,
   showPrintMargin: false,
+  fileId: `empty-file`,
 }
 
 const getEditor = editorRef => editorRef?.current?.editor
@@ -28,6 +29,7 @@ const useConfigureEditor = (props, editorRef) => {
 
   const {
     fontSize,
+    fileId,
     maxLines,
     fontFamily,
     scrollMargin,
@@ -41,6 +43,8 @@ const useConfigureEditor = (props, editorRef) => {
     pickKeys(props, Object.keys(defOptions))
   )
 
+  const [ activeId, setActiveId ] = useState(fileId)
+
   // Set the value and editors separate from the reset of the config
   // This way value updates don't also call all the editor setting over and over again
   useEffect(() => {
@@ -49,15 +53,21 @@ const useConfigureEditor = (props, editorRef) => {
     const editor = getEditor(editorRef)
     if(!editor) return
 
-    // The Ace editor only allows setting the initial text data
-    // So we have to call the ace editor API directly to update the text content
-    editor?.setValue(value, -1)
+    if(fileId !== activeId){
+      // The Ace editor only allows setting the initial text data
+      // So we have to call the ace editor API directly to update the text content
+      setActiveId(fileId)
+      editor?.setValue(value, -1)
+    }
 
     // Call resize after all settings have been updated
     editor?.resize()
 
   }, [
     value,
+    fileId,
+    activeId,
+    setActiveId,
     editorRef?.current,
   ])
 
