@@ -32,7 +32,7 @@ const MainEditor = props => {
     ? (
       <FeatureEditor
         {...props}
-        // onChange={setActiveFilePendingContent}
+        onChange={onChange}
         editorId={`feature-editor`}
       />
     )
