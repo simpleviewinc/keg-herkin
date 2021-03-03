@@ -1,45 +1,38 @@
 import { devLog } from 'SVUtils'
+import { get } from '@keg-hub/jsutils'
 import { dispatch, getStore } from 'SVStore'
 import { Values, ActionTypes } from 'SVConstants'
 import { getActiveScreen } from 'SVUtils/helpers/getActiveScreen'
 
-const { CATEGORIES } = Values
+const { CATEGORIES, SUB_CATEGORIES } = Values
+
+/**
+ * Gets the screen to be updated based on the passed in screen id or the currently active screen
+ * @param {string} screenId - Id of the screen to find
+ *
+ * @return {Object} - Found active screen model
+ */
+const getScreen = screenId => {
+  const { items } = getStore().getState()
+  return screenId && get(items, [CATEGORIES.SCREENS, screenId]) || getActiveScreen(items)
+}
 
 /**
  * setActiveFile
  * @param {Object} fileModel - file to set as the activeFile 
- * @param {string=} content - use as content as opposed to pulling from api
+ * @param {string=} content - use as content of the file, overrides the fileModels content
  */
-export const setActiveFile = async (model, content, screenId) => {
-  try {
-    dispatch({
-      type: ActionTypes.SET_ITEMS,
-      payload: {
-        category: CATEGORIES.ACTIVE_FILE,
-        items: { ...model, modified: content || model.modified },
-      },
-    })
-  } 
-  catch (error) {
-    devLog('warn', `setActiveFile error: ${error}`)
-  }
-}
-
-/*
-
-
 export const setActiveFile = async (fileModel, content, screenId) => {
-  const { items } = getStore().getState()
-  const activeScreen = getActiveScreen(items)
+  const screenModel = getScreen(screenId)
 
   dispatch({
     type: ActionTypes.SET_ITEM,
     payload: {
       category: CATEGORIES.SCREENS,
-      key: activeScreen.id,
+      key: screenModel.id,
       item: {
-        ...activeScreen,
-        [CATEGORIES.ACTIVE_FILE]: {
+        ...screenModel,
+        [SUB_CATEGORIES.ACTIVE_FILE]: {
           ...fileModel,
           modified: content || fileModel.modified
         }
@@ -49,4 +42,3 @@ export const setActiveFile = async (fileModel, content, screenId) => {
 }
 
 
-*/

@@ -2,7 +2,7 @@ const { getType } = require('mime')
 const { fileModel } = require('HerkinModels')
 const { HERKIN_ROOT } = require('HerkinBackConstants')
 const { getTestFileType } = require('./getTestFileType')
-const { validFilename, uuid } = require('@keg-hub/jsutils')
+const { uuid } = require('@keg-hub/jsutils')
 const { getLastModified } = require('../libs/fileSys/fileSys')
 
 const buildFileModel = async ({ location, ...modelData }) => {

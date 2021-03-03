@@ -1,12 +1,14 @@
-import React, { useCallback, useRef, useState, useEffect } from "react"
-import { getStore } from 'SVStore'
-import { removePendingFile, setPendingFile } from 'SVActions/files/local'
+import { Values } from 'SVConstants'
 import { RunnerTabs } from './runnerTabs'
 import { useStyle } from '@keg-hub/re-theme'
+import { ToRun } from 'SVComponents/runner/toRun'
 import { useTestRunner } from 'SVHooks/useTestRunner'
 import { Results } from 'SVComponents/runner/results'
-import { ToRun } from 'SVComponents/runner/toRun'
 import { TestsRunning } from 'SVComponents/runner/testsRunning'
+import { usePendingCallback } from 'SVHooks/usePendingCallback'
+import React, { useCallback, useRef, useState, useEffect, useMemo } from "react"
+
+const { SCREENS } = Values
 
 const useTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
   activeTab !== tab && setActiveTab(tab)
@@ -16,6 +18,7 @@ const useTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
 export const Runner = props => {
 
   const {
+    activeFile,
     autoRun=false,
     activeTab,
     parentMethods,
@@ -44,7 +47,6 @@ export const Runner = props => {
     toggleResultsRef.current = setResultsToggle
   }, [ toggleResultsRef && toggleResultsRef.current ])
 
-
   const onRunTests = useTestRunner({
     editorRef,
     setIsRunning,
@@ -53,6 +55,8 @@ export const Runner = props => {
     toggleToRun: toggleToRunRef.current,
     toggleResults: toggleResultsRef.current,
   })
+
+  const toRunOnChange = usePendingCallback(activeFile, SCREENS.RUNNER)
 
   useEffect(() => {
     autoRun && onRunTests()
@@ -67,13 +71,7 @@ export const Runner = props => {
         title={title}
         prefix={prefix}
         toggleHandel={setToggleToRun}
-        onChange={text => {
-          const { items } = getStore().getState()
-
-          text && text === items?.activeFile?.content
-            ? removePendingFile()
-            : setPendingFile(text)
-        }}
+        onChange={toRunOnChange}
       />
       <Results
         results={testResults}

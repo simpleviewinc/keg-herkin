@@ -1,10 +1,12 @@
 import { Tab } from './tab'
+import { Values } from 'SVConstants'
 import { useStyle } from '@keg-hub/re-theme'
+import { useActiveFile } from 'SVHooks/useActiveFile'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { checkCall, mapColl, noOpObj } from '@keg-hub/jsutils'
 import React, { useMemo, useCallback, useState, useLayoutEffect } from 'react'
 import { View, isValidComponent, renderFromType } from '@keg-hub/keg-components'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { Values } from 'SVConstants'
+
 
 const { CATEGORIES } = Values
 
@@ -42,12 +44,8 @@ const Bar = ({ children, styles }) => {
 
 const Tabs = ({ activeId, tabs, styles, onTabSelect }) => {
 
-  /**
-   * TODO: should extract useStoreItem ACTIVE_FILE method once we build out the separation of content by tabs
-   *  * store fileModel per valid tab - allowing different files to be loaded on each tab
-   *  * we should then be able to `showIndicator` based on the current tab.activeFile.modified
-   */
-  const { activeFile=noOpObj, pendingFiles=noOpObj } = useStoreItems([CATEGORIES.ACTIVE_FILE, CATEGORIES.PENDING_FILES])
+  const activeFile = useActiveFile()
+  const { pendingFiles=noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
 
   return mapColl(tabs, (index, tab) => {
     const { Tab:Component, tab:component, id, key, title, disableTab, ...tabProps } = tab

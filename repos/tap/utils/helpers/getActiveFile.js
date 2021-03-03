@@ -1,6 +1,7 @@
 import { Values } from 'SVConstants'
 import { getStore } from 'SVStore'
 import { pickKeys } from '@keg-hub/jsutils'
+
 const { CATEGORIES } = Values
 
 /**
@@ -9,16 +10,21 @@ const { CATEGORIES } = Values
  * @public
  * @export
  * @param {Object} items - Redux store items containing the features and activeData
+ * @param {string} screenId - Id of the screen the file is active on
  *
  * @return {Object} - Found active feature
  */
-export const getActiveFeature = items => {
+export const getActiveFile = (items, itemId) => {
   const storeItems = items || getStore()?.getState()?.items
+  const screenModels = storeItems[CATEGORIES.SCREENS]
 
-  const { activeData, features } = pickKeys(storeItems, [
-    CATEGORIES.FEATURES,
-    CATEGORIES.ACTIVE_DATA,
-  ])
+  return Object.values(screenModels)
+    .reduce((found, model) => {
+      return found
+        ? found
+        : itemId
+          ? screenModels[itemId].activeFile
+          : model.active && model.activeFile
+    }, false)
 
-  return features && features[activeData?.feature]
 }

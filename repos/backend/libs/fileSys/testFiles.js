@@ -63,7 +63,8 @@ const getTestFile = async (config, testPath) => {
 const saveTestFile = async (config, location, content) => {
 
   const { testsRoot } = config.paths
-  if (!validFilename(path.basename(location))) throw new Error(`[API - Files] Filename is invalid!`)
+  // if (!validFilename(path.basename(location))) throw new Error(`[API - Files] Filename is invalid!`)
+
   const inTestRoot = location.startsWith(testsRoot)
   if (!inTestRoot) throw new Error(`[API - Files] File must be saved to the mounted test folder!`)
 

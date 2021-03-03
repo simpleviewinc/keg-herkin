@@ -1,5 +1,7 @@
 export * from './definitions'
 export * from './features'
+export * from './unit'
+export * from './waypoint'
 export * from './init'
 export * from './runner'
 export * from './scenarios'

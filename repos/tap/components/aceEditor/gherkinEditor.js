@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react'
 import { useTheme } from '@keg-hub/re-theme'
 import { Values, ActionTypes } from 'SVConstants'
-import { noPropArr, noOpObj, pickKeys } from '@keg-hub/jsutils'
+import { useActiveFile } from 'SVHooks/useActiveFile'
 import { useSelector, shallowEqual } from 'react-redux'
+import { noPropArr, noOpObj, pickKeys } from '@keg-hub/jsutils'
 import ReactGherkinEditor from '@ltipton/react-gherkin-editor'
+
 
 const { CATEGORIES } = Values
 
@@ -14,8 +16,13 @@ const { CATEGORIES } = Values
  * @returns {Object}
  */
 const useAutoComplete = (feature, definitions) => useCallback((type, text) => {
+  // TODO: Create a new item in the store for the parsed definitions objects
+  // Then pull in this item, instead of the definitions fileModels
+  // Currently this is broken because definitions is an array of file models, NOT parsed definitions objects
   const stepDefs = definitions[type.toLowerCase()]
-  const matches = stepDefs.filter(def => def.name.startsWith(text))
+  const matches = stepDefs
+    ? stepDefs.filter(def => def.name.startsWith(text))
+    : noPropArr
 
   return matches.map(match => ({
     caption: match.name,
@@ -40,12 +47,12 @@ export const GherkinEditor = props => {
     ...args
   } = props
 
-  const { activeData, features, definitions } = useSelector(({ items }) => pickKeys(
+  const { definitions } = useSelector(({ items }) => pickKeys(
     items,
-    [ CATEGORIES.ACTIVE_DATA, CATEGORIES.FEATURES, CATEGORIES.DEFINITIONS ]
+    [ CATEGORIES.DEFINITIONS ]
   ), shallowEqual)
 
-  const feature = features && features[activeData?.feature]
+  const feature = useActiveFile()
   const autoComplete = useAutoComplete(feature, definitions)
 
 

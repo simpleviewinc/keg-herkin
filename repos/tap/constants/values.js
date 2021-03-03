@@ -3,12 +3,12 @@ export const Values = {
     STEPS: 'steps',
     FEATURES: 'features',
     DEFINITIONS: 'definitions',
+    UNIT: 'unit',
+    WAYPOINT: 'waypoint',
     ACTIVE_FEATURE: 'activeFeature',
     ACTIVE_TAB: 'activeTab',
-    ACTIVE_DATA: 'activeData',
     ACTIVE_RUNNER_TESTS: 'activeRunnerTests',
     FEATURE: 'feature',
-    ACTIVE_FILE: 'activeFile',
     SCREEN: 'screen',
     SCREENS: 'screens',
     COPY_STEP: 'copy_step',
@@ -18,6 +18,7 @@ export const Values = {
     PENDING_FILES: 'pendingFiles'
   },
   SUB_CATEGORIES: {
+    ACTIVE_FILE: 'activeFile',
     RUNNER_CONTENT: 'runnerContent',
     MODIFIED_CONTENT: 'modified',
     NODES: 'nodes'
