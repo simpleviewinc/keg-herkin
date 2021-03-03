@@ -11,6 +11,10 @@ import { noOpObj, exists, plural } from '@keg-hub/jsutils'
 import { usePendingCallback } from 'SVHooks/usePendingCallback'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
+import { saveFile } from 'SVActions/files'
+import { usePendingCallback } from 'SVHooks/usePendingCallback'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { setActiveFile } from 'SVActions/files/local/setActiveFile'
 
 const { EDITOR_TABS, SCREENS, CATEGORIES } = Values
 
@@ -59,8 +63,10 @@ const useTabActions = (props) => {
     setIsSaving(true)
 
     const content = editorRef.current?.editor?.getValue()
-    content && await saveFile({ ...activeFile, content })
-
+    // save the file and update active file
+    content 
+      && await saveFile({ ...activeFile, content })
+      && setActiveFile(activeFile, content, SCREENS.EDITOR)
     setIsSaving(false)
 
   }, [ editorRef.current, activeFile, SCREENS.EDITOR ])

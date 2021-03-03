@@ -1,5 +1,4 @@
 import { devLog } from 'SVUtils'
-import { dispatch, getStore } from 'SVStore'
 import { saveApiFile } from 'SVUtils/api'
 import { noOpObj } from '@keg-hub/jsutils'
 import { removePendingFile } from '../local/removePendingFile'
@@ -19,8 +18,10 @@ export const saveFile = async (fileToSave=noOpObj, screenId) => {
 
   const result = await saveApiFile(location, content)
 
-  return result?.success
-    ? removePendingFile(fileToSave, screenId)
-    : false
+  if (result?.success) {
+    removePendingFile(fileToSave, screenId)
+    return true
+  }
+  return false
 
 }
