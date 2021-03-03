@@ -1,23 +1,23 @@
 const { Given } = require('HerkinParkin')
-const { getBrowserContext } = require('HerkinSetup')
-const { getPage } = getBrowserContext()
+const { getElement } = require('HerkinPlaywright')
 
+/**
+ * Finds the element matching `ancestorSelector`, and
+ * registers it as the current ancestor
+ * @param {string} ancestorSelector 
+ * @param {Object} world 
+ */
 const isAncestor = async (ancestorSelector, world) => {
-  const page = await getPage()
-
-  const ancestor = page.$(ancestorSelector)
-  if (!ancestor)
-    throw new Error(`Could not find any element with selector ${ancestorSelector}`)
+  const ancestor = getElement(ancestorSelector)
 
   world.meta = {
     ancestor,
     ancestorSelector,
   }
 
-  return page
+  return ancestor
 }
 
-Given(`the element {string} is ancestor`, isAncestor)
-Given(`the element {string} is parent`, isAncestor)
+Given(`the element {string} is ancestor/parent`, isAncestor)
 
 module.exports = { isAncestor }

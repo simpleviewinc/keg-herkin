@@ -1,6 +1,10 @@
 const { Then } = require('HerkinParkin')
 const { getElement } = require('HerkinPlaywright')
 
+/**
+ * Checks that the element is not on the DOM
+ * @param {string} selector 
+ */
 const isDetached = async selector => {
   let element = null;
   try {

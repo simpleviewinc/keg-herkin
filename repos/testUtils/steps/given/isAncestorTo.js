@@ -2,7 +2,15 @@ const { Given } = require('HerkinParkin')
 const { getBrowserContext } = require('HerkinSetup')
 const { getPage } = getBrowserContext()
 
-
+/**
+ * @param {string} ancestorSelector - ancestor of descendent
+ * @param {string} descendentSelector - descendent to get
+ * @param {Object} options
+ * @param {boolean} [options.deep=true] - if true, will search deeply in ancestor tree for the descendent. If false, only looks 
+ * at ancestor's immediate children.
+ * @return {ElementHandle} - the playwright element that is a descendent of ancestor.
+ * @throws {Error} if no element is found
+ */
 const getDescendentElement = async (ancestorSelector, descendentSelector, { deep=true } = {}) => {
   const page = await getPage()
   const descendent = await page.$(`${ancestorSelector} ${deep ? '>>' : '>'} ${descendentSelector}`)
@@ -12,8 +20,13 @@ const getDescendentElement = async (ancestorSelector, descendentSelector, { deep
   return descendent
 }
 
-const getChildElement = (...args) => getDescendentElement(...args, { deep: false })
-
+/**
+ * 
+ * @param {string} ancestorSelector 
+ * @param {string} descendentType 
+ * @param {string} descendentSelector 
+ * @param {string} world 
+ */
 const isAncestorTo = async (ancestorSelector, descendentType, descendentSelector, world) => {
   const page = await getPage()
 

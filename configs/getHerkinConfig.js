@@ -7,12 +7,12 @@ const { deepMerge, get, isStr, isFunc, noOpObj } = require('@keg-hub/jsutils')
 const { KEG_HERKIN_CONFIG_PATH } = process.env
 
 /**
- * TODO: replace with jsutils' tryRequire once its PR is merged in
+ * TODO: replace with jsutils' tryRequireSync once its PR is merged in
  * Tries to require the path, returning null if unable to.
  * Does not throw.
  * @param {string} path 
  */
-const tryRequire = path => {
+const tryRequireSync = path => {
   try {
     return fs.existsSync(path) 
       ? require(path)
@@ -36,7 +36,7 @@ const getConfigAtPath = pathToCheck => {
   const paths = validNames.map(name => path.join(pathToCheck, name))
 
   for (const path of paths) {
-    const config = tryRequire(path)
+    const config = tryRequireSync(path)
     if (config) return config
   }
 

@@ -1,4 +1,4 @@
-const { tryRequire } = require('@keg-hub/jsutils/src/node')
+const { tryRequireSync } = require('@keg-hub/jsutils/src/node')
 const path = require('path')
 
 /**
@@ -16,7 +16,7 @@ const getClientWorld = () => {
     path.join(clientSupportPath, 'world'),
   ]
 
-  const clientExport = worldPaths.find(tryRequire)
+  const clientExport = worldPaths.find(tryRequireSync)
   return clientExport && clientExport.world
 }
 

@@ -1,15 +1,6 @@
 const { Then } = require('HerkinParkin')
 const { evalElement } = require('HerkinPlaywright')
-const { isObj } = require('@keg-hub/jsutils')
-
-/**
- * Validates that the world object has a registered ancestor
- * @param {Object} world 
- */
-const validateWorld = world => {
-  if (!isObj(world.meta) || !isObj(world.meta.ancestor))
-    throw new Error('Use an ancestor-registration step before running this step')
-}
+const { checkForAncestor } = require('HerkinSupport/validate')
 
 /**
  * For the element matching `selector`, descendent of the registered ancestor,
@@ -19,7 +10,7 @@ const validateWorld = world => {
  * @param {Object} world 
  */
 const descendentContainsText = async (selector, data, world) => {
-  validateWorld(world)
+  checkForAncestor(world)
   const content = await evalElement(`${world.meta.ancestorSelector} ${selector}`, elem => elem.textContent)
   expect(content).toEqual(expect.stringContaining(data))
 }
@@ -32,7 +23,7 @@ const descendentContainsText = async (selector, data, world) => {
  * @param {Object} world 
  */
 const childContainsText = async (selector, data, world) => {
-  validateWorld(world)
+  checkForAncestor(world)
   const content = await world.meta.ancestor.$eval(selector, elem => elem.textContent)
   expect(content).toEqual(expect.stringContaining(data))
 }

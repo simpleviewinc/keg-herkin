@@ -2,6 +2,11 @@ const { Then } = require('HerkinParkin')
 const { getBrowserContext } = require('HerkinSetup')
 const { getPage } = getBrowserContext()
 
+/**
+ * Expects the element matching `selector` to contain the text `data`
+ * @param {string} selector 
+ * @param {string} data 
+ */
 const inputContainsText = async (selector, data) => {
   const page = await getPage()
   const inputSelector = `input${selector}`
