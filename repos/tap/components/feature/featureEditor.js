@@ -27,6 +27,7 @@ export const FeatureEditor = props => {
   return (
     <AceEditor
       {...props}
+      fileId={activeFile.location}
       mode='gherkin'
       onChange={onChange || onFeatureEdit}
     />

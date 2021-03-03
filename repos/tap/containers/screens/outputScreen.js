@@ -40,6 +40,7 @@ export const RunnerScreen = props => {
       style={theme.get(`screens.editors.main`)}
     >
       <TestRunner
+        fileId={feature.location}
         editorId={`runner-editor`}
         value={testsOutcome}
         style={builtStyles}

@@ -22,8 +22,9 @@ const getScreen = screenId => {
  * @param {Object} fileModel - file to set as the activeFile 
  * @param {string=} content - use as content of the file, overrides the fileModels content
  */
-export const setActiveFile = async (fileModel, content, screenId) => {
+export const setActiveFile = (fileModel, content, screenId) => {
   const screenModel = getScreen(screenId)
+  const updatedFile = { ...fileModel, modified: content || fileModel.modified }
 
   dispatch({
     type: ActionTypes.SET_ITEM,
@@ -32,13 +33,12 @@ export const setActiveFile = async (fileModel, content, screenId) => {
       key: screenModel.id,
       item: {
         ...screenModel,
-        [SUB_CATEGORIES.ACTIVE_FILE]: {
-          ...fileModel,
-          modified: content || fileModel.modified
-        }
+        [SUB_CATEGORIES.ACTIVE_FILE]: updatedFile,
       },
     },
   })
+  
+  return updatedFile
 }
 
 

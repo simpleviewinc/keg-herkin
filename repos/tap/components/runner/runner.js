@@ -66,6 +66,7 @@ export const Runner = props => {
     <>
       <ToRun
         tests={tests}
+        fileId={activeFile.location}
         styles={runnerStyles}
         editorRef={editorRef}
         title={title}
