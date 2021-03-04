@@ -2,7 +2,7 @@ import { Values } from 'SVConstants'
 import { EditorTabs } from './editorTabs'
 import { useStyle } from '@keg-hub/re-theme'
 import { EditorFromType } from './editorFromType'
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 import { useEditorActions } from './useEditorActions'
 import { noOpObj, exists, plural, capitalize } from '@keg-hub/jsutils'
@@ -37,6 +37,15 @@ export const CodeEditor = props => {
 
   if (!exists(activeFile.content)) return null
 
+  useEffect(() => {
+    /**
+     * for edge case of:
+     * - if we're on the definitions tab and we switch to a non feature file
+     * - we need to switch the tab to the 'feature' tab so we can see the content
+     */
+    activeFile && activeFile.fileType !== 'feature' && setTab(EDITOR_TABS.FEATURE.id)
+  }, [tab, setTab, activeFile])
+  
   /* TODO: Clean up constants and Actions tab
     * Constants
       * FEATURE should be it's own constant
