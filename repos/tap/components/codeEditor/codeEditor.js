@@ -8,39 +8,11 @@ import { useStyle } from '@keg-hub/re-theme'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
 import { saveFile } from 'SVActions/files'
+import { EditorFromType } from './editorFromType'
 import { useActiveFile } from 'SVHooks/useActiveFile'
 import { usePendingCallback } from 'SVHooks/usePendingCallback'
 
 const { EDITOR_TABS, SCREENS } = Values
-
-/**
- * MainEditor
- * @param {Object} props
- * @param {Object} props.activeFile
- */
-const MainEditor = props => {
-  const { activeFile } = props
-  const onChange = usePendingCallback(activeFile, SCREENS.EDITOR)
-
-
-  return activeFile?.fileType === 'feature'
-    ? (
-      <FeatureEditor
-        {...props}
-        // onChange={setActiveFilePendingContent}
-        editorId={`feature-editor`}
-      />
-    )
-    : (
-      <AceEditor
-        {...props}
-        fileId={activeFile.location}
-        onChange={onChange}
-        editorId={`code-editor`}
-        mode={'javascript'}
-      />
-    )
-}
 
 /**
  * Hook to run the active files tests, or save changes to the active file
@@ -111,21 +83,24 @@ export const CodeEditor = props => {
   return (
     <>
       {(tab === EDITOR_TABS.FEATURE.id || tab === EDITOR_TABS.BDD_SPLIT.id) && (
-        <MainEditor
+        <EditorFromType
+          editorType={activeFile.fileType}
           aceRef={editorRef}
           key={`${tab}-feature`}
           activeFile={activeFile}
           setTab={setTab}
+          editorId={`${activeFile.fileType}-editor`}
           value={activeFile?.modified || activeFile?.content || ''}
           style={codeStyles.feature || codeStyles}
         />
       )}
       {(tab === EDITOR_TABS.DEFINITIONS.id ||tab === EDITOR_TABS.BDD_SPLIT.id) &&
         isFeature && (
-          <DefinitionsEditor
-            featureEditorRef={editorRef}
-            activeFile={activeFile}
+          <EditorFromType
+            editorType={EDITOR_TABS.DEFINITIONS.id}
+            aceRef={editorRef}
             key={`${tab}-definitions`}
+            activeFile={activeFile}
             editorId={`definitions-editor`}
             styles={codeStyles.definitions || codeStyles}
           />

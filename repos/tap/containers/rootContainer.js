@@ -7,12 +7,16 @@ import {
 } from 'SVComponents'
 import { SidebarContent } from 'SVComponents/sidebar'
 import { Screen } from './screens/screen'
+import { useActiveFile } from 'SVHooks'
 
 export const RootContainer = withAppHeader('KeGherkin Editor', props => {
   const theme = useTheme()
   const containerStyles =  theme.containers.root
 
-  const [sidebarToggled, setSidebarToggled] = useState(false)
+  const activeFile = useActiveFile()
+  // Auto open the sidebar to allow selecting a file, if no file is already active
+  const [sidebarToggled, setSidebarToggled] = useState(!Boolean(activeFile.location))
+
   return (
     <View className={`tap-main`} style={containerStyles.main}>
       <Sidebar 
