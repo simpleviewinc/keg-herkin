@@ -1,4 +1,4 @@
-const { snakeCase, validate, isObj } = require('@keg-hub/jsutils')
+const { snakeCase, validate, isObj, get } = require('@keg-hub/jsutils')
 const { replaceTemplateVars } = require('./replaceTemplateVars')
 
 const getEnvName = env => `HERKIN_` + snakeCase(env).toUpperCase()
@@ -24,7 +24,10 @@ const setMountEnvs = (config, options={}) => {
 
   // app envs
   const appUrlEnv = getEnvName('appUrl')
-  process.env[appUrlEnv] = replaceTemplateVars(config.app.url, config, options)
+  const appUrl = get(config, 'app.url')
+  if (appUrl) {
+    process.env[appUrlEnv] = replaceTemplateVars(appUrl, config, options)
+  }
 }
 
 module.exports = {
