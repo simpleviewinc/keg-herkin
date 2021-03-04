@@ -40,13 +40,13 @@ const SurfaceHeader = props => {
         </H3>
       )}
       RightComponent={hasToggle && (
-          <DrawerToggle
-            onPress={onTogglePress}
-            toggled={toggled}
-            styles={styles}
-            toggleDisabled={toggleDisabled}
-            icons={true}
-          />
+        <DrawerToggle
+          onPress={onTogglePress}
+          toggled={toggled}
+          styles={styles}
+          toggleDisabled={toggleDisabled}
+          icons={true}
+        />
       )}
     />
   )

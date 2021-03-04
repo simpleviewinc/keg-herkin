@@ -5,8 +5,9 @@ import { EditorFromType } from './editorFromType'
 import React, { useRef } from 'react'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 import { useEditorActions } from './useEditorActions'
-import { noOpObj, exists, plural } from '@keg-hub/jsutils'
+import { noOpObj, exists, plural, capitalize } from '@keg-hub/jsutils'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { Surface } from 'SVComponents/surface'
 
 const { EDITOR_TABS, CATEGORIES } = Values
 
@@ -51,7 +52,14 @@ export const CodeEditor = props => {
   */
 
   return (
-    <>
+    <Surface
+      className={`editor-main`}
+      title={capitalize(activeFile?.fileType)}
+      capitalize={false}
+      styles={editorStyles?.surface}
+      prefix={'Editor'}
+      hasToggle={false}
+    >
       {(tab === EDITOR_TABS.FEATURE.id || tab === EDITOR_TABS.BDD_SPLIT.id) && (
         <EditorFromType
           editorType={activeFile.fileType}
@@ -83,6 +91,6 @@ export const CodeEditor = props => {
         styles={actionsStyles}
         { ...tabActions }
       />
-    </>
+    </Surface>
   )
 }
