@@ -14,7 +14,6 @@ const pressKey = async key => {
   return page
 }
 
-When('I press {string}', pressKey)
 When('I press the key {string}', pressKey)
 
 module.exports = { pressKey }

@@ -1,19 +1,17 @@
 const { Then } = require('HerkinParkin')
-const { getElement } = require('HerkinPlaywright')
+const { getBrowserContext } = require('HerkinSetup')
+const { getPage } = getBrowserContext()
 
 /**
  * Checks that the element is not on the DOM
  * @param {string} selector 
  */
 const isDetached = async selector => {
-  let element = null;
-  try {
-    element = await getElement(selector) 
-  }
-  catch (err) {}
-  finally {
-    expect(element).toEqual(null)
-  }
+  const page = await getPage()
+  return page.waitForSelector(selector, { 
+    state: 'detached',
+    timeout: 100 //ms
+  })
 }
 
 Then('the element {string} is detached', isDetached)
