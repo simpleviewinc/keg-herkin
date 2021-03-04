@@ -13,11 +13,6 @@ const checkDescendent = async (selector, world) => {
   return checkElement(`${world.meta.ancestorSelector} ${selector}`)
 }
 
-const checkChild = async (selector, world) => {
-  checkForAncestor(world)
-  return checkElement(`${world.meta.ancestorSelector} > ${selector}`)
-}
-
 When(`I check the child/descendent {string}`, checkElement)
 
 module.exports = {
