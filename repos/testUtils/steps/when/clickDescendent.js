@@ -2,6 +2,11 @@ const { When } = require('HerkinParkin')
 const { getElement } = require('HerkinPlaywright')
 const { checkForAncestor } = require('HerkinSupport/validate')
 
+/**
+ * Clicks the element `selector` that is a descendant of the registered ancestor.
+ * @param {String} selector 
+ * @param {Object} world - world object, containing the ancestor metadata
+ */
 const clickDescendent = async (selector, world) => {
   checkForAncestor(world)
   const descendent = await getElement(`${world.meta.ancestorSelector} ${selector}`)
