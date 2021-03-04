@@ -1,3 +1,5 @@
+const { definitionsByType } = require('./definitionsByType')
+
 module.exports = {
-  ...require('./definitionsByType')
+  definitionsByType
 }
