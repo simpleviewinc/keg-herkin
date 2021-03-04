@@ -1,7 +1,25 @@
+import { socketConfig } from '../../../configs/socket.config'
+import { isFunc } from '@keg-hub/jsutils'
 
-export class SocketService {
+class Events {
+  constructor(instance){
+    Object.entries(this)
+      .map(([key, value]) => (
+        isFunc(value) && (instance.events[key] = value.bind(instance))
+      ))
+  }
 
+  // all = (message, instance, event) => {}
+  // connect = (message, instance) => {}
+  // init = (message) => {}
 
 }
 
-export const WSService = new SocketService()
+class SocketService {
+  constructor(config){
+    Object.assign(this, { events: {} }, config)
+    new Events(this)
+  }
+}
+
+export const WSService = new SocketService(socketConfig)

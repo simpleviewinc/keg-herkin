@@ -14,8 +14,7 @@ import { getHistory } from 'SVNavigation'
 import { isNative } from 'SVUtils/platform'
 import { init } from 'SVActions'
 import { WSService } from 'SVServices'
-import { WebSocketProvider } from '@ltipton/sockr/build/client/esm'
-import { socketConfig } from '../../configs/socket.config'
+import { SockrProvider } from '../sockr/src/client'
 
 const checkAppInit = async setInit => {
   await init()
@@ -45,12 +44,12 @@ const App = props => {
         <SafeAreaView>
           <Provider store={getStore()}>
             <ReThemeProvider theme={ activeTheme } >
-              <WebSocketProvider config={socketConfig} debug={true} >
+              <SockrProvider config={WSService} debug={true} >
                 <View style={activeTheme.app.main} >
                   <ContainerRoutes navigationConfigs={keg.routes}/>
                   <ModalManager />
                 </View>
-              </WebSocketProvider>
+              </SockrProvider>
             </ReThemeProvider>
           </Provider>
         </SafeAreaView>
