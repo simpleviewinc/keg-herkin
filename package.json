@@ -52,9 +52,6 @@
     "cucumber": "./node_modules/.bin/cucumber-js"
   },
   "dependencies": {
-    "@cucumber/cucumber": "7.0.0",
-    "@cucumber/gherkin": "16.0.0",
-    "@cucumber/messages": "13.2.1",
     "@keg-hub/args-parse": "6.2.1",
     "@keg-hub/ask-it": "0.0.1",
     "@keg-hub/jsutils": "8.2.0",
