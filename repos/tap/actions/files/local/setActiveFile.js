@@ -25,7 +25,7 @@ const getScreen = screenId => {
 export const setActiveFile = (fileModel, content, screenId) => {
   const screenModel = getScreen(screenId)
   if(!screenModel) return devLog(`error`, `Can not find screen from id`, screenId)
-  const updatedFile = fileModel
+  const updatedFile = { ...fileModel }
   content && (updatedFile.content = content)
 
   dispatch({

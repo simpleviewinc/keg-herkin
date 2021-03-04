@@ -22,7 +22,7 @@ export const usePendingCallback = (screenId) => {
       if(!text || (!curActiveFile || !curActiveFile.content)) return
 
       text && text === curActiveFile.content
-        ? removePendingFile(curActiveFile, screenId)
+        ? removePendingFile(curActiveFile)
         : setPendingFile(text, curActiveFile, screenId)
 
     }, null, 300), 
