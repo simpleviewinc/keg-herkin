@@ -51,10 +51,11 @@ export const CodeEditor = props => {
         * Currently hidden for all except feature files
   */
 
+  const surfaceTitle = `${capitalize(activeFile?.fileType)} ${pendingFiles[activeFile?.location] ? '*' : ''}`
   return (
     <Surface
       className={`editor-main`}
-      title={capitalize(activeFile?.fileType)}
+      title={surfaceTitle}
       capitalize={false}
       styles={editorStyles?.surface}
       prefix={'Editor'}

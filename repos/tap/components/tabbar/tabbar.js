@@ -1,9 +1,7 @@
 import { Tab } from './tab'
 import { Values } from 'SVConstants'
 import { useStyle } from '@keg-hub/re-theme'
-import { useActiveFile } from 'SVHooks/useActiveFile'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { checkCall, mapColl, noOpObj } from '@keg-hub/jsutils'
+import { checkCall, mapColl, } from '@keg-hub/jsutils'
 import React, { useMemo, useCallback, useState, useLayoutEffect } from 'react'
 import { View, isValidComponent, renderFromType } from '@keg-hub/keg-components'
 
@@ -44,9 +42,6 @@ const Bar = ({ children, styles }) => {
 
 const Tabs = ({ activeId, tabs, styles, onTabSelect }) => {
 
-  const activeFile = useActiveFile()
-  const { pendingFiles=noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
-
   return mapColl(tabs, (index, tab) => {
     const { Tab:Component, tab:component, id, key, title, disableTab, ...tabProps } = tab
 
@@ -64,7 +59,6 @@ const Tabs = ({ activeId, tabs, styles, onTabSelect }) => {
             styles={ styles }
             onTabSelect={ onTabSelect }
             active={ activeId === id }
-            showIndicator={pendingFiles[activeFile?.location]}
           >
             { renderFromType(Component || component) }
           </Tab>
