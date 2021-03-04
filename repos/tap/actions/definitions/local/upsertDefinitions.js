@@ -2,7 +2,7 @@ import { devLog } from 'SVUtils'
 import { dispatch } from 'SVStore'
 import { isArr, noPropArr, noOpObj } from '@keg-hub/jsutils'
 import { Values, ActionTypes } from 'SVConstants'
-import { organizeByType } from 'SVUtils/definitions/organizeByType'
+import { definitionsByType } from 'SVUtils/shared'
 
 const { CATEGORIES } = Values
 
@@ -35,7 +35,7 @@ export const upsertDefinitions = (definitions=noPropArr, definitionTypes) => {
     type: ActionTypes.UPSERT_ITEMS,
     payload: {
       category: CATEGORIES.DEFINITION_TYPES,
-      items: definitionTypes || organizeByType(definitions),
+      items: definitionTypes || definitionsByType(definitions),
     },
   })
 

@@ -4,7 +4,7 @@ const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 const apiEndpoints = require('./endpoints')
-const { sockr } = require('./libs/sockr/src/server')
+const { sockr } = require('@ltipton/sockr/src/server')
 const { getHerkinConfig } = require('HerkinConfigs/getHerkinConfig')
 const { noOpObj, eitherArr, isArr, isObj, exists, isStr } = require('@keg-hub/jsutils')
 

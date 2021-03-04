@@ -1,6 +1,13 @@
-import { get } from '@keg-hub/jsutils'
+const { get } = require('@keg-hub/jsutils')
 
-export const organizeByType = defFileModels => {
+/**
+ * Extracts the definitions code from a definitions fileModel
+ * Then organizes them by the step type ( given | then | when )
+ * @param {Array} defFileModels - All loaded definition fileModels
+ *
+ * @return {Object} - Organized definitions code by type 
+ */
+const definitionsByType = defFileModels => {
   return defFileModels.reduce((organized, fileModel, idx) => {
 
     get(fileModel, 'ast.definitions', [])
@@ -20,4 +27,8 @@ export const organizeByType = defFileModels => {
 
     return organized
   }, {})
+}
+
+module.exports = {
+  definitionsByType
 }
