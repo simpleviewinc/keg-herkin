@@ -12,6 +12,7 @@ class Events {
   // all = (message, instance, event) => {}
   // connect = (message, instance) => {}
   // init = (message) => {}
+  // cmdRunning = (message, instance, event) => {}
 
 }
 
