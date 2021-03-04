@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { Values } from 'SVConstants'
-import { noOpObj } from '@keg-hub/jsutils'
+import { noOpObj, get } from '@keg-hub/jsutils'
 import { saveFile } from 'SVActions/files'
 import { runTests } from 'SVActions/runner'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
@@ -20,20 +20,25 @@ const useRunAction = (activeFile, editorRef) => {
   const { commands=noOpObj } = useSockr()
   const { pendingFiles=noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
   const hasPending = Boolean(pendingFiles[activeFile.location])
+  const testCommand = get(commands, ['tests', activeFile.fileType ])
 
   return useCallback(async event => {
+    // TODO: Add UI message, to warn that the file needs to be saved
+    // Also add UI for if a file is not a test file, so no matching test command exists
+  
     if(!editorRef.current)
-      return  console.warn(`Editor Reference is not set!`)
+      return console.warn(`Editor Reference is not set!`)
+
+    if(!testCommand)
+      return console.warn(`Can not run tests for this file. It is not a test file!`)
 
     const content = editorRef.current?.editor?.getValue()
     const canRun = content !== activeFile.content || hasPending
       ? await saveFile({ ...activeFile, content })
       : true
 
-    // TODO: Add UI message, to warn that the file needs to be saved
-    // Or that it couldn't save it for some reason
     canRun
-      ? runTests(activeFile, commands.bbd, SCREENS.EDITOR)
+      ? runTests(activeFile, testCommand, SCREENS.EDITOR)
       : console.warn(
           `Can not run test on a file with pending changes!`,
           `The file must be saved first!`
@@ -42,7 +47,7 @@ const useRunAction = (activeFile, editorRef) => {
   }, [
     hasPending,
     activeFile,
-    commands.bbd,
+    testCommand,
     SCREENS.EDITOR,
     editorRef.current,
   ])

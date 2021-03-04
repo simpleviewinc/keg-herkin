@@ -61,6 +61,19 @@ class SocketService {
     SockrService.emit(eventType, data)
   }
 
+
+  /**
+   * Calls the SockrService runCommand method 
+   * Helper to make running command esier
+   * @memberof SocketService
+   * @type function
+   * @public
+   * @param {Object} data - Content sent to the backend
+   *
+   * @returns {*} Response from SockrService.runCommand
+   */
+  runCommand = data => SockrService.runCommand(data)
+
   /**
    * Disconnects from the backend websocket
    * Cleans up any open object || handles
