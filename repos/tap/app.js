@@ -14,7 +14,8 @@ import { getHistory } from 'SVNavigation'
 import { isNative } from 'SVUtils/platform'
 import { init } from 'SVActions'
 import { WSService } from 'SVServices'
-import { SockrProvider } from '../sockr/src/client'
+import { SockrProvider } from 'SVUtils/sockr'
+import { sockrReducer } from './reducers/sockrReducer'
 
 const checkAppInit = async setInit => {
   await init()
@@ -44,7 +45,11 @@ const App = props => {
         <SafeAreaView>
           <Provider store={getStore()}>
             <ReThemeProvider theme={ activeTheme } >
-              <SockrProvider config={WSService} debug={true} >
+              <SockrProvider
+                debug={true}
+                config={WSService}
+                reducer={sockrReducer}
+              >
                 <View style={activeTheme.app.main} >
                   <ContainerRoutes navigationConfigs={keg.routes}/>
                   <ModalManager />

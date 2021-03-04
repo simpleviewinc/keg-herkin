@@ -1,43 +1,18 @@
 import { Values } from 'SVConstants'
 import { EditorTabs } from './editorTabs'
-import { noOpObj, exists, plural } from '@keg-hub/jsutils'
-import { AceEditor } from 'SVComponents/aceEditor'
-import React, { useRef, useCallback } from 'react'
-import { useActiveTab } from 'SVHooks/useActiveTab'
 import { useStyle } from '@keg-hub/re-theme'
+import { EditorFromType } from './editorFromType'
+import React, { useRef, useCallback } from 'react'
+import { AceEditor } from 'SVComponents/aceEditor'
+import { useActiveTab } from 'SVHooks/useActiveTab'
+import { useEditorActions } from './useEditorActions'
+import { useActiveFile } from 'SVHooks/useActiveFile'
+import { noOpObj, exists, plural } from '@keg-hub/jsutils'
+import { usePendingCallback } from 'SVHooks/usePendingCallback'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
-import { saveFile } from 'SVActions/files'
-import { EditorFromType } from './editorFromType'
-import { useActiveFile } from 'SVHooks/useActiveFile'
-import { usePendingCallback } from 'SVHooks/usePendingCallback'
 
-const { EDITOR_TABS, SCREENS } = Values
-
-/**
- * Hook to run the active files tests, or save changes to the active file
- */
-const useTabActions = (props) => {
-  const { editorRef, activeFile } = props
-  
-  const onRun = useCallback(event => {
-    console.log('---Run tests---')
-  }, [])
-
-  const onSave = useCallback(async setIsSaving => {
-    if(!editorRef.current) return setIsSaving(false)
-
-    setIsSaving(true)
-
-    const content = editorRef.current?.editor?.getValue()
-    content && await saveFile({ ...activeFile, content })
-
-    setIsSaving(false)
-
-  }, [ editorRef.current, activeFile, SCREENS.EDITOR ])
-
-  return { onRun, onSave }
-}
+const { EDITOR_TABS, SCREENS, CATEGORIES } = Values
 
 /**
  * CodeEditor
@@ -55,7 +30,8 @@ export const CodeEditor = props => {
   const isFeature = Boolean(activeFile.fileType === EDITOR_TABS.FEATURE.id)
   const forceFull = !isFeature && tab !== EDITOR_TABS.FEATURE.id
   const editorRef = useRef(null)
-  const tabActions = useTabActions({...props, editorRef})
+  
+  const tabActions = useEditorActions(activeFile, editorRef)
 
   const editorStyles = useStyle(`screens.editors`)
   const actionsStyles = editorStyles?.actions

@@ -89,7 +89,7 @@ const initApi = async () => {
     () => console.log(new Date() + ` - Listening on ${serverConfig.host}:${serverConfig.port}`)
   )
 
-  const socket = await sockr(server, config.server)
+  const socket = await sockr(server, config.sockr)
 
   return { app, server, socket }
 }

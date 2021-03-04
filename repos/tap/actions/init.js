@@ -58,14 +58,15 @@ const loadInitModal = async queryObj => {
  * @function
  */
 export const init = async () => {
+
   // Get the query params from the url
   const queryObj = getQueryData()
 
-  // Load the initial test file
-  await loadInitTestFiles(queryObj)
-
   // Load the initial screen
   await loadInitScreen(queryObj)
+
+  // Load the initial test file
+  await loadInitTestFiles(queryObj)
 
   // Setup the sidebar
   setActiveSidebar(SIDEBAR_TYPES.FILE_TREE)
