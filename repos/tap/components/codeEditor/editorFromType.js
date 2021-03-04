@@ -1,8 +1,8 @@
 
 import { Values } from 'SVConstants'
-import { noOpObj, exists } from '@keg-hub/jsutils'
+import { noOpObj } from '@keg-hub/jsutils'
 import { AceEditor } from 'SVComponents/aceEditor'
-import React, { useRef, useCallback } from 'react'
+import React from 'react'
 import { usePendingCallback } from 'SVHooks/usePendingCallback'
 import { FeatureEditor } from 'SVComponents/feature/featureEditor'
 import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
@@ -11,7 +11,7 @@ const { EDITOR_TABS, SCREENS } = Values
 
 export const EditorFromType = props => {
   const { aceRef, activeFile=noOpObj, editorType, ...otherProps } = props
-  const onChange = usePendingCallback(activeFile, SCREENS.EDITOR)
+  const onChange = usePendingCallback(SCREENS.EDITOR)
 
   switch(editorType){
     case EDITOR_TABS.FEATURE.id: {
@@ -19,6 +19,7 @@ export const EditorFromType = props => {
         <FeatureEditor
           {...otherProps}
           activeFile={activeFile}
+          onChange={onChange}
           aceRef={aceRef}
         />
       )
@@ -39,6 +40,7 @@ export const EditorFromType = props => {
           aceRef={aceRef}
           mode={'javascript'}
           activeFile={activeFile}
+          onChange={onChange}
           fileId={activeFile?.location}
         />
       )

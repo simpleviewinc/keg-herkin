@@ -2,77 +2,13 @@ import { Values } from 'SVConstants'
 import { EditorTabs } from './editorTabs'
 import { useStyle } from '@keg-hub/re-theme'
 import { EditorFromType } from './editorFromType'
-import React, { useRef, useCallback } from 'react'
-import { AceEditor } from 'SVComponents/aceEditor'
+import React, { useRef } from 'react'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 import { useEditorActions } from './useEditorActions'
-import { useActiveFile } from 'SVHooks/useActiveFile'
 import { noOpObj, exists, plural } from '@keg-hub/jsutils'
-import { usePendingCallback } from 'SVHooks/usePendingCallback'
-import { FeatureEditor } from 'SVComponents/feature/featureEditor'
-import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
-import { saveFile } from 'SVActions/files'
-import { usePendingCallback } from 'SVHooks/usePendingCallback'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { setActiveFile } from 'SVActions/files/local/setActiveFile'
 
-const { EDITOR_TABS, SCREENS, CATEGORIES } = Values
-
-/**
- * MainEditor
- * @param {Object} props
- * @param {Object} props.activeFile
- */
-const MainEditor = props => {
-  const { activeFile } = props
-
-  const onChange = usePendingCallback(SCREENS.EDITOR)
-
-  return activeFile?.fileType === 'feature'
-    ? (
-      <FeatureEditor
-        {...props}
-        onChange={onChange}
-        editorId={`feature-editor`}
-      />
-    )
-    : (
-      <AceEditor
-        {...props}
-        fileId={activeFile.location}
-        onChange={onChange}
-        editorId={`code-editor`}
-        mode={'javascript'}
-      />
-    )
-}
-
-/**
- * Hook to run the active files tests, or save changes to the active file
- */
-const useTabActions = (props) => {
-  const { editorRef, activeFile } = props
-  
-  const onRun = useCallback(event => {
-    console.log('---Run tests---')
-  }, [])
-
-  const onSave = useCallback(async setIsSaving => {
-    if(!editorRef.current) return setIsSaving(false)
-
-    setIsSaving(true)
-
-    const content = editorRef.current?.editor?.getValue()
-    // save the file and update active file
-    content 
-      && await saveFile({ ...activeFile, content })
-      && setActiveFile(activeFile, content, SCREENS.EDITOR)
-    setIsSaving(false)
-
-  }, [ editorRef.current, activeFile, SCREENS.EDITOR ])
-
-  return { onRun, onSave }
-}
+const { EDITOR_TABS, CATEGORIES } = Values
 
 /**
  * CodeEditor

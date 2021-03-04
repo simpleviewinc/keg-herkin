@@ -5,6 +5,7 @@ import { saveFile } from 'SVActions/files'
 import { runTests } from 'SVActions/runner'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { useSockr } from 'SVUtils/sockr'
+import { setActiveFile } from 'SVActions/files/local/setActiveFile'
 
 const { SCREENS, CATEGORIES } = Values
 
@@ -27,7 +28,7 @@ const useRunAction = (activeFile, editorRef) => {
 
     const content = editorRef.current?.editor?.getValue()
     const canRun = content !== activeFile.content || hasPending
-      ? await saveFile({ ...activeFile, content })
+      ? await saveFile({ ...activeFile, content }) && setActiveFile(activeFile, content, SCREENS.EDITOR)
       : true
 
     // TODO: Add UI message, to warn that the file needs to be saved
@@ -62,7 +63,10 @@ const useSaveAction = (activeFile, editorRef) => {
     setIsSaving(true)
 
     const content = editorRef.current?.editor?.getValue()
-    content && await saveFile({ ...activeFile, content })
+      // save the file and update active file
+    content 
+      && await saveFile({ ...activeFile, content })
+      && setActiveFile(activeFile, content, SCREENS.EDITOR)
 
     setIsSaving(false)
 
