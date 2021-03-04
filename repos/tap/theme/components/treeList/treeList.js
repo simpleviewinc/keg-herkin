@@ -100,20 +100,29 @@ const hoverStyles = (theme, isChildNode) => {
   }
 }
 
+const pendingTextStyle = {
+  ...sharedTextStyle,
+  c: tapColors?.primary
+}
+
 export const treeList = (theme) => ({
   default: {
     root: defaultStyles(theme),
     child: defaultStyles(theme, true),
-    icon: iconStyle(theme)
+    icon: iconStyle(theme),
+    pendingText: pendingTextStyle
   },
   hover: {
     root: hoverStyles(theme),
     child: hoverStyles(theme, true),
-    icon: iconStyle(theme)
+    icon: iconStyle(theme),
+    pendingText: pendingTextStyle
+
   },
   active: {
     root: activeStyles(theme),
     child: activeStyles(theme, true),
-    icon: iconStyle(theme)
+    icon: iconStyle(theme),
+    pendingText: pendingTextStyle
   }
 })
