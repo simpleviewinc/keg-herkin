@@ -36,7 +36,7 @@ export const loadTestFile = async testFile => {
   const nodeToLoad = findFileInTree(fileTree.nodes, testFile)
   if(!nodeToLoad)
     return devLog(`Could not load file ${testFile}. It does not exist in the file tree`, `warn`)
-  
+
   const fileModel = await loadApiFile(nodeToLoad.location)
   return fileModel
     ? setActiveFileFromType(fileModel)
