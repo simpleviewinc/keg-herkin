@@ -1,5 +1,6 @@
 const path = require('path')
-const { socketConfig } = require('./socket.config.js')
+const { serverConfig } = require('./server.config.js')
+const { sockrCmds } = require('./sockrCmds.config.js')
 
 const {
   DOC_APP_PATH,
@@ -20,7 +21,11 @@ const dockerTestsRoot = path.join(rootDir, 'tests')
 const hostTestsRoot = HERKIN_TESTS_ROOT || dockerTestsRoot
 
 module.exports = {
-  ...socketConfig,
+  sockr: {
+    ...sockrCmds,
+    ...serverConfig,
+  },
+  server: serverConfig,
   paths: {
     rootDir,
 

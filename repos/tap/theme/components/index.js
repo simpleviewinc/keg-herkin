@@ -16,11 +16,14 @@ import { table } from './table'
 import { tags } from './tags'
 import { modals } from './modals'
 import { treeList } from './treeList'
+import { cmdOutput } from './cmdOutput'
+
 
 export const components = theme => ({
   aceEditor: aceEditor(theme),
   aceThemeOverrides: aceThemeOverrides(theme),
   chip: chip(theme),
+  cmdOutput: cmdOutput(theme),
   definitions: definitions(theme),
   drawer: drawer(theme),
   features: features(theme),

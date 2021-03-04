@@ -1,4 +1,10 @@
-export const runTests = async (feature, definitions) => {
-  console.log(feature)
-  console.log(definitions)
+
+export const runTests = async (activeFile, testCmd, screenID) => {
+  
+  console.log(`---------- activeFile ----------`)
+  console.log(activeFile)
+
+  console.log(`---------- testCmd ----------`)
+  console.log(testCmd)
+
 }
