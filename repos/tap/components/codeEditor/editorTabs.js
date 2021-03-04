@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useState, useMemo } from 'react'
 
 const { EDITOR_TABS } = Values
 
-const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs }) => {
+const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs, isDefinitionsTab }) => {
   const [ isSaving, setIsSaving ] = useState(false)
   return (
     <View
@@ -30,7 +30,7 @@ const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs }) => {
           }
         </Button>
       </View>
-      { showFeatureTabs && (
+      { onRun && (
         <View
           style={actionStyles.run}
           className={`editor-tab-actions-save`}
@@ -57,16 +57,17 @@ const tabs = [
 const useActionsTab = (
   tabs,
   TestActions,
-  { onRun, onSave, showFeatureTabs, styles }
+  { onRun, onSave, showFeatureTabs, showRun, styles }
 ) => useMemo(() => {
+
   const extraActionTabs = [{
-    onRun,
     onSave,
     showFeatureTabs,
     id: `test-actions`,
     Tab: TestActions,
     disableTab: true,
-    actionStyles: deepMerge(styles?.default, showFeatureTabs ? styles?.feature : null),
+    ...(showRun && { onRun }),
+    actionStyles: deepMerge(styles?.default, showRun ? styles?.showRun : null),
   }]
 
   return showFeatureTabs
@@ -78,6 +79,7 @@ const useActionsTab = (
   onRun,
   onSave,
   styles,
+  showRun,
   TestActions,
   showFeatureTabs,
 ])
@@ -93,7 +95,7 @@ const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
 export const EditorTabs = props => {
   const { activeTab, onTabSelect } = props
 
-  const [tab, setTab] = useState(activeTab || EDITOR_TABS.BDD_SPLIT.id)
+  const [tab, setTab] = useState(activeTab)
   const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
 
   useEffect(() => {

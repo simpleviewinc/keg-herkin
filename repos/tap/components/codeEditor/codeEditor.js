@@ -1,6 +1,6 @@
 import { Values } from 'SVConstants'
 import { EditorTabs } from './editorTabs'
-import { noOpObj, exists } from '@keg-hub/jsutils'
+import { noOpObj, exists, plural } from '@keg-hub/jsutils'
 import { AceEditor } from 'SVComponents/aceEditor'
 import React, { useRef, useCallback } from 'react'
 import { useActiveTab } from 'SVHooks/useActiveTab'
@@ -42,27 +42,24 @@ const useTabActions = (props) => {
 /**
  * CodeEditor
  * @param {Object} props
- * @param {String} props.activeTab
+ * @param {String} props.initialTab - Initial tab to start as active
  * @param {Object} props.activeFile - test file to load
  */
 export const CodeEditor = props => {
   const {
-    activeTab,
+    initialTab,
     activeFile=noOpObj
   } = props
 
-  const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.BDD_SPLIT.id)
+  const [ tab, setTab ] = useActiveTab(initialTab || EDITOR_TABS.BDD_SPLIT.id)
   const isFeature = Boolean(activeFile.fileType === EDITOR_TABS.FEATURE.id)
-
-  const forceFull = !isFeature &&
-    (tab === EDITOR_TABS.BDD_SPLIT.id || tab === EDITOR_TABS.DEFINITIONS.id)
-
-  const checkTab = forceFull ? EDITOR_TABS.FEATURE.id : tab
+  const forceFull = !isFeature && tab !== EDITOR_TABS.FEATURE.id
   const editorRef = useRef(null)
   const tabActions = useTabActions({...props, editorRef})
+
   const editorStyles = useStyle(`screens.editors`)
-  const codeStyles = editorStyles?.[checkTab] || noOpObj
   const actionsStyles = editorStyles?.actions
+  const codeStyles = editorStyles?.[forceFull ? 'full' : tab] || noOpObj
 
   if (!exists(activeFile.content)) return null
 
@@ -106,8 +103,9 @@ export const CodeEditor = props => {
           />
       )}
       <EditorTabs
-        activeTab={checkTab}
+        activeTab={tab}
         onTabSelect={setTab}
+        showRun={plural(activeFile.fileType) !== EDITOR_TABS.DEFINITIONS.id}
         showFeatureTabs={isFeature}
         styles={actionsStyles}
         { ...tabActions }

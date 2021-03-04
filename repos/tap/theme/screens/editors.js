@@ -5,6 +5,10 @@ export const editors = theme => {
     main: {
       flD: 'row',
     },
+    full: {
+      w: `100%`,
+      h: `75vh`,
+    },
     feature: {
       w: `100%`,
       h: `75vh`,
@@ -45,7 +49,7 @@ export const editors = theme => {
           mR: theme.margin.size,
         },
       },
-      feature: {
+      showRun: {
         save: { mR: 15 },
       }
     }
