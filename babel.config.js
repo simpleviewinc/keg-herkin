@@ -1,2 +1,2 @@
-// needed for cucumber-jest 
+// this is needed for parkin to run, don't remove
 module.exports = require('./configs/babel.cucumber-jest.config')

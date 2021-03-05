@@ -46,7 +46,11 @@ const buildCmdEnvs = (browser, params) => ({
  */
 const exitProcess = (exitCodes=[]) => {
   const codeSum = exitCodes.reduce((sum, code) => sum + parseInt(code), 0)
-
+  process.on('exit', () => {
+    console.log('=====================================================\n')
+    console.log('\x1b[33m%s\x1b[0m', 'View test report:', 'http://localhost:5005/reports/parkin') 
+    console.log('\n=====================================================')
+  })
   process.exit(codeSum)
 }
 
