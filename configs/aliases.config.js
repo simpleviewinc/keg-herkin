@@ -5,18 +5,18 @@ const path = require('path')
 
 // aliases shared by jest and module-alias
 const aliases = deepFreeze({
-  "HerkinRoot": HERKIN_ROOT,
-  "HerkinRepos": path.join(HERKIN_ROOT, 'repos'),
-  "HerkinConfigs": path.join(HERKIN_ROOT, 'configs'),
-  "HerkinTasks": path.join(HERKIN_ROOT, 'tasks'),
+  HerkinRoot: HERKIN_ROOT,
+  HerkinRepos: path.join(HERKIN_ROOT, 'repos'),
+  HerkinConfigs: path.join(HERKIN_ROOT, 'configs'),
+  HerkinTasks: path.join(HERKIN_ROOT, 'tasks'),
   HerkinModels: path.join(HERKIN_ROOT, 'repos/shared/models'),
-  "HerkinBackConstants": path.join(HERKIN_ROOT, 'constants', 'backend'),
-  "HerkinFrontConstants": path.join(HERKIN_ROOT, 'constants', 'frontend'),
-  "HerkinParkin": path.join(TEST_UTILS_PATH, 'parkin'),
-  "HerkinSetup": path.join(TEST_UTILS_PATH, 'playwright', 'setupTestEnvironment'),
-  "HerkinPlaywright": path.join(TEST_UTILS_PATH, 'playwright'),
-  "HerkinSteps": path.join(TEST_UTILS_PATH, 'steps'),
-  "HerkinSupport": path.join(TEST_UTILS_PATH, 'support'),
+  HerkinBackConstants: path.join(HERKIN_ROOT, 'constants', 'backend'),
+  HerkinFrontConstants: path.join(HERKIN_ROOT, 'constants', 'frontend'),
+  HerkinParkin: path.join(TEST_UTILS_PATH, 'parkin'),
+  HerkinSetup: path.join(TEST_UTILS_PATH, 'playwright', 'setupTestEnvironment'),
+  HerkinPlaywright: path.join(TEST_UTILS_PATH, 'playwright'),
+  HerkinSteps: path.join(TEST_UTILS_PATH, 'steps'),
+  HerkinSupport: path.join(TEST_UTILS_PATH, 'support'),
 })
 
 // Registers module-alias aliases (done programatically so we can reuse the aliases object for jest)

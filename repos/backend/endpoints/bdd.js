@@ -1,8 +1,7 @@
 const { apiErr, apiResponse } = require('./handler')
 const { loadFeatures } = require('../libs/features')
-const { definitionsByType } = require('../utils/definitionsByType')
 const { loadDefinitions } = require('../libs/definitions')
-const { fileModelArrayToObj } = require('../../shared/utils')
+const { definitionsByType, fileModelArrayToObj } = require('../../shared/utils')
 
 const testData = (app, config) => async (req, res) => {
   try {
