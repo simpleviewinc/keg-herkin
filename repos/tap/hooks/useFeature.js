@@ -20,7 +20,7 @@ export const useFeature = ({ name, path }) => {
     CATEGORIES.DEFINITION_TYPES
   ])
 
-  const feature = reduceObj(features, (key, feature, obj) => {
+  const feature = reduceObj(features, (__, feature, obj) => {
     if (feature.name === name || feature?.location === path) 
       obj = feature
     

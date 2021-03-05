@@ -20,12 +20,16 @@ export const upsertDefinitions = (definitions=noPropArr, definitionTypes) => {
       `Upsert definitions requires an array of definition file models`,
       definitions
     )
+  const objectMap = definitions && definitions.reduce((map, definition) => {
+    map[definition?.location] = definition
+    return map
+  }, {})
 
   dispatch({
     type: ActionTypes.UPSERT_ITEMS,
     payload: {
       category: CATEGORIES.DEFINITIONS,
-      items: definitions,
+      items: objectMap,
     },
   })
 

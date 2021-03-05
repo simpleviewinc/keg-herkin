@@ -1,7 +1,7 @@
 import { devLog } from 'SVUtils'
 import { isObj } from '@keg-hub/jsutils'
-import { getStore } from 'SVStore'
-import { Values } from 'SVConstants'
+import { getStore, dispatch } from 'SVStore'
+import { Values, ActionTypes } from 'SVConstants'
 import { setActiveFile } from '../../files/local/setActiveFile'
 
 const { CATEGORIES } = Values
@@ -34,10 +34,22 @@ const getFeatureFromName = (feature, location) => {
  *
  * @returns {void}
  */
-export const setFeatureActive = async (feature, screenId) => {
-  const activeFeature = isObj(feature)
-    ? getFeatureFromName(feature.name, feature.location)
-    : getFeatureFromName(feature)
+export const setFeatureActive = (feature, screenId) => {
+  // const activeFeature = isObj(feature)
+  //   ? getFeatureFromName(feature.name, feature.location)
+  //   : getFeatureFromName(feature)
 
-  await setActiveFile(activeFeature, screenId)
+  setFeatureItem(feature)
+  return setActiveFile(feature, screenId)
+}
+
+const setFeatureItem = (feature) => {
+  isObj(feature) && dispatch({
+    type: ActionTypes.UPSERT_ITEM,
+    payload: {
+      category: CATEGORIES.FEATURES,
+      key: feature?.location,
+      item: feature,
+    },
+  })
 }
