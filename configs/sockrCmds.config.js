@@ -5,13 +5,9 @@ const sockrCmds = {
       commands: {
         feature: {
           description: "Run behavior driven tests with feature files",
-          cmd: 'npx',
+          cmd: 'cucumber',
           beforeArgs: [
-            'jest',
-            '--detectOpenHandles',
-            '--no-cache',
-            '--verbose',
-            '--config=./configs/jest.parkin.config.js'
+            'test',
           ],
           afterArgs: [],
           params: [
@@ -62,13 +58,20 @@ const sockrCmds = {
         },
         waypoint: {
           description: "Run waypoint tests using playwright and jest",
-          cmd: 'npx',
+          cmd: 'wolf',
           beforeArgs: [
-            'qawolf',
-            'test',
+            'run',
           ],
           afterArgs: [],
           params: [
+            {
+              name: "name",
+              withKey: true,
+              description: "Name of the test to be run. If not set, all waypoint tests will be run",
+              type: "string",
+              required: false,
+              value: ""
+            },
           ]
         }
       }

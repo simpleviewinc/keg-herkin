@@ -16,7 +16,8 @@ export const Values = {
     MODALS: 'modals',
     FILE_TREE: 'fileTree',
     SIDEBAR: 'sidebar',
-    PENDING_FILES: 'pendingFiles'
+    PENDING_FILES: 'pendingFiles',
+    TOASTS: 'toasts',
   },
   SUB_CATEGORIES: {
     ACTIVE_FILE: 'activeFile',

@@ -1,1 +1,1 @@
-export * from '@ltipton/sockr'
+export * from '../../sockr/src/client'

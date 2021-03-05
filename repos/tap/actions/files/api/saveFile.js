@@ -1,5 +1,6 @@
 import { devLog } from 'SVUtils'
 import { saveApiFile } from 'SVUtils/api'
+import { addToast } from 'SVActions/toasts'
 import { noOpObj } from '@keg-hub/jsutils'
 import { removePendingFile } from '../local/removePendingFile'
 
@@ -16,9 +17,22 @@ export const saveFile = async (fileToSave=noOpObj, screenId) => {
   if (!content || !location)
     return devLog(`warn`, 'File content and location are required')
 
+  addToast({
+    type: 'info',
+    message: `Saving file ${fileToSave.name}!`
+  })
+
   const result = await saveApiFile(location, content)
 
-  result?.success && removePendingFile(fileToSave, screenId)
+  if(result?.success){
+    removePendingFile(fileToSave, screenId)
+    addToast({
+      type: 'success',
+      message: `File ${fileToSave.name} was saved!`
+    })
+  }
+  else addToast({ type: 'danger', message: `Failed to save file ${fileToSave.name}!` })
+  
   return result
 
 }

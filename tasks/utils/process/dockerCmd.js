@@ -25,10 +25,10 @@ const dockerExec = (containerName, args, extra=noOpObj) => {
 }
 
 const containerExec = (_, args, extra=noOpObj) => {
-  console.log(`---------- args ----------`)
-  console.log(args)
-  console.log(`---------- extra ----------`)
-  console.log(extra)
+  const cmd = args.shift()
+  const { opts=[], envs={} } = extra
+
+  return runCmd(cmd, ensureArray(args), envs)
 }
 
 const dockerCmd = (...args) => inDocker() ? containerExec(...args) : dockerExec(...args)

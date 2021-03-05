@@ -5,7 +5,7 @@ import { ReThemeProvider, getDefaultTheme } from '@keg-hub/re-theme'
 import { Provider } from 'react-redux'
 import { getStore } from 'SVStore'
 import { initAppAction, init } from 'SVActions'
-import { View, ModalManager, DomStyles } from 'SVComponents'
+import { View, ModalManager, DomStyles, Toast } from 'SVComponents'
 import { Router } from 'SVComponents/router'
 import { checkCall, get } from '@keg-hub/jsutils'
 import { ContainerRoutes } from 'SVNavigation/containerRoutes'
@@ -53,6 +53,7 @@ const App = props => {
                 <View style={activeTheme.app.main} >
                   <ContainerRoutes navigationConfigs={keg.routes}/>
                   <ModalManager />
+                  <Toast />
                 </View>
               </SockrProvider>
             </ReThemeProvider>

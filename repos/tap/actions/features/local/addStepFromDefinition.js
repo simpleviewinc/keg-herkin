@@ -1,4 +1,5 @@
 import { dispatch } from 'SVStore'
+import { addToast } from 'SVActions/toasts'
 import { uuid, noOpObj } from '@keg-hub/jsutils'
 import { Values, ActionTypes } from 'SVConstants'
 import { copyToDefinitionClipboard } from 'SVUtils/definitions'
@@ -18,8 +19,18 @@ const { CATEGORIES } = Values
  */
 export const addStepFromDefinition = (args) => {
   const { definition, clipboard } = args
+  if(!clipboard)
+    return addToast({
+      type: 'warn',
+      message: `Clipboard does not exist!`
+    })
+  
+  addToast({
+    type: 'info',
+    message: `Copied step definition to clipboard!`
+  })
 
-  if(clipboard) return copyToDefinitionClipboard(definition)
+  return copyToDefinitionClipboard(definition)
 
   // TODO: Add other options for auto setting the step definition into the feature 
 

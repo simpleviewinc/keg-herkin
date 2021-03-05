@@ -7,6 +7,7 @@ const serverConfig = {
   path: '/sockr-socket',
   process: {
     root: rootDir,
+    script: path.join(rootDir, 'scripts/sockr.cmd.sh'),
   }
 }
 

@@ -12,6 +12,7 @@ import { sidebar } from './sidebar'
 import { step } from './step'
 import { surface } from './surface'
 import { tabbar } from './tabbar'
+import { toast } from './toast'
 import { table } from './table'
 import { tags } from './tags'
 import { modals } from './modals'
@@ -36,6 +37,7 @@ export const components = theme => ({
   tags: tags(theme),
   modals: modals(theme),
   treeList: treeList(theme),
+  toast: toast(theme),
   ...header(theme),
   ...step(theme),
   ...surface(theme),
