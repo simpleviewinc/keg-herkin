@@ -47,8 +47,6 @@ const buildCmdEnvs = (browser, params) => ({
 const exitProcess = (exitCodes=[]) => {
   const codeSum = exitCodes.reduce((sum, code) => sum + parseInt(code), 0)
 
-  // TODO: this seems to not be actually setting the exitCode. Maybe something
-  // in the keg-cli process is intercepting?
   process.exit(codeSum)
 }
 
