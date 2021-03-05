@@ -1,4 +1,4 @@
-import { tapColors } from '../../tapColors'
+import { tapColors } from '../tapColors'
 
 export const aceThemeOverrides = theme => ({
   'editors-screen > div:first-child': {

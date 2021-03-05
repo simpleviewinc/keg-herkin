@@ -1,13 +1,9 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import ReactAce from '@ltipton/react-ace-editor'
 import { useTheme } from '@keg-hub/re-theme'
-import { ThemeOverrides } from './themeOverrides'
 import { isObj, checkCall, deepMerge, pickKeys } from '@keg-hub/jsutils'
 import { useStyleTag } from '@keg-hub/re-theme/styleInjector'
 import { GherkinEditor } from './gherkinEditor'
-
-let addOverrides = true
-const setOverrides = val => (addOverrides = val)
 
 const defOptions = {
   value: '',
@@ -138,13 +134,6 @@ export const AceEditor = props => {
 
   return (
     <>
-      {addOverrides && (
-        <ThemeOverrides
-          theme={tapTheme}
-          addOverrides={addOverrides}
-          setOverrides={setOverrides}
-        />
-      )}
       {mode === 'gherkin' ? (
         <GherkinEditor
           editorRef={editorRef}

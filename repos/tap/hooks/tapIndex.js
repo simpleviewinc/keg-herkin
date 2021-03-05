@@ -1,5 +1,6 @@
 export * from './useIds'
 export * from './useStyles'
+export * from './useDomStyles'
 export * from './useSelector'
 export * from './useTestRunner'
 export * from './useSetTimeout'

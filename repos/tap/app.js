@@ -5,7 +5,7 @@ import { ReThemeProvider, getDefaultTheme } from '@keg-hub/re-theme'
 import { Provider } from 'react-redux'
 import { getStore } from 'SVStore'
 import { initAppAction, init } from 'SVActions'
-import { View, ModalManager } from 'SVComponents'
+import { View, ModalManager, DomStyles } from 'SVComponents'
 import { Router } from 'SVComponents/router'
 import { checkCall, get } from '@keg-hub/jsutils'
 import { ContainerRoutes } from 'SVNavigation/containerRoutes'
@@ -44,6 +44,7 @@ const App = props => {
         <SafeAreaView>
           <Provider store={getStore()}>
             <ReThemeProvider theme={ activeTheme } >
+              <DomStyles />
               <SockrProvider
                 debug={true}
                 config={WSService}

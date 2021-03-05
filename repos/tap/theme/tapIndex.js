@@ -2,6 +2,7 @@ import { themeConfig } from './theme.config.js'
 import { deepMerge } from '@keg-hub/jsutils'
 import { app } from './app'
 import { appHeader } from './appHeader'
+import { domStyles } from './domStyles'
 import { containers } from './containers'
 import { transition } from './transition'
 import { tapColors } from './tapColors'
@@ -18,8 +19,9 @@ export const theme = setDefaultTheme(
     containers(kegTheme),
     components(kegTheme),
     {
-      app: app(theme),
+      app: app(kegTheme),
       appHeader: appHeader(kegTheme),
+      domStyles: domStyles(kegTheme),
       screens: screens(kegTheme),
       transition: transition(theme),
       tapColors

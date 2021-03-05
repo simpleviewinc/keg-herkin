@@ -1,24 +1,24 @@
-import React, { useLayoutEffect } from 'react'
+import { Values } from 'SVConstants'
 import ReactDOM from 'react-dom'
-import { __PORTAL_NODE } from 'SVUtils/dom/portalElement'
+import React, { useLayoutEffect, useState } from 'react'
+import { checkCall } from '@keg-hub/jsutils'
+import { createDomNode } from 'SVUtils/helpers/createDomNode'
 
-export const TabbarPortal = ({ children, node }) => {
+const { TABBAR_PORTAL_ID } = Values
+let portalElement
+
+export const TabbarPortal = ({ children }) => {
   useLayoutEffect(() => {
-    return () => {
-      if(node) return document.body.removeChild(node)
+    return () => {while (portalElement.firstChild) portalElement.firstChild.remove()}
+  }, [portalElement])
 
-      while (__PORTAL_NODE.firstChild) {
-        __PORTAL_NODE.firstChild.remove()
-      }
-    }
-  }, [])
-
-  return ReactDOM.createPortal(
-    children,
-    node || __PORTAL_NODE
-  )
-
+  return portalElement &&
+    ReactDOM.createPortal(children, portalElement)
 }
 
+/**
+ * Helper to auto-add dom portal element
+ */
+;(()=> portalElement = createDomNode(TABBAR_PORTAL_ID, 'div', 'body'))()
 
 

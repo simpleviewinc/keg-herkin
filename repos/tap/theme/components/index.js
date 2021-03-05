@@ -1,4 +1,4 @@
-import { aceEditor, aceThemeOverrides } from './aceEditor/index'
+import { aceEditor } from './aceEditor'
 import { chip } from './chip'
 import { definitions } from './definitions'
 import { drawer } from './drawer'
@@ -21,7 +21,6 @@ import { cmdOutput } from './cmdOutput'
 
 export const components = theme => ({
   aceEditor: aceEditor(theme),
-  aceThemeOverrides: aceThemeOverrides(theme),
   chip: chip(theme),
   cmdOutput: cmdOutput(theme),
   definitions: definitions(theme),

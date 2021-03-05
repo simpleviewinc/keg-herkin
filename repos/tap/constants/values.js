@@ -59,5 +59,7 @@ export const Values = {
   DEFINITION_TABS: {
     ACTIVE: 'active-definitions',
     LIST: 'list-definitions'
-  }
+  },
+  KEG_DOM_STYLES_ID: 'keg-dom-styles',
+  TABBAR_PORTAL_ID: `keg-tabbar-portal-root`,
 }
