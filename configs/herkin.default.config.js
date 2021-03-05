@@ -1,4 +1,6 @@
 const path = require('path')
+const { serverConfig } = require('./server.config.js')
+const { sockrCmds } = require('./sockrCmds.config.js')
 
 const {
   DOC_APP_PATH,
@@ -19,6 +21,11 @@ const dockerTestsRoot = path.join(rootDir, 'tests')
 const hostTestsRoot = HERKIN_TESTS_ROOT || dockerTestsRoot
 
 module.exports = {
+  sockr: {
+    ...sockrCmds,
+    ...serverConfig,
+  },
+  server: serverConfig,
   paths: {
     rootDir,
 
@@ -33,11 +40,4 @@ module.exports = {
     unitDir: HERKIN_UNIT_DIR || 'unit',
     waypointDir: HERKIN_WAYPOINT_DIR || 'waypoint'
   },
-  server: {
-    port: '5005',
-    host: '0.0.0.0'
-  },
-  urls: {
-    app: 'http://www.google.com'
-  }
 }

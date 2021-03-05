@@ -1,75 +1,50 @@
 import { Values } from 'SVConstants'
 import { EditorTabs } from './editorTabs'
-import { noOpObj, exists } from '@keg-hub/jsutils'
-import { AceEditor } from 'SVComponents/aceEditor'
-import React, { useRef, useCallback } from 'react'
+import { useStyle } from '@keg-hub/re-theme'
+import { EditorFromType } from './editorFromType'
+import React, { useRef, useEffect } from 'react'
 import { useActiveTab } from 'SVHooks/useActiveTab'
-import { useTheme, useStyle } from '@keg-hub/re-theme'
-import { FeatureEditor } from 'SVComponents/feature/featureEditor'
-import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
+import { useEditorActions } from './useEditorActions'
+import { noOpObj, exists, plural, capitalize } from '@keg-hub/jsutils'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
 
-const { EDITOR_TABS } = Values
-
-/**
- * MainEditor
- * @param {Object} props
- */
-const MainEditor = props => {
-  return props?.activeFile?.isFeature
-    ? (
-      <FeatureEditor
-        {...props}
-        editorId={`feature-editor`}
-      />
-    )
-    : (
-      <AceEditor
-        {...props}
-        editorId={`code-editor`}
-        mode={'javascript'}
-      />
-    )
-}
-
-/**
- * Hook to run the active files tests, or save changes to the active file
- */
-const useTabActions = () => {
-  const onRun = useCallback(event => {
-    console.log('---Run tests---')
-  }, [])
-
-  const onSave = useCallback(event => {
-    console.log('---Save file---')
-  }, [])
-
-  return { onRun, onSave }
-}
+const { EDITOR_TABS, CATEGORIES } = Values
 
 /**
  * CodeEditor
  * @param {Object} props
- * @param {String} props.activeTab
+ * @param {String} props.initialTab - Initial tab to start as active
  * @param {Object} props.activeFile - test file to load
  */
 export const CodeEditor = props => {
   const {
-    activeTab,
+    initialTab,
     activeFile=noOpObj
   } = props
 
-  const [ tab, setTab ] = useActiveTab(activeTab || EDITOR_TABS.SPLIT)
-  const forceFull = !activeFile.isFeature && (tab === EDITOR_TABS.SPLIT || tab === EDITOR_TABS.DEFINITIONS)
-  const checkTab = forceFull ? EDITOR_TABS.FEATURE : tab
-
+  const [ tab, setTab ] = useActiveTab(initialTab || EDITOR_TABS.BDD_SPLIT.id)
+  const isFeature = Boolean(activeFile.fileType === EDITOR_TABS.FEATURE.id)
+  const forceFull = !isFeature && tab !== EDITOR_TABS.FEATURE.id
   const editorRef = useRef(null)
-  const tabActions = useTabActions(props)
-  const editorStyles = useStyle(`screens.editors`)
-  const codeStyles = editorStyles?.[checkTab]
-  const actionsStyles = editorStyles?.actions
   
+  const tabActions = useEditorActions(activeFile, editorRef)
+  const { pendingFiles=noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
+
+  const editorStyles = useStyle(`screens.editors`)
+  const actionsStyles = editorStyles?.actions
+  const codeStyles = editorStyles?.[forceFull ? 'full' : tab] || noOpObj
+
   if (!exists(activeFile.content)) return null
 
+  useEffect(() => {
+    /**
+     * for edge case of:
+     * - if we're on the definitions tab and we switch to a non feature file
+     * - we need to switch the tab to the 'feature' tab so we can see the content
+     */
+    activeFile && activeFile.fileType !== 'feature' && setTab(EDITOR_TABS.FEATURE.id)
+  }, [tab, setTab, activeFile])
+  
   /* TODO: Clean up constants and Actions tab
     * Constants
       * FEATURE should be it's own constant
@@ -84,32 +59,39 @@ export const CodeEditor = props => {
         * Currently hidden for all except feature files
   */
 
+  const pendingMark = Boolean(pendingFiles[activeFile?.location]) ? '*' : ''
+  const surfaceTitle = `${capitalize(activeFile?.fileType)} ${pendingMark}`.trim()
+
   return (
     <>
-      {(tab === EDITOR_TABS.FEATURE || tab === EDITOR_TABS.SPLIT) && (
-        <MainEditor
+      {(tab === EDITOR_TABS.FEATURE.id || tab === EDITOR_TABS.BDD_SPLIT.id) && (
+        <EditorFromType
+          editorType={activeFile.fileType}
           aceRef={editorRef}
           key={`${tab}-feature`}
           activeFile={activeFile}
           setTab={setTab}
-          value={activeFile?.content || ''}
+          editorId={`${activeFile.fileType}-editor`}
+          value={pendingFiles[activeFile?.location] || activeFile?.content || ''}
           style={codeStyles.feature || codeStyles}
         />
       )}
-      {(tab === EDITOR_TABS.DEFINITIONS ||tab === EDITOR_TABS.SPLIT) &&
-        activeFile?.isFeature && (
-          <DefinitionsEditor
-            featureEditorRef={editorRef}
-            activeFile={activeFile}
+      {(tab === EDITOR_TABS.DEFINITIONS.id ||tab === EDITOR_TABS.BDD_SPLIT.id) &&
+        isFeature && (
+          <EditorFromType
+            editorType={EDITOR_TABS.DEFINITIONS.id}
+            aceRef={editorRef}
             key={`${tab}-definitions`}
+            activeFile={activeFile}
             editorId={`definitions-editor`}
             styles={codeStyles.definitions || codeStyles}
           />
       )}
       <EditorTabs
-        activeTab={checkTab}
+        activeTab={tab}
         onTabSelect={setTab}
-        showFeatureTabs={activeFile.isFeature}
+        showRun={plural(activeFile.fileType) !== EDITOR_TABS.DEFINITIONS.id}
+        showFeatureTabs={isFeature}
         styles={actionsStyles}
         { ...tabActions }
       />

@@ -33,7 +33,8 @@ export const ActiveDefinitionsEditor = props => {
     ? definitions.map(def => {
           return (
             <AceEditor
-              key={def.uuid}
+              key={def.keyId || def.uuid}
+              fileId={def.uuid}
               {...props}
               onChange={text => checkCall(props.onChange, def.uuid, text)}
               editorId={`definition-editor-${def.uuid}`}

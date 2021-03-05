@@ -3,6 +3,7 @@ const { isArr } = require('@keg-hub/jsutils')
 const { Definition } = require("./definition")
 const { REGEX_VARIANT, EXPRESSION_VARIANT } = require('../../constants')
 const { stripComments } = require('../../utils/stripComments')
+const { buildFileModel } = require('../../utils/buildFileModel')
 
 let defCache = {}
 const DEFINITION_REGEX = new RegExp(/(Given|When|Then|test)\(('|"|`|\/)(.*)('|"|`|\/),/, 'gm')
@@ -27,22 +28,28 @@ class DefinitionsParser {
   getDefinitions = async filePath => {
     if(defCache[filePath]) return defCache[filePath]
 
-    // Holds the loaded defs by file name
+    // Holds the loaded defs fileModels by file name
     // This is what will be returned to the frontend
     defCache[filePath] = []
 
-    const definitions = await this.parseDefinition(filePath)
+    const { fileModel, definitions } = await this.parseDefinition(filePath)
 
-    const loadedDefs = definitions.map(({ match, type, variant, content }) => {
+    definitions.map(({ match, type, variant, content }) => {
       if(!this.validateMatch(filePath, match, type)) return
 
       const definition = this.definitions[match] || new Definition(match, type, variant, content)
       !this.definitions[match] && (this.definitions[match] = definition)
+      
+      // Add a reference back to the parent
+      definition.parentUuid = fileModel.uuid
 
+      // Add the definition to the fileModels ast.definition array
+      fileModel.ast.definitions.push(definition)
+      
       return definition
     })
 
-    defCache[filePath] = loadedDefs
+    defCache[filePath] = fileModel
 
     return defCache[filePath]
   }
@@ -50,7 +57,7 @@ class DefinitionsParser {
   parseDefinition = (filePath) => {
     return new Promise((res, rej) => {
       const definitions = []
-      fs.readFile(filePath, (err, content) => {
+      fs.readFile(filePath, async (err, content) => {
         if(err) return rej(err)
 
         const contentStr = content.toString()
@@ -68,7 +75,15 @@ class DefinitionsParser {
           })
         }
 
-        return res(definitions)
+        const fileModel = await buildFileModel({
+          location: filePath,
+          content: contentStr,
+          // Set definitions as an empty array placeholder
+          // Later we will add instances of the Definition class into it
+          ast: { definitions: [] },
+        })
+
+        return res({ fileModel, definitions })
       })
     })
   }

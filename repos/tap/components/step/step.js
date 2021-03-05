@@ -1,17 +1,17 @@
 import { Values } from 'SVConstants'
 import { Drawer } from 'SVComponents'
-import { useSelector } from 'SVHooks'
 import { EditStep } from './editStep'
 import { useTheme } from '@keg-hub/re-theme'
 import { View } from '@keg-hub/keg-components'
 import { StepMatchText } from './stepMatchText'
 import { StepEditToggle } from './stepEditToggle'
+import { useSelector } from 'SVHooks/useSelector'
 import { devLog, getDefinitionFromId } from 'SVUtils'
 import { updateStepIndex } from 'SVUtils/steps/updateStepIndex'
 import { getDynamicMap } from 'SVUtils/steps/getDynamicMap'
 import { replaceScenarioStep } from 'SVUtils/features/replaceScenarioStep'
 import React, { useState, useCallback, useMemo } from 'react'
-import { saveFeature } from 'SVActions/features/saveFeature'
+import { saveFeature } from 'SVActions/features/api/saveFeature'
 import { copyStep } from 'SVActions/steps/copyStep'
 import { useSetTimeout } from 'SVHooks'
 import { SelectDefinitionType } from '../definition/selectDefinitionType'
@@ -20,15 +20,15 @@ const { CATEGORIES } = Values
 
 /**
  * Hook to memoize the finding a definition based on uuid
- * @param {Array} definitions - All loaded step definition
+ * @param {Array} definitionTypes - All loaded step definitions grouped by type
  * @param {Object} step - Step containing the definition to find
  *
  * @returns {Object} - Found definition
  */
-const useDefinition = (definitions, step) => {
+const useDefinition = (definitionTypes, step) => {
   return useMemo(() => {
-    return getDefinitionFromId(definitions, step.definition, step.altType || step.type)
-  }, [ definitions, step ])
+    return getDefinitionFromId(definitionTypes, step.definition, step.altType || step.type)
+  }, [ definitionTypes, step ])
 }
 
 /**
@@ -81,7 +81,7 @@ const useHighlightAction = () => {
 const useStepActions = (props) => {
 
   const {
-    definitions,
+    definitionTypes,
     isEditing,
     feature,
     orgStep,
@@ -113,10 +113,10 @@ const useStepActions = (props) => {
 
   // Action for updating the step definition
   const selectAction = useCallback((value) => {
-    const definition = getDefinitionFromId(definitions, value, step.altType || step.type)
+    const definition = getDefinitionFromId(definitionTypes, value, step.altType || step.type)
 
     if(!definition)
-      return devLog.info(`Could not find step definition with id: ${value}`, definitions)
+      return devLog.info(`Could not find step definition with id: ${value}`, definitionTypes)
 
 
     setStep({
@@ -126,7 +126,7 @@ const useStepActions = (props) => {
       dynamicMap: getDynamicMap(definition),
     })
 
-  }, [isEditing, step, definitions, setStep])
+  }, [isEditing, step, definitionTypes, setStep])
 
   // Action for updating the step type
   const typeAction = useCallback(type => {
@@ -177,8 +177,8 @@ export const Step = props => {
 
   // TODO: revert this back to false when other steps are added back
   const [isEditing, setIsEditing] = useState(false)
-  const { definitions } = useSelector(CATEGORIES.DEFINITIONS)
-  const definition = useDefinition(definitions, step)
+  const { definitionTypes } = useSelector(CATEGORIES.DEFINITION_TYPES)
+  const definition = useDefinition(definitionTypes, step)
 
   const {
     cancelAction,
@@ -190,7 +190,7 @@ export const Step = props => {
     selectAction,
     typeAction,
   } = useStepActions({
-    definitions,
+    definitionTypes,
     isEditing,
     feature,
     orgStep: props.step,

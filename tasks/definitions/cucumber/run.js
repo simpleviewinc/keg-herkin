@@ -1,4 +1,4 @@
-const { dockerExec } = require('HerkinTasks/utils/process/process')
+const { dockerCmd } = require('HerkinTasks/utils/process/dockerCmd')
 const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers') 
 const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
 const { runSeq, isNum } = require('@keg-hub/jsutils')
@@ -29,7 +29,7 @@ const buildCmdArgs = params => {
  * Builds the envs set in the command that runs a test
  * @param {String} browser - playwright browser name
  * @param {Object} params - `run` task params
- * @return {Object} dockerExec options object, with envs
+ * @return {Object} dockerCmd options object, with envs
  */
 const buildCmdEnvs = (browser, params) => ({
   envs: {
@@ -77,7 +77,7 @@ const runTest = async args => {
   const cmdArgs = buildCmdArgs(params)
 
   const commands = browsers.map(browser => 
-    () => dockerExec(params.container, cmdArgs, buildCmdEnvs(browser, params))
+    () => dockerCmd(params.container, cmdArgs, buildCmdEnvs(browser, params))
   )
 
   const codes = await runSeq(commands)

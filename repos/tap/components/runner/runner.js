@@ -1,12 +1,14 @@
-import React, { useCallback, useRef, useState, useEffect } from "react"
-import { uuid, checkCall } from '@keg-hub/jsutils'
+import { Values } from 'SVConstants'
 import { RunnerTabs } from './runnerTabs'
 import { useStyle } from '@keg-hub/re-theme'
-import { useTestRunner } from 'SVHooks/useTestRunner'
-import { View } from '@keg-hub/keg-components/view'
-import { Results } from 'SVComponents/runner/results'
 import { ToRun } from 'SVComponents/runner/toRun'
+import { useTestRunner } from 'SVHooks/useTestRunner'
+import { Results } from 'SVComponents/runner/results'
 import { TestsRunning } from 'SVComponents/runner/testsRunning'
+import { usePendingCallback } from 'SVHooks/usePendingCallback'
+import React, { useCallback, useRef, useState, useEffect, useMemo } from "react"
+
+const { SCREENS } = Values
 
 const useTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
   activeTab !== tab && setActiveTab(tab)
@@ -16,6 +18,7 @@ const useTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
 export const Runner = props => {
 
   const {
+    activeFile,
     autoRun=false,
     activeTab,
     parentMethods,
@@ -44,7 +47,6 @@ export const Runner = props => {
     toggleResultsRef.current = setResultsToggle
   }, [ toggleResultsRef && toggleResultsRef.current ])
 
-
   const onRunTests = useTestRunner({
     editorRef,
     setIsRunning,
@@ -54,6 +56,8 @@ export const Runner = props => {
     toggleResults: toggleResultsRef.current,
   })
 
+  const toRunOnChange = usePendingCallback(activeFile, SCREENS.RUNNER)
+
   useEffect(() => {
     autoRun && onRunTests()
   }, [autoRun, setTestResults, parentMethods])
@@ -62,11 +66,13 @@ export const Runner = props => {
     <>
       <ToRun
         tests={tests}
+        fileId={activeFile.location}
         styles={runnerStyles}
         editorRef={editorRef}
         title={title}
         prefix={prefix}
         toggleHandel={setToggleToRun}
+        onChange={toRunOnChange}
       />
       <Results
         results={testResults}

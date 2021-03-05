@@ -1,4 +1,5 @@
 import { Values } from 'SVConstants'
+import { noOpObj, reduceObj } from '@keg-hub/jsutils'
 import { useDefinitions } from './useDefinitions'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 
@@ -11,19 +12,21 @@ const { CATEGORIES } = Values
  * @param {string=} props.path 
  * @returns {Object}
  */
-export const useFeature = ({name, path}) => {
+export const useFeature = ({ name, path }) => {
   if (!name && !path) return
-  const { features=[], definitions } = useStoreItems([ 
-    CATEGORIES.ACTIVE_DATA, 
-    CATEGORIES.FEATURES, 
-    CATEGORIES.DEFINITIONS 
+
+  const { features=noOpObj, definitionTypes } = useStoreItems([
+    CATEGORIES.FEATURES,
+    CATEGORIES.DEFINITION_TYPES
   ])
 
-  const feature = features.filter((feature) => {
-    if (name) return feature?.feature === name
-    if (path) return feature?.fullPath === path
-  })[0]
-  const defs = useDefinitions(feature, definitions)
+  const feature = reduceObj(features, (__, feature, obj) => {
+    if (feature.name === name || feature?.location === path) 
+      obj = feature
+    
+    return obj
+  }, {})
 
-  return { feature, definitions: defs }
+  const definitions = useDefinitions(feature, definitionTypes)
+  return { feature, definitions }
 }

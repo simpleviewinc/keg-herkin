@@ -4,7 +4,7 @@
  * @function
  * @public
  * @export
- * @param {Object} parent - Parsed parent object of a tag
+ * @param {Object} parent - Parsed feature ast object of a tag
  *
  * @return {string} - Tag type based on tag's parent
  */

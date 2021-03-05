@@ -1,7 +1,8 @@
 const path = require('path')
 const glob = require('glob')
-const { FeatureParser } = require('./featureParser')
 const { mapToSteps } = require('./mapToSteps')
+const { FeatureParser } = require('./featureParser')
+const { buildFileModel } = require('../../utils/buildFileModel')
 
 const loadFeatureFiles = featuresDir => {
   return new Promise((res, rej) => {
@@ -19,8 +20,8 @@ const parseFeatures = (featureFiles, testsRoot) => {
     if(!file) return loaded
 
     const features = await FeatureParser.getFeatures({
-      fullPath: file,
-      testPath: file.replace(`${testsRoot}/`, '')
+      location: file,
+      relative: file.replace(`${testsRoot}/`, '')
     })
 
     return loaded.concat(features)
@@ -40,9 +41,21 @@ const loadFeatures = async (config, definitions) => {
   const featureFiles = featuresDir && await loadFeatureFiles(pathToFeatures)
   const features = await parseFeatures(featureFiles, pathToFeatures)
 
-  return definitions
+  const featuresWDefs = definitions
     ? mapToSteps(features, definitions)
     : features
+  
+  const featuresFiles = featuresWDefs.map(async feat => {
+    const { relative, location, content, feature, ...ast } = feat
+    return await buildFileModel({
+      ast,
+      content,
+      location,
+    })
+  })
+
+  return Promise.all(featuresFiles)
+
 }
 
 module.exports = {

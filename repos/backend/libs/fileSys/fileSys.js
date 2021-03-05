@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const { limbo, isFunc, exists } = require('@keg-hub/jsutils')
+const { limbo, isFunc, exists, noOpObj } = require('@keg-hub/jsutils')
 
 /**
  * Wraps a method with a callback into a promise
@@ -160,13 +160,42 @@ const getFolderContent = async (fromPath, opts={}, foundPaths=[]) => {
   }), foundPaths)
 }
 
+/**
+ * Gets the meta data for a file or folder based on the passed in filePath
+ * @function
+ * @param {string} fromPath - Path to get the content from
+ *
+ * @returns {Promise|Object} - Meta data of the passed in path
+ */
+const getLastModified = async filePath => {
+  const [__, metaData] = await limboify(fs.stat, filePath)
+  // Return the mtimeMs (POSIX Epoch in milliseconds)
+  // Either from the files stats, or current time
+  return metaData ? metaData.mtimeMs : Date.now()
+}
+
+/**
+ * Checks if the passed in path is a directory
+ * @function
+ * @param {string} fullPath - Path to check if it's a directory
+ *
+ * @returns {Promise|boolean} - True if fullPath a directory
+ */
+const isDirectory = async fullPath => {
+  // Check if its a directory
+  const [_, stat] = await limboify(fs.stat, fullPath)
+  return stat.isDirectory()
+}
+
 module.exports = {
   copyFile,
+  isDirectory,
   mkDir,
   readDir,
   pathExists,
   readFile,
   removeFile,
   writeFile,
+  getLastModified,
   getFolderContent
 }

@@ -1,3 +1,5 @@
+import { tapColors } from '../tapColors'
+
 export const editors = theme => {
   const halfMargin = theme.margin.size / 2
 
@@ -5,30 +7,43 @@ export const editors = theme => {
     main: {
       flD: 'row',
     },
-    feature: {
+    surface: {
+      main: {
+        fl:1
+      },
+      content: {
+        flWr: 'nowrap', 
+        backgroundColor: tapColors.backGround
+      }
+    },
+    full: {
       w: `100%`,
       h: `75vh`,
+    },
+    feature: {
+      w: `100%`,
+      h: `calc( 100vh - 210px )`,
     },
     definitions: {
       main: {
         w: `100%`,
-        h: `75vh`,
+        h: `calc( 100vh - 170px )`,
       },
       editor: {
         w: `100%`,
         minH: `100px`,
       }
     },
-    split: {
+    bddSplit: {
       feature: {
         w: `calc( 50% - ${halfMargin}px )`,
-        h: `75vh`,
+        h: `calc( 100vh - 210px )`,
         mR: halfMargin,
       },
       definitions: {
         main: {
           w: `calc( 50% - ${halfMargin}px )`,
-          h: `75vh`,
+          h: `calc( 100vh - 170px )`,
           mL: halfMargin,
         },
         editor: {
@@ -45,7 +60,7 @@ export const editors = theme => {
           mR: theme.margin.size,
         },
       },
-      feature: {
+      showRun: {
         save: { mR: 15 },
       }
     }

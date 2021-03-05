@@ -1,13 +1,10 @@
-import { Values } from 'SVConstants'
 import { noOpObj } from '@keg-hub/jsutils'
 import { reduceObj } from '@keg-hub/jsutils'
 import { useStyle } from '@keg-hub/re-theme'
 import React, { useMemo, useCallback } from 'react'
-import { useSelector, shallowEqual } from 'react-redux'
 import { ChevronDown, Copy } from 'SVAssets/icons'
 import { SimpleList, Row, Text, View, Touchable } from 'SVComponents'
-import { addStepFromDefinition } from 'SVActions/features/addStepFromDefinition'
-const { CATEGORIES, EDITOR_TABS } = Values
+import { addStepFromDefinition } from 'SVActions/features/local/addStepFromDefinition'
 
 /**
  * Maps the definitions to a format that can be loaded by the SimpleList Component

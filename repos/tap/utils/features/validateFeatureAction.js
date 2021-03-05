@@ -23,13 +23,14 @@ const emptyResponse = (message, ...extra) => {
  * @function
  * @public
  * @export
- * @param {Object} feature - Parsed feature object to be validated
+ * @param {Object} feature - Feature file model object
  * @param {string} type - Feature property to validate on the feature
  *
  * @return {Object} - Object containing the store features, items, and validated feature
  */
 export const validateFeatureAction = (feature, type) => {
-  if(!feature || !feature[type])
+
+  if(!feature || !feature?.ast[type])
     return emptyResponse(`The ${type} does not exist on the feature.`, feature, type)
 
   const { items } = getStore()?.getState()
@@ -37,7 +38,7 @@ export const validateFeatureAction = (feature, type) => {
     return emptyResponse(`No features exist in the store!`, items)
 
   const { features } = items
-  const index = features.findIndex(feat => feat.feature === feature.feature)
+  const index = features.findIndex(feat => feat?.ast?.feature === feature?.ast?.feature)
   if(index === -1) return emptyResponse(`Parent does not exist in the items store!`, items)
 
   return {

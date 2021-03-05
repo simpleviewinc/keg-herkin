@@ -9,7 +9,7 @@ import { AceEditor } from 'SVComponents/aceEditor'
 import { checkCall } from '@keg-hub/jsutils'
 
 export const ToRun = props => {
-  const { styles, tests, editorRef, title, prefix, toggleHandel } = props
+  const { styles, tests, editorRef, title, prefix, toggleHandel, fileId } = props
 
   return (
     <Surface
@@ -24,6 +24,7 @@ export const ToRun = props => {
         <Row className='runner-torun' style={styles?.toRun?.row} >
           <AceEditor
             aceRef={editorRef}
+            fileId={fileId}
             onChange={text => checkCall(props.onChange, text)}
             editorId={`runner-tests-editor`}
             value={tests || ''}

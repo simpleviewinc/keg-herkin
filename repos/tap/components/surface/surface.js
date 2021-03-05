@@ -14,6 +14,7 @@ const SurfaceHeader = props => {
     titleStyle,
     toggled,
     onTogglePress,
+    hasToggle=true,
     toggleDisabled,
   } = props
 
@@ -23,14 +24,14 @@ const SurfaceHeader = props => {
       styles={styles?.itemHeader}
       CenterComponent={(
         <H3 style={styles?.heading} >
-          { prefix &&  (
+          { prefix && (
             <Text style={styles?.prefix}>
               {prefix}
             </Text>
           )}
           { title && (
             <>
-              <Text style={styles?.prefix}> - </Text>
+              {prefix && (<Text style={styles?.prefix}> - </Text>)}
               <Text style={[styles?.title, titleStyle]}>
                 { capitalize ? wordCaps(`${title}`) : title }
               </Text>
@@ -38,14 +39,14 @@ const SurfaceHeader = props => {
           )}
         </H3>
       )}
-      RightComponent={(
-          <DrawerToggle
-            onPress={onTogglePress}
-            toggled={toggled}
-            styles={styles}
-            toggleDisabled={toggleDisabled}
-            icons={true}
-          />
+      RightComponent={hasToggle && (
+        <DrawerToggle
+          onPress={onTogglePress}
+          toggled={toggled}
+          styles={styles}
+          toggleDisabled={toggleDisabled}
+          icons={true}
+        />
       )}
     />
   )
@@ -58,6 +59,7 @@ export const Surface = props => {
     styles,
     title,
     titleStyle,
+    hasToggle,
     toggleHandel,
     initialToggle,
     toggleDisabled,
@@ -82,6 +84,7 @@ export const Surface = props => {
       {(title || prefix) && (<SurfaceHeader
         title={title}
         titleStyle={titleStyle}
+        hasToggle={hasToggle}
         prefix={prefix}
         capitalize={capitalize}
         styles={surfaceStyles?.header}

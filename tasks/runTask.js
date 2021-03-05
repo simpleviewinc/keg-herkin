@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('../configs/aliases.config').registerAliases()
 
 const Definitions = require('./definitions')
 const { argsParse } = require("@keg-hub/args-parse")

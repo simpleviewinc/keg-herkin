@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
-import { noPropArr, deepMerge } from '@keg-hub/jsutils'
+import { noOpObj, deepMerge } from '@keg-hub/jsutils'
 import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
-import { setActiveFile } from 'SVActions/files/setActiveFile'
+import { loadTestFile } from 'SVActions/files/api/loadTestFile'
 import {
   View,
   Loading,
@@ -10,25 +10,12 @@ import {
 import { Values } from 'SVConstants'
 import TreeView from 'react-native-final-tree-view'
 import { ChevronDown } from 'SVAssets/icons'
+import { useActiveFile } from 'SVHooks/useActiveFile'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { isEmptyFolderNode } from 'SVUtils/fileTree'
+import { isEmptyFolderNode, findNode, constructFileTree } from 'SVUtils/fileTree'
 import { toggleRotationStyle } from 'SVUtils/theme'
 
 const { CATEGORIES } = Values
-
-/**
- * Finds the node based on given id
- * @param {string} id 
- * @param {Array<object>} nodes 
- * 
- * @returns {object} node
- */
-const findNode = (id, nodes) => 
-  nodes.find((node) => {
-    return node.id === id 
-      ? node
-      : node.children.length && findNode(id, node.children)
-  }, {})
 
 /**
  * Hook to get the correct styles for the tree node
@@ -85,7 +72,7 @@ const useNodeActive = (isExpanded, nodeType, nodePath, filePath) => useMemo(() =
 
 /**
  * Hook to memoize the name of the node based on it's type
- * @param {Object} node - node object: { children, fullPath, id, isModified, name, type }
+ * @param {Object} node - node object: { children, location, id, modified, name, type }
  * 
  * @returns {string} - Name of the node
  */
@@ -95,6 +82,19 @@ const useNodeName = node => useMemo(() => {
     : node.name
 }, [ node?.type, node?.name ])
 
+/**
+ * Hook to memoize to check which tree node has pending changes
+ * @param {Array<FileModel>} pendingFiles - array of fileModels
+ * @param {string} location - full path of current node location
+ * 
+ * @returns {string} - Name of the node
+ */
+const usePendingContent = (pendingFiles, location) => useMemo(() => {
+  return pendingFiles && pendingFiles[location]
+}, [
+  location,
+  pendingFiles
+])
 
 /**
  * TreeList
@@ -104,27 +104,32 @@ const useNodeName = node => useMemo(() => {
  */
 export const TreeList = props => {
 
-  const { fileTree=noPropArr } = useStoreItems([CATEGORIES.FILE_TREE])
+  const { fileTree=noOpObj } = useStoreItems([CATEGORIES.FILE_TREE])
+  const { rootPaths, nodes } = fileTree
   const { onSidebarToggled } = props
 
-  const onItemPress = useCallback(({node}) => {
+  const tree = useMemo(() => constructFileTree(rootPaths, nodes), [rootPaths, nodes])
+
+  const onItemPress = useCallback( async ({node}) => {
     if (node?.type !== 'file') return
-    setActiveFile(node?.fullPath)
+    await loadTestFile(node.location)
+
     onSidebarToggled(false)
-  }, [ setActiveFile, onSidebarToggled ])
+
+  }, [ loadTestFile, onSidebarToggled ])
   
   const getCollapsedNodeHeight = useCallback(({id}) => {
-    const node = findNode(id, fileTree)
+    const node = findNode(id, nodes)
     return (isEmptyFolderNode(node))
       ? 0
       : 40
-  }, [fileTree])
+  }, [tree])
 
-  return !fileTree
+  return !tree
     ? (<Loading />)
     : (
         <TreeView
-          data={fileTree}
+          data={tree || []}
           renderNode={NodeComponent}
           onNodePress={onItemPress}
           getCollapsedNodeHeight={getCollapsedNodeHeight}
@@ -137,20 +142,21 @@ export const TreeList = props => {
  * Component for list item based on the props
  * prop ref: https://github.com/zaguiini/react-native-final-tree-view#rendernode
  * @param {Object} props 
- * @param {Object} props.node - node object: { children, fullPath, id, isModified, name, type }
+ * @param {Object} props.node - node object: { children, location, id, modified, name, type }
  * @param {Boolean} props.isExpanded - if the list item is expanded
  * @param {Boolean} props.hasChildrenNodes
  * 
  */
 const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
 
-  const { activeFile } = useStoreItems([CATEGORIES.ACTIVE_FILE])
+  const activeFile = useActiveFile()
+  const { pendingFiles } = useStoreItems([CATEGORIES.PENDING_FILES])
   const nodeName = useNodeName(node)
   const nodeType = node?.type
 
   // Check if active file or expanded folder
-  const isNodeActive = useNodeActive(isExpanded, nodeType, node?.fullPath, activeFile?.fullPath)
-
+  const isNodeActive = useNodeActive(isExpanded, nodeType, activeFile?.location, node?.location)
+  const showPending = usePendingContent(pendingFiles, node?.location)
   const {
     styles,
     styleRef,
@@ -171,6 +177,7 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
         style={styles?.text}
       >
         { nodeName }
+        {showPending && <Text style={mainStyles?.pendingText}> *</Text>}
       </Text>
       {
         nodeType === 'folder' &&

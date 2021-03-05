@@ -4,15 +4,17 @@ import { SafeAreaView, StatusBar } from 'react-native'
 import { ReThemeProvider, getDefaultTheme } from '@keg-hub/re-theme'
 import { Provider } from 'react-redux'
 import { getStore } from 'SVStore'
-import { initAppAction } from 'SVActions'
-import { View, ModalManager } from 'SVComponents'
+import { initAppAction, init } from 'SVActions'
+import { View, ModalManager, DomStyles, Toast } from 'SVComponents'
 import { Router } from 'SVComponents/router'
 import { checkCall, get } from '@keg-hub/jsutils'
 import { ContainerRoutes } from 'SVNavigation/containerRoutes'
 import { keg } from 'SVConfig'
 import { getHistory } from 'SVNavigation'
 import { isNative } from 'SVUtils/platform'
-import { init } from 'SVActions'
+import { WSService } from 'SVServices'
+import { SockrProvider } from 'SVUtils/sockr'
+import { sockrReducer } from './reducers/sockrReducer'
 
 const checkAppInit = async setInit => {
   await init()
@@ -42,10 +44,18 @@ const App = props => {
         <SafeAreaView>
           <Provider store={getStore()}>
             <ReThemeProvider theme={ activeTheme } >
-              <View style={activeTheme.app.main} >
-                <ContainerRoutes navigationConfigs={keg.routes}/>
-                <ModalManager />
-              </View>
+              <DomStyles />
+              <SockrProvider
+                debug={true}
+                config={WSService}
+                reducer={sockrReducer}
+              >
+                <View style={activeTheme.app.main} >
+                  <ContainerRoutes navigationConfigs={keg.routes}/>
+                  <ModalManager />
+                  <Toast />
+                </View>
+              </SockrProvider>
             </ReThemeProvider>
           </Provider>
         </SafeAreaView>

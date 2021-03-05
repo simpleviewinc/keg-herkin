@@ -3,20 +3,27 @@ export const Values = {
     STEPS: 'steps',
     FEATURES: 'features',
     DEFINITIONS: 'definitions',
+    DEFINITION_TYPES: 'definitionTypes',
+    UNITS: 'units',
+    WAYPOINTS: 'waypoints',
     ACTIVE_FEATURE: 'activeFeature',
     ACTIVE_TAB: 'activeTab',
-    ACTIVE_DATA: 'activeData',
     ACTIVE_RUNNER_TESTS: 'activeRunnerTests',
     FEATURE: 'feature',
-    ACTIVE_FILE: 'activeFile',
     SCREEN: 'screen',
+    SCREENS: 'screens',
     COPY_STEP: 'copy_step',
     MODALS: 'modals',
     FILE_TREE: 'fileTree',
-    SIDEBAR: 'sidebar'
+    SIDEBAR: 'sidebar',
+    PENDING_FILES: 'pendingFiles',
+    TOASTS: 'toasts',
   },
   SUB_CATEGORIES: {
-    RUNNER_CONTENT: 'runnerContent'
+    ACTIVE_FILE: 'activeFile',
+    RUNNER_CONTENT: 'runnerContent',
+    MODIFIED_CONTENT: 'modified',
+    NODES: 'nodes'
   },
   MODAL_TYPES: {
     TEST_SELECTOR_MODAL: 'testSelectorModal',
@@ -43,13 +50,17 @@ export const Values = {
     RUNNER: 'runner',
   },
   EDITOR_TABS: {
-    SPLIT: 'split',
-    FEATURE: 'feature',
-    DEFINITIONS: 'definitions',
-    ALL_DEFINITIONS: 'all-definitions',
+    BDD_SPLIT: { id: 'bddSplit', title: `Split` },
+    FEATURE: { id: 'feature', title: `Feature` },
+    DEFINITIONS: { id: 'definitions', title: `Definitions` },
+    OTHER: { id: 'other', title: `Non Test File` },
+    UNIT: { id: 'unit', title: `Unit Tests` },
+    WAYPOINT: { id: 'waypoint', title: `Waypoint Tests` },
   },
   DEFINITION_TABS: {
     ACTIVE: 'active-definitions',
     LIST: 'list-definitions'
-  }
+  },
+  KEG_DOM_STYLES_ID: 'keg-dom-styles',
+  TABBAR_PORTAL_ID: `keg-tabbar-portal-root`,
 }

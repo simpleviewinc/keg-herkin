@@ -1,4 +1,14 @@
-export const runTests = async (feature, definitions) => {
-  console.log(feature)
-  console.log(definitions)
+import { WSService } from 'SVServices'
+import { EventTypes } from 'SVUtils/sockr'
+import { addToast } from 'SVActions/toasts'
+import { buildCmdParams } from 'SVUtils/helpers/buildCmdParams'
+
+export const runTests = async (activeFile, testCmd, screenID) => {
+
+  addToast({
+    type: 'info',
+    message: `Running ${testCmd.name} tests for file ${activeFile.name}!`
+  })
+
+  WSService.runCommand(testCmd, buildCmdParams(testCmd, activeFile))
 }

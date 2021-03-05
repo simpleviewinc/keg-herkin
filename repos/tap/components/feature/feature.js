@@ -12,7 +12,7 @@ export const Feature = props => {
 
   return feature && (
     <Surface
-      title={feature.feature}
+      title={feature?.ast?.feature}
       prefix={`Feature - `}
     >
       <Tags

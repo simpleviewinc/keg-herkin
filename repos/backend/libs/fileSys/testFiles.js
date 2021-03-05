@@ -1,6 +1,14 @@
 const path = require('path')
-const { readFile, removeFile, writeFile, pathExists } = require('./fileSys')
 const { validFilename } = require('@keg-hub/jsutils')
+const { buildFileModel } = require('../../utils/buildFileModel')
+const {
+  readFile,
+  removeFile,
+  writeFile,
+  pathExists,
+} = require('./fileSys')
+
+
 /**
  * Checks that the file path exists
  * @param {String} path - file path to check
@@ -15,18 +23,15 @@ const checkPath = async (path) => {
   }
 }
 
-const deleteTestFile = async (config, testPath) => {
+const deleteTestFile = async (config, location) => {
   const { testsRoot } = config.paths
-  const fullPath = path.join(testsRoot, testPath)
-
-  await checkPath(fullPath)
+  await checkPath(location)
 
   // TODO: double check that removeFile returns a value
-  const [__, deleted] = await removeFile(fullPath)
+  const [__, deleted] = await removeFile(location)
 
   return {
-    fullPath,
-    testPath,
+    location,
     success: Boolean(deleted),
   }
 }
@@ -42,39 +47,40 @@ const getTestFile = async (config, testPath) => {
 
   const [ __, content ] = await readFile(fullPath)
 
-  return {
+  // Build the file model for the test file
+  return buildFileModel({
     content,
-    fullPath,
-    testPath,
-  } 
+    location: fullPath,
+  })
 }
 
 /**
  * Save file at a given location. file should be located in the test root path
  * @param {Object} config 
- * @param {string} fullPath
+ * @param {string} location
  * @param {string} content 
  */
-const saveTestFile = async (config, fullPath, content) => {
+const saveTestFile = async (config, location, content) => {
 
   const { testsRoot } = config.paths
-  if (!validFilename(path.basename(fullPath))) throw new Error(`[API - Files] Filename is invalid!`)
-  const inTestRoot = fullPath.startsWith(testsRoot)
+
+  const inTestRoot = location.startsWith(testsRoot)
   if (!inTestRoot) throw new Error(`[API - Files] File must be saved to the mounted test folder!`)
 
-  const [err, success] = await writeFile(fullPath, content)
+  const [err, success] = await writeFile(location, content)
 
   if (err) {
     console.log(err)
-    const pathError = new Error(`[API - Files] Save failed: ${fullPath} - ${err.message}`)
+    const pathError = new Error(`[API - Files] Save failed: ${location} - ${err.message}`)
     pathError.status = 404
     throw pathError
-  }
-
+  } 
   return {
-    fullPath,
-    fileName: path.basename(fullPath),
     success: Boolean(success),
+    file: await buildFileModel({
+      content,
+      location,
+    })
   }
 }
 

@@ -1,19 +1,22 @@
-import React, { useMemo, useCallback } from 'react'
-import { useSelector, shallowEqual } from 'react-redux'
 import { Values } from 'SVConstants'
 import { View, Tabbar } from 'SVComponents'
 import { EmptyScreen } from './emptyScreen'
-import { BuilderScreen } from './builderScreen'
-import { EditorScreen } from './editorScreen'
-import { RunnerScreen } from './runnerScreen'
-import { setScreen } from 'SVActions'
-import { pickKeys } from '@keg-hub/jsutils'
+import { deepMerge } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
+import { RunnerScreen } from './runnerScreen'
+import { EditorScreen } from './editorScreen'
+import { BuilderScreen } from './builderScreen'
+import React, { useMemo, useCallback } from 'react'
+import { setScreen } from 'SVActions/screens/setScreen'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 
 const { CATEGORIES, SCREENS } = Values
 
-const tabs = [
+/**
+ * Local tabs matching the screenModels in the store
+ * @type Array
+ */
+const screenTabs = [
   {
     id: SCREENS.EMPTY,
     View: EmptyScreen,
@@ -35,20 +38,46 @@ const tabs = [
   },
 ]
 
-const useScreen = id => useMemo(() => {
-  return tabs.find(item => item.id === id) || tabs[2]
-}, [id])
+/**
+ * Hook to merge the local tabs with the screenModels to make a screenTab
+ * @type function
+ * @param {string} id - Id of the active screen, uses the stores active screen if not passed
+ *
+ * @returns {Object} screenTab - screenModel and screenTab objects merged
+ */
+const useScreenTab = id => {
+  const screenModels = useStoreItems(CATEGORIES.SCREENS)
 
+  return useMemo(() => {
+    // If an id is passed use that for finding the screen, otherwise use the active 
+    const foundTab = screenTabs.find(item => (
+      id ? item.id === id : screenModels[item.id].active
+    )) 
+
+    // Default to returning an empty screen
+    return foundTab
+      ? deepMerge(screenModels[foundTab.id], foundTab)
+      : screenTabs[0]
+
+  }, [id, screenModels, screenTabs])
+}
+
+/**
+ * Screen - Renders Tabs component of screen tabs, from the props or active screen in the store
+ * @param {object} props
+ * @param {object} [props.activeScreen] - Currently active screen
+ */
 export const Screen = props => {
 
   const theme = useTheme()
-  const activeTab  = useStoreItems(CATEGORIES.ACTIVE_TAB) || {}
+  const screenTab = useScreenTab(props?.activeScreen)
 
-  const screen = useScreen(activeTab?.id)
-  const onTabSelect = useCallback(tabId => {
-    tabId !== activeTab?.id && setScreen(tabId)
+  const onTabSelect = useCallback(screenId => {
+    screenId !== screenTab?.id && setScreen(screenId)
     return true
-  }, [ activeTab, setScreen ])
+  }, [ screenTab, setScreen ])
+
+  if(!screenTab) return null
 
   return (
     <View
@@ -57,10 +86,10 @@ export const Screen = props => {
     >
       <Tabbar
         location={'top'}
-        tabs={tabs}
+        tabs={screenTabs}
         fixed
         type={'screens'}
-        activeTab={screen.id}
+        activeTab={screenTab.id}
         onTabSelect={onTabSelect}
       />
     </View>

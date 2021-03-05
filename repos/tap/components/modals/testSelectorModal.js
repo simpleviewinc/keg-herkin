@@ -2,15 +2,16 @@ import React, { useCallback, useState } from 'react'
 import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
 import { Select } from 'SVComponents/form/select'
 import { useTheme } from '@keg-hub/re-theme'
-import { createFeatureFile } from 'SVActions/features'
-import { setActiveFile } from 'SVActions/files/setActiveFile'
+import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
+import { createFeatureFile } from 'SVActions/features/local/createFeatureFile'
 import { setModalVisibility } from 'SVActions/modals'
 import { Values } from 'SVConstants'
 import { mapObj, capitalize, wordCaps, noPropArr } from '@keg-hub/jsutils'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { useFeature } from 'SVHooks/useFeature'
 import { devLog } from 'SVUtils'
-import { setScreen } from 'SVActions/setScreen'
+import { setScreen } from 'SVActions/screens/setScreen'
+import { useActiveScreenTab } from 'SVHooks'
 
 const { TEST_TYPE, CATEGORIES, SCREENS } = Values
 
@@ -50,11 +51,11 @@ const getTestNamesOptions = () => {
     label: wordCaps(Values.CREATE_NEW_FILE),
     value: Values.CREATE_NEW_FILE
   }
-  const features = useStoreItems(CATEGORIES.FEATURES) || []
-  const options = features.map((feature) => {
+  const features = useStoreItems(CATEGORIES.FEATURES) || {}
+  const options = mapObj(features, (__, feature) => {
     return {
-      label: feature?.feature,
-      value: feature?.feature
+      label: feature.name,
+      value: feature.location
     }
   })
   return [newFileOption, ...options]
@@ -73,19 +74,20 @@ export const TestSelectorModal = (props) => {
 
   const theme = useTheme()
   const builtStyles = theme.get(`modals.testSelectorModal`)
-  const { features=noPropArr, activeTab } = useStoreItems([
-    CATEGORIES.ACTIVE_TAB,
+  const { features=noPropArr } = useStoreItems([
     CATEGORIES.FEATURES,
   ])
+  const activeTab = useActiveScreenTab()
   const [testName, setTestName] = useState(Values.CREATE_NEW_FILE)
   const [selectedTab, setSelectedtab] = useState(SCREENS.EDITOR)
-  const { feature } = useFeature({name: testName}) || {}
+  const { feature } = useFeature({ name: testName }) || {}
 
   const loadTests = useCallback(() => {
-
     testName === Values.CREATE_NEW_FILE
       ? createFeatureFile(selectedTab)
-      : setActiveFile(feature.fullPath) && setScreen(selectedTab)
+      : feature 
+        ? setActiveFileFromType(feature, selectedTab) && setScreen(selectedTab)
+        : devLog(`warn`, `Feature from '${location}' does not exist!`)
 
       setModalVisibility(false)
   }, 
@@ -99,7 +101,7 @@ export const TestSelectorModal = (props) => {
     <Modal
       visible={visible}
       styles={builtStyles?.modal}
-      onBackdropTouch={() => activeTab.id !== SCREENS.EMPTY && setModalVisibility(false)}
+      onBackdropTouch={() => activeTab?.id !== SCREENS.EMPTY && setModalVisibility(false)}
     >
       <ItemHeader
         title={title}
@@ -147,15 +149,10 @@ export const TestSelectorModal = (props) => {
  */
 const TestNameSelect = ({styles, features, setTestName}) => {
 
-  const onValueChange = useCallback((val) => {
+  const onValueChange = useCallback((location) => {
     // fetch the feature file content from redux
-    const feature = features.find((feature) => feature.feature === val)
-
-    feature 
-      ? setActiveFile(feature.fullPath)
-      : devLog(`warn`, `Feature '${val}' does not exist!`)
-
-    setTestName(val)
+    const feature = features[location]
+    setTestName(feature?.name)
   }, [features, setTestName])
 
   return (

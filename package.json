@@ -17,7 +17,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "api": "nodemon --watch ./repos/backend --watch ./config --exec 'node ./repos/backend/index.js'",
+    "api": "nodemon --watch ./repos/backend --watch ./repos/sockr --watch ./repos/shared --watch ./config --exec 'node ./repos/backend/index.js'",
     "clean": "cd node_modules/keg-core; yarn clean",
     "clean:install": "yarn clean:full; yarn install",
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
@@ -48,15 +48,16 @@
     "task": "node ./tasks/runTask.js",
     "web": "yarn web:dev",
     "web:build": "cd node_modules/keg-core; yarn build:web",
-    "web:dev": "nodemon --watch node_modules/keg-core/core/base/configs --watch package.json --watch node_modules/keg-core/app.json --watch node_modules/keg-core/package.json --watch configs --exec 'cd node_modules/keg-core && yarn web'",
+    "web:dev": "nodemon --watch ./package.json --exec 'cd node_modules/keg-core && yarn web'",
     "cucumber": "./node_modules/.bin/cucumber-js"
   },
   "dependencies": {
     "@keg-hub/args-parse": "6.2.1",
     "@keg-hub/ask-it": "0.0.1",
-    "@keg-hub/jsutils": "8.2.0",
+    "@keg-hub/jsutils": "8.3.0",
     "@keg-hub/messenger": "file:repos/messenger",
     "@keg-hub/spawn-cmd": "0.1.0",
+    "@ltipton/sockr": "0.0.4",
     "@ltipton/react-ace-editor": "0.0.1",
     "@ltipton/react-gherkin-editor": "0.0.2",
     "ansi-html": "0.0.7",
@@ -77,18 +78,16 @@
     "qawolf": "1.4.0",
     "react-native-final-tree-view": "2.1.0",
     "rollup": "2.36.1",
-    "socket.io": "2.4.0",
     "webpack": "5.13.0",
     "words-to-numbers": "1.5.1"
   },
   "resolutions": {
-    "@keg-hub/jsutils": "8.2.0"
+    "@keg-hub/jsutils": "8.3.0"
   },
   "devDependencies": {
     "@babel/preset-env": "7.12.11",
     "babel-jest": "26.6.3",
     "core-js": "3.8.3",
-    "cucumber-jest": "0.1.1",
     "jest": "26.4.2",
     "jest-playwright-preset": "1.4.4",
     "jest-html-reporter": "3.3.0",

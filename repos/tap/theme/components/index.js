@@ -1,4 +1,4 @@
-import { aceEditor, aceThemeOverrides } from './aceEditor/index'
+import { aceEditor } from './aceEditor'
 import { chip } from './chip'
 import { definitions } from './definitions'
 import { drawer } from './drawer'
@@ -12,15 +12,18 @@ import { sidebar } from './sidebar'
 import { step } from './step'
 import { surface } from './surface'
 import { tabbar } from './tabbar'
+import { toast } from './toast'
 import { table } from './table'
 import { tags } from './tags'
 import { modals } from './modals'
 import { treeList } from './treeList'
+import { cmdOutput } from './cmdOutput'
+
 
 export const components = theme => ({
   aceEditor: aceEditor(theme),
-  aceThemeOverrides: aceThemeOverrides(theme),
   chip: chip(theme),
+  cmdOutput: cmdOutput(theme),
   definitions: definitions(theme),
   drawer: drawer(theme),
   features: features(theme),
@@ -34,6 +37,7 @@ export const components = theme => ({
   tags: tags(theme),
   modals: modals(theme),
   treeList: treeList(theme),
+  toast: toast(theme),
   ...header(theme),
   ...step(theme),
   ...surface(theme),

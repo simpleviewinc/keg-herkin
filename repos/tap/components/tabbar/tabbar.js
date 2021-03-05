@@ -1,8 +1,12 @@
 import { Tab } from './tab'
+import { Values } from 'SVConstants'
 import { useStyle } from '@keg-hub/re-theme'
-import { checkCall, mapColl, noOpObj } from '@keg-hub/jsutils'
+import { checkCall, mapColl, } from '@keg-hub/jsutils'
 import React, { useMemo, useCallback, useState, useLayoutEffect } from 'react'
 import { View, isValidComponent, renderFromType } from '@keg-hub/keg-components'
+import { TabbarPortal } from './tabbarPortal'
+
+const { CATEGORIES } = Values
 
 const useTabSelect = (tabs, activeTab, onTabSelect, setActiveId) => useCallback((id) => {
   if(!tabs) return
@@ -37,14 +41,16 @@ const Bar = ({ children, styles }) => {
 }
 
 const Tabs = ({ activeId, tabs, styles, onTabSelect }) => {
+
   return mapColl(tabs, (index, tab) => {
-    const { Tab:Component, tab:component, id, key, title, ...tabProps } = tab
+    const { Tab:Component, tab:component, id, key, title, disableTab, ...tabProps } = tab
 
     const keyId = key || id || index
     return !Component && !component && !title
       ? null
       : (
           <Tab
+            disabled={disableTab}
             className='tabbar-tab'
             key={ keyId }
             id={ id }
@@ -67,6 +73,16 @@ const ActiveTabView = ({ tab, styles }) => {
     : null
 }
 
+/**
+ * 
+ * @param {Object} props
+ * @param {string} props.activeTab - active tab id
+ * @param {Object} props.location - default 'bottom'
+ * @param {Boolean} props.fixed
+ * @param {Function} props.onTabSelect
+ * @param {Array} props.tabs
+ * @param {string} props.type
+ */
 export const Tabbar = props => {
   const {
     activeTab,
@@ -102,7 +118,7 @@ export const Tabbar = props => {
       styles={mainStyles}
     >
     { tabs && (
-      <Tabs 
+      <Tabs
         tabs={ tabs }
         activeId={ activeId }
         styles={ barStyles.tab }
@@ -127,7 +143,12 @@ export const Tabbar = props => {
 
   return (
     <View className='tabbar-main' style={ barStyles.main } >
-      { TabComponents }
+      { location === 'bottom' ? (
+        <TabbarPortal>
+          { TabComponents }
+        </TabbarPortal>
+      ): TabComponents }
+      
     </View>
   )
 

@@ -1,4 +1,4 @@
-const { dockerExec } = require('HerkinTasks/utils/process/process')
+const { dockerCmd } = require('HerkinTasks/utils/process/dockerCmd')
 const { launchBrowser } = require('HerkinTasks/utils/playwright/launchBrowser') 
 
 const createTest = async args => {
@@ -8,7 +8,7 @@ const createTest = async args => {
   // ensure a non-headless chromium instance is running
   await launchBrowser({ browser: 'chromium', headless: false })
 
-  return dockerExec(container, `npx qawolf create ${url} ${name}`)
+  return dockerCmd(container, `npx qawolf create ${url} ${name}`)
 }
 
 module.exports = {

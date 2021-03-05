@@ -29,15 +29,13 @@ const TestActions = props => {
 
 const tabs = [
   {
-    id: DEFINITION_TABS.ACTIVE,
-    title: `Active`,
-    // View: 
-  },
-  {
     id: DEFINITION_TABS.LIST,
     title: `List`,
-    // View: 
-  }
+  },
+  {
+    id: DEFINITION_TABS.ACTIVE,
+    title: `Active`,
+  },
 ]
 
 const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
