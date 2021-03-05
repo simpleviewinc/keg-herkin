@@ -1,9 +1,21 @@
 const path = require('path')
 const fs = require('fs')
-const rootDir = require('app-root-path').path
+const { HERKIN_ROOT } = require('HerkinBackConstants')
 const { validate, isStr, isObj } = require('@keg-hub/jsutils')
 
-const META_PATH = path.resolve(rootDir, 'browser-meta.json')
+const META_PATH = path.resolve(HERKIN_ROOT, 'browser-meta.json')
+
+/**
+ * @return {string?} contents of the browser-meta.json file if it can, else null
+ */
+const tryReadMeta = () => {
+  try {
+    return fs.readFileSync(META_PATH, 'utf8')
+  }
+  catch (err) {
+    return null
+  }
+}
 
 /**
  * Reads browser metadata from file
@@ -12,8 +24,8 @@ const META_PATH = path.resolve(rootDir, 'browser-meta.json')
  */
 const read = type => {
   try {
-    const data = fs.readFileSync(META_PATH, 'utf8')
-    const parsed = JSON.parse(data)
+    const data = tryReadMeta()
+    const parsed = data ? JSON.parse(data) : {}
     const value = isObj(parsed) && type
       ? parsed[type]
       : parsed

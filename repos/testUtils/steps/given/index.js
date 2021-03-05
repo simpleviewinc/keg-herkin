@@ -1,3 +1,3 @@
 export * from './openUrl'
-export * from './onUrl'
-export * from './pageUrl'
+export * from './isAncestor'
+export * from './isAncestorTo'

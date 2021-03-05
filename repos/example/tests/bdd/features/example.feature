@@ -8,4 +8,4 @@ Feature: Example Feature!!!
     When I set keg-hub to the input .gLFyf
     When I press enter
     When I wait for the page to load
-    Then the element #search contains the text simpleviewinc/keg-hu
+    Then the element #search contains the text simpleviewinc/keg-hub

@@ -60,6 +60,7 @@ const launchBrowserServer = async (browserType, launchOptions, log) => {
     !isEmpty(endpoint)
     && browserType === prevType
     && launchOptions.headless === prevOptions.headless
+    && launchOptions.slowMo === prevOptions.slowMo
 
   const browserName = `${launchOptions.headless ? 'headless ' : ''}${browserType}`
 
@@ -79,7 +80,6 @@ const launchBrowserServer = async (browserType, launchOptions, log) => {
 
   // Otherwise, launch the browser.
   log && Logger.log(`==== Starting ${browserName} on host machine... ====`)
-
   return playwright[browserType].launchServer(launchOptions)
 }
 
