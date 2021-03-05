@@ -34,14 +34,15 @@ sourceRCFile(){
 }
 
 # Add the bash settings for the environment
-sourceRCFile
+# sourceRCFile
 
 if [[ -z "$DOC_APP_PATH" ]]; then
   export DOC_APP_PATH=/keg/tap
 fi
 
-cd $DOC_APP_PATH
-yarn task "$@"
+# Should be able to run these commands
+# cd $DOC_APP_PATH
+# yarn task "$@"
 
+# yarn task cucumber test ===
 # npx jest --detectOpenHandles --config=/keg/tap/configs/jest.parkin.config.js --testTimeout=5000 --bail runParkin.js
-

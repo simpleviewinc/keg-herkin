@@ -23,7 +23,7 @@
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
     "clean:nm": "rimraf ./yarn.lock; rimraf ./package.lock; rimraf node_modules",
     "clean:rn": "yarn keg clean:rn",
-    "dev": "run-p web api",
+    "dev": "run-p web api mess",
     "ex": "yarn ex:dev",
     "ex:build": "cd ./repos/example && yarn build",
     "ex:dev": "cd ./repos/example && yarn dev",
