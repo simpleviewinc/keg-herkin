@@ -82,7 +82,7 @@
     "words-to-numbers": "1.5.1"
   },
   "resolutions": {
-    "@keg-hub/jsutils": "8.3.0",
+    "@keg-hub/jsutils": "8.3.0"
   },
   "devDependencies": {
     "@babel/preset-env": "7.12.11",
