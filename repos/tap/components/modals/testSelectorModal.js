@@ -51,8 +51,8 @@ const getTestNamesOptions = () => {
     label: wordCaps(Values.CREATE_NEW_FILE),
     value: Values.CREATE_NEW_FILE
   }
-  const features = useStoreItems(CATEGORIES.FEATURES) || []
-  const options = features.map((feature) => {
+  const features = useStoreItems(CATEGORIES.FEATURES) || {}
+  const options = mapObj(features, (__, feature) => {
     return {
       label: feature.name,
       value: feature.location
@@ -151,7 +151,7 @@ const TestNameSelect = ({styles, features, setTestName}) => {
 
   const onValueChange = useCallback((location) => {
     // fetch the feature file content from redux
-    const feature = features.find((feature) => feature.location === location)
+    const feature = features[location]
     setTestName(feature?.name)
   }, [features, setTestName])
 

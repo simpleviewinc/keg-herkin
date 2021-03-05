@@ -12,11 +12,16 @@ const { CATEGORIES } = Values
  * @returns {void}
  */
 export const upsertFeatures = (features=noPropArr) => {
-  features && dispatch({
+  const objectMap = features && features.reduce((map, feature) => {
+    map[feature?.location] = feature
+    return map
+  }, {})
+
+  dispatch({
     type: ActionTypes.UPSERT_ITEMS,
     payload: {
       category: CATEGORIES.FEATURES,
-      items: features,
+      items: objectMap,
     },
   })
 }

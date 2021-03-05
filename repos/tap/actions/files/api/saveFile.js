@@ -8,7 +8,7 @@ import { removePendingFile } from '../local/removePendingFile'
  * @param {Object} fileToSave - fileModel to be saved on the backend
  * @param {string} screenId - Id of the screen the file is active on
  * 
- * @returns {boolean} - False if the file was NOT saved
+ * @returns {Object} - {success, fileModel}
  */
 export const saveFile = async (fileToSave=noOpObj, screenId) => {
   const { location, content } = fileToSave
@@ -18,10 +18,7 @@ export const saveFile = async (fileToSave=noOpObj, screenId) => {
 
   const result = await saveApiFile(location, content)
 
-  if (result?.success) {
-    removePendingFile(fileToSave, screenId)
-    return true
-  }
-  return false
+  result?.success && removePendingFile(fileToSave, screenId)
+  return result
 
 }

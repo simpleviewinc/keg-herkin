@@ -39,5 +39,5 @@ export const setFeatureActive = async (feature, screenId) => {
     ? getFeatureFromName(feature.name, feature.location)
     : getFeatureFromName(feature)
 
-  await setActiveFile(activeFeature, null, screenId)
+  await setActiveFile(activeFeature, screenId)
 }

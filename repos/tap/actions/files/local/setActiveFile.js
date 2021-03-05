@@ -20,13 +20,11 @@ const getScreen = screenId => {
 /**
  * setActiveFile
  * @param {Object} fileModel - file to set as the activeFile 
- * @param {string=} content - use as content of the file, overrides the fileModels content
  */
-export const setActiveFile = (fileModel, content, screenId) => {
+export const setActiveFile = (fileModel, screenId) => {
   const screenModel = getScreen(screenId)
   if(!screenModel) return devLog(`error`, `Can not find screen from id`, screenId)
   const updatedFile = { ...fileModel }
-  content && (updatedFile.content = content)
 
   dispatch({
     type: ActionTypes.SET_ITEM,
