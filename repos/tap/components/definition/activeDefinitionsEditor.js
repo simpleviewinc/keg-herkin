@@ -28,8 +28,7 @@ export const ActiveDefinitionsEditor = props => {
   } = props
 
   const activeStyles = useStyle(`definitions.active`, styles)
-  console.log(definitions,'deffs')
-  console.log(definitions.filter(def => def.uuid==='72b46707-56e3-452e-8a4f-dd82963f026b'),'wtf')
+
   return definitions
     ? definitions.map(def => {
           return (

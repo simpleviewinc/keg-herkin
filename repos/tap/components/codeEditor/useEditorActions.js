@@ -65,7 +65,6 @@ const useSaveAction = (activeFile, editorRef) => {
     const content = editorRef.current?.editor?.getValue()
     // save the file and update active file
     const saveResult = await saveFile({ ...activeFile, content })
-    console.log(saveResult,' save result')
     content 
       && saveResult?.success
       && setActiveFileFromType(saveResult?.file, SCREENS.EDITOR)
