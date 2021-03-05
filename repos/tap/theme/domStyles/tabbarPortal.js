@@ -6,7 +6,7 @@ const { TABBAR_PORTAL_ID } = Values
 // It is useDomStyle it's used to to say
 // "body" is an element selector, and not a class selector
 export const tabbarPortal = theme => ({
-  [`body > #${TABBAR_PORTAL_ID}$`]: {
+  [`body > #${TABBAR_PORTAL_ID}`]: {
     position: 'sticky',
     bottom: 0
   }

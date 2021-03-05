@@ -24,7 +24,7 @@ export const useDomStyles = () => {
         
         const styleRules = classList[0].endsWith('$')
           ? `${classList[0].replace(/\$/g, '')}${styles}`
-          : `.${classList[0]}${styles}`
+          : `${classList[0]}${styles}`
         
         styleRules && DomStyleSheet?.sheet?.insertRule(`@media all {${styleRules}}`)
         // styleRules &&

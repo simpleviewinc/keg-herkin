@@ -4,7 +4,7 @@
 // It is useDomStyle it's used to to say
 // "body" is an element selector, and not a class selector
 export const body = theme => ({
-  body$: {
+  body: {
     flexDirection: 'column',
     overflow: 'hidden'
   }

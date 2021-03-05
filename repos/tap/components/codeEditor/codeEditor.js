@@ -7,7 +7,6 @@ import { useActiveTab } from 'SVHooks/useActiveTab'
 import { useEditorActions } from './useEditorActions'
 import { noOpObj, exists, plural, capitalize } from '@keg-hub/jsutils'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { Surface } from 'SVComponents/surface'
 
 const { EDITOR_TABS, CATEGORIES } = Values
 
@@ -60,16 +59,11 @@ export const CodeEditor = props => {
         * Currently hidden for all except feature files
   */
 
-  const surfaceTitle = `${capitalize(activeFile?.fileType)} ${pendingFiles[activeFile?.location] ? '*' : ''}`
+  const pendingMark = Boolean(pendingFiles[activeFile?.location]) ? '*' : ''
+  const surfaceTitle = `${capitalize(activeFile?.fileType)} ${pendingMark}`.trim()
+
   return (
-    <Surface
-      className={`editor-main`}
-      title={surfaceTitle}
-      capitalize={false}
-      styles={editorStyles?.surface}
-      prefix={'Editor'}
-      hasToggle={false}
-    >
+    <>
       {(tab === EDITOR_TABS.FEATURE.id || tab === EDITOR_TABS.BDD_SPLIT.id) && (
         <EditorFromType
           editorType={activeFile.fileType}
@@ -101,6 +95,6 @@ export const CodeEditor = props => {
         styles={actionsStyles}
         { ...tabActions }
       />
-    </Surface>
+    </>
   )
 }
