@@ -12,7 +12,8 @@ const getParkinReport = (app, config) => async (req, res) => {
   try {
     const reportPath = path.join(REPORTS_PATH, 'parkin-report.html')
     const report = fs.readFileSync(reportPath, 'utf8')
-    return apiResponse(req, res, report, 200)
+    res.set('Content-Type', 'text/html')
+    res.send(report)
   }
   catch(err){
     return apiErr(req, res, err, err.status || 400)
