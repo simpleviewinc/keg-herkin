@@ -1,4 +1,4 @@
-const { dockerExec } = require('HerkinTasks/utils/process/process')
+const { dockerCmd } = require('HerkinTasks/utils/process/dockerCmd')
 const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers') 
 const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
 const { buildArguments } = require('HerkinTasks/utils/task/buildArguments')
@@ -40,7 +40,7 @@ const runTest = async (args) => {
   await launchBrowsers(params)
   const cmdOptions = buildTestArguments(params)
 
-  return dockerExec(params.container, [`npx`, `qawolf`, `test`, name, ...cmdOptions])
+  return dockerCmd(params.container, [`npx`, `qawolf`, `test`, name, ...cmdOptions])
 }
 
 module.exports = {

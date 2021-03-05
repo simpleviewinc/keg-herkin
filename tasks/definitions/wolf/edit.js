@@ -1,4 +1,4 @@
-const { dockerExec } = require('HerkinTasks/utils/process/process')
+const { dockerCmd } = require('HerkinTasks/utils/process/dockerCmd')
 const { launchBrowser } = require('HerkinTasks/utils/playwright/launchBrowser') 
 const { timedRun } = require('@keg-hub/jsutils')
 
@@ -9,10 +9,10 @@ const { timedRun } = require('@keg-hub/jsutils')
  * @param {string} containerName 
  * @param {string} testName 
  * @param {number} expectedMinTime 
- * @return {*} result of dockerExec
+ * @return {*} result of dockerCmd
  */
 const runEditCmd = async (containerName, testName, expectedMinTime=10000) => {
-  const [ exitCode, duration ] = await timedRun(dockerExec, containerName, `npx qawolf edit ${testName}`)
+  const [ exitCode, duration ] = await timedRun(dockerCmd, containerName, `npx qawolf edit ${testName}`)
   if (exitCode === 0 && duration < expectedMinTime)
     console.log(
       '\x1b[35m%s\x1b[0m', 
