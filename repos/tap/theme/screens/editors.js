@@ -22,7 +22,7 @@ export const editors = theme => {
     },
     feature: {
       w: `100%`,
-      h: `calc( 100vh - 170px )`,
+      h: `calc( 100vh - 210px )`,
     },
     definitions: {
       main: {
@@ -37,7 +37,7 @@ export const editors = theme => {
     bddSplit: {
       feature: {
         w: `calc( 50% - ${halfMargin}px )`,
-        h: `calc( 100vh - 170px )`,
+        h: `calc( 100vh - 210px )`,
         mR: halfMargin,
       },
       definitions: {

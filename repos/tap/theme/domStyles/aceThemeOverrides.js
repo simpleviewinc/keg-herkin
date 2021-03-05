@@ -23,5 +23,6 @@ export const aceThemeOverrides = theme => ({
   },
   '.gherkin-editor-wrapper': {
     overflowY: 'auto',
+    marginRight: '0px !important',
   },
 })
