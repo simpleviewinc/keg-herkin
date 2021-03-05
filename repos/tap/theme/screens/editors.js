@@ -1,9 +1,20 @@
+import { tapColors } from '../tapColors'
+
 export const editors = theme => {
   const halfMargin = theme.margin.size / 2
 
   return {
     main: {
       flD: 'row',
+    },
+    surface: {
+      main: {
+        fl:1
+      },
+      content: {
+        flWr: 'nowrap', 
+        backgroundColor: tapColors.backGround
+      }
     },
     full: {
       w: `100%`,

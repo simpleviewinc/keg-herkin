@@ -177,7 +177,7 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
         style={styles?.text}
       >
         { nodeName }
-        {showPending && 'PENDING CHANGES'}
+        {showPending && <Text style={mainStyles?.pendingText}> *</Text>}
       </Text>
       {
         nodeType === 'folder' &&

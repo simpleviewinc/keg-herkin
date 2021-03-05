@@ -1,6 +1,6 @@
 import { devLog } from 'SVUtils'
 import { dispatch } from 'SVStore'
-import { isArr, noPropArr, noOpObj } from '@keg-hub/jsutils'
+import { noOpObj } from '@keg-hub/jsutils'
 import { Values, ActionTypes } from 'SVConstants'
 import { definitionsByType } from 'SVUtils/shared'
 
@@ -13,14 +13,7 @@ const { CATEGORIES } = Values
  *
  * @returns {void}
  */
-export const upsertDefinitions = (definitions=noPropArr, definitionTypes) => {
-  if(!isArr(definitions))
-    return devLog(
-      `warn`,
-      `Upsert definitions requires an array of definition file models`,
-      definitions
-    )
-
+export const upsertDefinitions = (definitions=noOpObj, definitionTypes) => {
   dispatch({
     type: ActionTypes.UPSERT_ITEMS,
     payload: {

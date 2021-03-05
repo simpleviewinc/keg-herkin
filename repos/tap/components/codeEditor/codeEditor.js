@@ -2,17 +2,14 @@ import { Values } from 'SVConstants'
 import { EditorTabs } from './editorTabs'
 import { useStyle } from '@keg-hub/re-theme'
 import { EditorFromType } from './editorFromType'
-import React, { useRef, useCallback } from 'react'
-import { AceEditor } from 'SVComponents/aceEditor'
+import React, { useRef, useEffect } from 'react'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 import { useEditorActions } from './useEditorActions'
-import { useActiveFile } from 'SVHooks/useActiveFile'
-import { noOpObj, exists, plural } from '@keg-hub/jsutils'
-import { usePendingCallback } from 'SVHooks/usePendingCallback'
-import { FeatureEditor } from 'SVComponents/feature/featureEditor'
-import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
+import { noOpObj, exists, plural, capitalize } from '@keg-hub/jsutils'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { Surface } from 'SVComponents/surface'
 
-const { EDITOR_TABS, SCREENS, CATEGORIES } = Values
+const { EDITOR_TABS, CATEGORIES } = Values
 
 /**
  * CodeEditor
@@ -32,6 +29,7 @@ export const CodeEditor = props => {
   const editorRef = useRef(null)
   
   const tabActions = useEditorActions(activeFile, editorRef)
+  const { pendingFiles=noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
 
   const editorStyles = useStyle(`screens.editors`)
   const actionsStyles = editorStyles?.actions
@@ -39,6 +37,15 @@ export const CodeEditor = props => {
 
   if (!exists(activeFile.content)) return null
 
+  useEffect(() => {
+    /**
+     * for edge case of:
+     * - if we're on the definitions tab and we switch to a non feature file
+     * - we need to switch the tab to the 'feature' tab so we can see the content
+     */
+    activeFile && activeFile.fileType !== 'feature' && setTab(EDITOR_TABS.FEATURE.id)
+  }, [tab, setTab, activeFile])
+  
   /* TODO: Clean up constants and Actions tab
     * Constants
       * FEATURE should be it's own constant
@@ -53,8 +60,16 @@ export const CodeEditor = props => {
         * Currently hidden for all except feature files
   */
 
+  const surfaceTitle = `${capitalize(activeFile?.fileType)} ${pendingFiles[activeFile?.location] ? '*' : ''}`
   return (
-    <>
+    <Surface
+      className={`editor-main`}
+      title={surfaceTitle}
+      capitalize={false}
+      styles={editorStyles?.surface}
+      prefix={'Editor'}
+      hasToggle={false}
+    >
       {(tab === EDITOR_TABS.FEATURE.id || tab === EDITOR_TABS.BDD_SPLIT.id) && (
         <EditorFromType
           editorType={activeFile.fileType}
@@ -63,7 +78,7 @@ export const CodeEditor = props => {
           activeFile={activeFile}
           setTab={setTab}
           editorId={`${activeFile.fileType}-editor`}
-          value={activeFile?.modified || activeFile?.content || ''}
+          value={pendingFiles[activeFile?.location] || activeFile?.content || ''}
           style={codeStyles.feature || codeStyles}
         />
       )}
@@ -86,6 +101,6 @@ export const CodeEditor = props => {
         styles={actionsStyles}
         { ...tabActions }
       />
-    </>
+    </Surface>
   )
 }

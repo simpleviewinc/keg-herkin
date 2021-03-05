@@ -5,6 +5,7 @@ import { saveFile } from 'SVActions/files'
 import { runTests } from 'SVActions/runner'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { useSockr } from 'SVUtils/sockr'
+import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
 
 const { SCREENS, CATEGORIES } = Values
 
@@ -34,7 +35,7 @@ const useRunAction = (activeFile, editorRef) => {
 
     const content = editorRef.current?.editor?.getValue()
     const canRun = content !== activeFile.content || hasPending
-      ? await saveFile({ ...activeFile, content })
+      ? await saveFile({ ...activeFile, content }) && setActiveFileFromType(activeFile, SCREENS.EDITOR)
       : true
 
     canRun
@@ -67,7 +68,11 @@ const useSaveAction = (activeFile, editorRef) => {
     setIsSaving(true)
 
     const content = editorRef.current?.editor?.getValue()
-    content && await saveFile({ ...activeFile, content })
+    // save the file and update active file
+    const saveResult = await saveFile({ ...activeFile, content })
+    content 
+      && saveResult?.success
+      && setActiveFileFromType(saveResult?.file, SCREENS.EDITOR)
 
     setIsSaving(false)
 

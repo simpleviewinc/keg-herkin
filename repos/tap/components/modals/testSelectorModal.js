@@ -11,6 +11,7 @@ import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { useFeature } from 'SVHooks/useFeature'
 import { devLog } from 'SVUtils'
 import { setScreen } from 'SVActions/screens/setScreen'
+import { useActiveScreenTab } from 'SVHooks'
 
 const { TEST_TYPE, CATEGORIES, SCREENS } = Values
 
@@ -50,8 +51,8 @@ const getTestNamesOptions = () => {
     label: wordCaps(Values.CREATE_NEW_FILE),
     value: Values.CREATE_NEW_FILE
   }
-  const features = useStoreItems(CATEGORIES.FEATURES) || []
-  const options = features.map((feature) => {
+  const features = useStoreItems(CATEGORIES.FEATURES) || {}
+  const options = mapObj(features, (__, feature) => {
     return {
       label: feature.name,
       value: feature.location
@@ -73,19 +74,20 @@ export const TestSelectorModal = (props) => {
 
   const theme = useTheme()
   const builtStyles = theme.get(`modals.testSelectorModal`)
-  const { features=noPropArr, activeTab } = useStoreItems([
-    CATEGORIES.ACTIVE_TAB,
+  const { features=noPropArr } = useStoreItems([
     CATEGORIES.FEATURES,
   ])
+  const activeTab = useActiveScreenTab()
   const [testName, setTestName] = useState(Values.CREATE_NEW_FILE)
   const [selectedTab, setSelectedtab] = useState(SCREENS.EDITOR)
   const { feature } = useFeature({ name: testName }) || {}
 
   const loadTests = useCallback(() => {
-
     testName === Values.CREATE_NEW_FILE
       ? createFeatureFile(selectedTab)
-      : setActiveFileFromType(feature) && setScreen(selectedTab)
+      : feature 
+        ? setActiveFileFromType(feature, selectedTab) && setScreen(selectedTab)
+        : devLog(`warn`, `Feature from '${location}' does not exist!`)
 
       setModalVisibility(false)
   }, 
@@ -99,7 +101,7 @@ export const TestSelectorModal = (props) => {
     <Modal
       visible={visible}
       styles={builtStyles?.modal}
-      onBackdropTouch={() => activeTab.id !== SCREENS.EMPTY && setModalVisibility(false)}
+      onBackdropTouch={() => activeTab?.id !== SCREENS.EMPTY && setModalVisibility(false)}
     >
       <ItemHeader
         title={title}
@@ -149,13 +151,8 @@ const TestNameSelect = ({styles, features, setTestName}) => {
 
   const onValueChange = useCallback((location) => {
     // fetch the feature file content from redux
-    const feature = features.find((feature) => feature.location === location)
-
-    feature 
-      ? setActiveFileFromType(feature)
-      : devLog(`warn`, `Feature from '${location}' does not exist!`)
-
-    setTestName(feature.name)
+    const feature = features[location]
+    setTestName(feature?.name)
   }, [features, setTestName])
 
   return (

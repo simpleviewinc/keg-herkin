@@ -1,5 +1,4 @@
 import { devLog } from 'SVUtils'
-import { dispatch, getStore } from 'SVStore'
 import { saveApiFile } from 'SVUtils/api'
 import { noOpObj } from '@keg-hub/jsutils'
 import { removePendingFile } from '../local/removePendingFile'
@@ -9,7 +8,7 @@ import { removePendingFile } from '../local/removePendingFile'
  * @param {Object} fileToSave - fileModel to be saved on the backend
  * @param {string} screenId - Id of the screen the file is active on
  * 
- * @returns {boolean} - False if the file was NOT saved
+ * @returns {Object} - {success, fileModel}
  */
 export const saveFile = async (fileToSave=noOpObj, screenId) => {
   const { location, content } = fileToSave
@@ -19,8 +18,7 @@ export const saveFile = async (fileToSave=noOpObj, screenId) => {
 
   const result = await saveApiFile(location, content)
 
-  return result?.success
-    ? removePendingFile(fileToSave, screenId)
-    : false
+  result?.success && removePendingFile(fileToSave, screenId)
+  return result
 
 }

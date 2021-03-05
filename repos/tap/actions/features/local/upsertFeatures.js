@@ -1,5 +1,5 @@
 import { dispatch } from 'SVStore'
-import { noPropArr } from '@keg-hub/jsutils'
+import { noOpObj } from '@keg-hub/jsutils'
 import { Values, ActionTypes } from 'SVConstants'
 
 const { CATEGORIES } = Values
@@ -11,8 +11,9 @@ const { CATEGORIES } = Values
  *
  * @returns {void}
  */
-export const upsertFeatures = (features=noPropArr) => {
-  features && dispatch({
+export const upsertFeatures = (features=noOpObj) => {
+
+  dispatch({
     type: ActionTypes.UPSERT_ITEMS,
     payload: {
       category: CATEGORIES.FEATURES,
