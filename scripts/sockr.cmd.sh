@@ -43,4 +43,5 @@ fi
 cd $DOC_APP_PATH
 yarn task "$@"
 
+# npx jest --detectOpenHandles --config=/keg/tap/configs/jest.parkin.config.js --testTimeout=5000 --bail runParkin.js
 
