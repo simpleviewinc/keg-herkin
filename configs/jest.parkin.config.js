@@ -79,5 +79,15 @@ module.exports = {
   testMatch: [
     '<rootDir>/scripts/*.js'
   ],
-  moduleNameMapper: jestAliases
+  moduleNameMapper: jestAliases,
+  reporters: [
+    'default',
+    [ 
+      './node_modules/jest-html-reporter', 
+      { 
+        pageTitle: 'Parkin Test Results' ,
+        outputPath: './reports/parkin-report.html'
+      }
+    ]
+  ],
 }
