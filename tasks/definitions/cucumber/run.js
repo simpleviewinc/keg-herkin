@@ -108,8 +108,8 @@ module.exports = {
         default: 'keg-herkin',
       },
       timeout: {
-        description: 'Test timeout. Defaults to no timeout, so that async playwright tasks have sufficient time to complete.',
-        default: 4 * 1000 // 4 seconds
+        description: 'Test timeout in milliseconds. Defaults to no timeout, so that async playwright tasks have sufficient time to complete.',
+        default: 5 * 1000 // 5 seconds
       },
       jestConfig: {
         description: 'Path to jest config within the docker container',
@@ -127,6 +127,7 @@ module.exports = {
         default: false
       },
       slowMo: {
+        alias: ['speed'],
         description: 'Playwright slow mo option, value in seconds',
         example: 'keg herkin cr test --slowMo 2.5',
       },
