@@ -90,6 +90,7 @@
     "core-js": "3.8.3",
     "jest": "26.4.2",
     "jest-playwright-preset": "1.4.4",
+    "jest-html-reporter": "3.3.0",
     "rimraf": "3.0.2"
   }
 }
