@@ -109,6 +109,7 @@ export const EditorTabs = props => {
   return (
     <Tabbar
       type='code'
+      fixed
       tabs={barTabs}
       activeTab={tab}
       location='bottom'

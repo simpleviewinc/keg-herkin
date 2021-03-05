@@ -8,6 +8,7 @@ import {
 import { SidebarContent } from 'SVComponents/sidebar'
 import { Screen } from './screens/screen'
 import { useActiveFile, useVisibleModal } from 'SVHooks'
+import { ScrollView } from '@keg-hub/keg-components'
 
 export const RootContainer = withAppHeader('KeGherkin Editor', props => {
   const theme = useTheme()
@@ -32,7 +33,9 @@ export const RootContainer = withAppHeader('KeGherkin Editor', props => {
           onSidebarToggled={setSidebarToggled}
         />
       </Sidebar>
-      <Screen />
+      <ScrollView>
+        <Screen />
+      </ScrollView>
     </View>
   )
 })

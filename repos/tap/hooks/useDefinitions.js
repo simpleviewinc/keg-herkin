@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { noOpObj } from '@keg-hub/jsutils'
+import { noOpObj, uuid } from '@keg-hub/jsutils'
 
 /**
  * gets the matching definitions for the passed in feature fileModel
@@ -16,12 +16,14 @@ export const useDefinitions = (feature=noOpObj, definitionTypes=noOpObj) => {
 
     feature?.ast?.scenarios.map(scenario => {
       scenario.steps && scenario.steps.map(step => {
-        const uuid = step.definition
         const type = step.type
         if(!definitionTypes || !definitionTypes[type]) return
 
         const foundDef = definitionTypes[type].find(def => def.uuid === step.definition)
-        foundDef && mappedDefs.push(foundDef)
+        // Add the keyId incase two steps use the same definition
+        // We need a different Id for them
+        // Which can be used as the keg in a react component loop
+        foundDef && mappedDefs.push({ ...foundDef, keyId: uuid() })
       })
     })
 

@@ -4,7 +4,7 @@ import { useStyle } from '@keg-hub/re-theme'
 import { checkCall, mapColl, } from '@keg-hub/jsutils'
 import React, { useMemo, useCallback, useState, useLayoutEffect } from 'react'
 import { View, isValidComponent, renderFromType } from '@keg-hub/keg-components'
-
+import { TabbarPortal } from './tabbarPortal'
 
 const { CATEGORIES } = Values
 
@@ -143,7 +143,12 @@ export const Tabbar = props => {
 
   return (
     <View className='tabbar-main' style={ barStyles.main } >
-      { TabComponents }
+      { location === 'bottom' ? (
+        <TabbarPortal>
+          { TabComponents }
+        </TabbarPortal>
+      ): TabComponents }
+      
     </View>
   )
 
