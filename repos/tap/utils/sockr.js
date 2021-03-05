@@ -1,1 +1,2 @@
-export * from '../../sockr/src/client'
+export * from '@ltipton/sockr'
+export * from '@ltipton/sockr/src/constants'
