@@ -5,7 +5,7 @@ import { EditorFromType } from './editorFromType'
 import React, { useRef, useEffect } from 'react'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 import { useEditorActions } from './useEditorActions'
-import { noOpObj, exists, plural, capitalize } from '@keg-hub/jsutils'
+import { noOpObj, exists, plural } from '@keg-hub/jsutils'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 
 const { EDITOR_TABS, CATEGORIES } = Values
@@ -58,9 +58,6 @@ export const CodeEditor = props => {
         * feature / waypoint / jest
         * Currently hidden for all except feature files
   */
-
-  const pendingMark = Boolean(pendingFiles[activeFile?.location]) ? '*' : ''
-  const surfaceTitle = `${capitalize(activeFile?.fileType)} ${pendingMark}`.trim()
 
   return (
     <>
