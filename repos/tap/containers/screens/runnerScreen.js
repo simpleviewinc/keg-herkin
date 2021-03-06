@@ -1,5 +1,4 @@
-import React from 'react'
-import { Values } from 'SVConstants'
+import React, { useEffect, useState } from 'react'
 import { useParentMethods } from 'SVHooks'
 import { EmptyScreen } from './emptyScreen'
 import { useStyle } from '@keg-hub/re-theme'
@@ -11,16 +10,33 @@ import { ExternalLink } from 'SVAssets/icons'
 import { Surface } from 'SVComponents/surface'
 import { Iframe } from 'SVComponents/iframe'
 import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
+import { getBaseApiUrl } from 'SVUtils/api'
+import { apiRequest } from 'SVUtils/api/apiRequest'
 
-const { CATEGORIES } = Values
+// current report URL is static
+const reportUrl = `${getBaseApiUrl()}/reports/parkin`
 
 export const RunnerScreen = props => {
   const builtStyles = useStyle(`screens.runner`)
   const parentMethods = useParentMethods()
   const activeFile = useActiveFile(props.id)
+  const [showReport, setShowReport] = useState(false)
 
-  return !activeFile?.fileType
-    ? (<EmptyScreen message={'No file selected!'} />)
+  /**
+   * TODO: this logic should be removed/updated once the runner flow is complete
+   * this is here to show that we can load the reporter in the test runner if it exists
+   */
+  useEffect(() => {
+    //  check if there is a report to show
+    const checkReport = async () => {
+      const result = await apiRequest('/reports/parkin')
+      if (result) setShowReport(true)
+    }
+    checkReport()
+  }, [])
+
+  return !showReport
+    ? (<EmptyScreen message={'No Report to show'} />)
     : (
         <View
           className={`runner-screen`}
@@ -31,6 +47,7 @@ export const RunnerScreen = props => {
             TitleComponent={({styles, ...props}) => 
               <IframeHeader 
                 {...props}
+                onIconPress={ () => window?.open(reportUrl, '_blank') }
                 mainTextStyles={styles}
                 mainStyles={builtStyles?.iFrame?.header} 
                 /> 
@@ -40,7 +57,7 @@ export const RunnerScreen = props => {
             styles={builtStyles?.iFrame?.wrapper}
             className={`runner-surface-iframe`}
           >
-            <Iframe src={'http://localhost:5005/reports/parkin'}/>
+            <Iframe src={reportUrl}/>
           </Surface>
           {/* <CmdOutput
             activeFile={activeFile}
@@ -69,7 +86,8 @@ const IframeHeader = (props) => {
     title,
     titleStyle,
     capitalize,
-    mainStyles
+    mainStyles,
+    onIconPress
   } = props
 
   return (
@@ -82,11 +100,12 @@ const IframeHeader = (props) => {
         capitalize={capitalize}
       />
       <TouchableIcon
-          styles={mainStyles?.icon}
-          color={mainStyles?.icon?.color}
-          size={mainStyles?.icon?.size}
-          Component={ ExternalLink }
-        />
+        styles={mainStyles?.icon}
+        color={mainStyles?.icon?.color}
+        size={mainStyles?.icon?.size}
+        onPress={onIconPress}
+        Component={ ExternalLink }
+      />
     </View>
   )
 }
