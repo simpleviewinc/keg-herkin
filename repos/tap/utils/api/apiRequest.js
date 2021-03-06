@@ -1,13 +1,13 @@
 import { networkRequest } from 'SVServices/networkRequest'
 import { isObj } from '@keg-hub/jsutils'
 import { devLog } from 'SVUtils'
-
+import { getBaseApiUrl } from './getBaseApiUrl'
 /**
  * Default arguments for an API request
  * @object
  */
 const defRequest = {
-  url: `http://${ process.env.SERVER_HOST }:${ process.env.SERVER_PORT }`
+  url: getBaseApiUrl()
 }
 
 /**
@@ -17,7 +17,7 @@ const defRequest = {
  * @public
  * @param {Object} request - Arguments that define the request type to make
  *
- * @returns {Array} - Data returned from the Backend API
+ * @returns {Object|Boolean} - Data returned from the Backend API
  */
 export const apiRequest = async request => {
   const builtRequest = isObj(request)
@@ -33,7 +33,11 @@ export const apiRequest = async request => {
     ...builtRequest,
   })
 
-  return success
-    ? isObj(data) && data.data || data
-    : devLog(`warn`, `ERROR: ${data?.error?.message}`) && []
+  if (success) 
+    return isObj(data) && data.data || data
+  else {
+    devLog(`warn`, `ERROR: ${data?.error?.message}`)
+    return false
+  }
+
 }
