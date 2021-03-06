@@ -13,7 +13,7 @@ const getParkinReport = (app, config) => async (req, res) => {
     const reportPath = path.join(REPORTS_PATH, 'parkin-report.html')
     const report = fs.readFileSync(reportPath, 'utf8')
 
-    // if caccept is not json. we can just send the text/html response
+    // if header 'accept' is not json. we can just send the text/html response
     // hitting this endpoint directly from a browser should serve the html/txt
     // hitting this endpoint from an api call, should just return if its valid
     const contentType = req.headers['accept']
