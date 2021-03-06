@@ -24,13 +24,23 @@ const loopTasks = (task, options) => {
     : loopTasks(subTask, options)
 }
 
-const findTask = (tasks, options=noOpArr) => {
+/**
+ * 
+ * @param {Array<Object>} tasks - all tasks
+ * @param {Array<string>} opts - command line opts
+ * @return {Array} - [
+ *    foundTaskObject - the found task
+ *    taskArgs - the found task's cmd line args
+ * ]
+ */
+const findTask = (tasks, opts=noOpArr) => {
+  const options = [ ...opts ]
   const taskName = options.shift()
   const task = tasks[taskName]
   const foundTask = task && loopTasks(task, options)
   
   return foundTask && foundTask.task
-    ? foundTask
+    ? [ foundTask, options ]
     : throwExitError(new Error(`Task not found for argument: ${taskName}`))
   
 }

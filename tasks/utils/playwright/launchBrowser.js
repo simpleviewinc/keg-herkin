@@ -7,6 +7,7 @@
 const { Logger }  = require('@keg-hub/ask-it/src/logger')
 const playwright = require('playwright')
 const { noOpObj, exists, isEmpty, limbo } = require('@keg-hub/jsutils')
+const { inDocker } = require('HerkinTasks/utils/helpers')
 const metadata = require('./metadata')
 
 /**
@@ -53,11 +54,17 @@ const launchBrowserServer = async (browserType, launchOptions, log) => {
     launchOptions: prevOptions 
   } = metadata.read(browserType) || {}
 
+  const isInContainer = inDocker()
+
   log && Logger.empty()
+
+  const browserEndpoint = isInContainer
+    ? endpoint.replace('127.0.0.1', 'host.docker.internal')
+    : endpoint
 
   // check to see if the previous launch parameters match the current ones
   const launchParamsMatch = 
-    !isEmpty(endpoint)
+    !isEmpty(browserEndpoint)
     && browserType === prevType
     && launchOptions.headless === prevOptions.headless
     && launchOptions.slowMo === prevOptions.slowMo
@@ -68,7 +75,7 @@ const launchBrowserServer = async (browserType, launchOptions, log) => {
   // browser. If you can connect, close the connection and do nothing else.
   if (launchParamsMatch) {
     const [ err, browser ] = await limbo(
-      playwright[browserType].connect({ wsEndpoint: endpoint })
+      playwright[browserType].connect({ wsEndpoint: browserEndpoint })
     )
 
     if (!err && browser.isConnected()) {
@@ -77,6 +84,9 @@ const launchBrowserServer = async (browserType, launchOptions, log) => {
       return null
     }
   }
+
+  if (isInContainer)
+    throw new Error(`Could not connect to the browser at ${browserEndpoint}. Exiting...`)
 
   // Otherwise, launch the browser.
   log && Logger.log(`==== Starting ${browserName} on host machine... ====`)

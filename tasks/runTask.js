@@ -19,12 +19,12 @@ const defParams = { env: process.env.NODE_ENV || 'development' }
 const runTask = async globalConfig => {
   try {
     const args = process.argv.slice(2)
-    const { task, options } = findTask(Definitions, [...args])
+    const [ { task, options }, taskArgs ] = findTask(Definitions, args)
 
     // Parse the args with the same package as the Keg-CLI, to ensure its consistent
     const params = await argsParse({
       task,
-      args: [...args],
+      args: taskArgs,
       params: defParams,
     })
 
