@@ -18,7 +18,7 @@ import { tags } from './tags'
 import { modals } from './modals'
 import { treeList } from './treeList'
 import { cmdOutput } from './cmdOutput'
-
+import { iframe } from './iframe'
 
 export const components = theme => ({
   aceEditor: aceEditor(theme),
@@ -38,6 +38,7 @@ export const components = theme => ({
   modals: modals(theme),
   treeList: treeList(theme),
   toast: toast(theme),
+  iframe: iframe(theme),
   ...header(theme),
   ...step(theme),
   ...surface(theme),
