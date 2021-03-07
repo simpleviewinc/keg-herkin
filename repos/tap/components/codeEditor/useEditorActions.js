@@ -4,7 +4,7 @@ import { noOpObj, get } from '@keg-hub/jsutils'
 import { saveFile } from 'SVActions/files'
 import { runTests } from 'SVActions/runner'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { useSockr } from 'SVUtils/sockr'
+import { useSockr } from '@ltipton/sockr'
 import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
 
 const { SCREENS, CATEGORIES } = Values
