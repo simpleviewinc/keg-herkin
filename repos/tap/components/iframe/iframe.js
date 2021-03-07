@@ -8,14 +8,15 @@ import React from 'react'
  */
 export const Iframe = (props) => {
   const {
-    src
+    src,
+    style,
   } = props
 
-  const mainStyles = useStyle(`iframe`)
-  console.log(mainStyles)
+  const mainStyles = useStyle(`iframe`, style)
+
   return (
     <iframe 
-      src={src} 
+      {...props}
       style={mainStyles?.main} 
     />
   )
