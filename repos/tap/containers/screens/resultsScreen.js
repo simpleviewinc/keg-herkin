@@ -26,29 +26,30 @@ export const ResultsScreen = props => {
   const reportUrl = useReportsUrl(fileType)
   const onIconPress = useWindowOpen(fileType, reportUrl)
 
-  return (
-    <View
-      className={`results-screen`}
-      style={builtStyles.main}
-    >
-      <Surface
-        prefix={'Test Results'}
-        TitleComponent={({styles, ...props}) => 
-          <IframeHeader
-            {...props}
-            onIconPress={onIconPress}
-            mainTextStyles={styles}
-            mainStyles={builtStyles?.iFrame?.header} 
-          />
-        }
-        capitalize={false}
-        title={'Report'}
-        styles={builtStyles?.iFrame?.surface}
-        className={`runner-surface-iframe`}
+  return !activeFile?.fileType
+    ? (<EmptyScreen message={'No file selected!'} />)
+    : (<View
+        className={`results-screen`}
+        style={builtStyles.main}
       >
-        <Iframe src={reportUrl}/>
-      </Surface>
-    </View>
+        <Surface
+          prefix={'Test Results'}
+          TitleComponent={({styles, ...props}) => 
+            <IframeHeader
+              {...props}
+              onIconPress={onIconPress}
+              mainTextStyles={styles}
+              mainStyles={builtStyles?.iFrame?.header} 
+            />
+          }
+          capitalize={false}
+          title={'Report'}
+          styles={builtStyles?.iFrame?.surface}
+          className={`runner-surface-iframe`}
+        >
+          <Iframe src={reportUrl}/>
+        </Surface>
+      </View>
   )
 }
 
