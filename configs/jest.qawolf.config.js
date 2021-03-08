@@ -1,7 +1,15 @@
 const { jestAliases } = require('./aliases.config')
 
 module.exports = {
-  // preset: 'jest-playwright-preset',
-  // transform: {},
-  moduleNameMapper: jestAliases
+  moduleNameMapper: jestAliases,
+  reporters: [
+    'default',
+    [ 
+      './node_modules/jest-html-reporter', 
+      { 
+        pageTitle: 'Waypoint Test Results' ,
+        outputPath: './reports/waypoint/report.html'
+      }
+    ]
+  ],
 }

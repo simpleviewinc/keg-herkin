@@ -86,7 +86,7 @@ module.exports = {
       './node_modules/jest-html-reporter', 
       { 
         pageTitle: 'Parkin Test Results' ,
-        outputPath: './reports/feature/parkin-report.html'
+        outputPath: './reports/feature/report.html'
       }
     ]
   ],

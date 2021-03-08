@@ -9,5 +9,15 @@ module.exports = {
   rootDir,
   testMatch: ['<rootDir>/tests/tests/**/*.js?(x)'],
   testPathIgnorePatterns: ['config.js'],
-  moduleNameMapper: jestAliases
+  moduleNameMapper: jestAliases,
+  reporters: [
+    'default',
+    [ 
+      './node_modules/jest-html-reporter', 
+      { 
+        pageTitle: 'E2E Test Results' ,
+        outputPath: './reports/e2e/report.html'
+      }
+    ]
+  ],
 }
