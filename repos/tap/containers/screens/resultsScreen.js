@@ -6,7 +6,7 @@ import { useStyle } from '@keg-hub/re-theme'
 import { ExternalLink } from 'SVAssets/icons'
 import { Surface } from 'SVComponents/surface'
 import { apiRequest } from 'SVUtils/api/apiRequest'
-import { useActiveFile } from 'SVHooks/useActiveFile'
+import { useActiveTestFile } from 'SVHooks/useActiveTestFile'
 import React, { useEffect, useState, useMemo } from 'react'
 import { View, TouchableIcon } from '@keg-hub/keg-components'
 import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
@@ -21,7 +21,8 @@ const useWindowOpen = (fileType, reportUrl) => useMemo(() => {
 
 export const ResultsScreen = props => {
   const builtStyles = useStyle(`screens.results`)
-  const activeFile = useActiveFile(props.id)
+  const activeFile = useActiveTestFile(props.id)
+
   const { fileType } = activeFile
   const reportUrl = useReportsUrl(fileType)
   const onIconPress = useWindowOpen(fileType, reportUrl)

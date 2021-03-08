@@ -13,10 +13,10 @@ const { CATEGORIES } = Values
  */
 export const setActiveTestFile = (testFile) => {
   testFile && dispatch({
-    type: ActionTypes.SET_ITEM,
+    type: ActionTypes.SET_ITEMS,
     payload: {
       category: CATEGORIES.ACTIVE_TEST_FILE,
-      item: testFile,
+      items: testFile,
     },
   })
 }
