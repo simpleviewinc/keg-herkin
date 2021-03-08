@@ -8,7 +8,7 @@ export const Values = {
     WAYPOINTS: 'waypoints',
     ACTIVE_FEATURE: 'activeFeature',
     ACTIVE_TAB: 'activeTab',
-    ACTIVE_RUNNER_TESTS: 'activeRunnerTests',
+    ACTIVE_TEST_FILE: 'activeTestFile',
     FEATURE: 'feature',
     SCREEN: 'screen',
     SCREENS: 'screens',
@@ -21,7 +21,6 @@ export const Values = {
   },
   SUB_CATEGORIES: {
     ACTIVE_FILE: 'activeFile',
-    RUNNER_CONTENT: 'runnerContent',
     MODIFIED_CONTENT: 'modified',
     NODES: 'nodes'
   },
