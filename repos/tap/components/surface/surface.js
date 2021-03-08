@@ -1,9 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { wordCaps, checkCall, exists } from '@keg-hub/jsutils'
+import { checkCall, exists } from '@keg-hub/jsutils'
 import { useStyle } from '@keg-hub/re-theme'
 import { DrawerToggle } from './drawerToggle'
-import { Section, ItemHeader, Row, H3, Text } from 'SVComponents'
+import { Section, ItemHeader, Row } from 'SVComponents'
 import { Drawer } from 'SVComponents'
+import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
 
 const SurfaceHeader = props => {
   const {
@@ -16,6 +17,7 @@ const SurfaceHeader = props => {
     onTogglePress,
     hasToggle=true,
     toggleDisabled,
+    TitleComponent=PrefixTitleHeader
   } = props
 
   return (
@@ -23,21 +25,13 @@ const SurfaceHeader = props => {
       className='surface-header'
       styles={styles?.itemHeader}
       CenterComponent={(
-        <H3 style={styles?.heading} >
-          { prefix && (
-            <Text style={styles?.prefix}>
-              {prefix}
-            </Text>
-          )}
-          { title && (
-            <>
-              {prefix && (<Text style={styles?.prefix}> - </Text>)}
-              <Text style={[styles?.title, titleStyle]}>
-                { capitalize ? wordCaps(`${title}`) : title }
-              </Text>
-            </>
-          )}
-        </H3>
+        <TitleComponent
+          styles={styles}
+          titleStyle={titleStyle}
+          title={title}
+          prefix={prefix}
+          capitalize={capitalize}
+        />
       )}
       RightComponent={hasToggle && (
         <DrawerToggle
@@ -63,6 +57,7 @@ export const Surface = props => {
     toggleHandel,
     initialToggle,
     toggleDisabled,
+    TitleComponent
   } = props
   
   const surfaceStyles = useStyle('surface', styles)
@@ -82,6 +77,7 @@ export const Surface = props => {
   return (
     <Section className='surface' style={surfaceStyles?.main} >
       {(title || prefix) && (<SurfaceHeader
+        TitleComponent={TitleComponent}
         title={title}
         titleStyle={titleStyle}
         hasToggle={hasToggle}

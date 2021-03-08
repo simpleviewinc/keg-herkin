@@ -48,6 +48,7 @@ export const Values = {
     BUILDER: 'builder',
     EMPTY: 'empty',
     RUNNER: 'runner',
+    RESULTS: 'results',
   },
   EDITOR_TABS: {
     BDD_SPLIT: { id: 'bddSplit', title: `Split` },

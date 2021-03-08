@@ -17,7 +17,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "api": "nodemon --watch ./repos/backend --watch ./repos/sockr --watch ./repos/shared --watch ./config --exec 'node ./repos/backend/index.js'",
+    "api": "nodemon --watch ./repos/backend --watch ./repos/shared --watch ./config --exec 'node ./repos/backend/index.js'",
     "clean": "cd node_modules/keg-core; yarn clean",
     "clean:install": "yarn clean:full; yarn install",
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
@@ -57,7 +57,7 @@
     "@keg-hub/jsutils": "8.3.0",
     "@keg-hub/messenger": "file:repos/messenger",
     "@keg-hub/spawn-cmd": "0.1.0",
-    "@ltipton/sockr": "0.0.4",
+    "@ltipton/sockr": "0.0.6",
     "@ltipton/react-ace-editor": "0.0.1",
     "@ltipton/react-gherkin-editor": "0.0.2",
     "ansi-html": "0.0.7",

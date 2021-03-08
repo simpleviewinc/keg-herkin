@@ -1,16 +1,13 @@
 import React from 'react'
-import { Values } from 'SVConstants'
 import { useParentMethods } from 'SVHooks'
 import { EmptyScreen } from './emptyScreen'
 import { useStyle } from '@keg-hub/re-theme'
 import { capitalize } from '@keg-hub/jsutils'
 import { View } from '@keg-hub/keg-components'
 import { Runner } from 'SVComponents/runner/runner'
-import { CmdOutput } from 'SVComponents/cmdOutput/cmdOutput'
 import { useActiveFile } from 'SVHooks/useActiveFile'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { CmdOutput } from 'SVComponents/cmdOutput/cmdOutput'
 
-const { CATEGORIES } = Values
 
 export const RunnerScreen = props => {
   const builtStyles = useStyle(`screens.runner`)
@@ -24,18 +21,13 @@ export const RunnerScreen = props => {
           className={`runner-screen`}
           style={builtStyles.main}
         >
-          <CmdOutput
+          <CmdOutput activeFile={activeFile} />
+          <Runner
             activeFile={activeFile}
+            tests={activeFile?.modified || activeFile?.content || ''}
+            title={capitalize(activeFile?.fileType || '')}
+            parentMethods={parentMethods}
           />
         </View>
       )
 }
-
-/*
-<Runner
-  activeFile={activeFile}
-  tests={activeFile?.modified || activeFile?.content || ''}
-  title={capitalize(activeFile?.fileType || '')}
-  parentMethods={parentMethods}
-/>
-*/

@@ -4,6 +4,7 @@ import { EmptyScreen } from './emptyScreen'
 import { deepMerge } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { RunnerScreen } from './runnerScreen'
+import { ResultsScreen } from './resultsScreen'
 import { EditorScreen } from './editorScreen'
 import { BuilderScreen } from './builderScreen'
 import React, { useMemo, useCallback } from 'react'
@@ -32,10 +33,15 @@ const screenTabs = [
     title: `Code Editor`,
   },
   {
-    id: SCREENS.RUNNER,
-    View: RunnerScreen,
-    title: `Tests Runner`,
+    id: SCREENS.RESULTS,
+    View: ResultsScreen,
+    title: `Tests Results`,
   },
+  // {
+  //   id: SCREENS.RUNNER,
+  //   View: RunnerScreen,
+  //   title: `Tests Runner`,
+  // },
 ]
 
 /**

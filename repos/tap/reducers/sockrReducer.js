@@ -1,4 +1,4 @@
-import { EventTypes } from 'SVUtils/sockr'
+import { EventTypes } from '@ltipton/sockr'
 
 export const sockrReducer = (state, action) => {
 

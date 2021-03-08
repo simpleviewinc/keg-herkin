@@ -13,7 +13,7 @@ import { keg } from 'SVConfig'
 import { getHistory } from 'SVNavigation'
 import { isNative } from 'SVUtils/platform'
 import { WSService } from 'SVServices'
-import { SockrProvider } from 'SVUtils/sockr'
+import { SockrProvider } from '@ltipton/sockr'
 import { sockrReducer } from './reducers/sockrReducer'
 
 const checkAppInit = async setInit => {

@@ -4,7 +4,7 @@ import { noOpObj, get } from '@keg-hub/jsutils'
 import { saveFile } from 'SVActions/files'
 import { runTests } from 'SVActions/runner'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { useSockr } from 'SVUtils/sockr'
+import { useSockr } from '@ltipton/sockr'
 import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
 
 const { SCREENS, CATEGORIES } = Values
@@ -34,8 +34,11 @@ const useRunAction = (activeFile, editorRef) => {
       return console.warn(`Can not run tests for this file. It is not a test file!`)
 
     const content = editorRef.current?.editor?.getValue()
+    await savePendingContent(content, activeFile)
+    
+    // save the file first if it has pending changes
     const canRun = content !== activeFile.content || hasPending
-      ? await saveFile({ ...activeFile, content }) && setActiveFileFromType(activeFile, SCREENS.EDITOR)
+      ? await savePendingContent(content, activeFile)
       : true
 
     canRun
@@ -68,15 +71,26 @@ const useSaveAction = (activeFile, editorRef) => {
     setIsSaving(true)
 
     const content = editorRef.current?.editor?.getValue()
-    // save the file and update active file
-    const saveResult = await saveFile({ ...activeFile, content })
-    content 
-      && saveResult?.success
-      && setActiveFileFromType(saveResult?.file, SCREENS.EDITOR)
+    await savePendingContent(content, activeFile)
 
     setIsSaving(false)
 
   }, [ editorRef.current, activeFile, SCREENS.EDITOR ])
+}
+
+/**
+ * Helper to save the file and updates the activeFile and file store
+ * @param {string} content 
+ * @param {object} activeFile - filemodel
+ * 
+ * @returns {boolean} - if successful or not
+ */
+const savePendingContent = async (content, activeFile) => {
+  // save the file and update active file
+  const saveResult = content && await saveFile({ ...activeFile, content })
+  saveResult
+    ? saveResult?.success && setActiveFileFromType(saveResult?.file, SCREENS.EDITOR)
+    : false
 }
 
 /**

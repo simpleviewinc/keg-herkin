@@ -1,5 +1,4 @@
 import { WSService } from 'SVServices'
-import { EventTypes } from 'SVUtils/sockr'
 import { addToast } from 'SVActions/toasts'
 import { buildCmdParams } from 'SVUtils/helpers/buildCmdParams'
 

@@ -1,6 +1,6 @@
 import { isFunc, camelCase, snakeCase } from '@keg-hub/jsutils'
 import { serverConfig } from '../../../configs/server.config'
-import { WSService as SockrService, EventTypes } from 'SVUtils/sockr'
+import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
 
 /**
  * Callback event functions bound to the SocketService

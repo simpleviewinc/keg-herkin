@@ -4,7 +4,7 @@ import { RenderOutput } from './renderOutput'
 import { Surface } from 'SVComponents/surface'
 import { Row } from '@keg-hub/keg-components/row'
 import { Grid } from '@keg-hub/keg-components/grid'
-import { useSockrItems } from 'SVUtils/sockr'
+import { useSockrItems } from '@ltipton/sockr'
 
 export const CmdOutput = props => {
   const { activeFile } = props
