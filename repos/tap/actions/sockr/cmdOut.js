@@ -26,6 +26,6 @@ export const cmdOut = (data, testRunModel) => {
           // data.message
         ]
       })
-    : devLog(`error`, `Can not set testRun output. A testRun model is required!`)
+    : devLog(`error`, `Can not add testRun output. A testRun model is required!`)
 
 }

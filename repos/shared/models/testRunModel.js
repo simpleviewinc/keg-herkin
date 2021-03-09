@@ -14,6 +14,7 @@ const Model = {
   file: '',
   testType: '',
   lastRun: '',
+  failed: false,
   active: false,
   running: false,
   output: []

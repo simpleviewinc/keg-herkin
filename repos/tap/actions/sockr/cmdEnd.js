@@ -20,6 +20,6 @@ export const cmdEnd = (data, testRunModel) => {
 
   testRunModel
     ? setTestRun({ ...testRunModel, running: false })
-    : devLog(`error`, `Can not turn off testRun model running. A testRun model is required!`)
+    : devLog(`error`, `Can not set testRun model running. A testRun model is required!`)
 
 }
