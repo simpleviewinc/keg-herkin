@@ -6,7 +6,7 @@ const { CATEGORIES } = Values
 
 export const useActiveTestOutput = () => {
   const activeTestFile = useActiveTestFile()
-  const allFileOutput = useStoreItems(CATEGORIES.TEST_FILE_OUTPUT)
+  const allFileOutput = useStoreItems(CATEGORIES.TEST_RUNS)
 
   return activeTestFile.location &&
     allFileOutput[activeTestFile.location]
