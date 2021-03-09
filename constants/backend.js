@@ -1,5 +1,5 @@
 const path = require('path')
-const { getRepoPaths } require('./repos')
+const { getRepoPaths } = require('./repos')
 const { execSync } = require('child_process')
 const { snakeCase, deepFreeze } = require('@keg-hub/jsutils')
 const { HERKIN_ROOT, ...repoPaths } = getRepoPaths()
