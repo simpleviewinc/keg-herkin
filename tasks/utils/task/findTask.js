@@ -38,9 +38,9 @@ const findTask = (tasks, opts=noOpArr) => {
   const taskName = options.shift()
   const task = tasks[taskName]
   const foundTask = task && loopTasks(task, options)
-  
+
   return foundTask && foundTask.task
-    ? [ foundTask, options ]
+    ? foundTask
     : throwExitError(new Error(`Task not found for argument: ${taskName}`))
   
 }

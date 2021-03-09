@@ -77,7 +77,7 @@ class SocketService {
    *
    * @returns {*} Response from SockrService.runCommand
    */
-  runCommand = data => SockrService.runCommand(data)
+  runCommand = (data, params) => SockrService.runCommand(data, params)
 
   /**
    * Disconnects from the backend websocket

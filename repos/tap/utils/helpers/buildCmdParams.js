@@ -1,13 +1,14 @@
 
 const buildFeatureParams = (command, activeFile) => {
   return [
-    `name=${activeFile.name}`,
+    `context=${activeFile.location}`,
     `slowMo=5`,
   ]
 }
+
 const buildWaypointParams = (command, activeFile) => {
   return [
-    `context=${activeFile.name}`,
+    `context=${activeFile.location}`,
   ]
 }
 
