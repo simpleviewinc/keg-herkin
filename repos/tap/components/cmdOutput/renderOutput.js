@@ -8,8 +8,13 @@ import { wordCaps, noOpObj } from '@keg-hub/jsutils'
 import { CheckFilled, TimesFilled } from 'SVAssets/icons'
 
 
-export const RenderOutput = props => {
+export const RenderOutput = ({ output, testFile }) => {
 
+  // console.log(`---------- output ----------`)
+  // console.log(output)
+
+  // console.log(`---------- testFile ----------`)
+  // console.log(testFile)
 
   return (
     <View>

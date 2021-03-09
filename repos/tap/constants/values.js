@@ -9,6 +9,7 @@ export const Values = {
     ACTIVE_FEATURE: 'activeFeature',
     ACTIVE_TAB: 'activeTab',
     ACTIVE_TEST_FILE: 'activeTestFile',
+    TEST_FILE_OUTPUT: 'testFileOutput',
     FEATURE: 'feature',
     SCREEN: 'screen',
     SCREENS: 'screens',

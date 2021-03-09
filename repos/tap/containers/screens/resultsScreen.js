@@ -34,6 +34,7 @@ export const ResultsScreen = props => {
         className={`results-screen`}
         style={builtStyles.main}
       >
+        <CmdOutput activeTestFile={activeTestFile} />
         <Surface
           prefix={'Test Results'}
           TitleComponent={({styles, ...props}) => 
@@ -50,7 +51,6 @@ export const ResultsScreen = props => {
           className={`runner-surface-iframe`}
         >
           <Iframe src={reportUrl}/>
-          <CmdOutput activeTestFile={activeTestFile} />
         </Surface>
       </View>
   )
