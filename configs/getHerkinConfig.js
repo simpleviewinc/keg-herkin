@@ -6,6 +6,8 @@ const { deepMerge, get, isStr, isFunc, noOpObj } = require('@keg-hub/jsutils')
 
 const { KEG_HERKIN_CONFIG_PATH } = process.env
 
+let __HERKIN_CONFIG
+
 /**
  * TODO: replace with jsutils' tryRequireSync once its PR is merged in
  * Tries to require the path, returning null if unable to.
@@ -93,6 +95,7 @@ const loadCustomConfig = (runtimeConfigPath) => {
  * @return {Object} - Loaded Herkin config
  */
 const getHerkinConfig = (argsConfig=noOpObj) => {
+  if(__HERKIN_CONFIG) return __HERKIN_CONFIG
 
   const customConfig = loadCustomConfig(argsConfig.config)
 
@@ -104,11 +107,13 @@ const getHerkinConfig = (argsConfig=noOpObj) => {
        * ensure a config exists in your current working directory or above it`
     )
 
-  return deepMerge(
+  __HERKIN_CONFIG = deepMerge(
     get(pkgConfig, ['herkin']),
     defaultConfig,
     customConfig
   )
+
+  return __HERKIN_CONFIG
 }
 
 module.exports = {

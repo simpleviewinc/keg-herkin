@@ -1,6 +1,6 @@
 const path = require('path')
 const { runFeatures } = require('HerkinRepos/testUtils/parkin/runFeatures')
-const { TESTS_MOUNT } = require('HerkinBackConstants')
+const { HERKIN_TESTS_ROOT } = require('HerkinBackConstants')
 
 const { 
   HERKIN_FEATURES_DIR,
@@ -10,7 +10,7 @@ const {
 } = process.env
 
 const featureMatchingPath = path.join(
-  TESTS_MOUNT,
+  HERKIN_TESTS_ROOT,
   HERKIN_FEATURES_DIR,
   HERKIN_FEATURE_GLOB
 )

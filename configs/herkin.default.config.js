@@ -1,24 +1,15 @@
 const path = require('path')
 const { serverConfig } = require('./server.config.js')
 const { sockrCmds } = require('./sockrCmds.config.js')
-
 const {
-  DOC_APP_PATH,
+  HERKIN_ROOT,
   HERKIN_TESTS_ROOT,
   HERKIN_FEATURES_DIR,
   HERKIN_STEPS_DIR,
   HERKIN_SUPPORT_DIR,
   HERKIN_UNIT_DIR,
   HERKIN_WAYPOINT_DIR,
-} = process.env
-
-const rootDir = path.join(__dirname, '../')
-
-// absolute path to tests volume inside the container
-const dockerTestsRoot = path.join(rootDir, 'tests')
-
-// absolute path to the tests folder on host machine
-const hostTestsRoot = HERKIN_TESTS_ROOT || dockerTestsRoot
+} = require('../constants/backend')
 
 module.exports = {
   sockr: {
@@ -27,17 +18,12 @@ module.exports = {
   },
   server: serverConfig,
   paths: {
-    rootDir,
-
-    // if DOC_APP_PATH is defined, we are in the docker container, so look for tests root at <herkin-root>/tests
-    testsRoot: DOC_APP_PATH 
-      ? dockerTestsRoot
-      : hostTestsRoot,
-
-    stepsDir: HERKIN_STEPS_DIR || 'bdd/steps',
-    featuresDir: HERKIN_FEATURES_DIR || 'bdd/features',
-    supportDir: HERKIN_SUPPORT_DIR || 'bdd/support',
-    unitDir: HERKIN_UNIT_DIR || 'unit',
-    waypointDir: HERKIN_WAYPOINT_DIR || 'waypoint'
+    rootDir: HERKIN_ROOT,
+    testsRoot: HERKIN_TESTS_ROOT,
+    featuresDir: HERKIN_FEATURES_DIR,
+    stepsDir: HERKIN_STEPS_DIR,
+    supportDir: HERKIN_SUPPORT_DIR,
+    unitDir: HERKIN_UNIT_DIR,
+    waypointDir: HERKIN_WAYPOINT_DIR
   },
 }

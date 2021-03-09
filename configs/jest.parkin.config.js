@@ -39,23 +39,24 @@ const getStepDefinitions = () => {
  * Gets all file paths for cucumber support files
  * @return {Array<string>} file paths
  */
-const getCucumberSupport = () => {
-  const herkinWorld = `${TEST_UTILS_PATH}/support/world`
+const getParkinSupport = () => {
+  const parkinEnvironment = `${TEST_UTILS_PATH}/parkin/setupTestEnvironment.js`
   const herkinHooks = `${TEST_UTILS_PATH}/support/hooks`
 
+  // Don't include the world here because it gets loaded in herkin/support/world.js
   const pattern = path.join(
     mountPoint, 
     config.paths.supportDir, 
-    '**/+(world.js|hook.js|setup.js)'
+    '**/+(hook.js|setup.js)'
   )
-
   const matches = glob.sync(pattern)
 
-  // only include the HerkinWorld if the user did not override it
-  if (!matches.find(match => match.includes('world.js')))
-    matches.push(herkinWorld)
-
+  // Add the default herkin hooks for setting up the tests
   matches.push(herkinHooks)
+
+  // Add the parkin environment setup first
+  // This ensures we can get access to the Parkin instance
+  matches.unshift(parkinEnvironment)
 
   return matches
 }
@@ -70,20 +71,22 @@ module.exports = {
     'tsx'
   ],
   setupFilesAfterEnv: [
-    ...getCucumberSupport(),
+    ...getParkinSupport(),
     ...getStepDefinitions()
   ],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+    // Add the custom parkin transformer for feature files
+    '^.*\\.feature': `${TEST_UTILS_PATH}/parkin/transformer.js`
   },
   testMatch: [
-    '<rootDir>/scripts/*.js'
+    '<rootDir>/tests/bdd/**/*.feature'
   ],
   moduleNameMapper: jestAliases,
   reporters: [
     'default',
     [ 
-      './node_modules/jest-html-reporter', 
+      './node_modules/jest-html-reporter',
       { 
         pageTitle: 'Parkin Test Results' ,
         outputPath: './reports/feature/report.html'

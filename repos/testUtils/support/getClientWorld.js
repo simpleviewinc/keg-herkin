@@ -1,22 +1,24 @@
-const { tryRequireSync } = require('@keg-hub/jsutils/src/node')
 const path = require('path')
+const glob = require('glob')
+const { HERKIN_TESTS_ROOT, HERKIN_SUPPORT_DIR } = require('../../../constants/backend')
+const { tryRequireSync } = require('@keg-hub/jsutils/src/node')
 
 /**
  * Searches the client's support directory for a world export
+ *
  * @return {Object?} - the client's world object, or undefined if it does not exist
  */
 const getClientWorld = () => {
-  const clientSupportPath = path.join(
-    process.env.HERKIN_TESTS_ROOT,
-    process.env.HERKIN_SUPPORT_DIR,
+
+  const worldPattern = path.join(
+    HERKIN_TESTS_ROOT,
+    HERKIN_SUPPORT_DIR,
+    '**/world.js'
   )
 
-  const worldPaths = [
-    clientSupportPath,
-    path.join(clientSupportPath, 'world'),
-  ]
+  const clientExport = glob.sync(worldPattern)
+    .reduce((found, file) => (found || tryRequireSync(file)), false)
 
-  const clientExport = worldPaths.find(tryRequireSync)
   return clientExport && clientExport.world
 }
 

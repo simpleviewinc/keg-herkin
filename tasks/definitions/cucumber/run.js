@@ -10,17 +10,22 @@ const path = require('path')
  *                          See options section of the task definition below
  */
 const buildCmdArgs = params => {
-  const { jestConfig, timeout, bail } = params
+  const { jestConfig, timeout, bail, context } = params
 
-  const cmdArgs = [ 'npx', 'jest', '--detectOpenHandles' ]
+  const cmdArgs = [
+    'npx',
+    'jest',
+    '--detectOpenHandles',
+    '--no-cache',
+    '--passWithNoTests'
+  ]
+
   const docTapPath = '/keg/tap'
   jestConfig && cmdArgs.push(`--config=${path.join(docTapPath, jestConfig)}`)
   timeout && cmdArgs.push(`--testTimeout=${timeout}`)
   bail && cmdArgs.push('--bail')
 
-
-  // see <root>/scripts/runParkin.js
-  cmdArgs.push('runParkin.js')
+  context && cmdArgs.push(context)
 
   return cmdArgs
 }
