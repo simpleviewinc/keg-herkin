@@ -37,7 +37,7 @@ export const setActiveFile = (fileModel, screenId) => {
       },
     },
   })
-  
+
   return updatedFile
 }
 
