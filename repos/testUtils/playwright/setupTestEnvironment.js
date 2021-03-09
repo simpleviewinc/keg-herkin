@@ -4,7 +4,7 @@ const { chromium, firefox, webkit } = require('playwright')
 const { isStr } = require('@keg-hub/jsutils')
 
 // QAW_BROWSER is a qawolf-set env, dependent on parameters like --all-browsers or --firefox
-// HOST_BROWSER is set by the task `keg herkin cucumber run`
+// HOST_BROWSER is set by the task `keg herkin bdd run`
 const BROWSER = process.env.QAW_BROWSER
   || process.env.HOST_BROWSER
   || 'chromium'

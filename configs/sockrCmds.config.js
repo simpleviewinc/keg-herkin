@@ -5,7 +5,7 @@ const sockrCmds = {
       commands: {
         feature: {
           description: "Run behavior driven tests with feature files",
-          cmd: 'cucumber',
+          cmd: 'bdd',
           beforeArgs: [
             'test',
           ],

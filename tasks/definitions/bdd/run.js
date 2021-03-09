@@ -17,7 +17,7 @@ const buildCmdArgs = params => {
     'jest',
     '--detectOpenHandles',
     '--no-cache',
-    '--passWithNoTests'
+    // '--passWithNoTests'
   ]
 
   const docTapPath = '/keg/tap'
@@ -94,8 +94,8 @@ module.exports = {
   run: {
     name: 'run',
     action: runTest,
-    example: 'keg herkin cucumber run',
-    description : 'Runs cucumber tests',
+    example: 'keg herkin bdd run',
+    description : 'Runs bdd feature tests',
     alias: ['test'],
     options: sharedOptions('run', {
       context: {

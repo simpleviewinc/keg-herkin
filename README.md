@@ -27,7 +27,7 @@
   * Provides data assertion ([expect](https://jestjs.io/docs/en/expect))
   * Allows running tests in parallel
   * Generates code coverage in multiple formats
-* [Cucumber](https://github.com/cucumber/cucumber-js)
+* [Parkin](https://github.com/@ltipton/parkin)
   * Tool for running automated tests written in plain language (Gherkin)
   * Parses Features / Scenarios files
   * Links Scenarios to Step definitions

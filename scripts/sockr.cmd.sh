@@ -40,5 +40,5 @@ if [[ -z "$DOC_APP_PATH" ]]; then
   export DOC_APP_PATH=/keg/tap
 fi
 
-## run the task (ex: bash scripts/sockr.cmd.sh cucumber test)
+## run the task (ex: bash scripts/sockr.cmd.sh bdd test)
 yarn task "$@"

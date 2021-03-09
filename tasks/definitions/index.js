@@ -20,5 +20,5 @@ const initialize = tasks => {
 module.exports = {
   ...initialize(require('./tap')),
   ...initialize(require('./wolf')),
-  ...initialize(require('./cucumber')),
+  ...initialize(require('./bdd')),
 }

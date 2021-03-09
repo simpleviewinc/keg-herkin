@@ -48,8 +48,7 @@
     "task": "node ./tasks/runTask.js",
     "web": "yarn web:dev",
     "web:build": "cd node_modules/keg-core; yarn build:web",
-    "web:dev": "nodemon --watch ./package.json --exec 'cd node_modules/keg-core && yarn web'",
-    "cucumber": "./node_modules/.bin/cucumber-js"
+    "web:dev": "nodemon --watch ./package.json --exec 'cd node_modules/keg-core && yarn web'"
   },
   "dependencies": {
     "@keg-hub/args-parse": "6.2.1",

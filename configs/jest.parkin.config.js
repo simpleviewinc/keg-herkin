@@ -36,7 +36,7 @@ const getStepDefinitions = () => {
 
 
 /**
- * Gets all file paths for cucumber support files
+ * Gets all file paths for bdd support files
  * @return {Array<string>} file paths
  */
 const getParkinSupport = () => {
