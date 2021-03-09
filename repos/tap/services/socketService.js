@@ -1,4 +1,5 @@
-import { isFunc, camelCase, snakeCase } from '@keg-hub/jsutils'
+import * as sockrActions from 'SVActions/sockr'
+import { isFunc, camelCase, snakeCase, checkCall } from '@keg-hub/jsutils'
 import { serverConfig } from '../../../configs/server.config'
 import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
 
@@ -14,10 +15,14 @@ import { WSService as SockrService, EventTypes } from '@ltipton/sockr'
  * @property {function} cmdRunning - Called when a command is running on the backend
  */
 const events = {
-  init: function(message){},
-  connect: function (message, instance){},
-  all: function(message, instance, event){},
-  cmdRunning: function(message, instance, event){},
+  all: function(message, instance, event){
+    if(!event) return
+
+    // Get the name of the action from sockr's Event Types
+    // And convert into an action name for the taps sockr actions
+    const actionName = camelCase((event.split(':')[1] || '').toLowerCase())
+    checkCall(sockrActions[actionName], message)
+  },
 }
 
 /**
@@ -41,7 +46,7 @@ class SocketService {
 
     Object.assign(this, config)
   }
-  
+
   /**
    * Sends an event to the connected backend through websocket ( Like an REST API call )
    * @memberof SocketService

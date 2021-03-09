@@ -5,6 +5,7 @@ import { Iframe } from 'SVComponents/iframe'
 import { useStyle } from '@keg-hub/re-theme'
 import { ExternalLink } from 'SVAssets/icons'
 import { Surface } from 'SVComponents/surface'
+import { CmdOutput } from 'SVComponents/cmdOutput'
 import { apiRequest } from 'SVUtils/api/apiRequest'
 import { useActiveTestFile } from 'SVHooks/useActiveTestFile'
 import React, { useEffect, useState, useMemo } from 'react'
@@ -21,13 +22,13 @@ const useWindowOpen = (fileType, reportUrl) => useMemo(() => {
 
 export const ResultsScreen = props => {
   const builtStyles = useStyle(`screens.results`)
-  const activeFile = useActiveTestFile(props.id)
+  const activeTestFile = useActiveTestFile(props.id)
 
-  const { fileType } = activeFile
+  const { fileType } = activeTestFile
   const reportUrl = useReportsUrl(fileType)
   const onIconPress = useWindowOpen(fileType, reportUrl)
 
-  return !activeFile?.fileType
+  return !activeTestFile?.fileType
     ? (<EmptyScreen message={'No file selected!'} />)
     : (<View
         className={`results-screen`}
@@ -49,6 +50,7 @@ export const ResultsScreen = props => {
           className={`runner-surface-iframe`}
         >
           <Iframe src={reportUrl}/>
+          <CmdOutput activeTestFile={activeTestFile} />
         </Surface>
       </View>
   )

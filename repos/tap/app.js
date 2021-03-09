@@ -14,7 +14,10 @@ import { getHistory } from 'SVNavigation'
 import { isNative } from 'SVUtils/platform'
 import { WSService } from 'SVServices'
 import { SockrProvider } from '@ltipton/sockr'
-import { sockrReducer } from './reducers/sockrReducer'
+
+// TODO: remove this once sockr is updated
+// Currently is requires a reducer function be passed in, but it should not
+const reducerNoOp = state => state
 
 const checkAppInit = async setInit => {
   await init()
@@ -46,9 +49,9 @@ const App = props => {
             <ReThemeProvider theme={ activeTheme } >
               <DomStyles />
               <SockrProvider
-                debug={true}
+                debug={false}
                 config={WSService}
-                reducer={sockrReducer}
+                reducer={reducerNoOp}
               >
                 <View style={activeTheme.app.main} >
                   <ContainerRoutes navigationConfigs={keg.routes}/>
