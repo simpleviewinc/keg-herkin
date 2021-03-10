@@ -5,7 +5,6 @@ import { Icon } from '@keg-hub/keg-components/icon'
 import { View } from '@keg-hub/keg-components/view'
 import { Text } from '@keg-hub/keg-components/text'
 import { wordCaps, noOpObj } from '@keg-hub/jsutils'
-import { CheckFilled, TimesFilled } from 'SVAssets/icons'
 
 
 export const RenderOutput = ({ output, testFile }) => {

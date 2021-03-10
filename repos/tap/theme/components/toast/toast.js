@@ -5,28 +5,49 @@ const defStyles = theme => ({
   main: {
     minW: 240,
     zIndex: 10,
-    opacity: 0.8,
+    opacity: 0.95,
     position: 'fixed',
     cursor: 'pointer',
     bRad: tapColors.borderRadius,
-    transition: 'transform .6s ease-in',
   },
   content: {
-    pV: theme.padding.size / 2,
-    pH: theme.padding.size,
+    opacity: 1,
+    ...theme.transition([ 'opacity' ], 0.8),
+    p: theme.padding.size - (theme.padding.size / 3),
+    pR: theme.padding.size,
     bRad: tapColors.borderRadius,
     mB: theme.margin.size,
+    flD: 'row',
+  },
+  left: {
+    jtC: 'center',
+  },
+  right: {
+    jtC: 'center',
+  },
+  icon: {
+    color: theme.colors.palette.white01,
+    mR: 10,
   },
   title: {
     mB: 5,
-    ftSz: 14,
+    ftSz: 16,
     ftWt: 'bold',
     c: theme.colors.palette.white01,
   },
   message: {
-    mB: 5,
-    ftSz: 12,
+    ftSz: 14,
     c: theme.colors.palette.white01,
+  },
+  hover: {
+    content: {
+      opacity: 0.6,
+    }
+  },
+  active: {
+    content: {
+      opacity: 0.2,
+    }
   },
 })
 
@@ -64,44 +85,24 @@ const success = (theme, styles) => deepMerge(styles, {
   content: {
     bgC: tapColors.successDark,
   },
-  title: {},
-  message: {}
 })
 
 const info = (theme, styles) => deepMerge(styles, {
   content: {
     bgC: tapColors.primaryDark,
   },
-  title: {
-  },
-  message: {
-  
-  }
 })
 
 const warn = (theme, styles) => deepMerge(styles, {
   content: {
     bgC: tapColors.warnDark,
   },
-  title: {
-  },
-  message: {
-  
-  }
 })
 
 const danger = (theme, styles) => deepMerge(styles, {
-  main: {
+  content: {
     bgC: tapColors.dangerDark,
   },
-  text: {
-    c: theme.colors.palette.white01,
-  },
-  title: {
-  },
-  message: {
-  
-  }
 })
 
 export const toast = theme => {

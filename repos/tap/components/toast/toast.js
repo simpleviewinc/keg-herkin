@@ -1,18 +1,32 @@
 import { Values } from 'SVConstants'
 import { removeToast } from 'SVActions/toasts'
-import { useStyle } from '@keg-hub/re-theme'
-import { noOpObj, noPropArr, noOp } from '@keg-hub/jsutils'
+import { useStyle, useThemeHover, useThemeActive } from '@keg-hub/re-theme'
+import { noOpObj, noPropArr, noOp, isStr } from '@keg-hub/jsutils'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { View, Button, Text } from '@keg-hub/keg-components'
-import React, { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useMemo, useEffect, useCallback } from 'react'
+import { Check, Times, Exclamation, Info } from 'SVAssets/icons'
+import { isValidComponent } from 'SVUtils/validate/isValidComponent'
+
+const icons = {
+  success: Check,
+  info: Info,
+  danger: Times,
+  warn: Exclamation,
+}
 
 const { CATEGORIES } = Values
+
+const useIcon = (type, icon) => useMemo(() => {
+  const Icon = isStr(type) && icons[type] || icon
+  return isValidComponent(Icon) && Icon
+}, [type, icon])
 
 const RenderToast = props => {
   const {
     toast=noOpObj,
     onDelete=noOp,
-    autoClose=3500,
+    autoClose=4000,
     styles=noOpObj,
     toastsStyle=noOpObj,
     position='topRight',
@@ -47,28 +61,50 @@ const RenderToast = props => {
     removeToast(toast)
   }, [ removeToast, onDelete, toast ])
 
+  const Icon = useIcon(type, icon)
+
+  const [ hoverRef, hoverStyles ] = useThemeHover(toastStyle, toastsStyle.hover)
+  const [ ref, themeStyles ] = useThemeActive(hoverStyles, toastsStyle.active, { ref: hoverRef })
+
   return (
     <View
+      ref={ref}
       onClick={deleteToast}
-      className="toast-content"
-      style={toastStyle.content}
+      className={`toast-content toast-${type}`}
+      style={themeStyles.content}
     >
-    {title && (
-      <Text
-        className="toast-title"
-        style={toastStyle.title}
+      {Icon && (
+        <View
+          className="toast-left"
+          style={themeStyles.left}
+        >
+          <Icon
+            className="toast-icon"
+            style={themeStyles.icon}
+          />
+        </View>
+      )}
+      <View
+        className="toast-right"
+        style={themeStyles.right}
       >
-        { title }
-      </Text>
-    )}
-    {message && (
-      <Text
-        className="toast-message"
-        style={toastStyle.message}
-      >
-        {message}
-      </Text>
-    )}
+        {title && (
+          <Text
+            className="toast-title"
+            style={themeStyles.title}
+          >
+            { title }
+          </Text>
+        )}
+        {message && (
+          <Text
+            className="toast-message"
+            style={themeStyles.message}
+          >
+            {message}
+          </Text>
+        )}
+      </View>
     </View>
   )
 }
