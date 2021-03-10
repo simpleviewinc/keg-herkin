@@ -5,16 +5,16 @@ import { RenderOutput } from './renderOutput'
 import { Surface } from 'SVComponents/surface'
 import { Row } from '@keg-hub/keg-components/row'
 import { Grid } from '@keg-hub/keg-components/grid'
-import { useActiveTestOutput } from 'SVHooks/useActiveTestOutput'
+import { useActiveTestRuns } from 'SVHooks/useActiveTestRuns'
 
 export const CmdOutput = props => {
   const { activeTestFile } = props
   const styles = useStyle(`cmdOutput`, props.styles)
   const sockr = useSockr()
   
-  const testFileOutput = useActiveTestOutput()
+  const testFileOutput = useActiveTestRuns()
 
-  return (
+  return testFileOutput && (
     <Surface
       className={`results-main`}
       prefix={`Test Output`}
@@ -31,5 +31,5 @@ export const CmdOutput = props => {
         </Row>
       </Grid>
     </Surface>
-  )
+  ) || null
 }

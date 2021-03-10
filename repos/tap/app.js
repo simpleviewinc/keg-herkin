@@ -49,7 +49,7 @@ const App = props => {
             <ReThemeProvider theme={ activeTheme } >
               <DomStyles />
               <SockrProvider
-                debug={false}
+                debug={true}
                 config={WSService}
                 reducer={reducerNoOp}
               >

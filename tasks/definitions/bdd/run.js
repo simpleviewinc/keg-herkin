@@ -53,9 +53,11 @@ const addEnv = (envs, key, value) => {
  * Builds the envs set in the command that runs a test
  * @param {String} browser - playwright browser name
  * @param {Object} params - `run` task params
+ * @param {Object} reportPath - Path where the test report should be saved
+ *
  * @return {Object} dockerCmd options object, with envs
  */
-const buildCmdOpts = (browser, params, reportsDir) => {
+const buildCmdOpts = (browser, params, reportPath) => {
   const envs = {
     HOST_BROWSER: browser,
     JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG: true,
@@ -68,7 +70,7 @@ const buildCmdOpts = (browser, params, reportsDir) => {
 
   // Build the output path, and page title based on the passed in context
   // Uses the word "features" when no context is passed
-  addEnv(envs, 'JEST_HTML_REPORTER_OUTPUT_PATH', buildReportPath('feature', params.context))
+  addEnv(envs, 'JEST_HTML_REPORTER_OUTPUT_PATH', reportPath)
   addEnv(envs, 'JEST_HTML_REPORTER_PAGE_TITLE', buildReportTitle('feature', params.context))
 
   return { envs }
@@ -121,14 +123,13 @@ const runTest = async args => {
   const launchParams = buildLaunchParams(params)
   const { browsers } = await launchBrowsers(launchParams)
   const cmdArgs = buildCmdArgs(params)
-  const cmdOpts = buildCmdOpts(browser, params, reportsDir)
+  const reportPath = buildReportPath('feature', params.context)
 
   const commands = browsers.map(browser => 
-    () => dockerCmd(params.container, cmdArgs, cmdOpts)
+    () => dockerCmd(params.container, cmdArgs, buildCmdOpts(browser, params, reportPath))
   )
 
   const codes = await runSeq(commands)
-  const reportPath = get(cmdOpts, `envs.JEST_HTML_REPORTER_OUTPUT_PATH`)
 
   exitProcess(codes, reportPath)
 }

@@ -12,9 +12,10 @@ import React, { useEffect, useState, useMemo } from 'react'
 import { View, TouchableIcon } from '@keg-hub/keg-components'
 import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
 
-const useReportsUrl = fileType => useMemo(() => {
-  return `${getBaseApiUrl()}/reports/${fileType || 'list'}`
-}, [getBaseApiUrl, fileType])
+const useReportsUrl = (fileType, name) => useMemo(() => {
+  const loc = name ? `${fileType}/${name}` : `${fileType}/${fileType}`
+  return `${getBaseApiUrl()}/reports/${loc}`
+}, [getBaseApiUrl, fileType, name])
 
 const useWindowOpen = (fileType, reportUrl) => useMemo(() => {
   return fileType ? () => window?.open(reportUrl, '_blank') : noOp
@@ -24,8 +25,9 @@ export const ResultsScreen = props => {
   const builtStyles = useStyle(`screens.results`)
   const activeTestFile = useActiveTestFile(props.id)
 
-  const { fileType } = activeTestFile
-  const reportUrl = useReportsUrl(fileType)
+  const { fileType, name } = activeTestFile
+
+  const reportUrl = useReportsUrl(fileType, name)
   const onIconPress = useWindowOpen(fileType, reportUrl)
 
   return !activeTestFile?.fileType
