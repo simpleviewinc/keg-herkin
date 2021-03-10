@@ -9,9 +9,8 @@ const { wordCaps } = require('@keg-hub/jsutils')
  */
 const buildReportTitle = (type='Test', context) => {
   const name = context ? context.split('/').pop() : type
-  return type !== 'Test'
-    ? wordCaps(`${name} - ${type}s Test Suite`)
-    : `Test Suite`
+
+  return wordCaps(`${name} - Test Suite`)
 }
 
 module.exports = {
