@@ -3,6 +3,7 @@ const { serverConfig } = require('./server.config.js')
 const { sockrCmds } = require('./sockrCmds.config.js')
 const {
   HERKIN_ROOT,
+  HERKIN_REPORTS_DIR,
   HERKIN_TESTS_ROOT,
   HERKIN_FEATURES_DIR,
   HERKIN_STEPS_DIR,
@@ -19,6 +20,7 @@ module.exports = {
   server: serverConfig,
   paths: {
     rootDir: HERKIN_ROOT,
+    reportsDir: HERKIN_REPORTS_DIR,
     testsRoot: HERKIN_TESTS_ROOT,
     featuresDir: HERKIN_FEATURES_DIR,
     stepsDir: HERKIN_STEPS_DIR,

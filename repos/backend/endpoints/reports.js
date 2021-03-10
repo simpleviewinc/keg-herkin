@@ -13,7 +13,12 @@ const getReportList = (app, config) => async (req, res) => {
 const getTestReport = (app, config) => async (req, res) => {
   try {
     const { fileType, reportName } = req.params
-    const report = await getTestReportHtml(fileType, reportName)
+
+    // Removes .html from the name if it exists
+    // Then adds it back, which allows it to work with or without the extension
+    const name = `${reportName.replace('.html', '')}.html`
+
+    const report = await getTestReportHtml(fileType, name)
 
     return htmlResponse(req, res, report)
   }

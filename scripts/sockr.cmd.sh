@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export HERKIN_RUN_FROM_UI="true"
+
 # Prints a message to the terminal through stderr
 printMessage(){
   echo "[ SOCKr ] $@" >&2

@@ -6,6 +6,7 @@ services:
       - HERKIN_APP_URL
       - HERKIN_ROOT_DIR
       - HERKIN_TESTS_ROOT
+      - HERKIN_REPORTS_DIR
       - HERKIN_STEPS_DIR
       - HERKIN_FEATURES_DIR
       - HERKIN_UNIT_DIR

@@ -1,8 +1,14 @@
-const { dockerCmd } = require('HerkinTasks/utils/process/dockerCmd')
-const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers') 
-const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
-const { runSeq, isNum } = require('@keg-hub/jsutils')
 const path = require('path')
+const { runSeq, isNum, get, exists } = require('@keg-hub/jsutils')
+const { dockerCmd } = require('HerkinTasks/utils/process/dockerCmd')
+const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
+const { buildReportPath } = require('HerkinTasks/utils/reporter/buildReportPath')
+const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers') 
+const { buildReportTitle } = require('HerkinTasks/utils/reporter/buildReportTitle')
+
+// The env should only be set on the sockr.cmd.sh script
+// This way we know if it's coming from the herkin frontend
+const { HERKIN_RUN_FROM_UI } = process.env
 
 /**
  * Builds the arguments that are passed to jest when the test is run
@@ -10,24 +16,37 @@ const path = require('path')
  *                          See options section of the task definition below
  */
 const buildCmdArgs = params => {
-  const { jestConfig, timeout, bail, context } = params
+  const { jestConfig, timeout, bail, context, filter, noTests } = params
 
   const cmdArgs = [
     'npx',
     'jest',
     '--detectOpenHandles',
     '--no-cache',
-    // '--passWithNoTests'
   ]
 
   const docTapPath = '/keg/tap'
   jestConfig && cmdArgs.push(`--config=${path.join(docTapPath, jestConfig)}`)
   timeout && cmdArgs.push(`--testTimeout=${timeout}`)
   bail && cmdArgs.push('--bail')
+  noTests && cmdArgs.push('--passWithNoTests')
 
-  context && cmdArgs.push(context)
+  // If context is set use that, otherwise check and use filter
+  context ? cmdArgs.push(context) : filter && cmdArgs.push(filter)
 
   return cmdArgs
+}
+
+/**
+ * Adds an env to the envs object when value exists
+ * @param {Object} envs - Object to add the env to
+ * @param {String} key - Name of the env to add
+ * @return {String} value - Value of the env
+ */
+const addEnv = (envs, key, value) => {
+  exists(value) && (envs[key] = value)
+
+  return envs
 }
 
 /**
@@ -36,26 +55,46 @@ const buildCmdArgs = params => {
  * @param {Object} params - `run` task params
  * @return {Object} dockerCmd options object, with envs
  */
-const buildCmdEnvs = (browser, params) => ({
-  envs: {
+const buildCmdOpts = (browser, params, reportsDir) => {
+  const envs = {
     HOST_BROWSER: browser,
-    ...(params.context && { HERKIN_FEATURE_NAME: params.context }),
-    ...(params.tags && { HERKIN_FEATURE_TAGS: params.tags }),
-    ...(params.debug && { DEBUG: 'pw:api' })
+    JEST_HTML_REPORTER_INCLUDE_FAILURE_MSG: true,
+    JEST_HTML_REPORTER_INCLUDE_SUITE_FAILURE: true,
   }
-})
+
+  addEnv(envs, 'DEBUG', params.debug && 'pw:api')
+  addEnv(envs, 'HERKIN_FEATURE_TAGS', params.tags)
+  addEnv(envs, 'HERKIN_FEATURE_NAME', params.context)
+
+  // Build the output path, and page title based on the passed in context
+  // Uses the word "features" when no context is passed
+  addEnv(envs, 'JEST_HTML_REPORTER_OUTPUT_PATH', buildReportPath('feature', params.context))
+  addEnv(envs, 'JEST_HTML_REPORTER_PAGE_TITLE', buildReportTitle('feature', params.context))
+
+  return { envs }
+}
 
 /**
  * Exits the process, once the tests are complete
  * @param {Array<string|number>} exitCodes - exit code of each test in container
  */
-const exitProcess = (exitCodes=[]) => {
+const exitProcess = (exitCodes=[], reportPath) => {
   const codeSum = exitCodes.reduce((sum, code) => sum + parseInt(code), 0)
-  process.on('exit', () => {
-    console.log('=====================================================\n')
-    console.log('\x1b[33m%s\x1b[0m', 'View test report:', 'http://localhost:5005/reports/parkin') 
-    console.log('\n=====================================================')
-  })
+
+  // If not running from the UI, then print the view reports message
+  !HERKIN_RUN_FROM_UI &&
+    process.on('exit', () => {
+
+      const reportSplit = reportPath.split('/')
+      const name = reportSplit.pop().replace('.html', '')
+      const type = reportSplit.pop()
+      const url = `http://localhost:5005/reports/${type}/${name}`
+
+      console.log('=====================================================\n')
+      console.log('\x1b[33m%s\x1b[0m', 'View test report:', url) 
+      console.log('\n=====================================================')
+    })
+
   process.exit(codeSum)
 }
 
@@ -77,17 +116,21 @@ const buildLaunchParams = params => ({
  */
 const runTest = async args => {
   const { params } = args
+  const reportsDir = get(args, 'herkin.paths.reportsDir')
+
   const launchParams = buildLaunchParams(params)
   const { browsers } = await launchBrowsers(launchParams)
   const cmdArgs = buildCmdArgs(params)
+  const cmdOpts = buildCmdOpts(browser, params, reportsDir)
 
   const commands = browsers.map(browser => 
-    () => dockerCmd(params.container, cmdArgs, buildCmdEnvs(browser, params))
+    () => dockerCmd(params.container, cmdArgs, cmdOpts)
   )
 
   const codes = await runSeq(commands)
+  const reportPath = get(cmdOpts, `envs.JEST_HTML_REPORTER_OUTPUT_PATH`)
 
-  exitProcess(codes)
+  exitProcess(codes, reportPath)
 }
 
 module.exports = {
@@ -99,8 +142,13 @@ module.exports = {
     alias: ['test'],
     options: sharedOptions('run', {
       context: {
-        alias: [ 'name', 'filter' ],
-        description: 'Filters test (feature and scenario names) by this substring. If not passed, all tests are run',
+        alias: [ 'name' ],
+        description: 'Path or name of the test file to run. If not passed, all tests are run. Overrides filters',
+        default: null
+      },
+      filter: {
+        alias: [ 'filters' ],
+        description: 'Filters test (feature and scenario names) by this substring. If not passed, all tests are run. Does nothing when context option is passed',
         default: null
       },
       sync: {
@@ -137,6 +185,11 @@ module.exports = {
         alias: ['speed'],
         description: 'Playwright slow mo option, value in seconds',
         example: 'keg herkin cr test --slowMo 2.5',
+      },
+      noTests: {
+        description: 'The test runner will not fail when no tests exit',
+        example: 'keg herkin cr test --noTests ',
+        default: false
       },
       bail: {
         description: 'Stops all tests once a single step fails',

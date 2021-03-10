@@ -132,6 +132,9 @@ re-theme-touch.js
 **/temp/**
 .temp
 
+/tests/reports/**
+!/tests/reports/.gitkeep
+
 # Logs
 logs
 *.log
