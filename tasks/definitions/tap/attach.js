@@ -1,4 +1,4 @@
-const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions'
+const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
 const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers')
 
 /**
