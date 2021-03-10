@@ -1,5 +1,5 @@
 import { apiRequest } from './apiRequest'
-import { logData, isFunc } from '@keg-hub/jsutils'
+import { logData, isFunc, noOpObj } from '@keg-hub/jsutils'
 import { Values } from 'SVConstants'
 
 const { HttpMethods } = Values
@@ -21,7 +21,7 @@ export const createApiFile = async (fileName, fileType, callback) => {
         url: `/files/create`,
         params: { name: fileName, type: fileType }
       })
-    : logData(`Create File action requires a file name!`)
+    : logData(`Create File action requires a file name!`) || noOpObj
 
   return isFunc(callback) ? callback(response) : response
 }

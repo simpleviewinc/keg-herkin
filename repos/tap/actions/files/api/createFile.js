@@ -42,16 +42,17 @@ export const createFile = async (fileType, fileName) => {
   })
 
   const result = await createApiFile(file, fileType)
+  const { success, file:filModel } = result 
 
-  if(result?.success){
+  if(success){
     addToast({
       type: 'success',
-      message: `New file ${fileToSave.name} was created!`
+      message: `New file ${filModel.name} was created!`
     })
 
-    await setActiveFileFromType(fileModel)
+    await setActiveFileFromType(filModel)
   }
-  else addToast({ type: 'danger', message: `Failed to create new file ${fileToSave.name}!` })
+  else addToast({ type: 'danger', message: `Failed to create new file ${fileName}!` })
 
   return result
 

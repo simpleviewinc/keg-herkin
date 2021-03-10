@@ -13,7 +13,7 @@ global.getParkinInstance = () => parkin
  */
 global.getParkinOptions = () => {
   return {
-    ...(HERKIN_FEATURE_NAME && { name: HERKIN_FEATURE_NAME })
+    ...(HERKIN_FEATURE_NAME && { name: HERKIN_FEATURE_NAME }),
     ...(HERKIN_FEATURE_TAGS && { tags: HERKIN_FEATURE_TAGS })
   }
 }
