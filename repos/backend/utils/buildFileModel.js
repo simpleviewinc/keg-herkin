@@ -4,20 +4,6 @@ const { fileModel } = require('HerkinModels')
 const { getTestFileType } = require('./getTestFileType')
 const { getLastModified } = require('../libs/fileSys/fileSys')
 const { HERKIN_ROOT, TEST_TYPES } = require('HerkinBackConstants')
-const { FeatureParser } = require('../libs/features/featureParser')
-const { DefinitionsParser } = require('../libs/definitions/definitionsParser')
-
-const checkForAstParsing = async fileModel => {
-
-  if(fileModel.fileType === 'feature')
-    fileModel.ast = FeatureParser.parse(fileModel)
-
-  // else if(fileModel.fileType === 'definition')
-  //   return fileModel
-
-  return fileModel
-}
-
 
 /**
  * Builds a fileModel from the fileModel object and passed arguments
@@ -28,7 +14,7 @@ const checkForAstParsing = async fileModel => {
 const buildFileModel = async ({ location, fileType, uuid, ...modelData }) => {
   fileType = fileType || getTestFileType(location, TEST_TYPES)
 
-  const builtModel = fileModel({
+  return fileModel({
     ...modelData,
     fileType,
     location,
@@ -38,8 +24,6 @@ const buildFileModel = async ({ location, fileType, uuid, ...modelData }) => {
     relative: location.replace(HERKIN_ROOT, ''),
     lastModified: await getLastModified(location),
   })
-
-  return checkForAstParsing(builtModel)
 
 }
 

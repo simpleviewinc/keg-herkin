@@ -8,7 +8,13 @@ import { findNode } from 'SVUtils/fileTree'
  * @param {Array}
  */
 export const constructFileTree = (rootPaths=noPropArr, nodes=noPropArr) => {
-  return rootPaths?.map(path => {
+
+  const filtered = rootPaths?.filter(path => {
+    // TODO do this filtering on the backend, no the frontend
+    return (!path.includes('.DS_Store') && !path.includes('/tests/reports'))
+  })
+
+  return filtered?.map(path => {
     const node = findNode(path, nodes)
     const result = applyToCloneOf(node, (clone) => {
       clone.children = (node.children?.length && constructFileTree(node?.children, nodes)) || []
