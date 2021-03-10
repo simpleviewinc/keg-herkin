@@ -14,12 +14,12 @@ const loadDefinitionsFiles = stepsDir => {
   })
 }
 
-const parseDefinitions = definitionFiles => {
+const parseDefinitions = (definitionFiles, config) => {
   return definitionFiles.reduce(async (toResolve, file) => {
     const loaded = await toResolve
     if(!file) return loaded
 
-    const definitions = await DefinitionsParser.getDefinitions(file)
+    const definitions = await DefinitionsParser.getDefinitions(file, config)
 
     return loaded.concat(definitions)
   }, Promise.resolve([]))
@@ -44,6 +44,5 @@ const loadDefinitions = async config => {
 module.exports = {
   loadDefinitions,
   loadDefinitionsFiles,
-  parseDefinitions,
   DefinitionsParser,
 }

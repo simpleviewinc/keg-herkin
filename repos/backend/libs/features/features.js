@@ -51,6 +51,7 @@ const loadFeatures = async (config, definitions) => {
       ast,
       content,
       location,
+      fileType: 'feature',
     })
   })
 

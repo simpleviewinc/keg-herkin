@@ -5,6 +5,7 @@ const {
   readFile,
   removeFile,
   writeFile,
+  mkDir,
   pathExists,
 } = require('./fileSys')
 
@@ -56,9 +57,11 @@ const getTestFile = async (config, testPath) => {
 
 /**
  * Save file at a given location. file should be located in the test root path
- * @param {Object} config 
- * @param {string} location
- * @param {string} content 
+ * @param {Object} config - Herkin server config
+ * @param {string} location - Location within the test root path the file should be saved
+ * @param {string} content - Content of the file to be saved
+ *
+ * @returns {Object} - Contains boolean if save was successful and its fileModel
  */
 const saveTestFile = async (config, location, content) => {
 
@@ -84,8 +87,52 @@ const saveTestFile = async (config, location, content) => {
   }
 }
 
-const createTestFile = (fileName, fileType) => {
-  // TODO: create test file
+/**
+ * Create a file based on location and fileName
+ * Only saved within the docker mounted test root path
+ * @param {Object} config - Herkin server config
+ * @param {string} fileName - Name / Location of the file to be saved
+ * @param {string} fileType - The type of file to be saved, one of the TEST_TYPES constants
+ *
+ * @returns {Object} - Contains boolean if create was successful and its fileModel
+ */
+const createTestFile = async (config, fileName, fileType) => {
+  const { testTypes } = config
+  const foundType = testTypes[fileType]
+
+  // Ensure the test type exists
+  // If not, then we can't create the file
+  if(!foundType)
+    throw new Error(
+      `[API - Files] Invalid test type "${fileType}"`,
+      `Must be one of ${Object.keys(testTypes)}`
+    )
+
+  // Build the path to the file and it's meta data
+  const location = path.join(foundType.location, fileName)
+  const basename = path.basename(location)
+  const dirname = path.dirname(location)
+
+  // Ensure the directory exists for the file
+  const [mkDirErr, mkDirSuccess] = await mkDir(dirname)
+  if(mkDirErr) throw new Error(mkDirErr)
+
+  // Create the new test file as an empty file
+  // In the future we might want to add templates base on test type
+  // This is just a quick and simple way for now
+  const content = ''
+  const [writeErr, writeSuccess] = await writeFile(location, content)
+  if(writeErr) throw new Error(writeErr)
+
+  return {
+    success: Boolean(writeSuccess),
+    // Build the file model for the new test file
+    file: await buildFileModel({
+      content,
+      fileType,
+      location,
+    })
+  }
 }
 
 module.exports = {

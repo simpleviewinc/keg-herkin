@@ -78,6 +78,7 @@ class DefinitionsParser {
         const fileModel = await buildFileModel({
           location: filePath,
           content: contentStr,
+          fileType: 'definition',
           // Set definitions as an empty array placeholder
           // Later we will add instances of the Definition class into it
           ast: { definitions: [] },

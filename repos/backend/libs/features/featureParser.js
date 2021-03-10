@@ -128,6 +128,10 @@ class FeatureParser {
       )
     })
   }
+  
+  parse = fileModel => {
+    return parseFeature(fileModel.content || '', fileModel)
+  }
 
 }
 

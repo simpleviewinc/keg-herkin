@@ -10,6 +10,7 @@ const {
   HERKIN_SUPPORT_DIR,
   HERKIN_UNIT_DIR,
   HERKIN_WAYPOINT_DIR,
+  TEST_TYPES,
 } = require('../constants/backend')
 
 module.exports = {
@@ -28,4 +29,5 @@ module.exports = {
     unitDir: HERKIN_UNIT_DIR,
     waypointDir: HERKIN_WAYPOINT_DIR
   },
+  testTypes: TEST_TYPES,
 }
