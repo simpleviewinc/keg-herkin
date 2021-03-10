@@ -1,20 +1,20 @@
 import React, { useCallback, useState, useMemo } from 'react'
-import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
-import { Select } from 'SVComponents/form/select'
-import { useStyle } from '@keg-hub/re-theme'
-import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
-import { createFeatureFile } from 'SVActions/features/local/createFeatureFile'
-import { setModalVisibility } from 'SVActions/modals'
 import { Values } from 'SVConstants'
-import { mapObj, capitalize, wordCaps, noPropArr } from '@keg-hub/jsutils'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { addToast } from 'SVActions/toasts'
+import { useStyle } from '@keg-hub/re-theme'
 import { useFeature } from 'SVHooks/useFeature'
-import { devLog } from 'SVUtils'
+import { Select } from 'SVComponents/form/select'
+import { useCloseModal } from 'SVHooks/useCloseModal'
 import { setScreen } from 'SVActions/screens/setScreen'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { useActiveScreenTab } from 'SVHooks/useActiveScreenTab'
 import { useTestTypeOptions } from 'SVHooks/useTestTypeOptions'
-import { setActiveModal } from 'SVActions/modals'
-import { addToast } from 'SVActions/toasts'
+import { setActiveModal } from 'SVActions/modals/setActiveModal'
+import { setModalVisibility } from 'SVActions/modals/setModalVisibility'
+import { mapObj, capitalize, wordCaps, noPropArr } from '@keg-hub/jsutils'
+import { createFeatureFile } from 'SVActions/features/local/createFeatureFile'
+import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
+import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
 
 const { CATEGORIES, SCREENS, MODAL_TYPES, CREATE_NEW_FILE } = Values
 
@@ -125,6 +125,7 @@ export const TestSelectorModal = (props) => {
 
   const tabOptions = useTabOptions()
   const typeOptions = useTestTypeOptions()
+  const onBackdropTouch = useCloseModal(activeTab?.id)
   const { feature } = useFeature({ name: testName }) || {}
   const loadTests = useLoadTest(testName, feature, selectedTab)
 
@@ -132,7 +133,7 @@ export const TestSelectorModal = (props) => {
     <Modal
       visible={visible}
       styles={builtStyles?.modal}
-      onBackdropTouch={() => activeTab?.id !== SCREENS.EMPTY && setModalVisibility(false)}
+      onBackdropTouch={onBackdropTouch}
     >
       <ItemHeader
         title={title}

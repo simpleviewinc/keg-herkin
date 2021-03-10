@@ -2,13 +2,14 @@ import React, { useCallback, useState, useMemo } from 'react'
 import { devLog } from 'SVUtils'
 import { Values } from 'SVConstants'
 import { useTheme } from '@keg-hub/re-theme'
-import { useActiveScreenTab } from 'SVHooks'
 import { Input } from 'SVComponents/form/input'
 import { Select } from 'SVComponents/form/select'
+import { useCloseModal } from 'SVHooks/useCloseModal'
 import { setModalVisibility } from 'SVActions/modals'
 import { setScreen } from 'SVActions/screens/setScreen'
 import { createFile } from 'SVActions/files/api/createFile'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { useActiveScreenTab } from 'SVHooks/useActiveScreenTab'
 import { useTestTypeOptions } from 'SVHooks/useTestTypeOptions'
 import { formatFileName } from 'SVUtils/helpers/formatFileName'
 import { mapObj, capitalize, wordCaps, noPropArr } from '@keg-hub/jsutils'
@@ -29,10 +30,11 @@ export const CreateFileModal = props => {
 
   const theme = useTheme()
   const builtStyles = theme.get(`modals.createFile`)
-  const activeTab = useActiveScreenTab()
   
-  const [testType, setTestType] = useState(FILE_TYPES.FEATURE)
+  const activeTab = useActiveScreenTab()
   const [testName, setTestName] = useState('')
+  const [testType, setTestType] = useState(FILE_TYPES.FEATURE)
+
   const onNameChange = useCallback(event => {
     const fileName = formatFileName(event.target.value || '')
 
@@ -44,13 +46,16 @@ export const CreateFileModal = props => {
 
   const onCreate = useCallback(() => {
     createFile(testType, testName)
+    // setModalVisibility(false)
   }, [testType, testName])
+
+  const onBackdropTouch = useCloseModal(activeTab?.id)
 
   return (
     <Modal
       visible={visible}
       styles={builtStyles?.modal}
-      onBackdropTouch={() => activeTab?.id !== SCREENS.EMPTY && setModalVisibility(false)}
+      onBackdropTouch={onBackdropTouch}
     >
       <ItemHeader
         title={title}
@@ -58,13 +63,13 @@ export const CreateFileModal = props => {
       />
       <View style={builtStyles?.form?.main}>
         <Input
-          title={'Test Name'}
+          title={'Name'}
           onChange={onNameChange}
           value={testName}
         />
         <Select
           options={options}
-          title={'Test Type'}
+          title={'Type'}
           onValueChange={onTypeChange}
           styles={builtStyles?.form?.select}
         />
