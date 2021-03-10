@@ -56,7 +56,7 @@
     "@keg-hub/jsutils": "8.3.0",
     "@keg-hub/messenger": "file:repos/messenger",
     "@keg-hub/spawn-cmd": "0.1.0",
-    "@ltipton/sockr": "0.0.9",
+    "@ltipton/sockr": "0.0.10",
     "@ltipton/react-ace-editor": "0.0.1",
     "@ltipton/react-gherkin-editor": "0.0.2",
     "ansi-html": "0.0.7",
