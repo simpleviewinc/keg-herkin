@@ -1,5 +1,7 @@
-import { testSelectorModal } from './testSelectorModal'
+import { testSelector } from './testSelector'
+import { createFile } from './createFile'
 
 export const modals = theme => ({
-  testSelectorModal: testSelectorModal(theme)
+  createFile: createFile(theme),
+  testSelector: testSelector(theme)
 })

@@ -30,7 +30,7 @@ const ToggleSettings = ({ styles }) => {
   const iconStroke = toggleStyles.icon?.c || toggleStyles.icon?.color
 
   const onPress = useCallback(() => {
-    setActiveModal(MODAL_TYPES.TEST_SELECTOR_MODAL)
+    setActiveModal(MODAL_TYPES.TEST_SELECTOR)
   }, [])
 
   return (

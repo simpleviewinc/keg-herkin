@@ -1,13 +1,16 @@
-import React from 'react'
-import {  
+import React, { useCallback } from 'react'
+import {
   TreeList,
   Text,
   View,
   TouchableIcon
 } from 'SVComponents'
+import { Values } from 'SVConstants'
 import { NoteAdd } from 'SVAssets/icons'
 import { useTheme } from '@keg-hub/re-theme'
+import { setActiveModal } from 'SVActions/modals'
 
+const { MODAL_TYPES } = Values
 
 /**
  * Title with Touchable NoteAdd icon
@@ -19,6 +22,9 @@ import { useTheme } from '@keg-hub/re-theme'
  * @returns {Component}
  */
 const FileTreeHeader = ({styles, title}) => {
+
+  const onPress = useCallback(() => setActiveModal(MODAL_TYPES.CREATE_FILE), [])
+
   return (
     <View style={styles?.main}>
       <View style={styles?.textContainer}>
@@ -29,17 +35,16 @@ const FileTreeHeader = ({styles, title}) => {
         </Text>
       </View>
       <View style={styles?.iconContainer}>
-      <TouchableIcon
-        Component={(
-          <NoteAdd
-            size={styles?.icon?.size}
-            fill={styles?.icon?.fill}
-            stroke={styles?.icon?.stroke}
-          />
-        )}
-        onPress={() => console.log('---TODO: creating new file action----')}
-      />
-        
+        <TouchableIcon
+          Component={(
+            <NoteAdd
+              size={styles?.icon?.size}
+              fill={styles?.icon?.fill}
+              stroke={styles?.icon?.stroke}
+            />
+          )}
+          onPress={onPress}
+        />
       </View>
     </View>
   )

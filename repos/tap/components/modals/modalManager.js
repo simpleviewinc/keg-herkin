@@ -1,7 +1,8 @@
 import React from 'react'
+import { Values } from 'SVConstants'
+import { CreateFileModal } from './createFileModal'
 import { TestSelectorModal } from './testSelectorModal'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { Values } from 'SVConstants'
 
 const { CATEGORIES, MODAL_TYPES } = Values
 
@@ -13,8 +14,10 @@ export const ModalManager = () => {
   const { activeModal, visible } = useStoreItems(CATEGORIES.MODALS) || {}
 
   switch (activeModal) {
-    case MODAL_TYPES.TEST_SELECTOR_MODAL:
+    case MODAL_TYPES.TEST_SELECTOR:
       return <TestSelectorModal visible={visible} />
+    case MODAL_TYPES.CREATE_FILE:
+      return <CreateFileModal visible={visible} />
     default:
       return null
   }

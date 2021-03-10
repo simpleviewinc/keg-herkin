@@ -26,7 +26,14 @@ export const Values = {
     NODES: 'nodes'
   },
   MODAL_TYPES: {
-    TEST_SELECTOR_MODAL: 'testSelectorModal',
+    TEST_SELECTOR: 'testSelectorModal',
+    CREATE_FILE: 'createFileModal',
+  },
+  FILE_TYPES: {
+    FEATURE: 'feature',
+    DEFINITION: 'definition',
+    WAYPOINT: 'waypoint',
+    UNIT: 'unit',
   },
   SIDEBAR_TYPES: {
     FILE_TREE: 'fileTree'
@@ -37,12 +44,9 @@ export const Values = {
     'when',
     'then',
   ],
-  TEST_TYPE: {
-    GHERKIN: 'gherkin',
-  },
   EMPTY_STEP: `None Selected`,
   EMPTY_PARAM: `PARAMETER`,
-  CREATE_NEW_FILE: 'create_new_file',
+  CREATE_NEW_FILE: 'Create New File',
   SCREENS: {
     EDITOR: 'editor',
     BUILDER: 'builder',

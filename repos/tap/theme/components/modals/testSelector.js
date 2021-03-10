@@ -1,6 +1,6 @@
 import { tapColors } from '../../tapColors'
 
-export const testSelectorModal = theme => ({
+export const testSelector = theme => ({
   modal: {
     content: {
       $xsmall: {
@@ -34,17 +34,6 @@ export const testSelectorModal = theme => ({
     main: {
       fl: 1,
       mT: theme.margin.size,
-    },
-    testFileSelect: {
-      main: {
-        flD: 'column', 
-        pV: theme.padding.size
-      },
-      dropDown: {
-        main: {
-          fl: 1
-        }
-      },
     },
     button: {
       main: {

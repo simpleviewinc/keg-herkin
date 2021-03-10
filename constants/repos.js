@@ -1,6 +1,6 @@
 const path = require('path')
 const { execSync } = require('child_process')
-const { snakeCase, deepFreeze } = require('@keg-hub/jsutils')
+const { snakeCase } = require('@keg-hub/jsutils')
 
 let __REPO_PATHS
 const rootDir = path.join(__dirname, '../')

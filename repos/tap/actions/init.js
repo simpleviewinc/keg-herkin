@@ -49,7 +49,7 @@ const loadInitTestFiles = async queryObj => {
 const loadInitModal = async queryObj => {
   // display options modal if no valid querystring passed in
   ;(!queryObj || isEmptyColl(queryObj)) &&
-    setActiveModal(MODAL_TYPES.TEST_SELECTOR_MODAL)
+    setActiveModal(MODAL_TYPES.TEST_SELECTOR)
 }
 
 /**

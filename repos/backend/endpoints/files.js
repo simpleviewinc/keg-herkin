@@ -4,12 +4,24 @@ const { apiErr, apiResponse } = require('./handler')
 const { treeNodeModel } = require('HerkinModels')
 const {
   isDirectory,
+  createTestFile,
   deleteTestFile,
   getTestFile,
   saveTestFile,
   getFolderContent
 } = require('../libs/fileSys')
 
+const createFile = (app, config) => async (req, res) => {
+  try {
+
+    const { name, type } = req.body
+    const meta = await createTestFile(config, location, content)
+    return apiResponse(req, res, meta || {}, 200)
+  }
+  catch(err){
+    return apiErr(req, res, err, err.status || 400)
+  }
+}
 
 const saveFile = (app, config) => async (req, res) => {
   try {
@@ -169,8 +181,10 @@ const getTree = (app, config) => async (req, res) => {
  
 module.exports = (app, config) => {
   app.get('/files/tree', getTree(app, config))
+
   app.get('/files/load', loadFile(app, config))
   app.post('/files/save', saveFile(app, config))
+  app.post('/files/create', createFile(app, config))
   app.delete('/files/delete', deleteFile(app, config))
 
   return app

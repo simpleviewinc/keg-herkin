@@ -84,7 +84,12 @@ const saveTestFile = async (config, location, content) => {
   }
 }
 
+const createTestFile = (fileName, fileType) => {
+  // TODO: create test file
+}
+
 module.exports = {
+  createTestFile,
   deleteTestFile,
   getTestFile,
   saveTestFile
