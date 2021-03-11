@@ -51,7 +51,6 @@ export const ResultsScreen = props => {
   const activeFile = useActiveFile(SCREENS.RESULTS)
 
   const { fileType, name } = activeFile
-
   const reportUrl = useReportsUrl(fileType, name)
   const onIconPress = useWindowOpen(fileType, reportUrl)
 

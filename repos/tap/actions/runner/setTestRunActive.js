@@ -1,9 +1,9 @@
 import { devLog } from 'SVUtils'
 import { getStore } from 'SVStore'
 import { Values } from 'SVConstants'
-import { get } from '@keg-hub/jsutils'
+import { get, noOpObj } from '@keg-hub/jsutils'
 import { addToast } from 'SVActions/toasts'
-import { setTestRun, noOpObj } from './setTestRun'
+import { setTestRun } from './setTestRun'
 import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
 
 const { CATEGORIES } = Values
