@@ -7,10 +7,10 @@ const { wordCaps } = require('@keg-hub/jsutils')
  *
  * @returns {string} - Path where the report should be created
  */
-const buildReportTitle = (type='Test', context) => {
-  const name = context ? context.split('/').pop() : type
+const buildReportTitle = (type, context) => {
+  const name = context && context.split('/').pop()
 
-  return wordCaps(`${name} - Test Suite`)
+  return name ? wordCaps(name) : type ? `${wordCaps(type)} Test Suite` : `Test Suite`
 }
 
 module.exports = {
