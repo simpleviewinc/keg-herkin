@@ -142,33 +142,13 @@ module.exports = {
     description : 'Runs bdd feature tests',
     alias: ['test'],
     options: sharedOptions('run', {
-      context: {
-        alias: [ 'name' ],
-        description: 'Path or name of the test file to run. If not passed, all tests are run.',
-        default: null
-      },
       filter: {
         alias: [ 'filters' ],
         description: 'Filters test (feature and scenario names) by this substring. If not passed, all tests are run. Does nothing when context option is passed',
         default: null
       },
-      sync: {
-        description: 'Run all tests sequentially',
-        alias: [ 'runInBand' ],
-        example: `--sync`,
-        default: false,
-      },
-      container: {
-        description: 'Name of container within which to run create command',
-        example: '--container keg-herkin',
-        default: 'keg-herkin',
-      },
-      timeout: {
-        description: 'Test timeout in milliseconds. Defaults to no timeout, so that async playwright tasks have sufficient time to complete.',
-        default: 5 * 1000 // 5 seconds
-      },
       jestConfig: {
-        description: 'Path to jest config within the docker container',
+        description: 'Path to jest config relative to the root directory',
         default: 'configs/jest.parkin.config.js'
       },
       tags: {
@@ -182,27 +162,20 @@ module.exports = {
         example: 'keg herkin cr test --debug',
         default: false
       },
-      slowMo: {
-        alias: ['speed'],
-        description: 'Playwright slow mo option, value in seconds',
-        example: 'keg herkin cr test --slowMo 2.5',
-      },
-      noTests: {
-        description: 'The test runner will not fail when no tests exit',
-        example: 'keg herkin cr test --noTests ',
-        default: false
-      },
-      bail: {
-        description: 'Stops all tests once a single step fails',
-        default: true
-      }
     }, [
+      'context',
       'allBrowsers',
       'chromium',
       'firefox',
       'webkit',
       'headless',
       'log',
+      'bail',
+      'noTests',
+      'slowMo',
+      'timeout',
+      'container',
+      'sync',
     ])
   }
 }

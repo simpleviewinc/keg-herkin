@@ -12,7 +12,7 @@ const sockrCmds = {
           afterArgs: [],
           params: [
             {
-              name: "name",
+              name: "context",
               withKey: true,
               description: "Name of the test to be run. If not set, all feature files will be run",
               type: "string",
@@ -44,16 +44,20 @@ const sockrCmds = {
         },
         unit: {
           description: "Run unit tests through jest",
-          cmd: 'npx',
+          cmd: 'unit',
           beforeArgs: [
-            'jest',
-            '--detectOpenHandles',
-            '--no-cache',
-            '--verbose',
-            '--config=./configs/jest.config.js'
+            'test',
           ],
           afterArgs: [],
           params: [
+            {
+              name: "context",
+              withKey: true,
+              description: "Name of the unit test to be run. If not set, all unit tests will be run",
+              type: "string",
+              required: false,
+              value: ""
+            },
           ]
         },
         waypoint: {
@@ -65,7 +69,7 @@ const sockrCmds = {
           afterArgs: [],
           params: [
             {
-              name: "name",
+              name: "context",
               withKey: true,
               description: "Name of the test to be run. If not set, all waypoint tests will be run",
               type: "string",

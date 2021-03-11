@@ -1,10 +1,12 @@
 const {
+  checkCall,
   deepMerge,
   isArr,
   noOpObj,
-  noOpArr,
+  noPropArr,
   pickKeys
 } = require('@keg-hub/jsutils')
+const { groupOpts, allGroupsOpts } = require('./sharedOptionGroups')
 
 /**
 * Gets the options to launch the Playwright browser based on passed in options and config settings
@@ -13,47 +15,21 @@ const {
 * @param {string} action - Name of the task action getting the options
 * @param {Object} taskOps - Task options defined in the task
 * @param {Array} include - Filter to include shared options by name
+* @param {Array} groups - Groups of options to include
 *
 * @example
 * sharedOptions('start') // Returns all shared options
 *
 * @returns {Object} - Merged task options and shared options
 */
-const sharedOptions = (action, taskOps=noOpObj, include=noOpArr) => {
-  const options = {
-    allBrowsers: {
-      alias: [ 'all'],
-      description: 'Launch all supported browsers',
-      example: `${action} --all`,
-    },
-    chromium: {
-      alias: [ 'chrome', 'chrom', 'ch' ],
-      description: 'Launch Chromium browser through Playwright',
-      example: `${action} --chrome`,
-    },
-    firefox: {
-      alias: [ 'fire', 'fox', 'ff' ],
-      description: 'Launch Firefox browser through Playwright',
-      example: `${action} --firefox`,
-    },
-    webkit: {
-      alias: [ 'webkit', 'safari', 'sa' ],
-      description: 'Launch Safari browser through Playwright',
-      example: `${action} --webkit`,
-    },
-    headless: {
-      alias: [ 'hl' ],
-      description: 'Launch the browser in headless mode',
-      default: false,
-      example: `${action} --no-headless`,
-    },
-    log: {
-      alias: [ 'lg' ],
-      description: 'Log task output.',
-      default: true,
-      example: 'launch --no-log',
-    }
-  }
+const sharedOptions = (action, taskOps=noOpObj, include, groups) => {
+  
+  const options = !isArr(groups)
+    ? allGroupsOpts(action)
+    : groups.reduce((joined, group) => ({
+        ...joined,
+        ...(checkCall(groupOpts[group], action) || noOpObj)
+      }), {})
 
   const addOpts = isArr(include)
     ? pickKeys(options, include)
