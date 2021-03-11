@@ -19,6 +19,10 @@ export const cmdFail = (data, testRunModel) => {
   const activeFile = getResultsActiveFile() || noOpObj
   testRunModel = testRunModel || get(items, [CATEGORIES.TEST_RUNS, activeFile.location])
 
+  // TODO: save the failed data object based on content
+  console.log(`---------- cmd Fail ----------`)
+  console.log(data)
+
   testRunModel
     ? setTestRun({ ...testRunModel, failed: true })
     : addToast({

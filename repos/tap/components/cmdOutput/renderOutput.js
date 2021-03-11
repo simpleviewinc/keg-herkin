@@ -5,15 +5,15 @@ import { Icon } from '@keg-hub/keg-components/icon'
 import { View } from '@keg-hub/keg-components/view'
 import { Text } from '@keg-hub/keg-components/text'
 import { wordCaps, noOpObj } from '@keg-hub/jsutils'
+import { AnsiUp } from 'SVUtils/runner/ansiUp'
 
+const ansiUp = new AnsiUp
+// ansiUp.ansi_to_html
 
-export const RenderOutput = ({ output, testFile }) => {
+export const RenderOutput = ({ testRunModel, testFile }) => {
 
-  // console.log(`---------- output ----------`)
-  // console.log(output)
-
-  // console.log(`---------- testFile ----------`)
-  // console.log(testFile)
+  // console.log(`---------- testRunModel ----------`)
+  // console.log(testRunModel)
 
   return (
     <View>

@@ -1,9 +1,10 @@
 import { addToast } from '../toasts/addToast'
-import { getStore } from 'SVStore'
-import { Values } from 'SVConstants'
+import { dispatch, getStore } from 'SVStore'
+import { Values, ActionTypes } from 'SVConstants'
 import { get, noOpObj } from '@keg-hub/jsutils'
 import { testRunModel } from 'SVModels'
 import { setTestRun } from '../runner/setTestRun'
+import { toggleTestRunning } from '../runner/toggleTestRunning'
 import { setScreenById } from 'SVActions/screens/setScreenById'
 import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
 
@@ -28,17 +29,24 @@ export const cmdRunning = data => {
 
   // Build the testFile model
   const builtModel = testRunModel({
-    file: activeFile.location,
-    testType: activeFile.fileType,
-    lastRun: data.timestamp,
     active: true,
     running: true,
-    output: [
-      `Running ${activeFile.fileType} tests for ${activeFile.name}`
-    ]
+    lastRun: data.timestamp,
+    file: activeFile.location,
+    testType: activeFile.fileType,
+    command: get(data, 'data.cmd'),
+    params: get(data, 'data.params'),
+    messages: {
+      [data.timestamp]: {
+        timestamp: data.timestamp,
+        message: `Running ${activeFile.fileType} tests for ${activeFile.name}`,
+      }
+    }
   })
 
   setTestRun(builtModel)
+
+  toggleTestRunning(true)
 
   // Switch to the results screen automatically
   // setScreenById(SCREENS.RESULTS)

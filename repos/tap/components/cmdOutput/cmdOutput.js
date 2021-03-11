@@ -12,9 +12,9 @@ export const CmdOutput = props => {
   const styles = useStyle(`cmdOutput`, props.styles)
   const sockr = useSockr()
   
-  const testFileOutput = useActiveTestRuns()
+  const testRunModel = useActiveTestRuns()
 
-  return testFileOutput && (
+  return testRunModel && (
     <Surface
       className={`results-main`}
       prefix={`Test Output`}
@@ -25,7 +25,7 @@ export const CmdOutput = props => {
       <Grid className={`results-grid`} style={styles?.grid} >
         <Row className='results-results-row' style={styles?.row} >
           <RenderOutput
-            output={testFileOutput}
+            testRunModel={testRunModel}
             testFile={activeFile}
           />
         </Row>

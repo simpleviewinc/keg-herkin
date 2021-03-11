@@ -1,3 +1,4 @@
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { Values } from 'SVConstants'
 import { noOp } from '@keg-hub/jsutils'
 import { getBaseApiUrl } from 'SVUtils/api'
@@ -10,7 +11,6 @@ import { CmdOutput } from 'SVComponents/cmdOutput'
 import { Results } from 'SVComponents/results'
 import { apiRequest } from 'SVUtils/api/apiRequest'
 import { useActiveFile } from 'SVHooks/useActiveFile'
-import React, { useEffect, useState, useMemo } from 'react'
 import { View, TouchableIcon } from '@keg-hub/keg-components'
 import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
 
@@ -54,15 +54,21 @@ export const ResultsScreen = props => {
   const reportUrl = useReportsUrl(fileType, name)
   const onIconPress = useWindowOpen(fileType, reportUrl)
 
+  const [ testRunning, setTestRunning ] = useState(false)
+
   return !activeFile?.fileType
     ? (<EmptyScreen message={'No file selected!'} />)
     : (<View
         className={`results-screen`}
         style={builtStyles.main}
       >
-        <CmdOutput activeFile={activeFile} />
+        <CmdOutput
+          activeFile={activeFile}
+          setTestRunning={setTestRunning}
+        />
         <Results
           {...props}
+          testRunning={testRunning}
           reportUrl={reportUrl}
           activeFile={activeFile}
           onIconPress={onIconPress}

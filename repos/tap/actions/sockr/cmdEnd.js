@@ -3,6 +3,7 @@ import { Values } from 'SVConstants'
 import { addToast } from '../toasts/addToast'
 import { get, noOpObj } from '@keg-hub/jsutils'
 import { setTestRun } from '../runner/setTestRun'
+import { toggleTestRunning } from '../runner/toggleTestRunning'
 import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
 
 const { CATEGORIES } = Values
@@ -19,12 +20,22 @@ export const cmdEnd = (data, testRunModel) => {
   const activeFile = getResultsActiveFile() || noOpObj
   testRunModel = testRunModel || get(items, [CATEGORIES.TEST_RUNS, activeFile.location])
 
+  const exitCode = get(data, 'data.exitCode', 0)
+
   testRunModel
-    ? setTestRun({ ...testRunModel, running: false })
+    ? setTestRun({
+        ...testRunModel,
+        exitCode,
+        running: false,
+        failed: Boolean(exitCode),
+      })
     : addToast({
         type: `error`,
         timeout: 6000,
         message: `Can not set testRun model running. A testRun model is required!`
       })
+
+
+  toggleTestRunning(false)
 
 }

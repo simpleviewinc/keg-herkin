@@ -8,7 +8,7 @@ import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
 const { CATEGORIES } = Values
 
 /**
- * Updates the output array of the active testRunModel with a stdout message
+ * Updates the messages array of the active testRunModel with a stdout message
  * @param {Object} data - Message data from the socket
  * @param {Object} testRunModel - The test run model to update
  *
@@ -22,15 +22,18 @@ export const cmdOut = (data, testRunModel) => {
   testRunModel
     ? setTestRun({
         ...testRunModel,
-        output: [
-          ...testRunModel.output,
-          // data.message
-        ]
+        messages: {
+          ...testRunModel.messages,
+          [data.timestamp]: {
+            message: data.message,
+            timestamp: data.timestamp,
+          },
+        }
       })
     : addToast({
         type: `error`,
         timeout: 6000,
-        message: `Can not add testRun output. A testRun model is required!`
+        message: `Can not add testRun messages. A testRun model is required!`
       })
 
 }

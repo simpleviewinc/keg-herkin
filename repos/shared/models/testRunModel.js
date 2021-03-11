@@ -14,10 +14,13 @@ const Model = {
   file: '',
   testType: '',
   lastRun: '',
+  exitCode: undefined,
   failed: false,
   active: false,
   running: false,
-  output: []
+  command: undefined,
+  params: [],
+  messages: {}
 }
 
 const testRunModel = overrides => buildModel(overrides, Model)
