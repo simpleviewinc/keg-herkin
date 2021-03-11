@@ -53,7 +53,7 @@ export const init = async () => {
   const queryObj = getQueryData()
 
   // Load the initial screen
-  const screenId = queryObj.screen || SCREENS.EMPTY
+  const screenId = queryObj.screen || SCREENS.EDITOR
   setScreenById(screenId)
 
   // Load the initial test file

@@ -2,7 +2,7 @@ import React, { useCallback, useState, useMemo } from 'react'
 import { Values } from 'SVConstants'
 import { addToast } from 'SVActions/toasts'
 import { useStyle } from '@keg-hub/re-theme'
-import { useFeature } from 'SVHooks/useFeature'
+import { useActiveFile } from 'SVHooks/useActiveFile'
 import { Select } from 'SVComponents/form/select'
 import { useCloseModal } from 'SVHooks/useCloseModal'
 import { setScreenById } from 'SVActions/screens/setScreenById'
@@ -36,38 +36,41 @@ const useTabOptions = () => useMemo(() => {
  * @returns {Array<{label:string, value:string}>}
  */
 const useTestNamesOptions = () => {
-  const features = useStoreItems(CATEGORIES.FEATURES) || {}
+  const activeFiles = useStoreItems(CATEGORIES.FEATURES) || {}
 
   return useMemo(() => {
     const options = [{ label: CREATE_NEW_FILE, value: CREATE_NEW_FILE }]
 
-    mapObj(features, (__, feature) => (
-      options.push({ label: feature.name, value: feature.location })
+    mapObj(activeFiles, (__, activeFile) => (
+      options.push({ label: activeFile.name, value: activeFile.location })
     ))
 
     return options
   }, [
-    features,
+    activeFiles,
     CREATE_NEW_FILE,
     MODAL_TYPES.CREATE_FILE
   ])
 
 }
 
-const useLoadTest = (testName, feature, selectedTab) => useCallback(() => {
-  if(testName === CREATE_NEW_FILE)
+const useLoadTest = (location, fileModels, screenId) => useCallback(() => {
+  if(location === CREATE_NEW_FILE)
     return setActiveModal(MODAL_TYPES.CREATE_FILE)
-  else if(!feature)
+
+  if(!fileModels[location])
     return addToast({ type: `warn`, message: `Feature from '${location}' does not exist!` })
 
-  setActiveFileFromType(feature, selectedTab)
-  setScreenById(selectedTab, feature && { activeFile: feature })
+  const activeFile = fileModels[location]
+
+  setScreenById(screenId)
+  setActiveFileFromType(activeFile, screenId)
   setModalVisibility(false)
 
 }, [
-  testName,
-  feature,
-  selectedTab,
+  fileModels,
+  location,
+  screenId,
   CREATE_NEW_FILE,
   MODAL_TYPES.CREATE_FILE
 ])
@@ -76,18 +79,20 @@ const useLoadTest = (testName, feature, selectedTab) => useCallback(() => {
  * setup the Test file selection UI
  * @param {Object} props 
  * @param {Object} props.styles
- * @param {Array} props.features
- * @param {Function} props.setTestName
+ * @param {Array} props.fileModels
+ * @param {Function} props.setTestLocation
  * 
  * @returns {Component}
  */
-const TestNameSelect = ({styles, features, setTestName}) => {
+const TestNameSelect = ({styles, fileModels, setTestLocation}) => {
 
   const onValueChange = useCallback((location) => {
-    // fetch the feature file content from redux
-    const feature = features[location]
-    setTestName(feature?.name)
-  }, [features, setTestName])
+    // Check if location is set to create a new file || check for the fileModel
+    location === CREATE_NEW_FILE
+      ? setTestLocation(CREATE_NEW_FILE)
+      : fileModels[location] && setTestLocation(location)
+
+  }, [fileModels, setTestLocation, CREATE_NEW_FILE])
 
   const options = useTestNamesOptions()
 
@@ -116,17 +121,19 @@ export const TestSelectorModal = (props) => {
   } = props
 
   const builtStyles = useStyle(`modals.testSelector`)
-  const { features=noPropArr } = useStoreItems([CATEGORIES.FEATURES])
-
-  const activeTab = useActiveScreenTab()
-  const [selectedTab, setSelectedtab] = useState(SCREENS.EDITOR)
-  const [testName, setTestName] = useState(CREATE_NEW_FILE)
+  const { features } = useStoreItems([CATEGORIES.FEATURES])
+  const fileModels = features || noPropArr
 
   const tabOptions = useTabOptions()
+  const activeTab = useActiveScreenTab()
   const typeOptions = useTestTypeOptions()
+  const [selectedTab, setSelectedTab] = useState(SCREENS.EDITOR)
+
+  const activeFile = useActiveFile()
+  const [testLocation, setTestLocation] = useState(activeFile.location || CREATE_NEW_FILE)
+
   const onBackdropTouch = useCloseModal(activeTab?.id)
-  const { feature } = useFeature({ name: testName }) || {}
-  const loadTests = useLoadTest(testName, feature, selectedTab)
+  const loadTests = useLoadTest(testLocation, fileModels, selectedTab)
 
   return (
     <Modal
@@ -141,7 +148,7 @@ export const TestSelectorModal = (props) => {
       <View style={builtStyles?.form?.main}>
         <Select
           title={'Tab'}
-          onValueChange={setSelectedtab}
+          onValueChange={setSelectedTab}
           options={tabOptions}
         />
         <Select
@@ -151,8 +158,8 @@ export const TestSelectorModal = (props) => {
         />
         <TestNameSelect
           styles={builtStyles?.form?.select}
-          features={features}
-          setTestName={setTestName}
+          fileModels={fileModels}
+          setTestLocation={setTestLocation}
         />
         <Button
           themePath='button.contained.primary'
