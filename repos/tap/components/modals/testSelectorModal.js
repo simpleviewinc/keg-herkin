@@ -104,7 +104,6 @@ const TestNameSelect = ({styles, fileModels, setTestLocation}) => {
         onValueChange={onValueChange}
         options={options}
       />
-      
     </View>
   )
 }

@@ -28,6 +28,7 @@ export const editors = theme => {
       main: {
         w: `100%`,
         h: `calc( 100vh - 170px )`,
+        overflowY: 'auto',
       },
       editor: {
         w: `100%`,
@@ -45,6 +46,7 @@ export const editors = theme => {
           w: `calc( 50% - ${halfMargin}px )`,
           h: `calc( 100vh - 170px )`,
           mL: halfMargin,
+          overflowY: 'auto',
         },
         editor: {
           w: `100%`,
