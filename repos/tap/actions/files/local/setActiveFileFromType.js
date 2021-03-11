@@ -10,7 +10,7 @@ const { FILE_TYPES } = Values
 /**
  * Calls the activeFile method for the fileModel based on the file type
  * @param {Object} fileModel - File model object to set active
- * @param {Object} screenId - Id of the screen to set the fileModel as the activeFile
+ * @param {string} screenId - Id of the screen to set the fileModel as the activeFile
  * 
  * @returns {void}
  */

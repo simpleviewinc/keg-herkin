@@ -8,7 +8,7 @@ import { Grid } from '@keg-hub/keg-components/grid'
 import { useActiveTestRuns } from 'SVHooks/useActiveTestRuns'
 
 export const CmdOutput = props => {
-  const { activeTestFile } = props
+  const { activeFile } = props
   const styles = useStyle(`cmdOutput`, props.styles)
   const sockr = useSockr()
   
@@ -18,7 +18,7 @@ export const CmdOutput = props => {
     <Surface
       className={`results-main`}
       prefix={`Test Output`}
-      title={activeTestFile.name}
+      title={activeFile.name}
       capitalize={false}
       styles={styles.surface}
     >
@@ -26,7 +26,7 @@ export const CmdOutput = props => {
         <Row className='results-results-row' style={styles?.row} >
           <RenderOutput
             output={testFileOutput}
-            testFile={activeTestFile}
+            testFile={activeFile}
           />
         </Row>
       </Grid>

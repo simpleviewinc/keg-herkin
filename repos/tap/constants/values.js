@@ -8,7 +8,6 @@ export const Values = {
     WAYPOINTS: 'waypoints',
     ACTIVE_FEATURE: 'activeFeature',
     ACTIVE_TAB: 'activeTab',
-    ACTIVE_TEST_FILE: 'activeTestFile',
     TEST_RUNS: 'testFileOutput',
     FEATURE: 'feature',
     SCREEN: 'screen',

@@ -1,8 +1,9 @@
-import { devLog } from 'SVUtils'
-import { get } from '@keg-hub/jsutils'
+import { addToast } from '../toasts/addToast'
+import { get, noOpObj } from '@keg-hub/jsutils'
 import { getStore } from 'SVStore'
 import { setTestRun } from '../runner/setTestRun'
 import { Values } from 'SVConstants'
+import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
 
 const { CATEGORIES } = Values
 
@@ -15,11 +16,15 @@ const { CATEGORIES } = Values
  */
 export const cmdFail = (data, testRunModel) => {
   const { items } = getStore().getState()
-  const { location } = get(items, CATEGORIES.ACTIVE_TEST_FILE, {})
-  testRunModel = testRunModel || get(items, [CATEGORIES.TEST_RUNS, location])
+  const activeFile = getResultsActiveFile() || noOpObj
+  testRunModel = testRunModel || get(items, [CATEGORIES.TEST_RUNS, activeFile.location])
 
   testRunModel
     ? setTestRun({ ...testRunModel, failed: true })
-    : devLog(`error`, `Can not set testRun model failed. A testRun model is required!`)
+    : addToast({
+        type: `error`,
+        timeout: 6000,
+        message: `Can not set testRun model failed. A testRun model is required!`
+      })
 
 }

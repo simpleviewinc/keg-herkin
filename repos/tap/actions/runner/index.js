@@ -1,5 +1,4 @@
 export * from './runTests'
 export * from './setTestRun'
-export * from './setTestRunActive'
 export * from './setTestResults'
-export * from './setActiveTestFile'
+export * from './setTestRunActive'

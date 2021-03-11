@@ -1,25 +1,15 @@
 import { Values } from 'SVConstants'
-import { setScreen } from 'SVActions/screens'
 import { isEmptyColl } from '@keg-hub/jsutils'
 import { setActiveModal } from 'SVActions/modals'
 import { setActiveSidebar } from 'SVActions/sidebar'
 import { loadTestFile } from './files/api/loadTestFile'
 import { loadBddTests } from './files/api/loadBddTests'
 import { getQueryData } from 'SVUtils/helpers/getQueryData'
+import { setScreenById } from 'SVActions/screens/setScreenById'
 import { getRemoteFileTree } from './files/api/getRemoteFileTree'
 
-const { MODAL_TYPES, SIDEBAR_TYPES } = Values
+const { MODAL_TYPES, SIDEBAR_TYPES, SCREENS } = Values
 
-/**
- * Checks if an initial screen should be set, and makes call to set it
- * @function
- * @param {Object} queryObj - Current url query params as an object
- *
- * @return {void}
- */
-const loadInitScreen = async queryObj => {
-  setScreen(queryObj.screen || 'empty')
-}
 
 /**
  * Checks if an initial test file should be loaded, and makes call to load it
@@ -28,7 +18,7 @@ const loadInitScreen = async queryObj => {
  *
  * @return {void}
  */
-const loadInitTestFiles = async queryObj => {
+const loadInitTestFiles = async (queryObj, screenId) => {
   // Load the file tree from root tests folder
   await getRemoteFileTree()
 
@@ -36,7 +26,7 @@ const loadInitTestFiles = async queryObj => {
   await loadBddTests()
 
   // Load the initial test file 
-  queryObj?.file && await loadTestFile(queryObj?.file)
+  queryObj?.file && await loadTestFile(queryObj?.file, screenId)
 }
 
 /**
@@ -63,10 +53,11 @@ export const init = async () => {
   const queryObj = getQueryData()
 
   // Load the initial screen
-  await loadInitScreen(queryObj)
+  const screenId = queryObj.screen || SCREENS.EMPTY
+  setScreenById(screenId)
 
   // Load the initial test file
-  await loadInitTestFiles(queryObj)
+  await loadInitTestFiles(queryObj, screenId)
 
   // Setup the sidebar
   setActiveSidebar(SIDEBAR_TYPES.FILE_TREE)

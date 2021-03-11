@@ -26,7 +26,7 @@ const RenderToast = props => {
   const {
     toast=noOpObj,
     onDelete=noOp,
-    autoClose=4000,
+    autoClose=toast.timeout || 4000,
     styles=noOpObj,
     toastsStyle=noOpObj,
     position='topRight',

@@ -61,7 +61,7 @@ const IframeHeader = (props) => {
 export const Results = props => {
   const {
     reportUrl,
-    activeTestFile,
+    activeFile,
     onIconPress,
     builtStyles,
   } = props

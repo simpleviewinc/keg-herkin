@@ -5,14 +5,13 @@ import { useStyle } from '@keg-hub/re-theme'
 import { useFeature } from 'SVHooks/useFeature'
 import { Select } from 'SVComponents/form/select'
 import { useCloseModal } from 'SVHooks/useCloseModal'
-import { setScreen } from 'SVActions/screens/setScreen'
+import { setScreenById } from 'SVActions/screens/setScreenById'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { useActiveScreenTab } from 'SVHooks/useActiveScreenTab'
 import { useTestTypeOptions } from 'SVHooks/useTestTypeOptions'
 import { setActiveModal } from 'SVActions/modals/setActiveModal'
 import { setModalVisibility } from 'SVActions/modals/setModalVisibility'
 import { mapObj, capitalize, wordCaps, noPropArr } from '@keg-hub/jsutils'
-import { createFeatureFile } from 'SVActions/features/local/createFeatureFile'
 import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
 import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
 
@@ -62,7 +61,7 @@ const useLoadTest = (testName, feature, selectedTab) => useCallback(() => {
     return addToast({ type: `warn`, message: `Feature from '${location}' does not exist!` })
 
   setActiveFileFromType(feature, selectedTab)
-  setScreen(selectedTab)
+  setScreenById(selectedTab, feature && { activeFile: feature })
   setModalVisibility(false)
 
 }, [

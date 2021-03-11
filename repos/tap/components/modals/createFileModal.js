@@ -6,7 +6,7 @@ import { Input } from 'SVComponents/form/input'
 import { Select } from 'SVComponents/form/select'
 import { useCloseModal } from 'SVHooks/useCloseModal'
 import { setModalVisibility } from 'SVActions/modals'
-import { setScreen } from 'SVActions/screens/setScreen'
+import { setScreenById } from 'SVActions/screens/setScreenById'
 import { createFile } from 'SVActions/files/api/createFile'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { useActiveScreenTab } from 'SVHooks/useActiveScreenTab'
@@ -53,7 +53,7 @@ export const CreateFileModal = props => {
     await setActiveFileFromType(file, SCREENS.EDITOR)
 
     // Update the screen to be the editor
-    setScreen(SCREENS.EDITOR)
+    setScreenById(SCREENS.EDITOR)
 
     // Close the modal
     setModalVisibility(false)

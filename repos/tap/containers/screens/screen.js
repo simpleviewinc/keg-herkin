@@ -8,7 +8,7 @@ import { ResultsScreen } from './resultsScreen'
 import { EditorScreen } from './editorScreen'
 import { BuilderScreen } from './builderScreen'
 import React, { useMemo, useCallback } from 'react'
-import { setScreen } from 'SVActions/screens/setScreen'
+import { setScreenById } from 'SVActions/screens/setScreenById'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 
 const { CATEGORIES, SCREENS } = Values
@@ -79,9 +79,11 @@ export const Screen = props => {
   const screenTab = useScreenTab(props?.activeScreen)
 
   const onTabSelect = useCallback(screenId => {
-    screenId !== screenTab?.id && setScreen(screenId)
+    screenId !== screenTab?.id &&
+      setScreenById(screenId)
+
     return true
-  }, [ screenTab, setScreen ])
+  }, [ screenTab, setScreenById ])
 
   if(!screenTab) return null
 

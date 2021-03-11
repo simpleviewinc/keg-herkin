@@ -1,7 +1,7 @@
-import { devLog } from 'SVUtils'
 import { getStore } from 'SVStore'
 import { Values } from 'SVConstants'
 import { loadApiFile } from 'SVUtils/api'
+import { addToast } from '../../toasts/addToast'
 import { setActiveFileFromType } from '../local/setActiveFileFromType'
 
 const { CATEGORIES } = Values
@@ -24,10 +24,11 @@ const findFileInTree = (nodes, file) => nodes.find(node => (
  * Then calls setActiveFileFromType to set the file Active
  * @type function
  * @param {Object|string} testFile - treeNodeModel, name or location of the test file
+ * @param {string} screenId - Id of the screen to load the fileModel for
  *
  * @return {void}
  */
-export const loadTestFile = async testFile => {
+export const loadTestFile = async (testFile, screenId) => {
   const { items } = getStore()?.getState()
   if(!items) return
 
@@ -35,11 +36,17 @@ export const loadTestFile = async testFile => {
 
   const nodeToLoad = findFileInTree(fileTree.nodes, testFile)
   if(!nodeToLoad)
-    return devLog(`Could not load file ${testFile}. It does not exist in the file tree`, `warn`)
+    return addToast({
+        type: `warn`,
+        message: `Could not load file ${testFile}. It does not exist in the file tree`,
+      })
 
   const fileModel = await loadApiFile(nodeToLoad.location)
   return fileModel
-    ? setActiveFileFromType(fileModel)
-    : devLog(`Could not load file ${testFile} from the API!`, `warn`)
+    ? setActiveFileFromType(fileModel, screenId)
+    : addToast({
+        type: `warn`,
+        message: `Could not load file ${testFile} from the API!`,
+      })
 
 }

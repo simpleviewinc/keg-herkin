@@ -1,9 +1,22 @@
-import { devLog } from 'SVUtils'
+import { addToast } from '../toasts/addToast'
 import { dispatch, getStore } from 'SVStore'
 import { Values, ActionTypes } from 'SVConstants'
 import { setScreenInactive } from './setScreenInactive'
+import { updateUrlQuery } from 'SVUtils/helpers/updateUrlQuery'
 
 const { CATEGORIES, SCREENS } = Values
+
+/**
+ * Updates the url with the currently active screen
+ * @param {Object} screenModel - Meta data for the screen being set to active
+ *
+ * @returns {void}
+ */
+const updateUrl = screenModel => {
+  const query = { screen: screenModel.id }
+  screenModel.activeFile && (query.file = screenModel.activeFile.name)
+  updateUrlQuery(query, true)
+}
 
 /**
  * Sets the active tab screen
@@ -12,13 +25,15 @@ const { CATEGORIES, SCREENS } = Values
  *
  * @returns {void}
  */
-export const setScreen = screenId => {
+export const setScreen = (screenId, screenModel) => {
   const { items } = getStore().getState()
-  const screenModel = items[CATEGORIES.SCREENS][screenId]
+  screenModel = screenModel || items[CATEGORIES.SCREENS][screenId]
 
-  if(!screenModel) return devLog(`warn`, `Screen ${screenId} does not exist!`, SCREENS)
+  if(!screenModel)
+    return addToast({ type: `warn`, message: `Screen ${screenId} does not exist!` })
 
   setScreenInactive()
+  updateUrl(screenModel)
 
   dispatch({
     type: ActionTypes.SET_ITEM,

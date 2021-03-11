@@ -1,7 +1,8 @@
-import { devLog } from 'SVUtils'
 import { get } from '@keg-hub/jsutils'
 import { dispatch, getStore } from 'SVStore'
+import { addToast } from '../../toasts/addToast'
 import { Values, ActionTypes } from 'SVConstants'
+import { updateUrlQuery } from 'SVUtils/helpers/updateUrlQuery'
 import { getActiveScreen } from 'SVUtils/helpers/getActiveScreen'
 
 const { CATEGORIES, SUB_CATEGORIES } = Values
@@ -23,8 +24,19 @@ const getScreen = screenId => {
  */
 export const setActiveFile = (fileModel, screenId) => {
   const screenModel = getScreen(screenId)
-  if(!screenModel) return devLog(`error`, `Can not find screen from id`, screenId)
+
+  if(!screenModel)
+    return addToast({
+      type: `error`,
+      timeout: 6000,
+      message: `Can not find screen from id: ${screenId}`,
+    })
+
   const updatedFile = { ...fileModel }
+
+  // If the current screen is active, then also update the browser url
+  screenModel.active &&
+    updateUrlQuery({ file: fileModel.name }, true)
 
   dispatch({
     type: ActionTypes.SET_ITEM,

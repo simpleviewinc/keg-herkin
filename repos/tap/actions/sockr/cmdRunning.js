@@ -1,10 +1,11 @@
-import { devLog } from 'SVUtils'
-import { get } from '@keg-hub/jsutils'
-import { testRunModel } from 'SVModels'
+import { addToast } from '../toasts/addToast'
 import { getStore } from 'SVStore'
-import { setTestRun } from '../runner/setTestRun'
 import { Values } from 'SVConstants'
-import { setScreen } from 'SVActions/screens/setScreen'
+import { get, noOpObj } from '@keg-hub/jsutils'
+import { testRunModel } from 'SVModels'
+import { setTestRun } from '../runner/setTestRun'
+import { setScreenById } from 'SVActions/screens/setScreenById'
+import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
 
 const { CATEGORIES, SCREENS } = Values
 
@@ -16,26 +17,30 @@ const { CATEGORIES, SCREENS } = Values
  */
 export const cmdRunning = data => {
   const { items } = getStore().getState()
-  const activeTestFile = get(items, CATEGORIES.ACTIVE_TEST_FILE)
+  const activeFile = getResultsActiveFile() || noOpObj
 
-  if(!activeTestFile || !activeTestFile.fileType)
-    return devLog(`error`, `Can not set command running. No active test file exists!`)
+  if(!activeFile || !activeFile.fileType)
+    return addToast({
+      type: `error`,
+      timeout: 6000,
+      message: `Can not set command running. No active test file exists!`
+    })
 
   // Build the testFile model
   const builtModel = testRunModel({
-    file: activeTestFile.location,
-    testType: activeTestFile.fileType,
+    file: activeFile.location,
+    testType: activeFile.fileType,
     lastRun: data.timestamp,
     active: true,
     running: true,
     output: [
-      `Running ${activeTestFile.fileType} tests for ${activeTestFile.name}`
+      `Running ${activeFile.fileType} tests for ${activeFile.name}`
     ]
   })
 
   setTestRun(builtModel)
 
   // Switch to the results screen automatically
-  // setScreen(SCREENS.RESULTS)
+  // setScreenById(SCREENS.RESULTS)
 
 }

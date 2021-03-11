@@ -1,4 +1,4 @@
-import { setScreen } from 'SVActions/screens/setScreen'
+import { setScreenById } from 'SVActions/screens/setScreenById'
 import { saveApiFile } from 'SVUtils/api/saveApiFile'
 
 /**
@@ -10,6 +10,6 @@ import { saveApiFile } from 'SVUtils/api/saveApiFile'
  * @returns {void}
  */
 export const createUnitFile = async (screenId, name) => {
-  setScreen(screenId)
+  setScreenById(screenId)
 
 }

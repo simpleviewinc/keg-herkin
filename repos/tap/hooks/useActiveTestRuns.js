@@ -1,19 +1,19 @@
 import { Values } from 'SVConstants'
 import { noOpObj } from '@keg-hub/jsutils'
-import { useActiveTestFile } from './useActiveTestFile'
+import { useActiveFile } from './useActiveFile'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 
 const { CATEGORIES } = Values
 
 /**
- * Get the currently active test runs for the activeTestFile
+ * Get the currently active test runs for the activeFile
  *
  * @returns {Object} - Found active test runs
  */
 export const useActiveTestRuns = () => {
-  const activeTestFile = useActiveTestFile()
+  const activeFile = useActiveFile()
   const allTestRuns = useStoreItems(CATEGORIES.TEST_RUNS) || noOpObj
 
-  return activeTestFile.location &&
-    allTestRuns[activeTestFile.location]
+  return activeFile.location &&
+    allTestRuns[activeFile.location]
 }
