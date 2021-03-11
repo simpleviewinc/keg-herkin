@@ -1,11 +1,13 @@
-import { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Values } from 'SVConstants'
+import { Rabbit } from 'SVAssets/icons'
 import { useSockr } from '@ltipton/sockr'
 import { useStyle } from '@keg-hub/re-theme'
-import { noOpObj, get } from '@keg-hub/jsutils'
+import { noOpObj, get, noOp } from '@keg-hub/jsutils'
 import { View, Button, Text } from 'SVComponents'
 import { addToast } from 'SVActions/toasts/addToast'
 import { runTests } from 'SVActions/runner/runTests'
+import { useActiveFile } from 'SVHooks/useActiveFile'
 import { saveFile } from 'SVActions/files/api/saveFile'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 
@@ -46,13 +48,33 @@ const useTestCommand = (commands, cmdName) => useMemo(
  *
  * @returns {function} - Callback to call when running tests on the active file
  */
-const useRunAction = ({ activeFile, checkPending=true, runAllTests=false }) => {
+const useRunAction = props => {
+  const {
+    activeFile:propsActiveFile,
+    checkPending=true,
+    runAllTests=false,
+    onRun=noOp,
+  } = props
+
+  const activeFile = useActiveFile()
+  const testFile = propsActiveFile || activeFile || noOpObj
 
   const { commands=noOpObj } = useSockr()
-  const hasPending = usePendingCheck(checkPending, activeFile.location)
-  const testCommand = useTestCommand(commands, activeFile.fileType)
+  const hasPending = usePendingCheck(checkPending, testFile.location)
+  const testCommand = useTestCommand(commands, testFile.fileType)
 
-  return useCallback, useMemo(async event => {
+  return useCallback(async event => {
+  
+    // Call the passed in onRun callback
+    // If it returns false, then don't do anything else in this callback
+    const shouldContinue = await onRun(
+      event,
+      testFile,
+      testCommand,
+      hasPending,
+      runAllTests
+    )
+    if(shouldContinue === false) return
 
     if(!testCommand)
       return addToast({
@@ -62,21 +84,22 @@ const useRunAction = ({ activeFile, checkPending=true, runAllTests=false }) => {
 
     // Save the file first if it has pending changes
     const canRun = hasPending
-      ? await savePendingContent(content, activeFile)
+      ? await savePendingContent(content, testFile)
       : true
 
     canRun
       ? runAllTests
         ? runTests(RUN_ALL_TESTS, testCommand, SCREENS.EDITOR)
-        : runTests(activeFile, testCommand, SCREENS.EDITOR)
+        : runTests(testFile, testCommand, SCREENS.EDITOR)
       : addToast({
           type: 'danger',
           message: `Can not run test on a file with pending changes!\n The file must be saved first!`,
         })
   }, [
+    onRun,
     hasPending,
     runAllTests,
-    activeFile,
+    testFile,
     testCommand,
     SCREENS.EDITOR,
   ])
@@ -87,15 +110,16 @@ const useRunAction = ({ activeFile, checkPending=true, runAllTests=false }) => {
  * RunTestsButton - Component for start a test run using sockr
  * @param {Object} props
  * @param {Object} props.activeFile - Current active fileModel
+ * @param {Object} props.onRun - Callback called when the button is clicked
  * @param {boolean} props.checkPending - Check if the activeFile has pending changes
  * @param {boolean} props.runAllTests - Run all tests or just the ActiveFiles tests
  *
  */
 export const RunTestsButton = props => {
-  const { text="Run Tests", styles, ...args } = props
+  const { children, text='Run Tests', styles, ...args } = props
   const onRun = useRunAction(args)
   
-  const builtStyles = useStyle(`button.runTests`, styles)
+  const builtStyles = useStyle(`buttons.runTests`, styles)
 
   return (
     <View
@@ -108,11 +132,15 @@ export const RunTestsButton = props => {
         styles={builtStyles.button}
         className={`run-tests-button`}
       >
+        <Rabbit
+          style={builtStyles.icon}
+          className={`run-tests-button-icon`}
+        />
         <Text
           style={builtStyles.text}
           className={`run-tests-button-text`}
         >
-          {text}
+          {children || text}
         </Text>
       </Button>
     </View>

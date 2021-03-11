@@ -1,8 +1,8 @@
-import { Tabbar } from 'SVComponents'
-import { Values } from 'SVConstants'
-import { isFunc, noOpObj, deepMerge } from '@keg-hub/jsutils'
-import { View, Button } from '@keg-hub/keg-components'
 import React, { useCallback, useEffect, useState, useMemo } from 'react'
+import { Values } from 'SVConstants'
+import { View, Button } from '@keg-hub/keg-components'
+import { isFunc, noOpObj, deepMerge } from '@keg-hub/jsutils'
+import { RunTestsButton, SaveFileButton, Tabbar } from 'SVComponents'
 
 const { EDITOR_TABS } = Values
 
@@ -10,8 +10,16 @@ const { EDITOR_TABS } = Values
  * TestActions Component - Displays editor screen actions for updating test files
  * @param {Object} props
  */
-const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs, isDefinitionsTab }) => {
-  const [ isSaving, setIsSaving ] = useState(false)
+const TestActions = props => {
+  const {
+    actionStyles,
+    onRun,
+    onSave,
+    isSaving,
+    showFeatureTabs,
+    isDefinitionsTab,
+  } = props
+
   return (
     <View
       style={actionStyles.main}
@@ -21,31 +29,24 @@ const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs, isDefinitio
         style={actionStyles.save}
         className={`editor-tab-actions-save`}
       >
-        <Button
-          type='primary'
+        <SaveFileButton
           disabled={isSaving}
-          onClick={() => onSave(setIsSaving)}
+          onSave={onSave}
           className={`editor-tab-actions-save-button`}
         >
-          {
-            isSaving
-              ? 'Saving in progress..'
-              : 'Save'
-          }
-        </Button>
+          {isSaving ? 'Saving...' : 'Save File'}
+        </SaveFileButton>
       </View>
       { onRun && (
         <View
           style={actionStyles.run}
           className={`editor-tab-actions-save`}
         >
-          <Button
-            type='secondary'
-            onClick={onRun}
-            className={`editor-tab-actions-run-button`}
-          >
-            Run
-          </Button>
+          <RunTestsButton
+            onRun={onRun}
+            checkPending={true}
+            runAllTests={false}
+          />
         </View>
       )}
     </View>
@@ -73,11 +74,12 @@ const tabs = [
 const useActionsTab = (
   tabs,
   TestActions,
-  { onRun, onSave, showFeatureTabs, showRun, styles }
+  { onRun, onSave, isSaving, showFeatureTabs, showRun, styles }
 ) => useMemo(() => {
 
   const extraActionTabs = [{
     onSave,
+    isSaving,
     showFeatureTabs,
     id: `test-actions`,
     Tab: TestActions,
@@ -97,6 +99,7 @@ const useActionsTab = (
   styles,
   showRun,
   TestActions,
+  isSaving,
   showFeatureTabs,
 ])
 

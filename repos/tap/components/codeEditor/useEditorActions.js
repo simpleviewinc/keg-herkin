@@ -1,11 +1,9 @@
 import { useCallback } from 'react'
 import { Values } from 'SVConstants'
-import { useSockr } from '@ltipton/sockr'
 import { noOpObj, get } from '@keg-hub/jsutils'
 import { addToast } from 'SVActions/toasts/addToast'
 import { runTests } from 'SVActions/runner/runTests'
 import { saveFile } from 'SVActions/files/api/saveFile'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
 
 const { SCREENS, CATEGORIES } = Values
@@ -19,12 +17,7 @@ const { SCREENS, CATEGORIES } = Values
  */
 const useRunAction = (activeFile, editorRef) => {
 
-  const { commands=noOpObj } = useSockr()
-  const { pendingFiles=noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
-  const hasPending = Boolean(pendingFiles[activeFile.location])
-  const testCommand = get(commands, ['tests', activeFile.fileType ])
-
-  return useCallback(async event => {
+  return useCallback(async (event, testFile, testCommand, hasPending) => {
   
     if(!editorRef.current)
       return console.warn(`Editor Reference is not set!`)
@@ -33,23 +26,23 @@ const useRunAction = (activeFile, editorRef) => {
       return console.warn(`Can not run tests for this file. It is not a test file!`)
 
     const content = editorRef.current?.editor?.getValue()
-    await savePendingContent(content, activeFile)
+    await savePendingContent(content, testFile)
     
     // save the file first if it has pending changes
-    const canRun = content !== activeFile.content || hasPending
-      ? await savePendingContent(content, activeFile)
+    const canRun = content !== testFile.content || hasPending
+      ? await savePendingContent(content, testFile)
       : true
 
     canRun
-      ? runTests(activeFile, testCommand, SCREENS.EDITOR)
+      ? runTests(testFile, testCommand, SCREENS.EDITOR)
       : addToast({
           type: 'danger',
           message: `Can not run test on a file with pending changes!\n The file must be saved first!`,
         })
+
+    // Return false so the original run tests method does not re-run the sets again
+    return false
   }, [
-    hasPending,
-    activeFile,
-    testCommand,
     SCREENS.EDITOR,
     editorRef.current,
   ])
@@ -62,9 +55,12 @@ const useRunAction = (activeFile, editorRef) => {
  *
  * @returns {function} - Callback to call when saving the active file
  */
-const useSaveAction = (activeFile, editorRef) => {
-  return useCallback(async setIsSaving => {
-    if(!editorRef.current) return setIsSaving(false)
+const useSaveAction = (activeFile, editorRef, setIsSaving) => {
+  return useCallback(async () => {
+    if(!editorRef.current){
+      setIsSaving(false)
+      return false
+    }
 
     setIsSaving(true)
 
@@ -73,7 +69,8 @@ const useSaveAction = (activeFile, editorRef) => {
 
     setIsSaving(false)
 
-  }, [ editorRef.current, activeFile, SCREENS.EDITOR ])
+    return false
+  }, [ editorRef.current, activeFile, setIsSaving, SCREENS.EDITOR ])
 }
 
 /**
@@ -94,9 +91,9 @@ const savePendingContent = async (content, activeFile) => {
 /**
  * Hook to build callbacks for running tests, or saving changes to the active file
  */
-export const useEditorActions = (activeFile, editorRef) => {
+export const useEditorActions = (activeFile, editorRef, setIsSaving) => {
   return {
     onRun: useRunAction(activeFile, editorRef),
-    onSave: useSaveAction(activeFile, editorRef)
+    onSave: useSaveAction(activeFile, editorRef, setIsSaving)
   }
 }

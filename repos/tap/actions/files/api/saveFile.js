@@ -7,11 +7,10 @@ import { removePendingFile } from '../local/removePendingFile'
 /**
  * Save the content to the given file. if no filePath passed in. it will save it on the currently active file
  * @param {Object} fileToSave - fileModel to be saved on the backend
- * @param {string} screenId - Id of the screen the file is active on
  * 
  * @returns {Object} - {success, fileModel}
  */
-export const saveFile = async (fileToSave=noOpObj, screenId) => {
+export const saveFile = async (fileToSave=noOpObj) => {
   const { location, content } = fileToSave
 
   if (!content || !location)
@@ -25,7 +24,7 @@ export const saveFile = async (fileToSave=noOpObj, screenId) => {
   const result = await saveApiFile(location, content)
 
   if(result?.success){
-    removePendingFile(fileToSave, screenId)
+    removePendingFile(fileToSave)
     addToast({
       type: 'success',
       message: `File ${fileToSave.name} was saved!`

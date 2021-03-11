@@ -1,8 +1,8 @@
+import React, { useRef, useEffect, useState } from 'react'
 import { Values } from 'SVConstants'
 import { EditorTabs } from './editorTabs'
 import { useStyle } from '@keg-hub/re-theme'
 import { EditorFromType } from './editorFromType'
-import React, { useRef, useEffect } from 'react'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 import { useEditorActions } from './useEditorActions'
 import { noOpObj, exists, plural } from '@keg-hub/jsutils'
@@ -27,7 +27,8 @@ export const CodeEditor = props => {
   const forceFull = !isFeature && tab !== EDITOR_TABS.FEATURE.id
   const editorRef = useRef(null)
   
-  const tabActions = useEditorActions(activeFile, editorRef)
+  const [ isSaving, setIsSaving ] = useState(false)
+  const tabActions = useEditorActions(activeFile, editorRef, setIsSaving)
   const { pendingFiles=noOpObj } = useStoreItems([CATEGORIES.PENDING_FILES])
 
   const editorStyles = useStyle(`screens.editors`)
@@ -87,6 +88,7 @@ export const CodeEditor = props => {
       <EditorTabs
         activeTab={tab}
         onTabSelect={setTab}
+        isSaving={isSaving}
         showRun={plural(activeFile.fileType) !== EDITOR_TABS.DEFINITIONS.id}
         showFeatureTabs={isFeature}
         styles={actionsStyles}
