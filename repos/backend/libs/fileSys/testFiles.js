@@ -1,5 +1,7 @@
 const path = require('path')
-const { validFilename } = require('@keg-hub/jsutils')
+const { validFilename, wordCaps } = require('@keg-hub/jsutils')
+
+const { loadTemplate } = require('../../templates/loadTemplate')
 const { buildFileModel } = require('../../utils/buildFileModel')
 const {
   readFile,
@@ -117,10 +119,13 @@ const createTestFile = async (config, fileName, fileType) => {
   const [mkDirErr, mkDirSuccess] = await mkDir(dirname)
   if(mkDirErr) throw new Error(mkDirErr)
 
-  // Create the new test file as an empty file
-  // In the future we might want to add templates base on test type
-  // This is just a quick and simple way for now
-  const content = ''
+  // Create the new test file using the template for the file type
+  // In the future we might want to allow custom templates from the mounted tests folder 
+  // But that's a lot more work
+  const content = loadTemplate(fileType, {
+    name: wordCaps(basename)
+  })
+
   const [writeErr, writeSuccess] = await writeFile(location, content)
   if(writeErr) throw new Error(writeErr)
 

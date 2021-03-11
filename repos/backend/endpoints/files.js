@@ -28,12 +28,10 @@ const {
  */
 const createFile = (app, config) => async (req, res) => {
   try {
-
     const { name, type } = req.body
-    const { success, file } = await createTestFile(config, name, type)
-    const fileModel = await checkForParsing(file)
-    
-    return apiResponse(req, res, { file: fileModel, success }, 200)
+    const meta = await createTestFile(config, name, type)
+
+    return apiResponse(req, res, meta, 200)
   }
   catch(err){
     console.log(err.stack)
