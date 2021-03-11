@@ -1,6 +1,6 @@
 const { apiErr, apiResponse } = require('./handler')
 const { loadFeatures } = require('../libs/features')
-const { loadDefinitions } = require('../libs/definitions')
+const { loadDefinitions, DefinitionsParser } = require('../libs/definitions')
 const { definitionsByType, fileModelArrayToObj } = require('../../shared/utils')
 
 const testData = (app, config) => async (req, res) => {
@@ -8,6 +8,9 @@ const testData = (app, config) => async (req, res) => {
     const definitions = await loadDefinitions(config)
     const definitionTypes = definitionsByType(definitions)
     const features = await loadFeatures(config, definitionTypes)
+
+    // Reset the cached definitions
+    DefinitionsParser.resetDefinitions()
 
     return apiResponse(req, res, { 
       features: fileModelArrayToObj(features), 

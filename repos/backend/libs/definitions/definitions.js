@@ -34,11 +34,7 @@ const loadDefinitions = async config => {
   const herkinDefinitions = await parseDefinitions(herkinDefinitionFiles) || []
 
   // all the definition file models
-  const defFileModels = clientDefinitions.concat(herkinDefinitions)
-  // Reset the cached definitions
-  DefinitionsParser.resetDefinitions()
-
-  return defFileModels
+  return clientDefinitions.concat(herkinDefinitions)
 }
 
 module.exports = {
