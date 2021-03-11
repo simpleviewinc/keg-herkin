@@ -1,10 +1,11 @@
 import { useCallback } from 'react'
 import { Values } from 'SVConstants'
-import { noOpObj, get } from '@keg-hub/jsutils'
-import { saveFile } from 'SVActions/files'
-import { runTests } from 'SVActions/runner'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { useSockr } from '@ltipton/sockr'
+import { noOpObj, get } from '@keg-hub/jsutils'
+import { addToast } from 'SVActions/toasts/addToast'
+import { runTests } from 'SVActions/runner/runTests'
+import { saveFile } from 'SVActions/files/api/saveFile'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
 
 const { SCREENS, CATEGORIES } = Values
@@ -24,8 +25,6 @@ const useRunAction = (activeFile, editorRef) => {
   const testCommand = get(commands, ['tests', activeFile.fileType ])
 
   return useCallback(async event => {
-    // TODO: Add UI message, to warn that the file needs to be saved
-    // Also add UI for if a file is not a test file, so no matching test command exists
   
     if(!editorRef.current)
       return console.warn(`Editor Reference is not set!`)
@@ -43,11 +42,10 @@ const useRunAction = (activeFile, editorRef) => {
 
     canRun
       ? runTests(activeFile, testCommand, SCREENS.EDITOR)
-      : console.warn(
-          `Can not run test on a file with pending changes!`,
-          `The file must be saved first!`
-        )
-
+      : addToast({
+          type: 'danger',
+          message: `Can not run test on a file with pending changes!\n The file must be saved first!`,
+        })
   }, [
     hasPending,
     activeFile,

@@ -31,9 +31,9 @@ export const Values = {
   },
   FILE_TYPES: {
     FEATURE: 'feature',
-    DEFINITION: 'definition',
-    WAYPOINT: 'waypoint',
-    UNIT: 'unit',
+    // DEFINITION: 'definition',
+    // WAYPOINT: 'waypoint',
+    // UNIT: 'unit',
   },
   SIDEBAR_TYPES: {
     FILE_TREE: 'fileTree'
@@ -49,9 +49,9 @@ export const Values = {
   CREATE_NEW_FILE: 'Create New File',
   SCREENS: {
     EDITOR: 'editor',
-    BUILDER: 'builder',
+    // BUILDER: 'builder',
     EMPTY: 'empty',
-    RUNNER: 'runner',
+    // RUNNER: 'runner',
     RESULTS: 'results',
   },
   EDITOR_TABS: {

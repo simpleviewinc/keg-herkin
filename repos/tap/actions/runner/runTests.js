@@ -1,7 +1,11 @@
+import { Values } from 'SVConstants'
 import { WSService } from 'SVServices'
 import { addToast } from 'SVActions/toasts'
+import { setScreen } from '../screens/setScreen'
 import { setActiveTestFile } from './setActiveTestFile'
 import { buildCmdParams } from 'SVUtils/helpers/buildCmdParams'
+
+const { SCREENS } = Values
 
 /**
  * Uses a web-socket to run tests on a file from the backend
@@ -20,6 +24,7 @@ export const runTests = async (activeFile, testCmd, screenID) => {
   })
 
   setActiveTestFile(activeFile)
+  setScreen(SCREENS.RESULTS)
 
   WSService.runCommand(testCmd, buildCmdParams(testCmd, activeFile))
 }

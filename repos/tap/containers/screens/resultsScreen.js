@@ -6,6 +6,7 @@ import { useStyle } from '@keg-hub/re-theme'
 import { ExternalLink } from 'SVAssets/icons'
 import { Surface } from 'SVComponents/surface'
 import { CmdOutput } from 'SVComponents/cmdOutput'
+import { Results } from 'SVComponents/results'
 import { apiRequest } from 'SVUtils/api/apiRequest'
 import { useActiveTestFile } from 'SVHooks/useActiveTestFile'
 import React, { useEffect, useState, useMemo } from 'react'
@@ -37,67 +38,13 @@ export const ResultsScreen = props => {
         style={builtStyles.main}
       >
         <CmdOutput activeTestFile={activeTestFile} />
-        <Surface
-          prefix={'Test Results'}
-          TitleComponent={({styles, ...props}) => 
-            <IframeHeader
-              {...props}
-              onIconPress={onIconPress}
-              mainTextStyles={styles}
-              mainStyles={builtStyles?.iFrame?.header} 
-            />
-          }
-          capitalize={false}
-          title={'Report'}
-          styles={builtStyles?.iFrame?.surface}
-          className={`runner-surface-iframe`}
-        >
-          <Iframe src={reportUrl}/>
-        </Surface>
+        <Results
+          {...props}
+          reportUrl={reportUrl}
+          activeTestFile={activeTestFile}
+          onIconPress={onIconPress}
+          builtStyles={builtStyles}
+        />
       </View>
-  )
-}
-
-
-
-/**
- * IframeHeader
- * @param {Object} props
- * @param {Object} props.mainTextStyles - passed down from surface component
- * @param {string} props.prefix - prefix passed in to the Surface
- * @param {string} props.title - title passed in to Surface
- * @param {Object} props.titleStyle - titleStyle passed in to Surface
- * @param {Boolean} props.capitalize - capitalize value passed in to Surface
- * 
- * @returns {Component}
- */
-const IframeHeader = (props) => {
-  const {
-    mainTextStyles,
-    prefix,
-    title,
-    titleStyle,
-    capitalize,
-    mainStyles,
-    onIconPress
-  } = props
-
-  return (
-    <View style={mainStyles?.main}>
-      <PrefixTitleHeader
-        styles={mainTextStyles}
-        titleStyle={titleStyle}
-        title={title}
-        prefix={prefix}
-        capitalize={capitalize}
-      />
-      <TouchableIcon
-        styles={mainStyles?.icon}
-        color={mainStyles?.icon?.color}
-        size={mainStyles?.icon?.size}
-        onPress={onIconPress}
-        Component={ ExternalLink }
-      />
-    </View>
   )
 }

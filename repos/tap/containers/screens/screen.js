@@ -22,11 +22,11 @@ const screenTabs = [
     id: SCREENS.EMPTY,
     View: EmptyScreen,
   },
-  {
-    id: SCREENS.BUILDER,
-    View: BuilderScreen,
-    title: `Feature Builder`,
-  },
+  // {
+  //   id: SCREENS.BUILDER,
+  //   View: BuilderScreen,
+  //   title: `Feature Builder`,
+  // },
   {
     id: SCREENS.EDITOR,
     View: EditorScreen,
