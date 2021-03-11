@@ -9,6 +9,13 @@ const { KEG_DOM_STYLES_ID } = Values
 let DomStyleSheet
 let overridesSet = false
 
+/**
+ * Helper hook to added CSS styles to a Stylesheet on the dom
+ * Uses helpers from re-theme in a no-standard fashion
+ * @type function
+ *
+ * @returns {void}
+ */
 export const useDomStyles = () => {
   if(overridesSet) return overridesSet
   overridesSet = true

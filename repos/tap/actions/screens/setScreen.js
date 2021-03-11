@@ -32,6 +32,11 @@ export const setScreen = (screenId, screenModel) => {
   if(!screenModel)
     return addToast({ type: `warn`, message: `Screen ${screenId} does not exist!` })
 
+  // For now default to the screen editor when the screen is empty
+  // We will want to remove this later when more screens are added
+  screenModel.id === SCREENS.EMPTY &&
+    (screenModel = items[CATEGORIES.SCREENS][SCREENS.EDITOR])
+
   setScreenInactive()
   updateUrl(screenModel)
 

@@ -1,4 +1,5 @@
 import { aceEditor } from './aceEditor'
+import { buttons } from './buttons'
 import { chip } from './chip'
 import { definitions } from './definitions'
 import { drawer } from './drawer'
@@ -22,6 +23,7 @@ import { iframe } from './iframe'
 
 export const components = theme => ({
   aceEditor: aceEditor(theme),
+  buttons: buttons(theme),
   chip: chip(theme),
   cmdOutput: cmdOutput(theme),
   definitions: definitions(theme),

@@ -1,8 +1,9 @@
 
 /**
  * Creates a new iframe at the provided url.
- *
  * @param url The url to load.
+ *
+ * @returns {string} - Inlined html content for use as an iframe url
  */
 export const fromURL = url => {
   if (!/^(https?|file|data):/.test(url))
@@ -21,14 +22,23 @@ export const fromURL = url => {
 }
 
 /**
- * Creates a new iframe and inlines some html content.
- *
+ * Creates a new iframe and inline some html content.
  * @param html The html to load into the iframe.
+ *
+ * @returns {string} - Inlined html content for use as an iframe url
  */
 export const fromHTML = html => {
   return fromURL(`data:text/htmlcharset=utf-8,${encodeURIComponent(html)}`)
 }
 
+/**
+ * Frame - Model iframe dom element
+ * @type class
+ * @property {Object} window - The frame's window object
+ * @property {Object} document - The frame's document object
+ * @property {Method} close - Helper to remove the iframe from the dom
+ *
+ */
 export class Frame {
   /**
    * The global window object for the iframe.

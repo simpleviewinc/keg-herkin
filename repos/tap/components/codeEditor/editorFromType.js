@@ -9,6 +9,10 @@ import { DefinitionsEditor } from 'SVComponents/definition/definitionsEditor'
 
 const { EDITOR_TABS, SCREENS } = Values
 
+/**
+ * EditorFromType Component - Renders the correct editor based on passed in props
+ * @param {Object} props
+ */
 export const EditorFromType = props => {
   const { aceRef, activeFile=noOpObj, editorType, ...otherProps } = props
   const onChange = usePendingCallback(SCREENS.EDITOR)

@@ -68,4 +68,17 @@ export const Values = {
   },
   KEG_DOM_STYLES_ID: 'keg-dom-styles',
   TABBAR_PORTAL_ID: `keg-tabbar-portal-root`,
+  // Constants matching the fileModel
+  // Used for defining when all tests of a type should be run
+  RUN_ALL_TESTS: {
+    name: 'RUN_ALL_TESTS',
+    location: 'tests',
+    relative: '',
+    content: '',
+    fileType: null,
+    mime: 'text/plain',
+    ast: {},
+    lastModified: 0,
+    uuid: 'RUN_ALL_TESTS',
+  }
 }

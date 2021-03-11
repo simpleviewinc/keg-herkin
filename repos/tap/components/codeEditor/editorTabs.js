@@ -6,6 +6,10 @@ import React, { useCallback, useEffect, useState, useMemo } from 'react'
 
 const { EDITOR_TABS } = Values
 
+/**
+ * TestActions Component - Displays editor screen actions for updating test files
+ * @param {Object} props
+ */
 const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs, isDefinitionsTab }) => {
   const [ isSaving, setIsSaving ] = useState(false)
   return (
@@ -48,12 +52,24 @@ const TestActions = ({ actionStyles, onRun, onSave, showFeatureTabs, isDefinitio
   )
 }
 
+/**
+ * Group of tabs that can be displayed 
+ * @type Object
+ */
 const tabs = [
   EDITOR_TABS.FEATURE,
   EDITOR_TABS.DEFINITIONS,
   EDITOR_TABS.BDD_SPLIT,
 ]
 
+/**
+ * Helper hook to memoizing the tabs to be displayed
+ * @param {Object} tabs - Tabs for the Editor screen
+ * @param {String} TestActions - React Component to render the test actions
+ * @param {Object} options - Options for configuring the tabs
+ *
+ * @returns {Array} - Tabs to be rendered for the Editor Component
+ */
 const useActionsTab = (
   tabs,
   TestActions,
@@ -84,6 +100,14 @@ const useActionsTab = (
   showFeatureTabs,
 ])
 
+/**
+ * Helper callback hook for memoizing switching between editor tabs
+ * @param {Object} tab - Current tab that is active
+ * @param {String} setTab - Method of update the current tab in the local state
+ * @param {Object} onTabSelect - Callback passed in from props
+ *
+ * @returns {function} - Callback called when a tab is clicked
+ */
 const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
   if(newTab === `test-actions`) return
   
@@ -92,6 +116,12 @@ const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
       : (tab !== newTab && setTab(newTab)) || true
 }, [ tab, setTab, onTabSelect ])
 
+/**
+ * EditorTabs Component - Displays the tabs for the editor screen
+ * @param {Object} props
+ * @param {Object} props.activeTab - Currently active tab
+ * @param {Object} props.onTabSelect - Callback for when the tab is changed
+ */
 export const EditorTabs = props => {
   const { activeTab, onTabSelect } = props
 

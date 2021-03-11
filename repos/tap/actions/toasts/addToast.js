@@ -5,11 +5,13 @@ const { CATEGORIES } = Values
 
 const buildToast = (toast=noOpObj) => {
   const type = toast.type || 'info'
+
   return deepMerge({
     type,
     id: uuid(),
     icon: type,
     title: capitalize(type),
+    timeout: type === 'danger' ? 6000 : 4000,
     message: `This is a ${type} toast component`,
   }, toast)
 }

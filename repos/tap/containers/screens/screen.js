@@ -79,11 +79,14 @@ export const Screen = props => {
   const screenTab = useScreenTab(props?.activeScreen)
 
   const onTabSelect = useCallback(screenId => {
-    screenId !== screenTab?.id &&
-      setScreenById(screenId)
+    if(screenId === screenTab?.id) return
+    
+    screenId === SCREENS.RESULTS
+      ? setScreenById(screenId, screenTab)
+      : setScreenById(screenId)
 
     return true
-  }, [ screenTab, setScreenById ])
+  }, [ SCREENS, screenTab.id, setScreenById ])
 
   if(!screenTab) return null
 
