@@ -31,8 +31,8 @@ const buildCmdArgs = params => {
   bail && cmdArgs.push('--bail')
   noTests && cmdArgs.push('--passWithNoTests')
 
-  // If context is set use that, otherwise check and use filter
-  context ? cmdArgs.push(context) : filter && cmdArgs.push(filter)
+  // If context is set use that as the only file to run
+  context && cmdArgs.push(context)
 
   return cmdArgs
 }
@@ -66,7 +66,7 @@ const buildCmdOpts = (browser, params, reportPath) => {
 
   addEnv(envs, 'DEBUG', params.debug && 'pw:api')
   addEnv(envs, 'HERKIN_FEATURE_TAGS', params.tags)
-  addEnv(envs, 'HERKIN_FEATURE_NAME', params.context)
+  addEnv(envs, 'HERKIN_FEATURE_NAME', params.filter)
 
   // Build the output path, and page title based on the passed in context
   // Uses the word "features" when no context is passed
@@ -144,7 +144,7 @@ module.exports = {
     options: sharedOptions('run', {
       context: {
         alias: [ 'name' ],
-        description: 'Path or name of the test file to run. If not passed, all tests are run. Overrides filters',
+        description: 'Path or name of the test file to run. If not passed, all tests are run.',
         default: null
       },
       filter: {
