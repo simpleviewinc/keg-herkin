@@ -22,7 +22,7 @@ class DefinitionsParser {
   resetDefinitions = () => { 
     // Holds the loaded defs
     // Used to check if a definition was already loaded
-    this.definitions = {}
+    defCache = {}
   }
 
   getDefinitions = async filePath => {
