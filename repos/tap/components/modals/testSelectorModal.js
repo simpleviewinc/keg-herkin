@@ -129,7 +129,7 @@ export const TestSelectorModal = (props) => {
   const [selectedTab, setSelectedTab] = useState(SCREENS.EDITOR)
 
   const activeFile = useActiveFile()
-  const [testLocation, setTestLocation] = useState(activeFile.location || CREATE_NEW_FILE)
+  const [testLocation, setTestLocation] = useState(CREATE_NEW_FILE)
 
   const onBackdropTouch = useCloseModal(activeTab?.id)
   const loadTests = useLoadTest(testLocation, fileModels, selectedTab)

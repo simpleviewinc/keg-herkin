@@ -12,8 +12,9 @@ const buildReportPath = (type, context) => {
   if(!type) throw new Error(`Test type is required to build the test report path!`)
 
   const name = context ? context.split('/').pop() : `${type}s`
+  const builtPath = path.join(HERKIN_TESTS_ROOT, HERKIN_REPORTS_DIR, `${type}/${name}.html`)
 
-  return path.join(HERKIN_TESTS_ROOT, HERKIN_REPORTS_DIR, `${type}/${name}.html`)
+  return `"${builtPath}"`
 }
 
 
