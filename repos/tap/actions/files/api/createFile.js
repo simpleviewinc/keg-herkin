@@ -2,8 +2,8 @@ import { devLog } from 'SVUtils'
 import { Values } from 'SVConstants'
 import { createApiFile } from 'SVUtils/api/createApiFile'
 import { addToast } from 'SVActions/toasts'
-import { noOpObj } from '@keg-hub/jsutils'
-import { setActiveFileFromType } from '../local/setActiveFileFromType'
+import { noOpObj, get } from '@keg-hub/jsutils'
+
 const { FILE_TYPES } = Values
 
 /**
@@ -34,7 +34,7 @@ export const createFile = async (fileType, fileName) => {
   const file = ensureExtension(fileType, fileName)
 
   if (!file)
-    return addToast({ type: `warn`, message: 'File name are required to create a new file'})
+    return addToast({ type: `warn`, message: 'File name is required to create a new file'})
 
   addToast({
     type: 'info',
@@ -42,17 +42,18 @@ export const createFile = async (fileType, fileName) => {
   })
 
   const result = await createApiFile(file, fileType)
-  const { success, file:filModel } = result 
+  const { success, file:filModel, error } = result 
 
   if(success){
     addToast({
       type: 'success',
       message: `New file ${filModel.name} was created!`
     })
-
-    await setActiveFileFromType(filModel)
   }
-  else addToast({ type: 'danger', message: `Failed to create new file ${fileName}!` })
+  else {
+    const message = get(result, 'error.message', `Failed to create new file ${fileName}!`)
+    addToast({ type: 'danger', message })
+  }
 
   return result
 

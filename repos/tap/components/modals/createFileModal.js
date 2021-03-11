@@ -14,6 +14,7 @@ import { useTestTypeOptions } from 'SVHooks/useTestTypeOptions'
 import { formatFileName } from 'SVUtils/helpers/formatFileName'
 import { mapObj, capitalize, wordCaps, noPropArr } from '@keg-hub/jsutils'
 import { Modal, Button, ItemHeader, View, Text } from '@keg-hub/keg-components'
+import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
 
 const { CATEGORIES, SCREENS, FILE_TYPES } = Values
 
@@ -44,9 +45,19 @@ export const CreateFileModal = props => {
   const options = useTestTypeOptions()
   const onTypeChange = useCallback(type => setTestType(type), [setTestType])
 
-  const onCreate = useCallback(() => {
-    createFile(testType, testName)
-    // setModalVisibility(false)
+  const onCreate = useCallback(async () => {
+    const { success, file } = await createFile(testType, testName)
+    if(!success) return
+
+    // Update the active file, and auto-set to the editor screen
+    await setActiveFileFromType(file, SCREENS.EDITOR)
+
+    // Update the screen to be the editor
+    setScreen(SCREENS.EDITOR)
+
+    // Close the modal
+    setModalVisibility(false)
+
   }, [testType, testName])
 
   const onBackdropTouch = useCloseModal(activeTab?.id)

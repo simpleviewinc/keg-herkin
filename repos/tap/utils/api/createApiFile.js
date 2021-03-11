@@ -20,7 +20,7 @@ export const createApiFile = async (fileName, fileType, callback) => {
         method: HttpMethods.POST,
         url: `/files/create`,
         params: { name: fileName, type: fileType }
-      })
+      }, 'object')
     : logData(`Create File action requires a file name!`) || noOpObj
 
   return isFunc(callback) ? callback(response) : response

@@ -16,10 +16,11 @@ const defRequest = {
  * @export
  * @public
  * @param {Object} request - Arguments that define the request type to make
+ * @param {string|boolean} responseType - Type of response returned on error. default is false
  *
  * @returns {Object|Boolean} - Data returned from the Backend API
  */
-export const apiRequest = async request => {
+export const apiRequest = async (request, responseType) => {
   const builtRequest = isObj(request)
     ? request
     : { url: request }
@@ -33,11 +34,11 @@ export const apiRequest = async request => {
     ...builtRequest,
   })
 
-  if (success) 
-    return isObj(data) && data.data || data
-  else {
-    devLog(`warn`, `ERROR: ${data?.error?.message}`)
-    return false
-  }
+  if (success)  return isObj(data) && data.data || data
+
+  devLog(`warn`, `ERROR: ${data?.error?.message}`)
+  return responseType === 'object'
+    ? data
+    : false
 
 }

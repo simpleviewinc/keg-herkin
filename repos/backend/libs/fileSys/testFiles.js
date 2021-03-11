@@ -14,13 +14,13 @@ const {
 
 /**
  * Checks that the file path exists
- * @param {String} path - file path to check
- * @throw {Error} if path not found on file system
+ * @param {String} location - file path to check
+ * @throw {Error} if location not found on file system
  */
-const checkPath = async (path) => {
-  const [ err, exists ] = await pathExists(path)
+const checkPath = async location => {
+  const [ err, exists ] = await pathExists(location)
   if (err || !exists) {
-    const pathError = new Error(`[API - Files] Path not found: ${path}`)
+    const pathError = new Error(`[API - Files] Path not found: ${location}`)
     pathError.status = 404
     throw pathError
   }
@@ -112,6 +112,11 @@ const createTestFile = async (config, fileName, fileType) => {
 
   // Build the path to the file and it's meta data
   const location = path.join(foundType.location, fileName)
+  
+  // Check if the path already exists, so we don't overwrite an existing file
+  const [ existsErr, fileExists ] = await pathExists(location)
+  if(fileExists) throw new Error(`File already exists at that location!`)
+
   const basename = path.basename(location)
   const dirname = path.dirname(location)
 
@@ -122,8 +127,8 @@ const createTestFile = async (config, fileName, fileType) => {
   // Create the new test file using the template for the file type
   // In the future we might want to allow custom templates from the mounted tests folder 
   // But that's a lot more work
-  const content = loadTemplate(fileType, {
-    name: wordCaps(basename)
+  const content = await loadTemplate(fileType, {
+    name: wordCaps(basename.split('.').shift())
   })
 
   const [writeErr, writeSuccess] = await writeFile(location, content)
