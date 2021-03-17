@@ -27,6 +27,8 @@ class DefinitionsParser {
     defCache[filePath] = {}
 
     const { fileModel } = await this.parseDefinition(filePath)
+    // The definitions get auto-loaded into the parkin instance
+    // from the require call in the parseDefinition method below
     const definitions = parkin.steps.list()
 
     definitions.map(def => {
@@ -41,7 +43,7 @@ class DefinitionsParser {
         fileModel.ast.definitions.push({
           ...def,
           // Add a reference back to the parent
-          parentUuid: fileModel.uuid
+          location: filePath
         })
     })
 
@@ -52,11 +54,21 @@ class DefinitionsParser {
 
   parseDefinition = (filePath) => {
     return new Promise((res, rej) => {
+      // We still want to load the file content
+      // Even if the require call fails
+      // So wrap if in a try catch, and log the error if it happends
+      let response
+      try {
+        // Require the file, to auto-load the definitions into parkin
+        // Later we'll pull them from parkin
+        response = require(filePath)
+      }
+      catch(err){
+        console.log(`Could not load step definition file ${filePath}`)
+        console.log('')
+        console.error(err.message)
+      }
 
-      // Require the file, to auto-load the definitions into parkin
-      // Later we'll pull them from parkin
-      const response = require(filePath)
-      
       // Read the file to get it's content and build the fileModel
       fs.readFile(filePath, async (err, content) => {
         if(err) return rej(err)
