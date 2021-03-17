@@ -101,6 +101,9 @@ const listItem = theme => {
 
 export const definitionList = theme => {
   return {
+    main: {
+      minW: '100%',
+    },
     list: {
       header: listHeader(theme),
       drawer: drawer(theme),

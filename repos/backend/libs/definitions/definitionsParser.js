@@ -1,17 +1,10 @@
 const fs = require('fs')
-const { isArr } = require('@keg-hub/jsutils')
-const { Definition } = require("./definition")
-const { REGEX_VARIANT, EXPRESSION_VARIANT } = require('../../constants')
+const { parkin } = require('HerkinParkin/instance')
+const { isArr, capitalize } = require('@keg-hub/jsutils')
 const { stripComments } = require('../../utils/stripComments')
 const { buildFileModel } = require('../../utils/buildFileModel')
 
 let defCache = {}
-const DEFINITION_REGEX = new RegExp(/(Given|When|Then|test)\(('|"|`|\/)(.*)('|"|`|\/),/, 'gm')
-
-const getDefinitionContent = definitionMatch => {
-  const content = definitionMatch.input.split(definitionMatch[0]).pop()
-  return `${definitionMatch[0]}${content.split(definitionMatch[1]).shift()}`
-}
 
 class DefinitionsParser {
 
@@ -31,23 +24,25 @@ class DefinitionsParser {
 
     // Holds the loaded defs fileModels by file name
     // This is what will be returned to the frontend
-    defCache[filePath] = []
+    defCache[filePath] = {}
 
-    const { fileModel, definitions } = await this.parseDefinition(filePath)
+    const { fileModel } = await this.parseDefinition(filePath)
+    const definitions = parkin.steps.list()
 
-    definitions.map(({ match, type, variant, content }) => {
-      if(!this.validateMatch(filePath, match, type)) return
+    definitions.map(def => {
+      const fileHasDef = fileModel.content.includes(def.match)
+      const isValidDef = this.validateMatch(def.match, def.type)
 
-      const definition = this.definitions[match] || new Definition(match, type, variant, content)
-      !this.definitions[match] && (this.definitions[match] = definition)
-      
-      // Add a reference back to the parent
-      definition.parentUuid = fileModel.uuid
-
-      // Add the definition to the fileModels ast.definition array
-      fileModel.ast.definitions.push(definition)
-      
-      return definition
+      // If the file model contains the step def
+      // And it's a valid match string
+      // Then add the def to the fileModels ast.definitions array
+      fileHasDef &&
+        isValidDef &&
+        fileModel.ast.definitions.push({
+          ...def,
+          // Add a reference back to the parent
+          parentUuid: fileModel.uuid
+        })
     })
 
     defCache[filePath] = fileModel
@@ -57,40 +52,29 @@ class DefinitionsParser {
 
   parseDefinition = (filePath) => {
     return new Promise((res, rej) => {
-      const definitions = []
+
+      // Require the file, to auto-load the definitions into parkin
+      // Later we'll pull them from parkin
+      const response = require(filePath)
+      
+      // Read the file to get it's content and build the fileModel
       fs.readFile(filePath, async (err, content) => {
         if(err) return rej(err)
 
         const contentStr = content.toString()
-        const definitionFile = stripComments(contentStr)
-
-        let definitionMatch
-        while (definitionMatch = DEFINITION_REGEX.exec(definitionFile)) {
-          const [ _, type, identifier, match ] = definitionMatch
-          const variant = identifier === `/` ? REGEX_VARIANT : EXPRESSION_VARIANT
-          definitions.push({
-            type,
-            variant,
-            match: variant === REGEX_VARIANT ? new RegExp(match, `gm`) : match,
-            content: getDefinitionContent(definitionMatch)
-          })
-        }
-
         const fileModel = await buildFileModel({
           location: filePath,
           content: contentStr,
           fileType: 'definition',
-          // Set definitions as an empty array placeholder
-          // Later we will add instances of the Definition class into it
           ast: { definitions: [] },
         })
 
-        return res({ fileModel, definitions })
+        return res({ fileModel })
       })
     })
   }
 
-  validateMatch = (filePath, match, type) => {
+  validateMatch = (match, type) => {
     if(!match)
       return console.warn(
         `Found a ${type} definition that contains an empty match in the definition definition files!`

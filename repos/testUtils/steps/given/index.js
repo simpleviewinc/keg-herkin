@@ -1,3 +1,5 @@
-export * from './openUrl'
-export * from './isAncestor'
-export * from './isAncestorTo'
+module.exports = {
+  ...require('./openUrl'),
+  ...require('./isAncestor'),
+  ...require('./isAncestorTo'),
+}

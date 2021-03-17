@@ -1,15 +1,47 @@
 import React from 'react'
 import { Values } from 'SVConstants'
+import { Sync } from 'SVAssets/icons'
 import { noOpObj } from '@keg-hub/jsutils'
-import { View } from '@keg-hub/keg-components'
+import { Surface } from 'SVComponents/surface'
 import { useFeature } from 'SVHooks/useFeature'
 import { DefinitionList } from './definitionList'
 import { DefinitionTabs } from './definitionTabs'
 import { useSelector } from 'SVHooks/useSelector'
 import { useActiveTab } from 'SVHooks/useActiveTab'
+import { Text } from '@keg-hub/keg-components/text'
+import { Touchable } from '@keg-hub/keg-components/touchable'
 import { ActiveDefinitionsEditor } from './activeDefinitionsEditor'
 
 const { DEFINITION_TABS, CATEGORIES } = Values
+
+const ReloadDefs = props => {
+  // TODO: add re-sync actions for definitions
+
+  return (
+    <Touchable
+      style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+      }}
+    >
+      <Sync
+        style={{
+          fontSize: 14,
+          marginRight: 5,
+        }}
+      />
+      <Text
+        style={{
+          fontSize: 10,
+        }}
+      >
+        RE-SYNC
+      </Text>
+    </Touchable>
+  )
+
+}
 
 /**
  * DefinitionsEditor
@@ -39,9 +71,14 @@ export const DefinitionsEditor = props => {
   const { definitions: activeDefs } = useFeature({ path: activeFile?.location }) || {}
 
   return (
-    <View
-      className={'definitions-editor-main'}
-      style={styles.main}
+    <Surface
+      prefix={'Editor'}
+      hasToggle={true}
+      capitalize={false}
+      title={'Definitions'}
+      styles={styles}
+      RightComponent={ReloadDefs}
+      className={`definitions-surface-main`}
     >
       <DefinitionTabs
         activeTab={tab}
@@ -63,7 +100,7 @@ export const DefinitionsEditor = props => {
           definitions={list || definitionTypes}
         />
       )}
-    </View>
+    </Surface>
   )
 
 }

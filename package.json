@@ -17,7 +17,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "api": "nodemon --watch ./repos/backend --watch ./repos/shared --watch ./config --exec 'node ./repos/backend/index.js'",
+    "api": "nodemon --watch ./repos/backend --watch node_modules/@ltipton/parkin/build/cjs --watch ./repos/shared --watch ./config --exec 'node ./repos/backend/index.js'",
     "clean": "cd node_modules/keg-core; yarn clean",
     "clean:install": "yarn clean:full; yarn install",
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
@@ -48,7 +48,7 @@
     "task": "node ./tasks/runTask.js",
     "web": "yarn web:dev",
     "web:build": "cd node_modules/keg-core; yarn build:web",
-    "web:dev": "nodemon --watch ./package.json --exec 'cd node_modules/keg-core && yarn web'"
+    "web:dev": "cd node_modules/keg-core && yarn web"
   },
   "dependencies": {
     "@keg-hub/args-parse": "6.2.1",
