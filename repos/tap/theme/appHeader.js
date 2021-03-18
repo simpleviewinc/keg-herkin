@@ -20,7 +20,7 @@ export const appHeader = theme => {
       },
       content: {
         title: {
-          c: tapColors.default,
+          c: tapColors.defaultDark,
           ftWt: 'bold',
         }
       }

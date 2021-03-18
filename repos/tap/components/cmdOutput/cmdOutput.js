@@ -22,7 +22,7 @@ export const CmdOutput = props => {
       capitalize={false}
       styles={styles.surface}
     >
-      <Grid className={`results-grid`} style={styles?.grid} >
+      <Grid className={`results-grid`} style={styles?.main} >
         <Row className='results-results-row' style={styles?.row} >
           <RenderOutput
             testRunModel={testRunModel}

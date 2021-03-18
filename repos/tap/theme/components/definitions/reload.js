@@ -6,24 +6,23 @@ export const reload = theme => ({
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'row',
+      opacity: 0.5,
+      ...theme.transition([ 'opacity' ], 0.8),
     },
     icon: {
       fontSize: 16,
       marginRight: 5,
-      color: tapColors.inactive,
+      color: tapColors.successLight,
     },
     text: {
       ftWt: 'bold',
       fontSize: 11,
-      color: tapColors.defaultDark,
+      color: tapColors.successLight,
     }
   },
   hover: {
-    icon: {
-      color: tapColors.link,
+    main: {
+      opacity: 1,
     },
-    text: {
-      color: tapColors.linkDark,
-    }
   }
 })

@@ -8,7 +8,7 @@ import { toggleTestRunning } from '../runner/toggleTestRunning'
 import { setScreenById } from 'SVActions/screens/setScreenById'
 import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
 
-const { CATEGORIES, SCREENS } = Values
+const { CATEGORIES, SCREENS, SOCKR_MSG_TYPES } = Values
 
 /**
  * Dispatches that a command is running
@@ -38,6 +38,7 @@ export const cmdRunning = data => {
     params: get(data, 'data.params'),
     messages: {
       [data.timestamp]: {
+        type: SOCKR_MSG_TYPES.CMD_RUN,
         timestamp: data.timestamp,
         message: `Running ${activeFile.fileType} tests for ${activeFile.name}`,
       }

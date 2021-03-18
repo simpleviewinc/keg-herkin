@@ -17,7 +17,6 @@ import { addStepFromDefinition } from 'SVActions/features/local/addStepFromDefin
 const useDefinitionGroups = definitions => {
   return useMemo(() => {
     return reduceObj(definitions, (key, defs, grouped) => {
-      grouped[key] = grouped[key] || { group: `${key} Steps`, items: [] }
 
       defs.map(def => {
         const itemProps = {
@@ -51,6 +50,9 @@ const useDefinitionGroups = definitions => {
 
         return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
       })
+      
+      // TODO: add order for steps inside each section
+      // alphabetized
 
       return grouped
     }, {
