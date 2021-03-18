@@ -15,7 +15,7 @@ const bottomStyle = { maxHeight: 0, opacity: 0 }
 const AlwaysScrollToBottom = () => {
   const bottomRef = useRef()
   // TODO: currently scrolls the whole page, only want to scroll the parent element
-  // useEffect(() => bottomRef.current.scrollIntoView())
+  // useEffect(() => bottomRef.current.scrollIntoView({behavior: 'smooth'}))
   return (<View ref={bottomRef} style={bottomStyle} />)
 };
 
