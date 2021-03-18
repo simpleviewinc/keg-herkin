@@ -1,12 +1,20 @@
 const { apiErr, apiResponse } = require('./handler')
-const { loadDefinitions } = require('../libs/definitions')
+const { loadDefinitions, DefinitionsParser } = require('../libs/definitions')
+const { definitionsByType, fileModelArrayToObj } = require('../../shared/utils')
 
 const getDefinitions = (app, config) => async (req, res) => {
   try {
 
-    const steps = await loadDefinitions(config)
+    const definitions = await loadDefinitions(config)
+    const definitionTypes = definitionsByType(definitions)
 
-    return apiResponse(req, res, steps || [], 200)
+    // Reset the cached definitions
+    DefinitionsParser.resetDefinitions()
+
+    return apiResponse(req, res, {
+      definitionTypes,
+      definitions: fileModelArrayToObj(definitions), 
+    }, 200)
   }
   catch(err){
     return apiErr(req, res, err, 400)

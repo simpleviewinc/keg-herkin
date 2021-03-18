@@ -38,8 +38,28 @@ const useDefinitionGroups = definitions => {
         grouped.lookup[def.uuid] = def
       })
 
+      grouped.all.items.sort((a, b) => {
+        const textA = a.title.toLowerCase()
+        const textB = b.title.toLowerCase()
+        const aWhen = textA.startsWith('when')
+        const bThen = textB.startsWith('then')
+        const aThen = textA.startsWith('then')
+        const bWhen = textB.startsWith('when')
+
+        if(aWhen && bThen) return -1
+        if(aThen && bWhen) return 1
+
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
+      })
+
       return grouped
-    }, { lookup: {}, all: { group: 'All Steps', toggled: true, items: [] } })
+    }, {
+      lookup: {},
+      all: { group: 'All Steps', toggled: true, items: [] },
+      given: { group: 'Given Steps', toggled: false, items: [] },
+      when: { group: 'When Steps', toggled: false, items: [] },
+      then: { group: 'Then Steps', toggled: false, items: [] },
+    })
   }, [ definitions ])
 }
 

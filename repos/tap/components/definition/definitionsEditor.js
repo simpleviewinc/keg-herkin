@@ -2,6 +2,7 @@ import React from 'react'
 import { Values } from 'SVConstants'
 import { Sync } from 'SVAssets/icons'
 import { noOpObj } from '@keg-hub/jsutils'
+import { useStyle, useThemeHover } from '@keg-hub/re-theme'
 import { Surface } from 'SVComponents/surface'
 import { useFeature } from 'SVHooks/useFeature'
 import { DefinitionList } from './definitionList'
@@ -11,32 +12,23 @@ import { useActiveTab } from 'SVHooks/useActiveTab'
 import { Text } from '@keg-hub/keg-components/text'
 import { Touchable } from '@keg-hub/keg-components/touchable'
 import { ActiveDefinitionsEditor } from './activeDefinitionsEditor'
+import { getRemoteDefinitions } from 'SVActions/definitions/api/getRemoteDefinitions'
 
 const { DEFINITION_TABS, CATEGORIES } = Values
 
 const ReloadDefs = props => {
-  // TODO: add re-sync actions for definitions
+  const reloadStyles = useStyle('definitions.reload')
+  const [ syncRef, syncStyles ] = useThemeHover(reloadStyles.default, reloadStyles.hover)
 
   return (
     <Touchable
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-      }}
+      ref={syncRef}
+      style={syncStyles.main}
+      onPress={getRemoteDefinitions}
     >
-      <Sync
-        style={{
-          fontSize: 14,
-          marginRight: 5,
-        }}
-      />
-      <Text
-        style={{
-          fontSize: 10,
-        }}
-      >
-        RE-SYNC
+      <Sync style={syncStyles.icon} />
+      <Text style={syncStyles.text} >
+        SYNC
       </Text>
     </Touchable>
   )
@@ -68,17 +60,16 @@ export const DefinitionsEditor = props => {
 
   const { definitionTypes } = useSelector(CATEGORIES.DEFINITION_TYPES)
   const [tab, setTab] = useActiveTab(activeTab || DEFINITION_TABS.LIST)
-  const { definitions: activeDefs } = useFeature({ path: activeFile?.location }) || {}
 
   return (
     <Surface
-      prefix={'Editor'}
       hasToggle={true}
       capitalize={false}
       title={'Definitions'}
       styles={styles}
       RightComponent={ReloadDefs}
       className={`definitions-surface-main`}
+      prefix={tab === DEFINITION_TABS.ACTIVE ? 'Editor' : 'List'}
     >
       <DefinitionTabs
         activeTab={tab}
@@ -86,10 +77,8 @@ export const DefinitionsEditor = props => {
       />
       { tab === DEFINITION_TABS.ACTIVE  && (
         <ActiveDefinitionsEditor
-          feature={feature}
           featureEditorRef={featureEditorRef}
           styles={styles.active}
-          definitions={active || activeDefs}
         />
       )}
       { tab === DEFINITION_TABS.LIST  && (

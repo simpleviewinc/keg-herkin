@@ -21,9 +21,10 @@ export const Values = {
     TOASTS: 'toasts',
   },
   SUB_CATEGORIES: {
+    NODES: 'nodes',
     ACTIVE_FILE: 'activeFile',
     MODIFIED_CONTENT: 'modified',
-    NODES: 'nodes'
+    ACTIVE_DEFINITION: 'activeDefinition',
   },
   MODAL_TYPES: {
     TEST_SELECTOR: 'testSelectorModal',
