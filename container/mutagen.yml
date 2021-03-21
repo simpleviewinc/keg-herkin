@@ -75,7 +75,7 @@ actions:
       location: /keg/tap/node_modules/@ltipton/parkin
       privileged: true
       cmds:
-        - yarn build
+        - yarn build:rollup
     start:
       location: /keg/tap/node_modules/@ltipton/parkin
       privileged: true

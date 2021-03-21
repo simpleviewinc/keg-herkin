@@ -1,4 +1,5 @@
 const { apiErr, apiResponse } = require('./handler')
+const { parkin } = require('HerkinParkin/instance')
 const { loadDefinitions, DefinitionsParser } = require('../libs/definitions')
 const { definitionsByType, fileModelArrayToObj } = require('../../shared/utils')
 
@@ -7,9 +8,6 @@ const getDefinitions = (app, config) => async (req, res) => {
 
     const definitions = await loadDefinitions(config)
     const definitionTypes = definitionsByType(definitions)
-
-    // Reset the cached definitions
-    DefinitionsParser.resetDefinitions()
 
     return apiResponse(req, res, {
       definitionTypes,
