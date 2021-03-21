@@ -22,6 +22,7 @@ const useDefinitionGroups = definitions => {
         const itemProps = {
           title: `${def.type} ${def.name}`,
           uuid: def.uuid,
+          meta: def.meta,
           actions: [{
             name: 'Copy to Clipboard',
             key: `action-copy`,
