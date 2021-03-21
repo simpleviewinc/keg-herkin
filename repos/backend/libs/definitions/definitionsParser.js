@@ -6,6 +6,10 @@ const { buildFileModel } = require('../../utils/buildFileModel')
 
 class DefinitionsParser {
 
+  clear = () => {
+    parkin.steps.clear()
+  }
+
   getDefinitions = async filePath => {
     const { fileModel } = await this.parseDefinition(filePath)
 

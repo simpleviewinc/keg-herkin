@@ -33,6 +33,9 @@ const parseDefinitions = (definitionFiles, config) => {
 }
 
 const loadDefinitions = async config => {
+  // Clear out any steps that were already loaded
+  DefinitionsParser.clear()
+
   const { stepsDir, testsRoot } = config.paths
   const pathToSteps = path.join(testsRoot, stepsDir)
   const definitionFiles = stepsDir && await loadDefinitionsFiles(pathToSteps)
