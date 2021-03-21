@@ -1,5 +1,4 @@
 import { setActiveFile } from '../../files/local/setActiveFile'
-import { setFeatureItem } from './setFeatureItem'
 
 /**
  * Sets a feature active relative to a screen
@@ -10,6 +9,5 @@ import { setFeatureItem } from './setFeatureItem'
  * @returns {void}
  */
 export const setFeatureActive = (feature, screenId) => {
-  setFeatureItem(feature)
   return setActiveFile(feature, screenId)
 }

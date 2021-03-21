@@ -1,5 +1,4 @@
 import { Surface } from 'SVComponents/surface'
-import { useFeature } from 'SVHooks/useFeature'
 import { noOp, noOpObj } from '@keg-hub/jsutils'
 import { AceEditor } from 'SVComponents/aceEditor'
 import React, { useCallback, useState } from 'react'
@@ -17,14 +16,13 @@ export const FeatureEditor = props => {
     activeFile=noOpObj,
     onChange=noOp
   } = props
-  
-  const { feature } = useFeature({ path: activeFile?.location }) || {}
-  const [activeFeat, setActiveFeat] = useState(feature)
+
+  const [activeFeat, setActiveFeat] = useState(activeFile)
 
   const onFeatureEdit = useCallback((content) => {
-    content !== feature.content &&
+    content !== activeFeat.content &&
       !content.trim() &&
-      setFeature({ ...feature, content })
+      setFeature({ ...activeFeat, content })
       
   }, [activeFeat, setActiveFeat])
 

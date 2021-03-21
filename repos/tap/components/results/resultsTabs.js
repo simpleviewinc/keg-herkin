@@ -99,9 +99,6 @@ export const ResultsTabs = props => {
 
   const barTabs = useActionsTab(tabs, TestActions, props)
 
-  console.log(`---------- barTabs ----------`)
-  console.log(barTabs)
-
   return (
     <Tabbar
       type='results'

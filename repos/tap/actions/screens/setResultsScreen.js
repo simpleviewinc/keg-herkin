@@ -1,6 +1,7 @@
 import { getStore } from 'SVStore'
 import { Values } from 'SVConstants'
 import { setScreen } from './setScreen'
+import { isEmptyColl } from '@keg-hub/jsutils'
 
 const { CATEGORIES, SUB_CATEGORIES, SCREENS } = Values
 
@@ -12,7 +13,8 @@ const { CATEGORIES, SUB_CATEGORIES, SCREENS } = Values
  * @returns {Object} - Found fileModel to set as the active file for the results screen
  */
 const getResultsFile = (items, resultsScreen) => {
-  if(resultsScreen.activeFile) return resultsScreen.activeFile
+  if(!isEmptyColl(resultsScreen.activeFile))
+    return resultsScreen.activeFile
 
   // If no resultsFile then get the activeFile for the activeScreen of the results screen
   const activeScreen = Object.values(items[CATEGORIES.SCREENS]).find(screen => screen.active)
@@ -29,13 +31,15 @@ const getResultsFile = (items, resultsScreen) => {
  * @returns {void}
  */
 export const setResultsScreen = activeFile => {
+
   const { items } = getStore().getState()
   const resultsScreen = items[CATEGORIES.SCREENS][SCREENS.RESULTS]
-  const fileModel = activeFile || getResultsFile(items, resultsScreen)
+  const fileModel = !isEmptyColl(activeFile)
+    ? activeFile
+    : getResultsFile(items, resultsScreen)
 
   const screenModel = { ...resultsScreen }
   fileModel && (screenModel[SUB_CATEGORIES.ACTIVE_FILE] = fileModel)
 
   setScreen(screenModel.id, screenModel)
-
 }
