@@ -43,17 +43,7 @@ const useTreeStyles = (level, nodeType, isNodeActive) => {
       styles: deepMerge(
         (isNodeActive ? activeStyle : styles),
         level && { main: { paddingLeft: padSize * level } },
-        { empty: {
-          main: {
-            position: 'absolute',
-            right: 10,
-            top: 13,
-          },
-          text: {
-            fontSize: 12,
-            color: theme?.colors?.palette?.gray01,
-          }
-        }}
+        { empty: themeStyles.empty },
       )
     }
 

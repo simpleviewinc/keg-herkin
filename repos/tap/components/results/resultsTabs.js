@@ -26,6 +26,7 @@ const TestActions = props => {
         <RunTestsButton
           onRun={onRun}
           runAllTests={false}
+          text={`Re-Run Tests`}
         />
       </View>
     </View>
