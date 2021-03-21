@@ -8,14 +8,11 @@ const {
   deleteTestFile,
   getTestFile,
   saveTestFile,
-  getFolderContent
 } = require('../libs/fileSys')
 
 const {
-  getPathMeta,
-  getPathNodes,
+  buildFileTree,
   getRootPaths,
-  parentNodeExists
 } = require('../libs/fileSys/fileTree')
 
 
@@ -114,16 +111,12 @@ const deleteFile = (app, config) => async (req, res) => {
  */
 const getTree = (app, config) => async (req, res) => {
   try {
-    const { testsRoot } = config.paths
-    const meta = await getFolderContent(testsRoot, {
-      full: true,
-      recursive: true,
-    })
-    const nodes = await getPathNodes(meta)
+
+    const {nodes, rootPaths} = await buildFileTree(config, req.params)
 
     return apiResponse(req, res, { 
-      rootPaths: getRootPaths(meta, testsRoot), 
-      nodes 
+      nodes,
+      rootPaths
     } || {}, 200)
   }
   catch(err){

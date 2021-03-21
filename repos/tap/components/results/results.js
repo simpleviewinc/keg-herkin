@@ -6,6 +6,7 @@ import { ExternalLink } from 'SVAssets/icons'
 import { Surface } from 'SVComponents/surface'
 import { View, TouchableIcon } from '@keg-hub/keg-components'
 import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
+import { ResultsTabs } from './resultsTabs'
 
 const useReportsUrl = (fileType, name) => useMemo(() => {
   const loc = name ? `${fileType}/${name}` : `${fileType}/${fileType}`
@@ -66,24 +67,32 @@ export const Results = props => {
     builtStyles,
   } = props
 
+  const tabActions = {}
+
   return (
-    <Surface
-      prefix={'Test Results'}
-      TitleComponent={({styles, ...props}) => 
-        <IframeHeader
-          {...props}
-          onIconPress={onIconPress}
-          mainTextStyles={styles}
-          mainStyles={builtStyles?.iFrame?.header} 
-        />
-      }
-      capitalize={false}
-      title={'Report'}
-      styles={builtStyles?.iFrame?.surface}
-      className={`runner-surface-iframe`}
-    >
-      <Iframe src={reportUrl}/>
-    </Surface>
+    <>
+      <Surface
+        prefix={'Test Results'}
+        TitleComponent={({styles, ...props}) => 
+          <IframeHeader
+            {...props}
+            onIconPress={onIconPress}
+            mainTextStyles={styles}
+            mainStyles={builtStyles?.iFrame?.header} 
+          />
+        }
+        capitalize={false}
+        title={'Report'}
+        styles={builtStyles?.iFrame?.surface}
+        className={`runner-surface-iframe`}
+      >
+        <Iframe src={reportUrl}/>
+      </Surface>
+      <ResultsTabs
+        styles={builtStyles.actions}
+        { ...tabActions }
+      />
+    </>
   )
 
 }

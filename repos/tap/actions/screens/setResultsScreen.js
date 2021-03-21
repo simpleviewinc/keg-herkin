@@ -12,7 +12,7 @@ const { CATEGORIES, SUB_CATEGORIES, SCREENS } = Values
  * @returns {Object} - Found fileModel to set as the active file for the results screen
  */
 const getResultsFile = (items, resultsScreen) => {
-  if(resultsScreen.activeFile) return false
+  if(resultsScreen.activeFile) return resultsScreen.activeFile
 
   // If no resultsFile then get the activeFile for the activeScreen of the results screen
   const activeScreen = Object.values(items[CATEGORIES.SCREENS]).find(screen => screen.active)
