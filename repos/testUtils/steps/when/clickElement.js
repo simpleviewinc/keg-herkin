@@ -12,8 +12,6 @@ const clickElement = async selector => {
 }
 
 When('I click the element {string}', clickElement)
-When('I click on {string}', clickElement)
-When('I select {string}', clickElement)
 
 module.exports = {
   clickElement

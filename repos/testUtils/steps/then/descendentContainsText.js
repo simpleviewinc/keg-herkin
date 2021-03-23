@@ -28,8 +28,8 @@ const childContainsText = async (selector, data, world) => {
   expect(content).toEqual(expect.stringContaining(data))
 }
 
-Then('the descendent {string} contains the text {string}', descendentContainsText)
-Then('the child {string} contains the text {string}', childContainsText)
+Then('the descendent element {string} contains the text {string}', descendentContainsText)
+Then('the child element {string} contains the text {string}', childContainsText)
 
 module.exports = {
   childContainsText,

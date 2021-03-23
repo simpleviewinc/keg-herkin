@@ -16,7 +16,7 @@ const validateWorld = world => {
 const checkForAncestor = world => {
   validateWorld(world)
 
-  if (!isObj(world.meta) || !isObj(world.meta.ancestor))
+  if (!isObj(world.meta) || !isObj(world.meta.ancestorSelector))
     throw new Error('Cannot find ancestor. Use an ancestor-registration step before running this step')
 }
 

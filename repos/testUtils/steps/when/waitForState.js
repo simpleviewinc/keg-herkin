@@ -19,18 +19,13 @@ const waitForState = async (selector, state) => {
     throw new Error('Invalid Selector State: ' + state)
 
   const page = await getPage()
-
-  return page.waitForSelector(selector, state)
+  return page.waitForSelector(selector, { 
+    state: `${state}`,
+    timeout: 100
+  })
 }
 
-states.map(state => 
-  When(
-    `I wait for {string} to be ${state}`, 
-    (selector, world) => waitForState(selector, state, world)
-  )
-)
-
-When('I wait for {string}', selector => waitForState(selector, 'visible'))
+When('I wait for element {string} to be {string}', (selector, state) => waitForState(selector, state))
 
 
 module.exports = {

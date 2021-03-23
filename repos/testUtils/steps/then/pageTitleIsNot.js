@@ -13,6 +13,6 @@ const pageTitleIsNot = async (title) => {
   return page
 }
 
-Then('the title is not {string}', pageTitleIsNot)
+Then('the page title is not {string}', pageTitleIsNot)
 
 module.exports = { pageTitleIsNot }
