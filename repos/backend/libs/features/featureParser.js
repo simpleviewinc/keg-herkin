@@ -11,7 +11,7 @@ class FeatureParser {
       fs.readFile(location, (err, data) => {
         if(err) return rej(err)
 
-        const parsed = parkin.parse.feature(data.toString())
+        const parsed = (parkin.parse.feature(data.toString())[0] || {})
 
         return res({ ...featureMeta, ...parsed })
       })
