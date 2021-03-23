@@ -17,7 +17,6 @@ sync:
         - "/web-build"
         - "/reports"
         - "/build"
-        - "/repos/messenger/build"
         - "/repos/example/build"
         - "/docs"
         - "/tests"
@@ -35,27 +34,6 @@ actions:
         - yarn setup
     start:
       location: /keg/tap
-      privileged: true
-      cmds:
-        - yarn dev
-  mess:
-    att:
-      location: /keg/tap/repos/messenger
-      privileged: true
-      cmds:
-        - bash
-    build:
-      location: /keg/tap/repos/messenger
-      privileged: true
-      cmds:
-        - yarn build
-    install:
-      location: /keg/tap/repos/messenger
-      privileged: true
-      cmds:
-        - yarn install
-    start:
-      location: /keg/tap/repos/messenger
       privileged: true
       cmds:
         - yarn dev
