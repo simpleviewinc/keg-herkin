@@ -5,7 +5,7 @@ import { setTestRun } from '../runner/setTestRun'
 import { Values } from 'SVConstants'
 import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
 
-const { CATEGORIES } = Values
+const { CATEGORIES, SOCKR_MSG_TYPES } = Values
 
 /**
  * Updates a testRunModel to be failed
@@ -19,12 +19,19 @@ export const cmdFail = (data, testRunModel) => {
   const activeFile = getResultsActiveFile() || noOpObj
   testRunModel = testRunModel || get(items, [CATEGORIES.TEST_RUNS, activeFile.location])
 
-  // TODO: save the failed data object based on content
-  console.log(`---------- cmd Fail ----------`)
-  console.log(data)
-
   testRunModel
-    ? setTestRun({ ...testRunModel, failed: true })
+    ? setTestRun({
+        ...testRunModel,
+        failed: true,
+        messages: {
+          ...testRunModel.messages,
+          [data.timestamp]: {
+            message: data.message || `Command failed!`,
+            timestamp: data.timestamp,
+            type: SOCKR_MSG_TYPES.CMD_FAIL,
+          },
+        },
+      })
     : addToast({
         type: `error`,
         timeout: 6000,

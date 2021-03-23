@@ -1,4 +1,9 @@
-import { setActiveFile } from 'SVActions/files/local'
+import { get } from '@keg-hub/jsutils'
+import { dispatch, getStore } from 'SVStore'
+import { Values, ActionTypes } from 'SVConstants'
+import { getActiveScreen } from 'SVUtils/helpers/getActiveScreen'
+
+const { CATEGORIES, SUB_CATEGORIES } = Values
 
 /**
  * Sets a step definitions active relative to a screen
@@ -9,6 +14,20 @@ import { setActiveFile } from 'SVActions/files/local'
  * @returns {void}
  */
 export const setDefinitionActive = (fileModel, screenId) => {
-  // TODO
-  setActiveFile(fileModel)
+  const { items } = getStore().getState()
+  const screenModel = getActiveScreen(items, screenId)
+
+  dispatch({
+    type: ActionTypes.SET_ITEM,
+    payload: {
+      category: CATEGORIES.SCREENS,
+      key: screenModel.id,
+      item: {
+        ...screenModel,
+        [SUB_CATEGORIES.ACTIVE_DEFINITION]: { ...fileModel },
+      },
+    },
+  })
+  
+  
 }

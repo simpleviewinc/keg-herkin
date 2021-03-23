@@ -1,4 +1,3 @@
-import { devLog } from 'SVUtils'
 import { dispatch } from 'SVStore'
 import { noOpObj } from '@keg-hub/jsutils'
 import { Values, ActionTypes } from 'SVConstants'
@@ -13,21 +12,20 @@ const { CATEGORIES } = Values
  *
  * @returns {void}
  */
-export const upsertDefinitions = (definitions, definitionTypes) => {
-  definitions &&
-    dispatch({
-      type: ActionTypes.UPSERT_ITEMS,
-      payload: {
-        category: CATEGORIES.DEFINITIONS,
-        items: definitions,
-      },
-    })
+export const setDefinitions = (definitions=noOpObj, definitionTypes) => {
+  dispatch({
+    type: ActionTypes.SET_ITEMS,
+    payload: {
+      category: CATEGORIES.DEFINITIONS,
+      items: definitions,
+    },
+  })
 
   // Sort the definitions by type ( given | then | etc... )
   // This makes it easier to match to features when editing
-  definitionTypes &&
+  definitionTypes && 
     dispatch({
-      type: ActionTypes.UPSERT_ITEMS,
+      type: ActionTypes.SET_ITEMS,
       payload: {
         category: CATEGORIES.DEFINITION_TYPES,
         items: definitionTypes || definitionsByType(definitions),

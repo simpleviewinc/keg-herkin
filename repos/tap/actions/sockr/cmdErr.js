@@ -5,7 +5,7 @@ import { get, noOpObj } from '@keg-hub/jsutils'
 import { setTestRun } from '../runner/setTestRun'
 import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
 
-const { CATEGORIES } = Values
+const { CATEGORIES, SOCKR_MSG_TYPES } = Values
 
 /**
  * Updates the messages object of the active testRunModel with a stderr message
@@ -27,6 +27,7 @@ export const cmdErr = (data, testRunModel) => {
           [data.timestamp]: {
             message: data.message,
             timestamp: data.timestamp,
+            type: SOCKR_MSG_TYPES.STD_ERR,
           },
         }
       })
