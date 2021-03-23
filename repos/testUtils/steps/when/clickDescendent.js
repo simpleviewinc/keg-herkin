@@ -16,6 +16,6 @@ const clickDescendent = async (selector, world) => {
   return descendent.click()
 }
 
-When('I click the descendent {string}', clickDescendent)
+When('I click the descendent element {string}', clickDescendent)
 
 module.exports = { clickDescendent }

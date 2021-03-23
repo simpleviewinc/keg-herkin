@@ -12,6 +12,6 @@ const pageTitleIs = async (title) => {
   return page
 }
 
-Then('the title is {string}', pageTitleIs)
+Then('the page title is {string}', pageTitleIs)
 
 module.exports = { pageTitleIs }

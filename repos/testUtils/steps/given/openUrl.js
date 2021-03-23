@@ -35,7 +35,7 @@ const openUrl = async (url, world) => {
   return page
 }
 
-Given('I am on the site/url/uri {string}', openUrl, {
+Given('I navigate to {string}', openUrl, {
   description: 'Navigates to the given website within the browser.',
   expressions: [
     {
@@ -45,8 +45,6 @@ Given('I am on the site/url/uri {string}', openUrl, {
     }
   ]
 })
-Given('I open the site/url/uri {string}', openUrl)
-Given('the page/site url/uri is {string}', openUrl)
-Given('the user navigates to {string}', openUrl)
+
 
 module.exports = { openUrl }

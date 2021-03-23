@@ -16,7 +16,7 @@ const inputContainsText = async (selector, data) => {
   return page
 }
 
-Then('the input {string} should have the value {string}', inputContainsText)
+Then('the input {string} contains the text {string}', inputContainsText)
 
 module.exports = { inputContainsText }
 
