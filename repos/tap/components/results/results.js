@@ -4,18 +4,31 @@ import { getBaseApiUrl } from 'SVUtils/api'
 import { Iframe } from 'SVComponents/iframe'
 import { ExternalLink } from 'SVAssets/icons'
 import { Surface } from 'SVComponents/surface'
-import { View, TouchableIcon } from '@keg-hub/keg-components'
+import { useActiveTestRuns } from 'SVHooks/useActiveTestRuns'
+import { Loading, View, Text, TouchableIcon } from '@keg-hub/keg-components'
 import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
 import { ResultsTabs } from './resultsTabs'
 
-const useReportsUrl = (fileType, name) => useMemo(() => {
-  const loc = name ? `${fileType}/${name}` : `${fileType}/${fileType}`
-  return `${getBaseApiUrl()}/reports/${loc}`
-}, [getBaseApiUrl, fileType, name])
-
-const useWindowOpen = (fileType, reportUrl) => useMemo(() => {
-  return fileType ? () => window?.open(reportUrl, '_blank') : noOp
-}, [fileType, reportUrl])
+const TestsRunning = ({ styles }) => {
+  return (
+    <View
+      style={styles?.main}
+      className={`tests-running-main`}
+    >
+      <Loading
+        style={styles?.loading}
+        size={styles?.loading?.size || 'large'}
+        color={styles?.loading?.color}
+      />
+      <Text
+        style={styles?.text}
+        className={`tests-running-text`}
+      >
+        Tests Running
+      </Text>
+    </View>
+  )
+}
 
 /**
  * IframeHeader
@@ -64,34 +77,35 @@ export const Results = props => {
     reportUrl,
     activeFile,
     onIconPress,
-    builtStyles,
+    styles,
   } = props
 
-  const tabActions = {}
+  const testRunModel = useActiveTestRuns()
 
   return (
     <>
       <Surface
         prefix={'Test Results'}
-        TitleComponent={({styles, ...props}) => 
+        TitleComponent={({styles:textStyles, ...props}) => 
           <IframeHeader
             {...props}
             onIconPress={onIconPress}
-            mainTextStyles={styles}
-            mainStyles={builtStyles?.iFrame?.header} 
+            mainTextStyles={textStyles}
+            mainStyles={styles?.iFrame?.header} 
           />
         }
         capitalize={false}
         title={'Report'}
-        styles={builtStyles?.iFrame?.surface}
+        styles={styles?.iFrame?.surface}
         className={`runner-surface-iframe`}
       >
-        <Iframe src={reportUrl}/>
+        {
+          testRunModel?.running
+            ? (<TestsRunning styles={styles?.running} />)
+            : (<Iframe src={reportUrl}/>)
+        }
       </Surface>
-      <ResultsTabs
-        styles={builtStyles.actions}
-        { ...tabActions }
-      />
+      <ResultsTabs styles={styles?.actions} />
     </>
   )
 

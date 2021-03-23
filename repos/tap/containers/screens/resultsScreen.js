@@ -54,25 +54,19 @@ export const ResultsScreen = props => {
   const reportUrl = useReportsUrl(fileType, name)
   const onIconPress = useWindowOpen(fileType, reportUrl)
 
-  const [ testRunning, setTestRunning ] = useState(false)
-
   return !activeFile?.fileType
     ? (<EmptyScreen message={'No file selected!'} />)
     : (<View
         className={`results-screen`}
         style={builtStyles.main}
       >
-        <CmdOutput
-          activeFile={activeFile}
-          setTestRunning={setTestRunning}
-        />
+        <CmdOutput activeFile={activeFile} />
         <Results
           {...props}
-          testRunning={testRunning}
           reportUrl={reportUrl}
           activeFile={activeFile}
           onIconPress={onIconPress}
-          builtStyles={builtStyles}
+          styles={builtStyles}
         />
       </View>
   )
