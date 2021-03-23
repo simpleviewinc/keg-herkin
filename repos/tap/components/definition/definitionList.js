@@ -17,12 +17,12 @@ import { addStepFromDefinition } from 'SVActions/features/local/addStepFromDefin
 const useDefinitionGroups = definitions => {
   return useMemo(() => {
     return reduceObj(definitions, (key, defs, grouped) => {
-      grouped[key] = grouped[key] || { group: `${key} Steps`, items: [] }
 
       defs.map(def => {
         const itemProps = {
           title: `${def.type} ${def.name}`,
           uuid: def.uuid,
+          meta: def.meta,
           actions: [{
             name: 'Copy to Clipboard',
             key: `action-copy`,
@@ -38,8 +38,31 @@ const useDefinitionGroups = definitions => {
         grouped.lookup[def.uuid] = def
       })
 
+      grouped.all.items.sort((a, b) => {
+        const textA = a.title.toLowerCase()
+        const textB = b.title.toLowerCase()
+        const aWhen = textA.startsWith('when')
+        const bThen = textB.startsWith('then')
+        const aThen = textA.startsWith('then')
+        const bWhen = textB.startsWith('when')
+
+        if(aWhen && bThen) return -1
+        if(aThen && bWhen) return 1
+
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
+      })
+      
+      // TODO: add order for steps inside each section
+      // alphabetized
+
       return grouped
-    }, { lookup: {}, all: { group: 'All Steps', toggled: true, items: [] } })
+    }, {
+      lookup: {},
+      all: { group: 'All Steps', toggled: true, items: [] },
+      given: { group: 'Given Steps', toggled: false, items: [] },
+      when: { group: 'When Steps', toggled: false, items: [] },
+      then: { group: 'Then Steps', toggled: false, items: [] },
+    })
   }, [ definitions ])
 }
 

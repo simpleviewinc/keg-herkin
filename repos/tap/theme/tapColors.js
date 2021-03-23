@@ -5,6 +5,7 @@ const inputHeight = 35
 // Example : http://snpy.in/EuGKsu
 export const tapColors = {
   default: `#5e6e82`,
+  defaultDark60: shadeHex('#5e6e82', -60),
   defaultDark: shadeHex('#5e6e82', -20),
   defaultLight: shadeHex('#5e6e82', 20),
   primary: '#3580e6',

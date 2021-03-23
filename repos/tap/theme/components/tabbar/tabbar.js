@@ -3,6 +3,7 @@ import { deepMerge } from '@keg-hub/jsutils'
 import { codeTabs } from './codeTabs'
 import { screenTabs } from './screenTabs'
 import { definitionTabs } from './definitionTabs'
+import { resultsTabs } from './resultsTabs'
 
 const defTabbar = theme => ({
   main: {},
@@ -87,6 +88,7 @@ export const tabbar = theme => {
     default: builtTabbar,
     code: codeTabs(theme, builtTabbar),
     screens: screenTabs(theme, builtTabbar),
+    results: resultsTabs(theme, builtTabbar),
     definitions: definitionTabs(theme, builtTabbar),
     
   }

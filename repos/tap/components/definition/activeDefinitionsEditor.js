@@ -3,18 +3,21 @@ import { useStyle } from '@keg-hub/re-theme'
 import { checkCall, noOpObj } from '@keg-hub/jsutils'
 import { View, H5 } from '@keg-hub/keg-components'
 import { AceEditor } from 'SVComponents/aceEditor'
+import { useActiveDefinition } from 'SVHooks/useActiveDefinition'
+import { Values } from 'SVConstants'
+const { SCREENS } = Values
 
-const NoActiveDefinitions = ({ style=noOpObj }) => {
+const NoActiveDefinitions = ({ styles=noOpObj }) => {
   return (
     <View
       className={'empty-definitions-main'}
-      style={style.main}
+      style={styles.main}
     >
       <H5
         className={'empty-definitions-text'}
-        style={style.text}
+        style={styles.text}
       >
-        No Active Definitions
+        No Active Definition
       </H5>
     </View>
   )
@@ -28,29 +31,28 @@ export const ActiveDefinitionsEditor = props => {
   } = props
 
   const activeStyles = useStyle(`definitions.active`, styles)
+  const definition = useActiveDefinition(SCREENS.EDITOR)
 
-  return definitions
-    ? definitions.map(def => {
-          return (
-            <AceEditor
-              key={def.keyId || def.uuid}
-              fileId={def.uuid}
-              {...props}
-              onChange={text => checkCall(props.onChange, def.uuid, text)}
-              editorId={`definition-editor-${def.uuid}`}
-              value={def.content || ''}
-              style={styles.editor}
-              mode='javascript'
-              editorProps={{
-                wrapBehavioursEnabled: true,
-                animatedScroll: false,
-                dragEnabled: false,
-                tabSize: 2,
-                wrap: true,
-                ...props.editorProps,
-              }}
-            />
-          )
-        })
-      : (<NoActiveDefinitions style={styles.empty} />)
+  return definition
+    ? (
+        <AceEditor
+          key={definition.keyId || definition.uuid}
+          fileId={definition.uuid}
+          {...props}
+          onChange={text => checkCall(props.onChange, definition.uuid, text)}
+          editorId={`definition-editor-${definition.uuid}`}
+          value={definition.content || ''}
+          style={styles.editor}
+          mode='javascript'
+          editorProps={{
+            wrapBehavioursEnabled: true,
+            animatedScroll: false,
+            dragEnabled: false,
+            tabSize: 2,
+            wrap: true,
+            ...props.editorProps,
+          }}
+        />
+      )
+      : (<NoActiveDefinitions styles={activeStyles.none} />)
 }
