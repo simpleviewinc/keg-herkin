@@ -4,21 +4,21 @@ import { useStoreItems } from 'SVHooks/store/useStoreItems'
 const { CATEGORIES, SUB_CATEGORIES } = Values
 
 /**
- * Hook to get the activeFile from the currently active screen
+ * Hook to get the active definition file from the currently active screen
  * @function
  * @param {string} screenId - Id of the screen the file is active on
  *
- * @returns {Object} - Found active file
+ * @returns {Object} - Found active definition file
  */
-export const useActiveFile = screenId => {
+export const useActiveDefinition = screenId => {
   const screenModels = useStoreItems(CATEGORIES.SCREENS)
 
   return useMemo(() => {
     return screenId
-      ? screenModels[screenId][SUB_CATEGORIES.ACTIVE_FILE]
+      ? screenModels[screenId][SUB_CATEGORIES.ACTIVE_DEFINITION]
       : Object.values(screenModels)
           .reduce((found, model) => (
-            found || model.active && model[SUB_CATEGORIES.ACTIVE_FILE]
+            found || model.active && model[SUB_CATEGORIES.ACTIVE_DEFINITION]
           ), false)
   }, [screenModels, screenId])
 } 

@@ -45,9 +45,9 @@ export const surface = theme => ({
       ftWt: 'bold',
       ftSz: titleSize,
     },
-    titlePrefix: {
+    prefix: {
       ftSz: titleSize,
-      c: tapColors?.default
+      c: tapColors?.defaultDark,
     },
     title: {
       ftSz: titleSize,
