@@ -13,6 +13,7 @@ const Model = {
   id: '',
   name: '',
   type: '',
+  testType: '',
   children: [],
   location: '',
 }

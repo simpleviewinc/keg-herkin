@@ -1,7 +1,9 @@
 const fs = require('fs')
 const path = require('path')
+const { singular } = require('@keg-hub/jsutils')
 const { treeNodeModel } = require('HerkinModels')
-const { isDirectory } = require('./fileSys')
+const { isDirectory, getFolderContent } = require('./fileSys')
+const { resolveTestFileType } = require('../../utils/resolveTestFileType')
 
 /**
  * Recursively checks to find the parent node for a given item
@@ -28,7 +30,7 @@ const parentNodeExists = (nodes, parentPath, newItem) => {
  * 
  * @returns {Object} - Meta data containing {name, parent, type ( folder || file )} properties
  */
-const getPathMeta = async filePath => {
+const getPathMeta = async (filePath) => {
   const isDir = await isDirectory(filePath)
 
   return {
@@ -47,16 +49,16 @@ const getPathMeta = async filePath => {
  * @returns {Array<Object>} - each object has the form: 
  *                            {id, location, children: [], modified}
  */
-const getPathNodes = async paths => {
+const getPathNodes = async (paths, config) => {
    /**
    * 1. create new object for each 'path' item
    * 2. if the parent path of current 'path' item exists, add it as the child
    */
-  return await paths.reduce(async (toResolve, path) => {
+  return await paths.reduce(async (toResolve, filePath) => {
     const nodes = await toResolve
 
     // Get the meta data for this path
-    const { parent, ...pathMeta } = await getPathMeta(path)
+    const { parent, ...pathMeta } = await getPathMeta(filePath)
     
     // Ignore hidden files that start with a .
     if (pathMeta.type === 'file' && pathMeta.name.startsWith('.')) return nodes
@@ -65,6 +67,7 @@ const getPathNodes = async paths => {
       children: [],
       modified: false,
       ...pathMeta,
+      testType: resolveTestFileType(filePath, config)
     })
 
     // either push the node or add it to an existing node.children
@@ -89,8 +92,19 @@ const getRootPaths = (fullPaths, testsRootPath) => {
   )
 }
 
+const buildFileTree = async (config, params) => {
+  const { testsRoot } = config.paths
+
+  // Get all the paths from the testRoot directory
+  const paths = await getFolderContent(testsRoot, { full: true, recursive: true })
+  const nodes = await getPathNodes(paths, config)
+  const rootPaths = await getRootPaths(paths, testsRoot)
+
+  return { paths, nodes, rootPaths }
+}
 
 module.exports = {
+  buildFileTree,
   getPathMeta,
   getPathNodes,
   getRootPaths,
