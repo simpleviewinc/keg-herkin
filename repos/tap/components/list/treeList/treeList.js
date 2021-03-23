@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { noOpObj, deepMerge } from '@keg-hub/jsutils'
 import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { loadTestFile } from 'SVActions/files/api/loadTestFile'
+import { setReportFile } from 'SVActions/files/local/setReportFile'
 import {
   View,
   Loading,
@@ -119,7 +120,9 @@ export const TreeList = props => {
         message: `Unknown node type selected: ${node.type}`
       })
 
-    await loadTestFile(node.location)
+    node.testType === 'report'
+      ? await setReportFile(node.location)
+      : await loadTestFile(node.location)
 
     onSidebarToggled(false)
 
