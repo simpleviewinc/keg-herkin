@@ -46,13 +46,14 @@ export const Select = (props) => {
     title='',
     onValueChange,
     options=[],
-    styles
+    styles,
+    className
   } = props
 
   return (
     <ReStyleView style={styles?.main}>
       <Label>{title}</Label>
-      <KegSelect onValueChange={onValueChange}>
+      <KegSelect className={className} onValueChange={onValueChange}>
         {generateOptions(options)}
       </KegSelect>
     </ReStyleView>
