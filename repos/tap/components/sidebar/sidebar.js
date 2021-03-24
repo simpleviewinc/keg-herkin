@@ -1,7 +1,7 @@
 import { View } from 'SVComponents'
 import { checkCall } from '@keg-hub/jsutils'
 import { Animated } from 'react-native'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
 import { SidebarToggle } from './sidebarToggle'
 import { noOpObj, noOp } from 'SVUtils/helpers/noop'
 import { isValidComponent } from 'SVUtils/validate/isValidComponent'
@@ -43,18 +43,14 @@ export const Sidebar = props => {
     ...childProps
   } = props
 
-  const theme = useTheme()
-
-   const sidebarStyles = useMemo(() => {
-    return theme.get('sidebar', styles)
-  }, [ theme, styles ])
+   const sidebarStyles = useStyle('sidebar', styles)
 
   // Store the toggled state for reference later
   const [ isToggled, setIsToggled ] = useState(toggled)
   const [ originalToggled, setOriginalToggled ] = useState(toggled)
 
   // If the passed in toggled does not match the original toggled
-  // Then update the toggled boolean to rerender
+  // Then update the toggled boolean to be rendered
   // This allows changing the toggled prop outside the sidebar
   // And still allowing the sidebar to update
   useEffect(() => {

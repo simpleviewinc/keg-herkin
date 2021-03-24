@@ -9,6 +9,11 @@ import { SidebarContent } from 'SVComponents/sidebar'
 import { Screen } from './screens/screen'
 import { useActiveFile, useVisibleModal } from 'SVHooks'
 
+const sideBarConfig = {
+  speed: 1,
+  bounciness: 1,
+}
+
 export const RootContainer = withAppHeader('KeGherkin Editor', props => {
   const theme = useTheme()
   const containerStyles =  theme.containers.root
@@ -24,6 +29,8 @@ export const RootContainer = withAppHeader('KeGherkin Editor', props => {
       <Sidebar 
         initial={-250}
         to={0}
+        type={'spring'}
+        config={sideBarConfig}
         toggled={sidebarToggled}
         onToggled={setSidebarToggled}
       >
