@@ -103,6 +103,7 @@ const TestNameSelect = ({styles, fileModels, setTestLocation}) => {
         title={'Test File'}
         onValueChange={onValueChange}
         options={options}
+        className={'modal-test-settings-field-test-file'}
       />
     </View>
   )
@@ -149,11 +150,13 @@ export const TestSelectorModal = (props) => {
           title={'Tab'}
           onValueChange={setSelectedTab}
           options={tabOptions}
+          className={'modal-test-settings-field-tab'}
         />
         <Select
           title={'Test Type'}
           onValueChange={(props) => console.log(props)}
           options={typeOptions}
+          className={'modal-test-settings-field-test-type'}
         />
         <TestNameSelect
           styles={builtStyles?.form?.select}
