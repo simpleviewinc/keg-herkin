@@ -1,5 +1,5 @@
 import { queryToObj, objToQuery, noOpObj } from '@keg-hub/jsutils'
-
+import { inPopStateUpdate } from './listenToPopState'
 /**
  * Wrapper around window.location and window.history
  * Encapsulates the global APIs to ensure consistency
@@ -40,6 +40,8 @@ const buildQuery = (current, update, merge) => {
  * @return {void}
  */
 export const updateUrlQuery = (update=noOpObj, merge) => {
+  if(inPopStateUpdate()) return
+
   const { location, history } = getWindowProps()
   const current = queryToObj(location.search)
 

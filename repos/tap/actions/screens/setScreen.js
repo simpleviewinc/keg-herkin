@@ -2,7 +2,7 @@ import { addToast } from '../toasts/addToast'
 import { dispatch, getStore } from 'SVStore'
 import { Values, ActionTypes } from 'SVConstants'
 import { setScreenInactive } from './setScreenInactive'
-import { updateUrlQuery } from 'SVUtils/helpers/updateUrlQuery'
+import { updateUrlQuery } from 'SVUtils/url/updateUrlQuery'
 
 const { CATEGORIES, SCREENS } = Values
 

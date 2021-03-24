@@ -6,14 +6,14 @@ import { getActiveScreen } from 'SVUtils/helpers/getActiveScreen'
 const { CATEGORIES, SUB_CATEGORIES } = Values
 
 /**
- * Sets a step definitions active relative to a screen
+ * Sets a alternate file active relative to the current active file and screen
  * @type function
- * @param {Object} fileModel - Definition fileModel
+ * @param {Object} fileModel - alternate fileModel to set active
  * @param {Object} screenId - Id of the screen to set the fileModel as the activeFile
  *
  * @returns {void}
  */
-export const setDefinitionActive = (fileModel, screenId) => {
+export const setAltActiveFile = (fileModel, screenId) => {
   const { items } = getStore().getState()
   const screenModel = getActiveScreen(items, screenId)
 
@@ -24,10 +24,8 @@ export const setDefinitionActive = (fileModel, screenId) => {
       key: screenModel.id,
       item: {
         ...screenModel,
-        [SUB_CATEGORIES.ACTIVE_DEFINITION]: { ...fileModel },
+        [SUB_CATEGORIES.ALT_ACTIVE_FILE]: { ...fileModel },
       },
     },
   })
-  
-  
 }

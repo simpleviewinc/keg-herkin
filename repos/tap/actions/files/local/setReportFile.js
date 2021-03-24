@@ -2,6 +2,8 @@ import { getStore } from 'SVStore'
 import { Values } from 'SVConstants'
 import { loadApiFile } from 'SVUtils/api'
 import { addToast } from '../../toasts/addToast'
+import { isEmptyColl } from '@keg-hub/jsutils'
+import { setAltActiveFile } from './setAltActiveFile'
 import { setResultsScreen } from '../../screens/setResultsScreen'
 
 const { CATEGORIES } = Values
@@ -30,21 +32,31 @@ const findRelatedFile = (nodes, reportFile) => {
  * @returns {void}
  */
 export const setReportFile = async reportFile => {
+  if(!reportFile)
+    return addToast({
+        type: `error`,
+        message: `Can not set report active. A location is required!`,
+      })
 
   const { items } = getStore()?.getState()
   if(!items) return
-
   const fileTree = items[CATEGORIES.FILE_TREE]
 
+  // Try to find the relative node
   const relativeNode = findRelatedFile(fileTree.nodes, reportFile)
 
-  if(!relativeNode)
-    return addToast({
-        type: `warn`,
-        message: `Could not load related file for ${reportFile}. It does not exist in the file tree`,
+  // If found load it from the API, and set it active in the results screen
+  const fileModel = relativeNode && await loadApiFile(relativeNode.location)
+  const activeFile = !fileModel || isEmptyColl(fileModel) ? false : fileModel
+
+  // Then try to load the report file model
+  const altFileModel = await loadApiFile(reportFile)
+
+  ;(activeFile || altFileModel)
+    ? setResultsScreen(activeFile, altFileModel)
+    : addToast({
+        type: `error`,
+        message: `Report file could not be loaded. Invalid server response!`,
       })
 
-  const fileModel = await loadApiFile(relativeNode.location)
-
-  setResultsScreen(fileModel)
 }
