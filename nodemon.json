@@ -1,0 +1,15 @@
+{
+  "ignoreRoot": [
+    ".git",
+    "docs",
+    "node_modules/keg-core",
+    "node_modules/.bin",
+    "repos/example",
+    "repos/testUtils",
+    "repos/tap",
+    "scripts",
+    "tasks",
+    "tests",
+    "temp"
+  ]
+}

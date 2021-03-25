@@ -1,89 +1,61 @@
 import React, { useMemo } from 'react'
 import { noOp } from '@keg-hub/jsutils'
 import { getBaseApiUrl } from 'SVUtils/api'
-import { Iframe } from 'SVComponents/iframe'
+import { Iframe } from 'SVComponents/iframe/iframe'
+import { IframeHeader } from 'SVComponents/iframe/iframeHeader'
 import { ExternalLink } from 'SVAssets/icons'
 import { Surface } from 'SVComponents/surface'
-import { View, TouchableIcon } from '@keg-hub/keg-components'
+import { useActiveTestRuns } from 'SVHooks/useActiveTestRuns'
+import { Loading, View, Text, TouchableIcon } from '@keg-hub/keg-components'
 import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
-
-const useReportsUrl = (fileType, name) => useMemo(() => {
-  const loc = name ? `${fileType}/${name}` : `${fileType}/${fileType}`
-  return `${getBaseApiUrl()}/reports/${loc}`
-}, [getBaseApiUrl, fileType, name])
-
-const useWindowOpen = (fileType, reportUrl) => useMemo(() => {
-  return fileType ? () => window?.open(reportUrl, '_blank') : noOp
-}, [fileType, reportUrl])
+import { ResultsTabs } from './resultsTabs'
+import { TestsRunning } from './testsRunning'
 
 /**
- * IframeHeader
+ * Results
  * @param {Object} props
- * @param {Object} props.mainTextStyles - passed down from surface component
- * @param {string} props.prefix - prefix passed in to the Surface
- * @param {string} props.title - title passed in to Surface
- * @param {Object} props.titleStyle - titleStyle passed in to Surface
- * @param {Boolean} props.capitalize - capitalize value passed in to Surface
+ * @param {Object} props.reportUrl - Url of the report being viewed
+ * @param {string} props.activeFile - Current activeFile for this screen
+ * @param {string} props.onExternalOpen - callback called when the icon is pressed
+ * @param {Object} props.styles - Custom styles for the Results component
  * 
  * @returns {Component}
  */
-const IframeHeader = (props) => {
-  const {
-    mainTextStyles,
-    prefix,
-    title,
-    titleStyle,
-    capitalize,
-    mainStyles,
-    onIconPress
-  } = props
-
-  return (
-    <View style={mainStyles?.main}>
-      <PrefixTitleHeader
-        styles={mainTextStyles}
-        titleStyle={titleStyle}
-        title={title}
-        prefix={prefix}
-        capitalize={capitalize}
-      />
-      <TouchableIcon
-        styles={mainStyles?.icon}
-        color={mainStyles?.icon?.color}
-        size={mainStyles?.icon?.size}
-        onPress={onIconPress}
-        Component={ ExternalLink }
-      />
-    </View>
-  )
-}
-
 export const Results = props => {
   const {
     reportUrl,
     activeFile,
-    onIconPress,
-    builtStyles,
+    onExternalOpen,
+    styles,
   } = props
 
+  const testRunModel = useActiveTestRuns()
+
   return (
-    <Surface
-      prefix={'Test Results'}
-      TitleComponent={({styles, ...props}) => 
-        <IframeHeader
-          {...props}
-          onIconPress={onIconPress}
-          mainTextStyles={styles}
-          mainStyles={builtStyles?.iFrame?.header} 
-        />
-      }
-      capitalize={false}
-      title={'Report'}
-      styles={builtStyles?.iFrame?.surface}
-      className={`runner-surface-iframe`}
-    >
-      <Iframe src={reportUrl}/>
-    </Surface>
+    <>
+      <Surface
+        prefix={'Test Results'}
+        TitleComponent={({styles:textStyles, ...props}) => 
+          <IframeHeader
+            {...props}
+            onExternalOpen={onExternalOpen}
+            mainTextStyles={textStyles}
+            mainStyles={styles?.iFrame?.header} 
+          />
+        }
+        capitalize={false}
+        title={'Report'}
+        styles={styles?.iFrame?.surface}
+        className={`runner-surface-iframe`}
+      >
+        {
+          testRunModel?.running
+            ? (<TestsRunning styles={styles?.running} />)
+            : (<Iframe src={reportUrl}/>)
+        }
+      </Surface>
+      <ResultsTabs styles={styles?.actions} />
+    </>
   )
 
 }
