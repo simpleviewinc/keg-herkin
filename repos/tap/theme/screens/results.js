@@ -31,6 +31,21 @@ export const results = theme => {
         }
       }
       
+    },
+    running: {
+      main: {
+        width: `100%`,
+        alI: 'center',
+        jtC: 'center',
+      },
+      loading: {
+        color: tapColors.defaultLight,
+      },
+      text: {
+        mT: theme.margin.size * 2,
+        color: tapColors.defaultLight,
+        ftWt: 'bold',
+      },
     }
   }
 }

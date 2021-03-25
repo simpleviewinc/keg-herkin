@@ -44,8 +44,7 @@ class DefinitionsParser {
         // Always clear out the node require cache
         // This ensure we get a fresh file every time
         // Otherwise changed files would not get reloaded
-        if(require.cache[filePath])
-          delete require.cache[filePath]
+        delete require.cache[filePath]
 
         // Require the file, to auto-load the definitions into parkin
         // Later we'll pull them from parkin

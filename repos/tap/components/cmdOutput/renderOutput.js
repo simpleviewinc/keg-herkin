@@ -7,15 +7,16 @@ import { Text } from '@keg-hub/keg-components/text'
 import { wordCaps, noOpObj, mapObj } from '@keg-hub/jsutils'
 
 const useRunMessages = (messages) => useMemo(() => {
-  return mapObj(messages, (__, meta) => meta)
+  return Object.values(messages)
 }, [ messages ])
 
 
 const bottomStyle = { maxHeight: 0, opacity: 0 }
 const AlwaysScrollToBottom = () => {
   const bottomRef = useRef()
-  // TODO: currently scrolls the whole page, only want to scroll the parent element
-  // useEffect(() => bottomRef.current.scrollIntoView({behavior: 'smooth'}))
+  useEffect(() => {
+    bottomRef.current.scrollIntoView({behavior: 'smooth', block: 'end'})
+  })
   return (<View ref={bottomRef} style={bottomStyle} />)
 };
 
