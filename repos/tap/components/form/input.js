@@ -40,11 +40,11 @@ export const Input = ({ onChange, styles, title='', value, inputRef, className }
         {title}
       </Label>
       <KegInput
-        className={className}
         style={styles?.input}
         ref={inputRef}
         onChange={onChange}
         value={value}
+        className={className}
       />
     </ReStyleView>
   )

@@ -6,6 +6,5 @@ module.exports = {
   ...require('./pageTitleIsNot'),
   ...require('./assertElementCount'),
   ...require('./descendentContainsText'),
-  ...require('./selectOptionValue'),
   ...require('./exactText')
 }
