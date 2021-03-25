@@ -3,26 +3,19 @@ import { useStyle } from '@keg-hub/re-theme'
 import { checkCall, noOpObj } from '@keg-hub/jsutils'
 import { View, H5 } from '@keg-hub/keg-components'
 import { AceEditor } from 'SVComponents/aceEditor'
-import { useActiveDefinition } from 'SVHooks/useActiveDefinition'
+import { NoActiveDefinition } from './noActiveDefinition'
+import { useAltActiveFile } from 'SVHooks/useAltActiveFile'
 import { Values } from 'SVConstants'
-const { SCREENS } = Values
+const { SCREENS, FILE_TYPES } = Values
 
-const NoActiveDefinitions = ({ styles=noOpObj }) => {
-  return (
-    <View
-      className={'empty-definitions-main'}
-      style={styles.main}
-    >
-      <H5
-        className={'empty-definitions-text'}
-        style={styles.text}
-      >
-        No Active Definition
-      </H5>
-    </View>
-  )
-}
-
+/**
+ * ActiveDefinitionsEditor - Renders an editor to modify a definition file
+ * @param {Object} props
+ * @param {Array} props.definitions - Loaded definition for the backend as fileModels
+ * @param {Object} props.styles - Custom styles for displaying the component
+ *
+ * @returns {Component}
+ */
 export const ActiveDefinitionsEditor = props => {
   const {
     definitions,
@@ -31,7 +24,7 @@ export const ActiveDefinitionsEditor = props => {
   } = props
 
   const activeStyles = useStyle(`definitions.active`, styles)
-  const definition = useActiveDefinition(SCREENS.EDITOR)
+  const definition = useAltActiveFile(SCREENS.EDITOR, FILE_TYPES.DEFINITION)
 
   return definition
     ? (
@@ -54,5 +47,5 @@ export const ActiveDefinitionsEditor = props => {
           }}
         />
       )
-      : (<NoActiveDefinitions styles={activeStyles.none} />)
+      : (<NoActiveDefinition styles={activeStyles.none} />)
 }

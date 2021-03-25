@@ -1,6 +1,6 @@
 const { jestAliases } = require('./aliases.config')
 const { getHerkinConfig } = require('./getHerkinConfig')
-const { TEST_UTILS_PATH, HERKIN_ROOT } = require('../constants/backend')
+const { TEST_UTILS_PATH, HERKIN_ROOT, HERKIN_REPORTS_DIR } = require('../constants/backend')
 const { uniqArr } = require('@keg-hub/jsutils')
 const path = require('path')
 const glob = require('glob')
@@ -89,7 +89,7 @@ module.exports = {
       './node_modules/jest-html-reporter',
       { 
         pageTitle: 'Parkin Test Results' ,
-        outputPath: './reports/feature/report.html'
+        outputPath: `${HERKIN_REPORTS_DIR}/feature/report.html`
       }
     ]
   ],

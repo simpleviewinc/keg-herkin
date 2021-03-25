@@ -2,7 +2,7 @@ import { get } from '@keg-hub/jsutils'
 import { dispatch, getStore } from 'SVStore'
 import { addToast } from '../../toasts/addToast'
 import { Values, ActionTypes } from 'SVConstants'
-import { updateUrlQuery } from 'SVUtils/helpers/updateUrlQuery'
+import { updateUrlQuery } from 'SVUtils/url/updateUrlQuery'
 import { getActiveScreen } from 'SVUtils/helpers/getActiveScreen'
 
 const { CATEGORIES, SUB_CATEGORIES } = Values

@@ -18,6 +18,7 @@ sync:
         - "/reports"
         - "/build"
         - "/repos/example/build"
+        - "repos/messenger"
         - "/docs"
         - "/tests"
 actions:
