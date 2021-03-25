@@ -3,8 +3,8 @@ import { Values } from 'SVConstants'
 import { setScreen } from './setScreen'
 import { setResultsScreen } from './setResultsScreen'
 
-
 const { CATEGORIES, SCREENS } = Values
+const defFileProps = { activeFile: {}, altActiveFile: false }
 
 /**
  * Sets the currently active screen based on the passed in ID
@@ -17,7 +17,9 @@ export const setScreenById = (screenId, screenModel) => {
   const { items } = getStore().getState()
   screenModel = screenModel || items[CATEGORIES.SCREENS][screenId]
 
-  screenId === SCREENS.RESULTS
-    ? setResultsScreen(screenModel && screenModel.activeFile)
+  const { activeFile, altActiveFile } = (screenModel || defFileProps)
+
+  return screenId === SCREENS.RESULTS
+    ? setResultsScreen(activeFile, altActiveFile)
     : setScreen(screenId, screenModel)
 }

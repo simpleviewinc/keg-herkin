@@ -5,7 +5,6 @@
     "node_modules/keg-core",
     "node_modules/.bin",
     "repos/example",
-    "repos/messenger",
     "repos/testUtils",
     "repos/tap",
     "scripts",

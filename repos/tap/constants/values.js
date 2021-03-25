@@ -24,7 +24,7 @@ export const Values = {
     NODES: 'nodes',
     ACTIVE_FILE: 'activeFile',
     MODIFIED_CONTENT: 'modified',
-    ACTIVE_DEFINITION: 'activeDefinition',
+    ALT_ACTIVE_FILE: 'altActiveFile',
   },
   MODAL_TYPES: {
     TEST_SELECTOR: 'testSelectorModal',
@@ -32,7 +32,8 @@ export const Values = {
   },
   FILE_TYPES: {
     FEATURE: 'feature',
-    // DEFINITION: 'definition',
+    REPORT: 'report',
+    DEFINITION: 'definition',
     // WAYPOINT: 'waypoint',
     // UNIT: 'unit',
   },

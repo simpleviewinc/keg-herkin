@@ -1,8 +1,9 @@
 const path = require('path')
 const { validFilename, wordCaps } = require('@keg-hub/jsutils')
-
 const { loadTemplate } = require('../../templates/loadTemplate')
 const { buildFileModel } = require('../../utils/buildFileModel')
+const { resolveReportAst } = require('../../utils/resolveReportAst')
+
 const {
   readFile,
   removeFile,
@@ -26,6 +27,13 @@ const checkPath = async location => {
   }
 }
 
+/**
+ * Deletes a file at a given location. file should be located in the test root path
+ * @param {Object} config - Herkin server config
+ * @param {string} location - Location within the test root path the file should be deleted
+ *
+ * @returns {Object} - Contains boolean if delete was successful and its location
+ */
 const deleteTestFile = async (config, location) => {
   const { testsRoot } = config.paths
   await checkPath(location)
@@ -39,21 +47,35 @@ const deleteTestFile = async (config, location) => {
   }
 }
 
-const getTestFile = async (config, testPath) => {
+/**
+ * Checks the files path and if it exists creates a fileModel from the meta data 
+ * @param {Object} config - Herkin server config
+ * @param {string} location - Location within the test root path the file should exist
+ *
+ * @returns {Object} - fileModel for the file at the passed in location
+ */
+const getTestFile = async (config, location) => {
 
-  const { testsRoot } = config.paths
-  const fullPath = testPath.includes(testsRoot)
-    ? testPath
-    : path.join(testsRoot, testPath)
+  const { testsRoot, reportsDir } = config.paths
+  const fullPath = location.startsWith(testsRoot)
+    ? location
+    : path.join(testsRoot, location)
 
   await checkPath(fullPath)
 
-  const [ __, content ] = await readFile(fullPath)
+  // If it's a report file, then need to build the report ast meta data
+  const reportContent = resolveReportAst(fullPath, testsRoot, reportsDir)
+  // If not report ast is returned, then get the file content
+  // Reports get loaded as HTML, so we don't need to the file content
+  const [ _, content ] = !reportContent.ast
+    ? await readFile(fullPath)
+    : []
 
   // Build the file model for the test file
   return buildFileModel({
     content,
     location: fullPath,
+    ...reportContent,
   })
 }
 

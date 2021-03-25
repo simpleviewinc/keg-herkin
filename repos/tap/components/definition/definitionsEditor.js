@@ -1,15 +1,38 @@
 import React from 'react'
 import { Values } from 'SVConstants'
+import { Sync } from 'SVAssets/icons'
 import { noOpObj } from '@keg-hub/jsutils'
-import { View } from '@keg-hub/keg-components'
-import { useFeature } from 'SVHooks/useFeature'
+import { useStyle, useThemeHover } from '@keg-hub/re-theme'
+import { Surface } from 'SVComponents/surface'
 import { DefinitionList } from './definitionList'
 import { DefinitionTabs } from './definitionTabs'
 import { useSelector } from 'SVHooks/useSelector'
 import { useActiveTab } from 'SVHooks/useActiveTab'
+import { Text } from '@keg-hub/keg-components/text'
+import { Touchable } from '@keg-hub/keg-components/touchable'
 import { ActiveDefinitionsEditor } from './activeDefinitionsEditor'
+import { getRemoteDefinitions } from 'SVActions/definitions/api/getRemoteDefinitions'
 
 const { DEFINITION_TABS, CATEGORIES } = Values
+
+const ReloadDefs = props => {
+  const reloadStyles = useStyle('definitions.reload')
+  const [ syncRef, syncStyles ] = useThemeHover(reloadStyles.default, reloadStyles.hover)
+
+  return (
+    <Touchable
+      ref={syncRef}
+      style={syncStyles.main}
+      onPress={getRemoteDefinitions}
+    >
+      <Sync style={syncStyles.icon} />
+      <Text style={syncStyles.text} >
+        SYNC
+      </Text>
+    </Touchable>
+  )
+
+}
 
 /**
  * DefinitionsEditor
@@ -36,12 +59,16 @@ export const DefinitionsEditor = props => {
 
   const { definitionTypes } = useSelector(CATEGORIES.DEFINITION_TYPES)
   const [tab, setTab] = useActiveTab(activeTab || DEFINITION_TABS.LIST)
-  const { definitions: activeDefs } = useFeature({ path: activeFile?.location }) || {}
 
   return (
-    <View
-      className={'definitions-editor-main'}
-      style={styles.main}
+    <Surface
+      hasToggle={true}
+      capitalize={false}
+      title={'Definitions'}
+      styles={styles}
+      RightComponent={ReloadDefs}
+      className={`definitions-surface-main`}
+      prefix={tab === DEFINITION_TABS.ACTIVE ? 'Editor' : 'List'}
     >
       <DefinitionTabs
         activeTab={tab}
@@ -49,10 +76,8 @@ export const DefinitionsEditor = props => {
       />
       { tab === DEFINITION_TABS.ACTIVE  && (
         <ActiveDefinitionsEditor
-          feature={feature}
           featureEditorRef={featureEditorRef}
           styles={styles.active}
-          definitions={active || activeDefs}
         />
       )}
       { tab === DEFINITION_TABS.LIST  && (
@@ -63,7 +88,7 @@ export const DefinitionsEditor = props => {
           definitions={list || definitionTypes}
         />
       )}
-    </View>
+    </Surface>
   )
 
 }
