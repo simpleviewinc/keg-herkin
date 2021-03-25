@@ -74,8 +74,7 @@ export const Sidebar = props => {
     checkCall(onToggled, toggleUpdate)
   }, [ isToggled, setIsToggled, initial, to ])
 
-  // Use useLayoutEffect to check if the sidebar should be animated
-  // Within the hook, toggled flag defines how to update the animated value
+  // Toggled flag defines how to update the animated value
   // To Open: isToggled === true === should animate open
   // To Close: isToggled === false === should animate close
   useLayoutEffect(() => {
