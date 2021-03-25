@@ -1,10 +1,7 @@
 import { Values } from 'SVConstants'
 import { setActiveFile } from './setActiveFile'
-import { setFeatureActive } from '../../features/local/setFeatureActive'
-import { setDefinitionActive } from '../../definitions/local/setDefinitionActive'
-import { setUnitActive } from '../../unit/local/setUnitActive'
-import { setWaypointActive } from '../../waypoint/local/setWaypointActive'
-
+import { addToast } from '../../toasts/addToast'
+import { setAltActiveFile } from './setAltActiveFile'
 const { FILE_TYPES } = Values
 
 /**
@@ -16,15 +13,17 @@ const { FILE_TYPES } = Values
  */
 export const setActiveFileFromType = (fileModel, screenId) => {
   switch(fileModel.fileType){
+    case FILE_TYPES.REPORT:
     case FILE_TYPES.DEFINITION:
-      return setDefinitionActive(fileModel, screenId)
-    case FILE_TYPES.FEATURE:
-      return setFeatureActive(fileModel, screenId)
+      return setAltActiveFile(fileModel, screenId)
     case FILE_TYPES.UNIT:
-      return setUnitActive(fileModel, screenId)
     case FILE_TYPES.WAYPOINT:
-      return setWaypointActive(fileModel, screenId)
-    default:
+    case FILE_TYPES.FEATURE:
       return setActiveFile(fileModel, screenId)
+    default:
+      return addToast({
+        type: `error`,
+        message: `Could not ${fileModel.name} active. Unknown file type ${fileModel.fileType}`,
+      })
   }
 }

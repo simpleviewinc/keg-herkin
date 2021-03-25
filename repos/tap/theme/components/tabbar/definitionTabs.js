@@ -6,6 +6,7 @@ export const definitionTabs = (theme, defTabbar) => deepMerge(defTabbar, {
     zIndex: 7,
     bgC: tapColors.headerBackground,
     mB: theme.margin.size * 2,
+    minW: '100%',
   },
   tabview: {
     display: 'none',

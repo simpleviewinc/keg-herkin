@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { noOpObj, deepMerge } from '@keg-hub/jsutils'
 import { useTheme, useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { loadTestFile } from 'SVActions/files/api/loadTestFile'
+import { setReportFile } from 'SVActions/files/local/setReportFile'
 import {
   View,
   Loading,
@@ -14,6 +15,7 @@ import { useActiveFile } from 'SVHooks/useActiveFile'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { isEmptyFolderNode, findNode, constructFileTree } from 'SVUtils/fileTree'
 import { toggleRotationStyle } from 'SVUtils/theme'
+import { addToast } from 'SVActions/toasts'
 
 const { CATEGORIES } = Values
 
@@ -42,6 +44,7 @@ const useTreeStyles = (level, nodeType, isNodeActive) => {
       styles: deepMerge(
         (isNodeActive ? activeStyle : styles),
         level && { main: { paddingLeft: padSize * level } },
+        { empty: themeStyles.empty },
       )
     }
 
@@ -111,19 +114,24 @@ export const TreeList = props => {
   const tree = useMemo(() => constructFileTree(rootPaths, nodes), [rootPaths, nodes])
 
   const onItemPress = useCallback( async ({node}) => {
-    if (node?.type !== 'file') return
-    await loadTestFile(node.location)
+    if (node?.type !== 'file')
+      return addToast({
+        type: 'error',
+        message: `Unknown node type selected: ${node.type}`
+      })
+
+    node.testType === 'report'
+      ? await setReportFile(node.location)
+      : await loadTestFile(node.location)
 
     onSidebarToggled(false)
 
   }, [ loadTestFile, onSidebarToggled ])
   
+  const collapsedNodeHeight = 40
   const getCollapsedNodeHeight = useCallback(({id}) => {
-    const node = findNode(id, nodes)
-    return (isEmptyFolderNode(node))
-      ? 0
-      : 40
-  }, [tree])
+    return collapsedNodeHeight
+  }, [collapsedNodeHeight])
 
   return !tree
     ? (<Loading />)
@@ -162,9 +170,6 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
     styleRef,
     mainStyles,
   } = useTreeStyles(level, nodeType, isNodeActive)
-  
-  // Don't display empty folders
-  if (level === 0 && isEmptyFolderNode(node)) return null
 
   return (
     <View 
@@ -180,21 +185,30 @@ const NodeComponent = ({ node, level, isExpanded, hasChildrenNodes }) => {
         {showPending && <Text style={mainStyles?.pendingText}> *</Text>}
       </Text>
       {
-        nodeType === 'folder' &&
-        (
-          <ChevronDown
-            className={`tree-node-icon`}
-            size={mainStyles?.icon?.size || 16}
-            style={[
-              mainStyles?.icon, 
-              toggleRotationStyle({
-                isToggled: isExpanded,
-                onValue: 180,
-                offValue: 0
-              })
-            ]}
-          />
-        )
+        nodeType === 'folder'
+        ? isEmptyFolderNode(node)
+          ? (
+              <View style={styles?.empty?.main} >
+                <Text style={styles?.empty?.text}>
+                  ( Empty )
+                </Text>
+              </View>
+            )
+          : (
+              <ChevronDown
+                className={`tree-node-icon`}
+                size={mainStyles?.icon?.size || 16}
+                style={[
+                  mainStyles?.icon, 
+                  toggleRotationStyle({
+                    isToggled: isExpanded,
+                    onValue: 180,
+                    offValue: 0
+                  })
+                ]}
+              />
+            )
+        : null
       }
     </View>
   )

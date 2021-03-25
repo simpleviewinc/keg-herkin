@@ -11,7 +11,7 @@ const buildReportTitle = (type, context) => {
   const name = context && context.split('/').pop()
   const builtName = name ? wordCaps(name) : type ? `${wordCaps(type)} Test Suite` : `Test Suite`
 
-  return `"${builtName}"`
+  return builtName
 }
 
 module.exports = {

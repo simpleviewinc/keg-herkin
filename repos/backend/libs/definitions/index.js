@@ -1,4 +1,3 @@
 module.exports = {
-  ...require('./definitions'),
-  ...require('./register')
+  ...require('./definitions')
 }

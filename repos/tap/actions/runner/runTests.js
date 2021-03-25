@@ -17,14 +17,12 @@ const { SCREENS } = Values
  * 
  */
 export const runTests = async (activeFile, testCmd, screenID) => {
-
   addToast({
     type: 'info',
     message: `Running ${testCmd.name} tests for file ${activeFile.name}!`
   })
 
-  // setActiveFileFromType(activeFile, SCREENS.RESULTS)
-  setResultsScreen(activeFile)
+  setResultsScreen(activeFile, false)
 
   WSService.runCommand(testCmd, buildCmdParams(testCmd, activeFile))
 }
