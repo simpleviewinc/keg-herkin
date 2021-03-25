@@ -7,15 +7,12 @@ const { getPage } = getBrowserContext()
  * @param {string} selector 
  * @param {string} data 
  */
-const selectOptionValue = async (selector, data) => {
+const setSelectOption = async (selector, data) => {
   const page = await getPage()
-  console.log(selector)
-  //const selectSelector = `select${selector}`
   const content = await page.selectOption(selector, { label: `${data}` });
-
 }
 
-Then('the select {string} selected option is {string}', selectOptionValue)
+Then('the select {string} selected option is {string}', setSelectOption)
 
-module.exports = { selectOptionValue }
+module.exports = { setSelectOption }
 
