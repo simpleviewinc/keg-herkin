@@ -17,6 +17,7 @@ const SurfaceHeader = props => {
     onTogglePress,
     hasToggle=true,
     toggleDisabled,
+    RightComponent=DrawerToggle,
     TitleComponent=PrefixTitleHeader
   } = props
 
@@ -34,7 +35,7 @@ const SurfaceHeader = props => {
         />
       )}
       RightComponent={hasToggle && (
-        <DrawerToggle
+        <RightComponent
           onPress={onTogglePress}
           toggled={toggled}
           styles={styles}
@@ -57,6 +58,7 @@ export const Surface = props => {
     toggleHandel,
     initialToggle,
     toggleDisabled,
+    RightComponent,
     TitleComponent
   } = props
   
@@ -77,6 +79,7 @@ export const Surface = props => {
   return (
     <Section className='surface' style={surfaceStyles?.main} >
       {(title || prefix) && (<SurfaceHeader
+        RightComponent={RightComponent}
         TitleComponent={TitleComponent}
         title={title}
         titleStyle={titleStyle}

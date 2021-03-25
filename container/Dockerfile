@@ -27,9 +27,6 @@ ENV KEG_PROXY_PORT=$KEG_PROXY_PORT
 # Expose container ports
 EXPOSE $KEG_PROXY_PORT
 
-# Ensure the expo cli version
-ARG EXPO_CLI_VERSION=3.28.0
-
 # Add yarn's global bin to PATH
 ENV PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin
 
@@ -38,15 +35,11 @@ COPY --from=tap-base /usr/local/share/.config/yarn /usr/local/share/.config/yarn
 COPY --from=tap-base /keg/. /keg/
 
 # Install the dependecies with yarn setup, then remove the .npmrc
-# Install git and the expo-cli and sharp-cli
 RUN yarn global add npm-run-all; \
     echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
     sudo sysctl -p; \
     rm -rf /var/cache/apk/*; \
-    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
-    cd $DOC_APP_PATH/repos/messenger; \
-    yarn install --ignore-engines; \
-    yarn cache clean
+    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd
 
 # Set the current directory to tap repo
 WORKDIR $DOC_APP_PATH

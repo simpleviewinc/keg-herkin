@@ -124,5 +124,16 @@ export const treeList = (theme) => ({
     child: activeStyles(theme, true),
     icon: iconStyle(theme),
     pendingText: pendingTextStyle
+  },
+  empty: {
+    main: {
+      position: 'absolute',
+      right: 10,
+      top: 13,
+    },
+    text: {
+      fontSize: 12,
+      color: theme?.colors?.palette?.gray01,
+    }
   }
 })

@@ -1,11 +1,14 @@
-export * from './containsText'
-export * from './inputContainsText'
-export * from './pageTitleIs'
-export * from './pageTitleIsNot'
-export * from './isAttached'
-export * from './isDetached'
-export * from './isHidden'
-export * from './isVisible'
-export * from './assertElementCount'
-export * from './descendentContainsText'
-export * from './inputContainsText'
+
+module.exports = {
+  ...require('./containsText'),
+  ...require('./inputContainsText'),
+  ...require('./pageTitleIs'),
+  ...require('./pageTitleIsNot'),
+  ...require('./isAttached'),
+  ...require('./isDetached'),
+  ...require('./isHidden'),
+  ...require('./isVisible'),
+  ...require('./assertElementCount'),
+  ...require('./descendentContainsText'),
+  ...require('./inputContainsText'),
+}

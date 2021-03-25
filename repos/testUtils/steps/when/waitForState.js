@@ -14,7 +14,7 @@ const states = [
  * @param {string} selector 
  * @param {string} state 
  */
-export const waitForState = async (selector, state) => {
+const waitForState = async (selector, state) => {
   if (!states.includes(state)) 
     throw new Error('Invalid Selector State: ' + state)
 
@@ -31,3 +31,8 @@ states.map(state =>
 )
 
 When('I wait for {string}', selector => waitForState(selector, 'visible'))
+
+
+module.exports = {
+  waitForState
+}

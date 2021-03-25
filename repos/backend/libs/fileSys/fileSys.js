@@ -2,6 +2,12 @@ const fs = require('fs')
 const path = require('path')
 const { limbo, isFunc, exists, noOpObj } = require('@keg-hub/jsutils')
 
+const defaultFileExclude = [
+  `.DS_Store`,
+  `.gitignore`,
+  `.gitkeep`,
+]
+
 /**
  * Wraps a method with a callback into a promise
  * @function
@@ -108,7 +114,7 @@ const writeFile = (filePath, data, format='utf8') => {
  */
 const buildFoundArray = async ({ allFound, recurCall, file, fromPath, opts={} }) => {
   
-  const { exclude=[], full, include=[], recursive, type } = opts
+  const { exclude=defaultFileExclude, full, include=[], recursive, type } = opts
   const all = await allFound
   // Filter out any folder matching the exclude
   if(!file || exclude.indexOf(file) !== -1) return all

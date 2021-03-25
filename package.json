@@ -1,6 +1,6 @@
 {
   "name": "@keg-hub/keg-herkin",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Keg and Tap testing",
   "main": "index.js",
   "publishConfig": {
@@ -17,29 +17,22 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "api": "nodemon --watch ./repos/backend --watch ./repos/shared --watch ./config --exec 'node ./repos/backend/index.js'",
+    "api": "nodemon --watch ./repos/backend --watch node_modules/@ltipton/parkin/build/cjs --watch ./repos/shared --watch ./config --exec 'node ./repos/backend/index.js'",
     "clean": "cd node_modules/keg-core; yarn clean",
     "clean:install": "yarn clean:full; yarn install",
     "clean:full": "yarn clean; yarn clean:nm; yarn install",
     "clean:nm": "rimraf ./yarn.lock; rimraf ./package.lock; rimraf node_modules",
     "clean:rn": "yarn keg clean:rn",
-    "dev": "run-p web api mess",
+    "dev": "run-p web api",
     "ex": "yarn ex:dev",
     "ex:build": "cd ./repos/example && yarn build",
     "ex:dev": "cd ./repos/example && yarn dev",
     "ex:i": "yarn ex:install",
     "ex:install": "cd ./repos/example && yarn install",
     "ex:start": "yarn ex:dev",
-    "ex:mess": "yarn ex:mess:dev",
-    "ex:mess:dev": "run-p ex:dev mess:dev",
     "format": "yarn pretty",
     "ios": "cd node_modules/keg-core; yarn ios",
     "keg": "cd node_modules/keg-core; yarn",
-    "mess": "yarn mess:dev",
-    "mess:build": "cd ./repos/messenger && yarn build",
-    "mess:dev": "cd ./repos/messenger && yarn dev",
-    "mess:i": "yarn mess:install",
-    "mess:install": "cd ./repos/messenger && yarn install",
     "pretty": "./node_modules/.bin/prettier --config ./configs/prettier.config.js --write '**/*.{js,jsx}'",
     "postinstall": "node scripts/postinstall.js",
     "setup": "yarn install --ignore-engines; cd node_modules/keg-core; yarn postinstall --ignore-engines",
@@ -48,14 +41,13 @@
     "task": "node ./tasks/runTask.js",
     "web": "yarn web:dev",
     "web:build": "cd node_modules/keg-core; yarn build:web",
-    "web:dev": "nodemon --watch ./package.json --exec 'cd node_modules/keg-core && yarn web'"
+    "web:dev": "cd node_modules/keg-core && yarn web"
   },
   "dependencies": {
-    "@keg-hub/args-parse": "6.2.1",
-    "@keg-hub/ask-it": "0.0.1",
-    "@keg-hub/jsutils": "8.3.0",
-    "@keg-hub/messenger": "file:repos/messenger",
-    "@keg-hub/spawn-cmd": "0.1.0",
+    "@keg-hub/args-parse": "6.2.3",
+    "@keg-hub/ask-it": "0.0.2",
+    "@keg-hub/jsutils": "8.4.0",
+    "@keg-hub/spawn-cmd": "0.1.2",
     "@ltipton/sockr": "0.0.10",
     "@ltipton/react-ace-editor": "0.0.1",
     "@ltipton/react-gherkin-editor": "0.0.2",
@@ -66,8 +58,8 @@
     "dotenv": "8.0.0",
     "events": "3.2.0",
     "express": "4.11.1",
-    "keg-core": "npm:@keg-hub/keg-core@8.2.0",
-    "@ltipton/parkin": "0.3.1",
+    "keg-core": "npm:@keg-hub/keg-core@9.0.1",
+    "@ltipton/parkin": "0.4.0",
     "module-alias": "2.2.2",
     "nodemon": "2.0.4",
     "npm-run-all": "4.1.5",
@@ -81,7 +73,7 @@
     "words-to-numbers": "1.5.1"
   },
   "resolutions": {
-    "@keg-hub/jsutils": "8.3.0"
+    "@keg-hub/jsutils": "8.4.0"
   },
   "devDependencies": {
     "@babel/preset-env": "7.12.11",

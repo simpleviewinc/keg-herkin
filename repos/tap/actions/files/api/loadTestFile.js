@@ -2,9 +2,11 @@ import { getStore } from 'SVStore'
 import { Values } from 'SVConstants'
 import { loadApiFile } from 'SVUtils/api'
 import { addToast } from '../../toasts/addToast'
+import { getActiveScreen } from 'SVUtils/helpers/getActiveScreen'
+import { setResultsScreen } from '../../screens/setResultsScreen'
 import { setActiveFileFromType } from '../local/setActiveFileFromType'
 
-const { CATEGORIES } = Values
+const { CATEGORIES, SCREENS } = Values
 
 /**
  * Helper to find the treeNodeModel of the passed in file
@@ -41,9 +43,13 @@ export const loadTestFile = async (testFile, screenId) => {
         message: `Could not load file ${testFile}. It does not exist in the file tree`,
       })
 
+  const screenModel = getActiveScreen(items, screenId)
+
   const fileModel = await loadApiFile(nodeToLoad.location)
   return fileModel
-    ? setActiveFileFromType(fileModel, screenId)
+    ? screenModel.id === SCREENS.RESULTS
+      ? setResultsScreen(fileModel)
+      : setActiveFileFromType(fileModel, screenId)
     : addToast({
         type: `warn`,
         message: `Could not load file ${testFile} from the API!`,

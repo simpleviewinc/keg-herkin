@@ -6,7 +6,7 @@ import { setTestRun } from '../runner/setTestRun'
 import { toggleTestRunning } from '../runner/toggleTestRunning'
 import { getResultsActiveFile } from 'SVUtils/helpers/getResultsActiveFile'
 
-const { CATEGORIES } = Values
+const { CATEGORIES, SOCKR_MSG_TYPES } = Values
 
 /**
  * Updates a testRunModel to no longer be running
@@ -25,6 +25,14 @@ export const cmdEnd = (data, testRunModel) => {
   testRunModel
     ? setTestRun({
         ...testRunModel,
+        messages: {
+          ...testRunModel.messages,
+          [data.timestamp]: {
+            message: `Finished running command!\n`,
+            timestamp: data.timestamp,
+            type: SOCKR_MSG_TYPES.CMD_END,
+          },
+        },
         exitCode,
         running: false,
         failed: Boolean(exitCode),

@@ -1,19 +1,26 @@
 import React, { useCallback } from 'react'
-import { pickKeys, exists } from '@keg-hub/jsutils'
+import { pickKeys, exists, noOp } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { useSelector, shallowEqual } from 'react-redux'
-import { setFeatureActive } from 'SVActions/features/local/setFeatureActive'
+import { setActiveFile } from 'SVActions/files/local/setActiveFile'
 import {
   View,
   SimpleList,
   Loading,
 } from 'SVComponents'
 import { Values } from 'SVConstants'
+
 const { CATEGORIES } = Values
+const onHeaderPress = noOp
+const drawerProps = { variant: 'sidebar' }
 
-
-const onHeaderPress = () => {}
-
+/**
+ * builtFeatureList - Helper to get a formatted list of features to work with SimpleList
+ * @param {Array} features - Features group to build the formatted list from
+ * @param {Object} activeFeature - Active feature or the active screen
+ *
+ * @returns {Object} - Formatted list that works with Simple List component
+ */
 const builtFeatureList = (features, activeFeature={}) => {
   return {
     features: {
@@ -26,7 +33,12 @@ const builtFeatureList = (features, activeFeature={}) => {
   }
 }
 
-const drawerProps = { variant: 'sidebar' }
+/**
+ * FeatureList - Displays a list of features
+ * @param {Object} props
+ *
+ * @returns {Component}
+ */
 export const FeatureList = props => {
 
   const theme = useTheme()
@@ -38,7 +50,7 @@ export const FeatureList = props => {
 
   const onItemPress = useCallback((event, item) => {
     const match = features.find(feature => feature?.ast?.feature === item.title)
-    match && setFeatureActive(match)
+    match && setActiveFile(match)
     
   }, [ features ])
 

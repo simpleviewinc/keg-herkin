@@ -1,14 +1,23 @@
+import { addToast } from '../../toasts/addToast'
 import { apiRequest } from 'SVUtils/api/apiRequest'
-import { upsertDefinitions } from '../local/upsertDefinitions'
+import { setDefinitions } from '../local/setDefinitions'
 
 /**
  * Calls the API backend to load the parsed step definitions
- * Then calls upsertDefinitions, to add them to the Store
+ * Then calls setDefinitions, to add them to the Store
  * @type function
  *
  * @returns {void}
  */
 export const getRemoteDefinitions = async () => {
-  const definitions = await apiRequest(`/definitions`)
-  definitions && upsertDefinitions(definitions)
+
+  addToast({
+    type: `info`,
+    message: `Syncing step definitions with server!`,
+  })
+
+  const { definitions, definitionTypes } = await apiRequest(`/definitions`)
+
+  ;(definitions || definitionTypes) &&
+    setDefinitions(definitions, definitionTypes)
 }
