@@ -14,6 +14,7 @@ const getTestTypes = (testsRoot, pathEnvs) => {
 
   const {
     HERKIN_FEATURES_DIR,
+    HERKIN_REPORTS_DIR,
     HERKIN_SUPPORT_DIR,
     HERKIN_STEPS_DIR,
     HERKIN_UNIT_DIR,
@@ -25,6 +26,11 @@ const getTestTypes = (testsRoot, pathEnvs) => {
       type: 'feature',
       ext: 'feature',
       location: path.join(testsRoot, HERKIN_FEATURES_DIR),
+    },
+    report: {
+      type: 'report',
+      ext: 'html',
+      location: path.join(testsRoot, HERKIN_REPORTS_DIR),
     },
     support: {
       type: 'support',

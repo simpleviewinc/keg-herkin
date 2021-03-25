@@ -4,7 +4,7 @@ import { setActiveModal } from 'SVActions/modals'
 import { setActiveSidebar } from 'SVActions/sidebar'
 import { loadTestFile } from './files/api/loadTestFile'
 import { loadBddTests } from './files/api/loadBddTests'
-import { getQueryData } from 'SVUtils/helpers/getQueryData'
+import { getQueryData } from 'SVUtils/url/getQueryData'
 import { setScreenById } from 'SVActions/screens/setScreenById'
 import { getRemoteFileTree } from './files/api/getRemoteFileTree'
 
@@ -65,3 +65,5 @@ export const init = async () => {
   // Load the init modal
   loadInitModal(queryObj)
 }
+
+

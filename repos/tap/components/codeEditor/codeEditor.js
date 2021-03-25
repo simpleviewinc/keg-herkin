@@ -35,8 +35,6 @@ export const CodeEditor = props => {
   const actionsStyles = editorStyles?.actions
   const codeStyles = editorStyles?.[forceFull ? 'full' : tab] || noOpObj
 
-  if (!exists(activeFile.content)) return null
-
   useEffect(() => {
     /**
      * for edge case of:
@@ -45,7 +43,9 @@ export const CodeEditor = props => {
      */
     activeFile && activeFile.fileType !== 'feature' && setTab(EDITOR_TABS.FEATURE.id)
   }, [tab, setTab, activeFile])
-  
+
+  if (!exists(activeFile.content)) return null
+
   /* TODO: Clean up constants and Actions tab
     * Constants
       * FEATURE should be it's own constant

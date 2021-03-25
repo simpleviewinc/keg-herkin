@@ -5,7 +5,6 @@
   * Visualize tests as they are run on the host machines browser
   * Write and execute tests directly in the browser within a web applications context
     * **Requires** adding a single `script` tag to the web application
-    * Browser must support [postmessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
     * The same tests can later be executed within a `headless` browser environment ( CI )
   * Use Cucumber.js to write feature files and step definitions
     * Feature files can use pre-defined step definitions, enabling non-developers to write tests

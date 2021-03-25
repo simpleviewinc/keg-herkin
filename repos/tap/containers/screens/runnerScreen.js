@@ -1,5 +1,4 @@
 import React from 'react'
-import { useParentMethods } from 'SVHooks'
 import { EmptyScreen } from './emptyScreen'
 import { useStyle } from '@keg-hub/re-theme'
 import { capitalize } from '@keg-hub/jsutils'
@@ -11,7 +10,6 @@ import { CmdOutput } from 'SVComponents/cmdOutput/cmdOutput'
 
 export const RunnerScreen = props => {
   const builtStyles = useStyle(`screens.runner`)
-  const parentMethods = useParentMethods()
   const activeFile = useActiveFile(props.id)
 
   return !activeFile?.fileType
@@ -26,7 +24,7 @@ export const RunnerScreen = props => {
             activeFile={activeFile}
             tests={activeFile?.modified || activeFile?.content || ''}
             title={capitalize(activeFile?.fileType || '')}
-            parentMethods={parentMethods}
+            parentMethods={null}
           />
         </View>
       )

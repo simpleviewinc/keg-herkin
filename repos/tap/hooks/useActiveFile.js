@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Values, ActionTypes } from 'SVConstants'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
-const { CATEGORIES } = Values
+const { CATEGORIES, SUB_CATEGORIES } = Values
 
 /**
  * Hook to get the activeFile from the currently active screen
@@ -15,8 +15,10 @@ export const useActiveFile = screenId => {
 
   return useMemo(() => {
     return screenId
-      ? screenModels[screenId].activeFile
+      ? screenModels[screenId][SUB_CATEGORIES.ACTIVE_FILE]
       : Object.values(screenModels)
-          .reduce((found, model) => (found || model.active && model.activeFile), false)
+          .reduce((found, model) => (
+            found || model.active && model[SUB_CATEGORIES.ACTIVE_FILE]
+          ), false)
   }, [screenModels, screenId])
 } 

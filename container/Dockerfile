@@ -39,10 +39,7 @@ RUN yarn global add npm-run-all; \
     echo fs.inotify.max_user_watches=1048576 | sudo tee -a /etc/sysctl.conf; \
     sudo sysctl -p; \
     rm -rf /var/cache/apk/*; \
-    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd; \
-    cd $DOC_APP_PATH/repos/messenger; \
-    yarn install --ignore-engines; \
-    yarn cache clean
+    /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd
 
 # Set the current directory to tap repo
 WORKDIR $DOC_APP_PATH

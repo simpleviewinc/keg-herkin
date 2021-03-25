@@ -18,7 +18,7 @@ const resolveTestFileType = (filePath, config) => {
 
       return found || !filePath.startsWith(fullDirPath)
         ? found
-        : singular(location.replace('Dir', ''))
+        : singular(dirType.replace('Dir', ''))
       return found
     }, false)
 }
