@@ -1,5 +1,5 @@
 const { Given } = require('HerkinParkin')
-const { getElement } = require('HerkinPlaywright')
+const { getElements } = require('HerkinPlaywright')
 
 /**
  * Finds the element matching `ancestorSelector`, and
@@ -7,8 +7,9 @@ const { getElement } = require('HerkinPlaywright')
  * @param {string} ancestorSelector 
  * @param {Object} world 
  */
-const isAncestor = async (ancestorSelector, world) => {
-  const ancestor = getElement(ancestorSelector)
+const isAncestor = async (parentContainer, ancestorSelector, world) => {
+  const containerDescritor = parentContainer //this is a descriptor, in plain english, of the parent element such as session,listing, asset, etc.  currently not used anywhere and only included to make the step expression more readable
+  const ancestor = getElements(ancestorSelector)
 
   world.meta = {
     ancestor,
@@ -18,6 +19,7 @@ const isAncestor = async (ancestorSelector, world) => {
   return ancestor
 }
 
-Given(`the element {string} is ancestor/parent`, isAncestor)
+//Given(`the element {string} is ancestor/parent`, isAncestor)
+Given(`the {string} container element {string} is found`, isAncestor)
 
 module.exports = { isAncestor }

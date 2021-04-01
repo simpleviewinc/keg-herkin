@@ -1,10 +1,11 @@
 
 module.exports = {
-  ...require('./containsText'),
-  ...require('./inputContainsText'),
+  ...require('./elementCount'),
   ...require('./pageTitleIs'),
   ...require('./pageTitleIsNot'),
-  ...require('./assertElementCount'),
+  ...require('./elementExactText'),
+  ...require('./elementContainsText'),
+  ...require('./inputExactText'),
+  ...require('./inputContainsText'),
   ...require('./descendentContainsText'),
-  ...require('./exactText')
 }

@@ -9,6 +9,10 @@ const { getPage } = getBrowserContext()
 const waitForNavigation = async () => {
   const page = await getPage()
   await page.waitForNavigation()
+  // await page.waitForNavigation({
+  //   timeout: 4000,
+  //   waitUntil: 'networkidle',
+  // })
   return page
 }
 

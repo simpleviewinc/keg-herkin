@@ -8,15 +8,13 @@ const { getPage } = getBrowserContext()
  * @param {string} selector 
  * @param {string} data 
  */
-const exactText = async (selector, data) => {
+const elementExactText = async (selector, data) => {
   const page = await getPage()
-  //const content = await page.$eval(selector, el => el.textContent) //.textContent doesn't work for reading the text of an input
-  const content = await page.$eval(selector, el => el.value)
+  const content = await page.$eval(selector, el => el.textContent)
   expect(content).toEqual(expect.stringMatching(data))
   return page
 }
 
-Then('the element {string} text is {string}', exactText)
+Then('the element {string} text is {string}', elementExactText)
 
-module.exports = { exactText }
-
+module.exports = { elementExactText }

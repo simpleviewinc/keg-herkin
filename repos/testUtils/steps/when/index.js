@@ -5,7 +5,7 @@ module.exports = {
   ...require('./clickDescendent'),
   ...require('./clickElement'),
   ...require('./setSelectOption'),
-  ...require('./setInputText'),
+  ...require('./setText'),
   ...require('./pressKey'),
   ...require('./wait'),
   ...require('./waitForNavigation'),

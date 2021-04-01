@@ -7,15 +7,14 @@ const { getPage } = getBrowserContext()
  * @param {string} selector
  * @param {string} data 
  */
-const setInputText = async (selector,data) => {
+const setText = async (selector,data) => {
   const page = await getPage()
-  const inputSelector = `input${selector}`
-  await page.click(inputSelector)
-  await page.type(inputSelector, data)
+  await page.click(selector)
+  await page.type(selector, data)
   return page
 }
 
-When('I set the input element {string} to {string}', setInputText)
+When('I set the element {string} text to {string}', setText)
 
-module.exports = { setInputText }
+module.exports = { setText }
 
