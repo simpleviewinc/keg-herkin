@@ -1,9 +1,9 @@
-const { Then } = require('HerkinParkin')
+const { When } = require('HerkinParkin')
 const { getBrowserContext } = require('HerkinSetup')
 const { getPage } = getBrowserContext()
 
 /**
- * Expects the element matching `selector` and selects the option with value === `data`
+ * Expects the element matching `selector` and selects the option with the label === `data`
  * @param {string} selector 
  * @param {string} data 
  */
@@ -12,7 +12,7 @@ const setSelectOption = async (selector, data) => {
   const content = await page.selectOption(selector, { label: `${data}` });
 }
 
-Then('the select {string} selected option is {string}', setSelectOption)
+When('I set the select {string} to {string}', setSelectOption)
 
 module.exports = { setSelectOption }
 

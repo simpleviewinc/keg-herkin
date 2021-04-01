@@ -7,13 +7,13 @@ const { getPage } = getBrowserContext()
  * @param {string} selector 
  * @param {number} count 
  */
-const assertElementCount = async (selector, count) => {
+const elementCount = async (selector, count) => {
   const page = await getPage()
   const elements = await page.$$(selector)
   expect(elements.length).toEqual(count)
   return page
 }
 
-Then('the count of {string} is/equals {int}', assertElementCount)
+Then('the count of {string} is/equals {int}', elementCount)
 
-module.exports = { assertElementCount }
+module.exports = { elementCount }
