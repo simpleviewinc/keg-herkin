@@ -5,6 +5,7 @@ import React, { useMemo, useCallback } from 'react'
 import { ChevronDown, Copy } from 'SVAssets/icons'
 import { SimpleList, Row, Text, View, Touchable } from 'SVComponents'
 import { addStepFromDefinition } from 'SVActions/features/local/addStepFromDefinition'
+import { DefinitionListItem } from './definitionListItem'
 
 /**
  * Sorts the passed in array of items alphabetically based on each items title property
@@ -74,7 +75,6 @@ const useDefinitionGroups = definitions => {
           actions: [{
             name: 'Copy to Clipboard',
             key: `action-copy`,
-            showFeedback: false,
             iconProps: {
               size: 14,
               Component: Copy,
@@ -97,12 +97,14 @@ const useDefinitionGroups = definitions => {
   }, [ definitions ])
 }
 
+const renderItem = props => (<DefinitionListItem {...props} />)
+
 export const DefinitionList = props => {
 
   const { definitions, feature, contextRef, styles=noOpObj } = props
   const { lookup, ...groupedDefs } = useDefinitionGroups(definitions)
 
-  const onItemPress = useCallback((item, event) => {
+  const onItemPress = useCallback((event, item) => {
     // TODO: feature and context are not currently used
     // Right now it just copies the text to the clipboard
     // Lookup the definition from the lookup table using the uuid
@@ -129,6 +131,7 @@ export const DefinitionList = props => {
         styles={listStyles.list}
         items={groupedDefs}
         toggled={false}
+        renderItem={renderItem}
         onItemPress={ onItemPress }
         HeaderIcon={ChevronDown}
       />

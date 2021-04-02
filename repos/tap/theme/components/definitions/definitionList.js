@@ -41,15 +41,25 @@ const drawer = theme => {
   }
 }
 
+
 const listItem = theme => {
   return {
     default: {
       main: {
+        w: '100%',
+        flD: 'row',
+        alI: 'center',
         ...theme.transition([ 'backgroundColor' ], 0.8),
+        ...theme.flex.justify.between,
+        pV: theme.padding.size / 2,
+        pH: theme.padding.size,
+        // paddingLeft: theme.padding.size,
       },
       row: {
-        pV: theme.padding.size / 2,
-        paddingLeft: theme.padding.size,
+        pV: 0,
+        pH: 0,
+        pL: 0,
+        ...theme.flex.justify.start,
         flexWrap: 'nowrap',
       },
       title: {},
@@ -60,21 +70,41 @@ const listItem = theme => {
         },
         action: {
           main: {
-            pointerEvents: 'none',
           },
           touchable: {
             flD: 'row',
           },
           icon: {
             icon: {
-              c: tapColors?.success,
+              c: tapColors.inactive,
               mR: 5,
             },
           },
           name: {
             ftSz: 12,
             ftWt: 'bold',
-            c: tapColors?.success,
+            c: tapColors.inactive,
+          }
+        }
+      },
+      touchable: {
+        flD: 'row',
+        alI: 'center',
+        ...theme.flex.justify.start,
+      },
+      meta: {
+        main: {
+
+        },
+        toggle: {
+          main: {
+            pR: theme.padding.size / 3,
+          },
+          icon: {
+            fontSize: 12,
+            color: tapColors.inactive,
+            transitionDuration: '0.8s',
+            transitionProperty: 'transform',
           }
         }
       }
@@ -84,15 +114,26 @@ const listItem = theme => {
         backgroundColor: tapColors.headerBackground
       },
       title: {
-        c: tapColors?.success,
+        c: tapColors.success,
       },
       actions: {
         main: {
           opacity: 1,
         },
         action: {
-          touchable: {},
-          name: {}
+          touchable: {
+            c: tapColors?.success,
+          },
+          name: {
+            c: tapColors?.success,
+          }
+        }
+      },
+      meta: {
+        toggle: {
+          icon: {
+            color: tapColors.success,
+          }
         }
       }
     }

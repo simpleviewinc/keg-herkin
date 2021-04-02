@@ -1,5 +1,5 @@
 import React from 'react'
-import { capitalize, noOpObj } from '@keg-hub/jsutils'
+import { capitalize, noOpObj, exists } from '@keg-hub/jsutils'
 import { useStyle } from '@keg-hub/re-theme'
 import { Icon, View, Touchable, Text } from 'SVComponents'
 
@@ -23,9 +23,9 @@ export const ListItemAction = props => {
     >
       <Touchable
         onPress={onPress}
-        showFeedback={showFeedback}
+        showFeedback={exists(showFeedback) ? showFeedback : true}
         style={mergedStyles.touchable}
-        className={[ 'list-item-action', `list-item-action=${name}` ]}
+        className={'list-item-action'}
       >
       {(iconProps) && (
         <Icon

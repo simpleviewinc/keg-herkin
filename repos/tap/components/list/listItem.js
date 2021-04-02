@@ -23,7 +23,6 @@ const RenderActions = ({ actions=noPropArr, styles=noOpObj, ...props }) => {
   ) || null
 }
 
-
 const RenderAvatar = ({ avatar, ...props }) => {
   return avatar && (
     <View className='list-item-avatar' {...props} >
@@ -56,7 +55,7 @@ const RenderTitle = ({ style, title, ...props }) => {
   ) || null
 }
 
-export const ListItem = props => {
+export const ListItem = React.memo(props => {
   const {
     active,
     actions,
@@ -64,11 +63,12 @@ export const ListItem = props => {
     children,
     components=noOpObj,
     icon,
-    item,
     onItemPress,
     renderItem,
+    showFeedback,
     styles=noOpObj,
     title,
+    uuid,
   } = props
 
   const mergeStyles = useStyle('list.item', styles)
@@ -77,60 +77,51 @@ export const ListItem = props => {
   const rowStyles = useStyle(itemStyles.row, activeStyle?.row)
 
   const onPress = useCallback(
-    event => checkCall(onItemPress, item, event),
-    [item, onItemPress]
+    event => checkCall(onItemPress, event, { title, active, uuid }),
+    [title, active, uuid, onItemPress]
   )
 
-  const renderProps = useMemo(() => {
-    return {
-      item,
-      onItemPress,
-      itemRef: rowRef,
-      styles: {
-        propStyles: styles,
-        ...itemStyles,
-        row: rowStyles,
-      }
-    } 
-  }, [item, onItemPress, styles, rowStyles, itemStyles])
+  return (
+    <Touchable
+      showFeedback={showFeedback || true}
+      className='list-item'
+      touchRef={ rowRef }
+      style={[itemStyles.main, activeStyle?.main]}
+      onPress={onPress}
+    >
+      <Row
+        className='list-item-row'
+        style={rowStyles}
+      >
+        { children || ([
+          avatar && renderCustomOrDefault(
+            components.avatar,
+            RenderAvatar,
+            { key: 'list-item-avatar', avatar, style: itemStyles.avatar },
+          ),
+          icon && renderCustomOrDefault(
+            components.icon,
+            RenderIcon,
+            { key: 'list-item-icon', icon, style: itemStyles.icon }
+          ),
+          title && renderCustomOrDefault(
+            components.title,
+            RenderTitle,
+            { key: 'list-item-title', title, style: [ itemStyles.title, activeStyle?.title ] }
+          ),
+          actions && renderCustomOrDefault(
+            components.actions,
+            RenderActions,
+            { key: 'list-item-actions', actions, styles: itemStyles.actions }
+          )
+        ])}
+      </Row>
+    </Touchable>
+  )
+})
 
-  return isFunc(renderItem)
-    ? renderItem(renderProps)
-    : (
-        <Touchable
-          showFeedback={item.showFeedback || true}
-          className='list-item'
-          touchRef={ rowRef }
-          style={[itemStyles.main, activeStyle?.main]}
-          onPress={onPress}
-        >
-          <Row
-            className='list-item-row'
-            style={rowStyles}
-          >
-            { children || ([
-              avatar && renderCustomOrDefault(
-                components.avatar,
-                RenderAvatar,
-                { key: 'list-item-avatar', avatar, style: itemStyles.avatar },
-              ),
-              icon && renderCustomOrDefault(
-                components.icon,
-                RenderIcon,
-                { key: 'list-item-icon', icon, style: itemStyles.icon }
-              ),
-              title && renderCustomOrDefault(
-                components.title,
-                RenderTitle,
-                { key: 'list-item-title', title, style: [ itemStyles.title, activeStyle?.title ] }
-              ),
-              actions && renderCustomOrDefault(
-                components.actions,
-                RenderActions,
-                { key: 'list-item-actions', actions, styles: itemStyles.actions }
-              )
-            ])}
-          </Row>
-        </Touchable>
-      )
-}
+
+ListItem.Avatar = RenderAvatar
+ListItem.Icon = RenderIcon
+ListItem.Title = RenderTitle
+ListItem.Actions = RenderActions
