@@ -7,7 +7,7 @@ import { Text } from '@keg-hub/keg-components/text'
 import { wordCaps, noOpObj, mapObj } from '@keg-hub/jsutils'
 
 const useRunMessages = (messages) => useMemo(() => {
-  return mapObj(messages, (__, meta) => meta)
+  return Object.values(messages)
 }, [ messages ])
 
 
