@@ -8,7 +8,7 @@ import { reStyle } from '@keg-hub/re-theme/reStyle'
 const MetaLabel = reStyle(Text)(theme => ({
   fontSize: 12,
   fontWeight: 'bold',
-  paddingBottom: 5,
+  paddingBottom: 2,
   color: theme.tapColors.default,
 }))
 

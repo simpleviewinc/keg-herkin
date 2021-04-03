@@ -35,9 +35,26 @@ const drawer = theme => {
     main: {
     },
     content: {
-      pV: theme.padding.size / 2,
       backgroundColor: tapColors?.accentBackground,
     },
+  }
+}
+
+const borderStyle = {
+  hide: {
+    borderColor: 'transparent',
+    top: -1,
+    position: 'relative',
+    borderWidth: 0,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+  },
+  show: {
+    borderWidth: 0,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: tapColors.border,
+    backgroundColor: tapColors.headerBackground,
   }
 }
 
@@ -54,10 +71,11 @@ const listItem = theme => {
         flD: 'row',
         alI: 'center',
         flexWrap: 'nowrap',
-        ...theme.transition([ 'backgroundColor' ], 0.8),
+        ...theme.transition([ 'backgroundColor', 'border' ], 0.8),
         ...theme.flex.justify.between,
         pV: padSizeHalf,
         pH: theme.padding.size,
+        ...borderStyle.hide,
       },
       row: {
         pV: 0,
@@ -116,7 +134,7 @@ const listItem = theme => {
 
           },
           content: {
-            p: theme.padding.size / 2,
+            p: theme.padding.size,
             pL: theme.padding.size * 2
           },
           label: {
@@ -147,7 +165,7 @@ const listItem = theme => {
     },
     hover: {
       main: {
-        backgroundColor: tapColors.headerBackground
+        ...borderStyle.show,
       },
       title: {
         c: tapColors.success,
@@ -180,7 +198,7 @@ const listItem = theme => {
     },
     activeMeta: {
       main: {
-        backgroundColor: tapColors.headerBackground
+        ...borderStyle.show,
       },
       title: {
         c: tapColors.success,
@@ -191,6 +209,12 @@ const listItem = theme => {
             color: tapColors.success,
           }
         },
+        drawer: {
+          main: {
+            borderBottomWidth: 1,
+            borderColor: tapColors.border,
+          },
+        }
       }
     }
   }
@@ -199,6 +223,7 @@ const listItem = theme => {
 export const definitionList = theme => {
   return {
     main: {
+      fl: 1,
       minW: '100%',
     },
     list: {

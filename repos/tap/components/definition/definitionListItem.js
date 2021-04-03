@@ -56,6 +56,7 @@ export const DefinitionListItem = React.memo(props => {
       style={rowStyles}
     >
       <View
+        className={`def-list-image-main`}
         ref={rowRef}
         style={[
           itemStyles.main,
