@@ -1,3 +1,4 @@
+export * from './caretDown'
 export * from './check'
 export * from './checkFilled'
 export * from './chevronDown'
@@ -20,3 +21,4 @@ export * from './times'
 export * from './timesFilled'
 export * from './vial'
 export * from './wifi'
+

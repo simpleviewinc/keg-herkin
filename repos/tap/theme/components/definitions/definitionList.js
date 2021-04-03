@@ -43,24 +43,27 @@ const drawer = theme => {
 
 
 const listItem = theme => {
+
+  const padSizeHalf = theme.padding.size / 2
+  const padSizeThird = theme.padding.size / 3
+
   return {
     default: {
       main: {
         w: '100%',
         flD: 'row',
         alI: 'center',
+        flexWrap: 'nowrap',
         ...theme.transition([ 'backgroundColor' ], 0.8),
         ...theme.flex.justify.between,
-        pV: theme.padding.size / 2,
+        pV: padSizeHalf,
         pH: theme.padding.size,
-        // paddingLeft: theme.padding.size,
       },
       row: {
         pV: 0,
         pH: 0,
         pL: 0,
         ...theme.flex.justify.start,
-        flexWrap: 'nowrap',
       },
       title: {},
       actions: {
@@ -93,12 +96,13 @@ const listItem = theme => {
         ...theme.flex.justify.start,
       },
       meta: {
-        main: {
-
-        },
         toggle: {
           main: {
-            pR: theme.padding.size / 3,
+            w: 0,
+            pos: 'relative',
+            overflow: 'visible',
+            left: padSizeThird * -1,
+            pR: (theme.padding.size - padSizeThird),
           },
           icon: {
             fontSize: 12,
@@ -106,6 +110,38 @@ const listItem = theme => {
             transitionDuration: '0.8s',
             transitionProperty: 'transform',
           }
+        },
+        drawer: {
+          main: {
+
+          },
+          content: {
+            p: theme.padding.size / 2,
+            pL: theme.padding.size * 2
+          },
+          label: {
+            ftSz: 12,
+            ftWt: 'bold',
+            c: tapColors.default,
+          },
+          description: {
+            ftSz: 12,
+            pL: theme.padding.size,
+            c: tapColors.default,
+          },
+          expressions: {
+
+          },
+          expression: {
+            main: {
+              mT: theme.margin.size / 3,
+            },
+            info: {
+              ftSz: 12,
+              pL: theme.padding.size,
+              c: tapColors.default,
+            }
+          },
         }
       }
     },
@@ -122,10 +158,10 @@ const listItem = theme => {
         },
         action: {
           touchable: {
-            c: tapColors?.success,
+            c: tapColors?.primary,
           },
           name: {
-            c: tapColors?.success,
+            c: tapColors?.primary,
           }
         }
       },
@@ -135,6 +171,26 @@ const listItem = theme => {
             color: tapColors.success,
           }
         }
+      }
+    },
+    noMeta: {
+      main: {
+        pL: (padSizeThird) * 5
+      }
+    },
+    activeMeta: {
+      main: {
+        backgroundColor: tapColors.headerBackground
+      },
+      title: {
+        c: tapColors.success,
+      },
+      meta: {
+        toggle: {
+          icon: {
+            color: tapColors.success,
+          }
+        },
       }
     }
   }

@@ -37,6 +37,12 @@ export const DefinitionListItem = React.memo(props => {
   )
 
   const [metaToggled, setMetaToggled] = useState(false)
+  const metaStyles = !hasMetaData
+    ? mergeStyles.noMeta
+    : metaToggled
+      ? mergeStyles.activeMeta
+      : noOpObj
+
 
   const toggleMeta = useCallback(
     () => setMetaToggled(!metaToggled),
@@ -51,7 +57,11 @@ export const DefinitionListItem = React.memo(props => {
     >
       <View
         ref={rowRef}
-        style={[itemStyles.main, activeStyle?.main]}
+        style={[
+          itemStyles.main,
+          activeStyle?.main,
+          metaStyles.main,
+        ]}
       >
         <Touchable
           style={itemStyles.touchable}
@@ -62,13 +72,18 @@ export const DefinitionListItem = React.memo(props => {
           {hasMetaData && (
             <MetaToggle
               styles={itemStyles.meta}
+              metaStyles={metaStyles.meta}
               onPress={toggleMeta}
               toggled={metaToggled}
             />
           )}
           <Title
             title={title}
-            style={[ itemStyles.title, activeStyle?.title ]}
+            style={[
+              itemStyles.title,
+              activeStyle?.title,
+              metaStyles.title,
+            ]}
           />
         </Touchable>
         <Actions
@@ -76,17 +91,18 @@ export const DefinitionListItem = React.memo(props => {
           onPress={onPress}
           styles={itemStyles.actions}
         />
-        {hasMetaData && (
-          <DefinitionMeta
-            meta={meta}
-            group={group}
-            title={title}
-            styles={itemStyles.meta}
-            metaToggled={metaToggled}
-            setMetaToggled={setMetaToggled}
-          />
-        )}
       </View>
+      {hasMetaData && (
+        <DefinitionMeta
+          meta={meta}
+          group={group}
+          title={title}
+          styles={itemStyles.meta}
+          metaStyles={metaStyles.meta}
+          toggled={metaToggled}
+          setMetaToggled={setMetaToggled}
+        />
+      )}
     </Row>
   )
 })
