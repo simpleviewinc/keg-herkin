@@ -18,17 +18,17 @@ const typesMap = {
    filter_modal : (title) => {
        return `.evf-modal:has(h5:text('${title}'))`
    },
-   //if an element isn't mapped the user can pass "selector" as the {word} and the actual selector as the string like it does now
+   //if an element isn't mapped the user can pass "selector" as the {word} and the actual selector as the string like before
    selector : (title) => {
        return title
-   }
+   },
 }
 
 const parentContainerIsFound = async (type, title, world) => {
-   const itemSelector = world.typesMap[type](title)
+   const itemSelector = typesMap[type](title)
    return isAncestor(type, itemSelector, world)
 }
 
-Given(`the {word} titled {string} is found`, parentContainerIsFound)
+Given('the {word} titled/identifier {string} is found', parentContainerIsFound)
  
 module.exports = { parentContainerIsFound }
