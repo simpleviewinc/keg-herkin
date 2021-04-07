@@ -1,5 +1,5 @@
 const { Given } = require('HerkinParkin')
-const { getElements } = require('HerkinPlaywright')
+const { getElement } = require('HerkinPlaywright')
 
 /**
  * Finds the element matching `ancestorSelector`, and
@@ -9,7 +9,8 @@ const { getElements } = require('HerkinPlaywright')
  */
 const isAncestor = async (parentContainer, ancestorSelector, world) => {
   const containerDescritor = parentContainer //this is a descriptor, in plain english, of the parent element such as session,listing, asset, etc.  currently not used anywhere and only included to make the step expression more readable
-  const ancestor = getElements(ancestorSelector)
+  //const ancestor = getElements(ancestorSelector)
+  const ancestor = getElement(ancestorSelector)
 
   world.meta = {
     ancestor,
@@ -19,7 +20,14 @@ const isAncestor = async (parentContainer, ancestorSelector, world) => {
   return ancestor
 }
 
+/*
+NNQA Note : commenting out expressions so they don't show up in the step expression list in the UI
+keeping the code because the replacement, ancestorAbstracted, references isAncestor
+this may change/go away once we have finalized how we want to alias the selectors
+also changed the function from getElements to getElement because it should only find one
+*/
+
 //Given(`the element {string} is ancestor/parent`, isAncestor)
-Given(`the {string} container element {string} is found`, isAncestor)
+//Given(`the {string} container element {string} is found`, isAncestor)
 
 module.exports = { isAncestor }

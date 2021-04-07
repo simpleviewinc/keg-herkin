@@ -10,8 +10,8 @@ const { getPage } = getBrowserContext()
  */
 const inputExactText = async (selector, data) => {
   const page = await getPage()
-  const inputSelector = `input${selector}`
-  const content = await page.$eval(inputSelector, el => el.value)
+  //const inputSelector = `input${selector}`
+  const content = await page.$eval(selector, el => el.value)
   expect(content).toEqual(expect.stringMatching(data))
   return page
 }
@@ -19,4 +19,3 @@ const inputExactText = async (selector, data) => {
 Then('the input {string} text is {string}', inputExactText)
 
 module.exports = { inputExactText }
-
