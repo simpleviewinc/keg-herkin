@@ -52,6 +52,7 @@ const RenderList = props => {
     drawer=true,
     first,
     header=true,
+    headerToggle=true,
     groupKey,
     HeaderIcon,
     iconProps,
@@ -65,14 +66,13 @@ const RenderList = props => {
   } = props
 
   const group = meta.group || groupKey
-  const initialToggle = meta.toggled || drawerProps[groupKey]?.toggled || props.toggled || false
-
-  const [ toggled, setToggled ] = useState(initialToggle)
+  const toggled = meta.toggled || drawerProps[groupKey]?.toggled || props.toggled || false
+  const [ headerToggled, setToggled ] = useState(toggled)
 
   const onTogglePress = useCallback(event => {
-    checkCall(onHeaderPress, event)
-    setToggled(!toggled)
-  }, [ toggled, onHeaderPress ])
+    checkCall(onHeaderPress, event, meta)
+    headerToggle && setToggled(!headerToggled)
+  }, [ toggled, onHeaderPress, meta, headerToggled, headerToggle ])
 
   const drawerStyles = useMemo(() => {
     return deepMerge(
