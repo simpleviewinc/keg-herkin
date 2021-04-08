@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import { isStr, capitalize, checkCall, isFunc, noOpObj, noPropArr } from '@keg-hub/jsutils'
+import { isStr, checkCall, isFunc, noOpObj, noPropArr } from '@keg-hub/jsutils'
 import { Icon, View, Row, Text, Touchable } from 'SVComponents'
 import { renderCustomOrDefault } from 'SVUtils'
 import { useThemeHover, useStyle } from '@keg-hub/re-theme'
@@ -50,7 +50,7 @@ const RenderTitle = ({ style, title, ...props }) => {
       style={ style }
       { ...props }
     >
-      { capitalize(title) }
+      {title}
     </Text>
   ) || null
 }

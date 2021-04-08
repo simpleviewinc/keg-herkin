@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { isStr, checkCall, noOpObj, isEmptyColl } from '@keg-hub/jsutils'
+import { isStr, checkCall, noOpObj, isEmptyColl, capitalize } from '@keg-hub/jsutils'
 import { Icon, View, Row, Text, Touchable } from 'SVComponents'
 import { renderCustomOrDefault } from 'SVUtils'
 import { useThemeHover, useStyle } from '@keg-hub/re-theme'
@@ -8,6 +8,10 @@ import { ChevronDown } from 'SVAssets/icons'
 import { MetaToggle, DefinitionMeta } from './definitionMeta'
 const { Actions, Title } = ListItem
 
+const useFormattedTitle = (title='') => useMemo(() => {
+  const [ type, ...rest ] = title.split(' ')
+  return `${capitalize(type)} ${rest.join(' ')}`
+}, [ title ])
 
 export const DefinitionListItem = React.memo(props => {
   const {
@@ -49,6 +53,8 @@ export const DefinitionListItem = React.memo(props => {
     [metaToggled, setMetaToggled]
   )
 
+  const formattedTitle = useFormattedTitle(title)
+
   return (
     <Row
       key={`${group}-${title}`}
@@ -79,7 +85,7 @@ export const DefinitionListItem = React.memo(props => {
             />
           )}
           <Title
-            title={title}
+            title={formattedTitle}
             style={[
               itemStyles.title,
               activeStyle?.title,
