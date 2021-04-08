@@ -14,7 +14,7 @@ const buildReportPath = (type, context) => {
   const name = context ? context.split('/').pop() : `${type}s`
   const builtPath = path.join(HERKIN_TESTS_ROOT, HERKIN_REPORTS_DIR, `${type}/${name}.html`)
 
-  return `${builtPath}`
+  return builtPath
 }
 
 
