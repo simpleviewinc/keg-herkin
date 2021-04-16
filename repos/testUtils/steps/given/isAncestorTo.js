@@ -50,8 +50,23 @@ const isAncestorTo = async (ancestorSelector, descendentType, descendentSelector
 
 // example: The element ".foo" is parent/ancestor to child/descendent
 Given(
-  'the element {string} is parent to {string}', 
-  (selector, childSelector, world) => isAncestorTo(selector, 'child', childSelector, world)
+  'the element {string} is parent to {string}',
+  (selector, childSelector, world) => isAncestorTo(selector, 'child', childSelector, world),
+  {
+    description: 'Creates a parent child relationship between two elements.',
+    expressions: [
+      {
+        type: 'string',
+        description: 'Dom element selector of the parent element.',
+        example: '#element-parent-id',
+      },
+      {
+        type: 'string',
+        description: 'Dom element selector of the child element.',
+        example: '#element-child-id',
+      },
+    ]
+  }
 )
 Given(
   'the element {string} is ancestor to {string}', 

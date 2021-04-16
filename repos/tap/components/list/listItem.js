@@ -1,10 +1,18 @@
 import React, { useCallback, useMemo } from 'react'
-import { isStr, capitalize, checkCall, isFunc, noOpObj, noPropArr } from '@keg-hub/jsutils'
+import { isStr, checkCall, isFunc, noOpObj, noPropArr } from '@keg-hub/jsutils'
 import { Icon, View, Row, Text, Touchable } from 'SVComponents'
 import { renderCustomOrDefault } from 'SVUtils'
 import { useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { ListItemAction } from './listItemAction'
 
+/**
+ * RenderActions - Default component to render the actions of the ListItem
+ * @param {Object} props
+ * @param {Array} props.actions - Group of action props to be pass on to ListItemAction component
+ * @param {Object} props.style - Custom style for the component
+ *
+ * @returns {Component}
+ */
 const RenderActions = ({ actions=noPropArr, styles=noOpObj, ...props }) => {
   return actions && (
     <View
@@ -23,7 +31,14 @@ const RenderActions = ({ actions=noPropArr, styles=noOpObj, ...props }) => {
   ) || null
 }
 
-
+/**
+ * RenderAvatar - Default component to render the Avatar of the ListItem
+ * @param {Object} props
+ * @param {Object} props.avatar - Custom avatar props to pass to the avatar component
+ * @param {Object} props.style - Custom style for the component
+ *
+ * @returns {Component}
+ */
 const RenderAvatar = ({ avatar, ...props }) => {
   return avatar && (
     <View className='list-item-avatar' {...props} >
@@ -32,6 +47,14 @@ const RenderAvatar = ({ avatar, ...props }) => {
   ) || null
 }
 
+/**
+ * RenderIcon - Default component to render the icon of the ListItem
+ * @param {Object} props
+ * @param {Object} props.icon - Custom Icon props to pass to the keg-components Icon
+ * @param {Object} props.style - Custom style for the component
+ *
+ * @returns {Component}
+ */
 const RenderIcon = ({ icon, style, ...props }) => {
   icon = isStr(icon) ? { name: icon } : icon
   return icon && (
@@ -44,6 +67,14 @@ const RenderIcon = ({ icon, style, ...props }) => {
   ) || null
 }
 
+/**
+ * RenderTitle - Default component to render the title of the ListItem
+ * @param {Object} props
+ * @param {string} props.title - Text title content
+ * @param {Object} [props.style] - Custom style for the component
+ *
+ * @returns {Component}
+ */
 const RenderTitle = ({ style, title, ...props }) => {
   return title && (
     <Text
@@ -51,12 +82,29 @@ const RenderTitle = ({ style, title, ...props }) => {
       style={ style }
       { ...props }
     >
-      { capitalize(title) }
+      {title}
     </Text>
   ) || null
 }
 
-export const ListItem = props => {
+/**
+ * ListItem - Default item component used to display an item in the SimpleList component
+ * @param {Object} props
+ * @param {boolean} [props.active=false] - State for if the item is currently active within the List
+ * @param {Component|Object} props.actions - Component or object defining how the item actions are rendered
+ * @param {boolean|Object} props.avatar - Defines if and how the avatar component should be rendered
+ * @param {Component} props.children - Child components of the item
+ * @param {Object} props.components - Allows overriding default components with custom components
+ * @param {Component|Object} props.icon - Defines if and how the icon component should be rendered
+ * @param {function} props.onItemPress - Called when the item is pressed
+ * @param {boolean} [props.showFeedback=true] - Should feedback be shown when the item is pressed 
+ * @param {Object} props.styles - Custom styles for the ListItem component
+ * @param {string} props.title - Defines if and how the title component should be rendered
+ * @param {string} props.uuid - Id of the list item
+ *
+ * @returns {Component}
+ */
+export const ListItem = React.memo(props => {
   const {
     active,
     actions,
@@ -64,11 +112,11 @@ export const ListItem = props => {
     children,
     components=noOpObj,
     icon,
-    item,
     onItemPress,
-    renderItem,
+    showFeedback,
     styles=noOpObj,
     title,
+    uuid,
   } = props
 
   const mergeStyles = useStyle('list.item', styles)
@@ -77,60 +125,51 @@ export const ListItem = props => {
   const rowStyles = useStyle(itemStyles.row, activeStyle?.row)
 
   const onPress = useCallback(
-    event => checkCall(onItemPress, item, event),
-    [item, onItemPress]
+    event => checkCall(onItemPress, event, { title, active, uuid }),
+    [title, active, uuid, onItemPress]
   )
 
-  const renderProps = useMemo(() => {
-    return {
-      item,
-      onItemPress,
-      itemRef: rowRef,
-      styles: {
-        propStyles: styles,
-        ...itemStyles,
-        row: rowStyles,
-      }
-    } 
-  }, [item, onItemPress, styles, rowStyles, itemStyles])
+  return (
+    <Touchable
+      showFeedback={showFeedback || true}
+      className='list-item'
+      touchRef={ rowRef }
+      style={[itemStyles.main, activeStyle?.main]}
+      onPress={onPress}
+    >
+      <Row
+        className='list-item-row'
+        style={rowStyles}
+      >
+        { children || ([
+          avatar && renderCustomOrDefault(
+            components.avatar,
+            RenderAvatar,
+            { key: 'list-item-avatar', avatar, style: itemStyles.avatar },
+          ),
+          icon && renderCustomOrDefault(
+            components.icon,
+            RenderIcon,
+            { key: 'list-item-icon', icon, style: itemStyles.icon }
+          ),
+          title && renderCustomOrDefault(
+            components.title,
+            RenderTitle,
+            { key: 'list-item-title', title, style: [ itemStyles.title, activeStyle?.title ] }
+          ),
+          actions && renderCustomOrDefault(
+            components.actions,
+            RenderActions,
+            { key: 'list-item-actions', actions, styles: itemStyles.actions }
+          )
+        ])}
+      </Row>
+    </Touchable>
+  )
+})
 
-  return isFunc(renderItem)
-    ? renderItem(renderProps)
-    : (
-        <Touchable
-          showFeedback={item.showFeedback || true}
-          className='list-item'
-          touchRef={ rowRef }
-          style={[itemStyles.main, activeStyle?.main]}
-          onPress={onPress}
-        >
-          <Row
-            className='list-item-row'
-            style={rowStyles}
-          >
-            { children || ([
-              avatar && renderCustomOrDefault(
-                components.avatar,
-                RenderAvatar,
-                { key: 'list-item-avatar', avatar, style: itemStyles.avatar },
-              ),
-              icon && renderCustomOrDefault(
-                components.icon,
-                RenderIcon,
-                { key: 'list-item-icon', icon, style: itemStyles.icon }
-              ),
-              title && renderCustomOrDefault(
-                components.title,
-                RenderTitle,
-                { key: 'list-item-title', title, style: [ itemStyles.title, activeStyle?.title ] }
-              ),
-              actions && renderCustomOrDefault(
-                components.actions,
-                RenderActions,
-                { key: 'list-item-actions', actions, styles: itemStyles.actions }
-              )
-            ])}
-          </Row>
-        </Touchable>
-      )
-}
+
+ListItem.Avatar = RenderAvatar
+ListItem.Icon = RenderIcon
+ListItem.Title = RenderTitle
+ListItem.Actions = RenderActions

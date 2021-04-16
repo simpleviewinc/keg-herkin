@@ -1,4 +1,4 @@
-const { get } = require('@keg-hub/jsutils')
+const { get, isArr } = require('@keg-hub/jsutils')
 
 /**
  * Extracts the definitions code from a definitions fileModel
@@ -8,25 +8,26 @@ const { get } = require('@keg-hub/jsutils')
  * @return {Object} - Organized definitions code by type 
  */
 const definitionsByType = defFileModels => {
-  return defFileModels.reduce((organized, fileModel, idx) => {
+  return isArr(defFileModels)
+  ? defFileModels.reduce((organized, fileModel, idx) => {
+      get(fileModel, 'ast.definitions', [])
+        .map(definition => {
+          if(!definition || !definition.type) return
+          
+          const type = definition.type.toLowerCase()
+          // Store a reference to the parent fileModel to allow finding it later
+          definition.parent = {
+            uuid: fileModel.uuid,
+            location: fileModel.location
+          }
 
-    get(fileModel, 'ast.definitions', [])
-      .map(definition => {
-        if(!definition || !definition.type) return
-        
-        const type = definition.type.toLowerCase()
-        // Store a reference to the parent fileModel to allow finding it later
-        definition.parent = {
-          uuid: fileModel.uuid,
-          location: fileModel.location
-        }
+          organized[type] = organized[type] || []
+          organized[type].push(definition)
+        })
 
-        organized[type] = organized[type] || []
-        organized[type].push(definition)
-      })
-
-    return organized
-  }, {})
+      return organized
+    }, {})
+  : {}
 }
 
 module.exports = {

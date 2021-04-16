@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useToggledStyles } from 'SVHooks/useToggledStyles'
 import { Touchable, Text, View } from 'SVComponents'
 import { ChevronDown } from 'SVAssets/icons'
-import { useTheme, useThemeHover } from '@keg-hub/re-theme'
+import { useStyle, useThemeHover } from '@keg-hub/re-theme'
 
 /**
  * Helper to listen for click events
@@ -79,8 +79,8 @@ export const SidebarToggle = props => {
     setIsToggled
   } = props
 
-  const theme = useTheme()
-  const toggleStyles = useToggledStyles(toggled, theme.get('sidebar.toggle', styles))
+  const joinedStyles = useStyle('sidebar.toggle', styles)
+  const toggleStyles = useToggledStyles(toggled, joinedStyles)
 
   return (
     <View
@@ -89,7 +89,6 @@ export const SidebarToggle = props => {
     >
     {children || (
         <ToggleContent
-          theme={theme}
           text={text}
           toggled={toggled}
           setIsToggled={setIsToggled}

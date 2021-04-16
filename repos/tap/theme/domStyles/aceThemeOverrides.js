@@ -25,4 +25,7 @@ export const aceThemeOverrides = theme => ({
     overflowY: 'auto',
     marginRight: '0px !important',
   },
+  '.gherkin-editor-wrapper #feature-editor': {
+    height: '100% !important',
+  }
 })

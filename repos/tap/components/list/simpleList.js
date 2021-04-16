@@ -5,7 +5,8 @@ import {
   checkCall,
   noPropArr,
   deepMerge,
-  noOpObj
+  noOpObj,
+  isFunc
 } from '@keg-hub/jsutils'
 import {
   Grid,
@@ -30,18 +31,19 @@ const buildStyles = (theme, styles={}) => {
 
 const RenderListItems = ({ items, renderItem, group, onItemPress, styles }) => {
   return Object.entries(items)
-    .map(([ key, meta ]) => {
-      return (
-        <ListItem
-          key={`${group}-${key}`}
-          title={ key }
-          renderItem={renderItem}
-          onItemPress={onItemPress}
-          item={meta}
-          styles={styles}
-          { ...meta }
-        />
-      )
+    .map(([ key, item ]) => {
+      const itemProps = {
+        group,
+        styles,
+        title: key,
+        onItemPress,
+        key: `${group}-${key}`,
+        ...item
+      }
+
+      return isFunc(renderItem)
+        ? renderItem(itemProps)
+        : (<ListItem {...itemProps} />)
     })
 }
 
@@ -50,6 +52,7 @@ const RenderList = props => {
     drawer=true,
     first,
     header=true,
+    headerToggle=true,
     groupKey,
     HeaderIcon,
     iconProps,
@@ -63,14 +66,13 @@ const RenderList = props => {
   } = props
 
   const group = meta.group || groupKey
-  const initialToggle = meta.toggled || drawerProps[groupKey]?.toggled || props.toggled || false
-
-  const [ toggled, setToggled ] = useState(initialToggle)
+  const toggled = meta.toggled || drawerProps[groupKey]?.toggled || props.toggled || false
+  const [ headerToggled, setToggled ] = useState(toggled)
 
   const onTogglePress = useCallback(event => {
-    checkCall(onHeaderPress, event)
-    setToggled(!toggled)
-  }, [ toggled, onHeaderPress ])
+    checkCall(onHeaderPress, event, meta)
+    headerToggle && setToggled(!headerToggled)
+  }, [ toggled, onHeaderPress, meta, headerToggled, headerToggle ])
 
   const drawerStyles = useMemo(() => {
     return deepMerge(
@@ -118,7 +120,7 @@ const RenderList = props => {
               styles={ drawerStyles }
               toggled={ toggled }
             >
-            { RenderedItems }
+              { RenderedItems }
             </Drawer>
           )
         : RenderedItems
@@ -128,7 +130,7 @@ const RenderList = props => {
 
 }
 
-// Need to move tasks spacific data outside of this component
+// Need to move tasks specific data outside of this component
 // Should create a RenderTasks component, and use this inside it
 // Which will make this component reuseable
 export const SimpleList = (props) => {

@@ -1,3 +1,4 @@
+export * from './caretDown'
 export * from './check'
 export * from './checkFilled'
 export * from './chevronDown'
