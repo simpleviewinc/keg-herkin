@@ -1,10 +1,11 @@
 import { noOpObj } from '@keg-hub/jsutils'
 import { reduceObj } from '@keg-hub/jsutils'
 import { useStyle } from '@keg-hub/re-theme'
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo, useCallback, useState } from 'react'
 import { ChevronDown, Copy } from 'SVAssets/icons'
 import { SimpleList, Row, Text, View, Touchable } from 'SVComponents'
 import { addStepFromDefinition } from 'SVActions/features/local/addStepFromDefinition'
+import { DefinitionListItem } from './definitionListItem'
 
 /**
  * Sorts the passed in array of items alphabetically based on each items title property
@@ -74,7 +75,6 @@ const useDefinitionGroups = definitions => {
           actions: [{
             name: 'Copy to Clipboard',
             key: `action-copy`,
-            showFeedback: false,
             iconProps: {
               size: 14,
               Component: Copy,
@@ -89,20 +89,33 @@ const useDefinitionGroups = definitions => {
       return sortDefinitions(grouped)
     }, {
       lookup: {},
-      all: { group: 'All Steps', toggled: true, items: [] },
-      given: { group: 'Given Steps', toggled: false, items: [] },
-      when: { group: 'When Steps', toggled: false, items: [] },
-      then: { group: 'Then Steps', toggled: false, items: [] },
+      all: { type: 'all', group: 'All Steps', toggled: true, items: [] },
+      given: { type: 'given', group: 'Given Steps', toggled: false, items: [] },
+      when: { type: 'when', group: 'When Steps', toggled: false, items: [] },
+      then: { type: 'then', group: 'Then Steps', toggled: false, items: [] },
     })
   }, [ definitions ])
 }
 
+const renderItem = props => (<DefinitionListItem {...props} />)
+
+/**
+ * DefinitionList - Renders a list of Step Definitions
+ * @param {Object} props
+ * @param {Object} props.definitions - Items to show in the list
+ * @param {Object} props.feature - Parent active feature file
+ * @param {Object|function} props.contextRef - React ref of the current text editor being used
+ * @param {Object} props.styles - Custom styles for displaying the component
+ *
+ * @returns {Component}
+ */
 export const DefinitionList = props => {
 
   const { definitions, feature, contextRef, styles=noOpObj } = props
   const { lookup, ...groupedDefs } = useDefinitionGroups(definitions)
+  const [listItems, setListItems] = useState(groupedDefs)
 
-  const onItemPress = useCallback((item, event) => {
+  const onItemPress = useCallback((event, item) => {
     // TODO: feature and context are not currently used
     // Right now it just copies the text to the clipboard
     // Lookup the definition from the lookup table using the uuid
@@ -118,6 +131,22 @@ export const DefinitionList = props => {
       : console.warn(`Could not find matching definition for item:`, item)
   }, [lookup, feature, contextRef.current])
 
+  const onHeaderPress = useCallback((event, meta) => {
+    const listItemsCopy = { ...listItems }
+    const activeGroup = reduceObj(listItems, (key, group, updated) => {
+      const active = updated || (group.toggled && group)
+      // Update all other groups toggled to false in the same iteration
+      // Allows only looping over the groups once
+      listItemsCopy[key].toggled = (group.type === meta.type) && !meta.toggled
+
+      return active
+    }, false)
+
+    // Update the list items with a new version
+    // Which includes the updated active group
+    setListItems(listItemsCopy)
+  }, [listItems, setListItems])
+
   const listStyles = useStyle(`definitions.list`, styles)
 
   return (
@@ -127,9 +156,12 @@ export const DefinitionList = props => {
     >
       <SimpleList
         styles={listStyles.list}
-        items={groupedDefs}
+        items={listItems}
         toggled={false}
-        onItemPress={ onItemPress }
+        headerToggle={false}
+        renderItem={renderItem}
+        onHeaderPress={onHeaderPress}
+        onItemPress={onItemPress}
         HeaderIcon={ChevronDown}
       />
     </View>

@@ -35,8 +35,17 @@ const openUrl = async (url, world) => {
   return page
 }
 
+Given('I am on the site/url/uri {string}', openUrl, {
+  description: 'Navigates to the given website within the browser.',
+  expressions: [
+    {
+      type: 'string',
+      description: 'URL of the website the browser should navigate to',
+      example: 'https://my.website.com',
+    }
+  ]
+})
 Given('I open the site/url/uri {string}', openUrl)
-Given('I am on the site/url/uri {string}', openUrl)
 Given('the page/site url/uri is {string}', openUrl)
 Given('the user navigates to {string}', openUrl)
 

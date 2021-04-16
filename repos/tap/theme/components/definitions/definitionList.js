@@ -35,22 +35,53 @@ const drawer = theme => {
     main: {
     },
     content: {
-      pV: theme.padding.size / 2,
       backgroundColor: tapColors?.accentBackground,
     },
   }
 }
 
+const borderStyle = {
+  hide: {
+    borderColor: 'transparent',
+    top: -1,
+    position: 'relative',
+    borderWidth: 0,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+  },
+  show: {
+    borderWidth: 0,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: tapColors.border,
+    backgroundColor: tapColors.headerBackground,
+  }
+}
+
+
 const listItem = theme => {
+
+  const padSizeHalf = theme.padding.size / 2
+  const padSizeThird = theme.padding.size / 3
+
   return {
     default: {
       main: {
-        ...theme.transition([ 'backgroundColor' ], 0.8),
+        w: '100%',
+        flD: 'row',
+        alI: 'center',
+        flexWrap: 'nowrap',
+        ...theme.transition([ 'backgroundColor', 'border' ], 0.8),
+        ...theme.flex.justify.between,
+        pV: padSizeHalf,
+        pH: theme.padding.size,
+        ...borderStyle.hide,
       },
       row: {
-        pV: theme.padding.size / 2,
-        paddingLeft: theme.padding.size,
-        flexWrap: 'nowrap',
+        pV: 0,
+        pH: 0,
+        pL: 0,
+        ...theme.flex.justify.start,
       },
       title: {},
       actions: {
@@ -60,39 +91,129 @@ const listItem = theme => {
         },
         action: {
           main: {
-            pointerEvents: 'none',
           },
           touchable: {
             flD: 'row',
           },
           icon: {
             icon: {
-              c: tapColors?.success,
+              c: tapColors.inactive,
               mR: 5,
             },
           },
           name: {
             ftSz: 12,
             ftWt: 'bold',
-            c: tapColors?.success,
+            c: tapColors.inactive,
           }
+        }
+      },
+      touchable: {
+        flD: 'row',
+        alI: 'center',
+        ...theme.flex.justify.start,
+      },
+      meta: {
+        toggle: {
+          main: {
+            w: 0,
+            pos: 'relative',
+            overflow: 'visible',
+            left: padSizeThird * -1,
+            pR: (theme.padding.size - padSizeThird),
+          },
+          icon: {
+            fontSize: 12,
+            color: tapColors.inactive,
+            transitionDuration: '0.8s',
+            transitionProperty: 'transform',
+          }
+        },
+        drawer: {
+          main: {
+
+          },
+          content: {
+            p: theme.padding.size,
+            pL: theme.padding.size * 2
+          },
+          label: {
+            ftSz: 12,
+            ftWt: 'bold',
+            c: tapColors.default,
+          },
+          description: {
+            ftSz: 12,
+            pL: theme.padding.size,
+            c: tapColors.default,
+          },
+          expressions: {
+
+          },
+          expression: {
+            main: {
+              mT: theme.margin.size / 3,
+            },
+            info: {
+              ftSz: 12,
+              pL: theme.padding.size,
+              c: tapColors.default,
+            }
+          },
         }
       }
     },
     hover: {
       main: {
-        backgroundColor: tapColors.headerBackground
+        ...borderStyle.show,
       },
       title: {
-        c: tapColors?.success,
+        c: tapColors.success,
       },
       actions: {
         main: {
           opacity: 1,
         },
         action: {
-          touchable: {},
-          name: {}
+          touchable: {
+            c: tapColors?.primary,
+          },
+          name: {
+            c: tapColors?.primary,
+          }
+        }
+      },
+      meta: {
+        toggle: {
+          icon: {
+            color: tapColors.success,
+          }
+        }
+      }
+    },
+    noMeta: {
+      main: {
+        pL: (padSizeThird) * 5
+      }
+    },
+    activeMeta: {
+      main: {
+        ...borderStyle.show,
+      },
+      title: {
+        c: tapColors.success,
+      },
+      meta: {
+        toggle: {
+          icon: {
+            color: tapColors.success,
+          }
+        },
+        drawer: {
+          main: {
+            borderBottomWidth: 1,
+            borderColor: tapColors.border,
+          },
         }
       }
     }
@@ -102,6 +223,7 @@ const listItem = theme => {
 export const definitionList = theme => {
   return {
     main: {
+      fl: 1,
       minW: '100%',
     },
     list: {

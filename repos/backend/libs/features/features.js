@@ -1,5 +1,6 @@
 const path = require('path')
 const glob = require('glob')
+const { limbo, noPropArr } = require('@keg-hub/jsutils')
 const { featuresParser } = require('./featuresParser')
 const { buildFileModel } = require('../../utils/buildFileModel')
 
@@ -35,12 +36,19 @@ const parseFeatures = (featureFiles, testsRoot) => {
     const loaded = await toResolve
     if(!file) return loaded
 
-    const features = await featuresParser({
+    const [err, features=noPropArr] = await limbo(featuresParser({
       location: file,
       relative: file.replace(`${testsRoot}/`, '')
-    })
+    }))
 
-    return loaded.concat(features)
+    err &&
+      console.error(
+        `Error parsing ${file}\n`,
+        `This feature file will be skipped!\n`,
+        error.message
+      )
+
+    return features ? loaded.concat(features) : loaded
   }, Promise.resolve([]))
 }
 

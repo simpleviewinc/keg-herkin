@@ -62,6 +62,7 @@ const getParkinSupport = () => {
 }
 
 module.exports = {
+  maxWorkers: 1,
   rootDir: HERKIN_ROOT,
   moduleFileExtensions: [
     'feature',

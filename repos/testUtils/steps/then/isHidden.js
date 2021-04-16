@@ -11,6 +11,15 @@ const isHidden = async selector => {
   expect(element.isHidden()).toBe(true)
 }
 
-Then('the element {string} is hidden', isHidden)
+Then('the element {string} is hidden', isHidden, {
+  description: 'Checks that the element is on the DOM, but is hidden',
+  expressions: [
+    {
+      type: 'string',
+      example: `#element-id`,
+      description: 'Playwright element selector ( css | text | xpath )',
+    }
+  ]
+})
 
 module.exports = { isHidden }
