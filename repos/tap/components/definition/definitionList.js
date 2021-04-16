@@ -99,6 +99,16 @@ const useDefinitionGroups = definitions => {
 
 const renderItem = props => (<DefinitionListItem {...props} />)
 
+/**
+ * DefinitionList - Renders a list of Step Definitions
+ * @param {Object} props
+ * @param {Object} props.definitions - Items to show in the list
+ * @param {Object} props.feature - Parent active feature file
+ * @param {Object|function} props.contextRef - React ref of the current text editor being used
+ * @param {Object} props.styles - Custom styles for displaying the component
+ *
+ * @returns {Component}
+ */
 export const DefinitionList = props => {
 
   const { definitions, feature, contextRef, styles=noOpObj } = props
@@ -128,8 +138,6 @@ export const DefinitionList = props => {
       // Update all other groups toggled to false in the same iteration
       // Allows only looping over the groups once
       listItemsCopy[key].toggled = (group.type === meta.type) && !meta.toggled
-        ? true
-        : false
 
       return active
     }, false)

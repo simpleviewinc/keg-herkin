@@ -5,6 +5,14 @@ import { renderCustomOrDefault } from 'SVUtils'
 import { useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { ListItemAction } from './listItemAction'
 
+/**
+ * RenderActions - Default component to render the actions of the ListItem
+ * @param {Object} props
+ * @param {Array} props.actions - Group of action props to be pass on to ListItemAction component
+ * @param {Object} props.style - Custom style for the component
+ *
+ * @returns {Component}
+ */
 const RenderActions = ({ actions=noPropArr, styles=noOpObj, ...props }) => {
   return actions && (
     <View
@@ -23,6 +31,14 @@ const RenderActions = ({ actions=noPropArr, styles=noOpObj, ...props }) => {
   ) || null
 }
 
+/**
+ * RenderAvatar - Default component to render the Avatar of the ListItem
+ * @param {Object} props
+ * @param {Object} props.avatar - Custom avatar props to pass to the avatar component
+ * @param {Object} props.style - Custom style for the component
+ *
+ * @returns {Component}
+ */
 const RenderAvatar = ({ avatar, ...props }) => {
   return avatar && (
     <View className='list-item-avatar' {...props} >
@@ -31,6 +47,14 @@ const RenderAvatar = ({ avatar, ...props }) => {
   ) || null
 }
 
+/**
+ * RenderIcon - Default component to render the icon of the ListItem
+ * @param {Object} props
+ * @param {Object} props.icon - Custom Icon props to pass to the keg-components Icon
+ * @param {Object} props.style - Custom style for the component
+ *
+ * @returns {Component}
+ */
 const RenderIcon = ({ icon, style, ...props }) => {
   icon = isStr(icon) ? { name: icon } : icon
   return icon && (
@@ -43,6 +67,14 @@ const RenderIcon = ({ icon, style, ...props }) => {
   ) || null
 }
 
+/**
+ * RenderTitle - Default component to render the title of the ListItem
+ * @param {Object} props
+ * @param {string} props.title - Text title content
+ * @param {Object} [props.style] - Custom style for the component
+ *
+ * @returns {Component}
+ */
 const RenderTitle = ({ style, title, ...props }) => {
   return title && (
     <Text
@@ -55,6 +87,23 @@ const RenderTitle = ({ style, title, ...props }) => {
   ) || null
 }
 
+/**
+ * ListItem - Default item component used to display an item in the SimpleList component
+ * @param {Object} props
+ * @param {boolean} [props.active=false] - State for if the item is currently active within the List
+ * @param {Component|Object} props.actions - Component or object defining how the item actions are rendered
+ * @param {boolean|Object} props.avatar - Defines if and how the avatar component should be rendered
+ * @param {Component} props.children - Child components of the item
+ * @param {Object} props.components - Allows overriding default components with custom components
+ * @param {Component|Object} props.icon - Defines if and how the icon component should be rendered
+ * @param {function} props.onItemPress - Called when the item is pressed
+ * @param {boolean} [props.showFeedback=true] - Should feedback be shown when the item is pressed 
+ * @param {Object} props.styles - Custom styles for the ListItem component
+ * @param {string} props.title - Defines if and how the title component should be rendered
+ * @param {string} props.uuid - Id of the list item
+ *
+ * @returns {Component}
+ */
 export const ListItem = React.memo(props => {
   const {
     active,
@@ -64,7 +113,6 @@ export const ListItem = React.memo(props => {
     components=noOpObj,
     icon,
     onItemPress,
-    renderItem,
     showFeedback,
     styles=noOpObj,
     title,

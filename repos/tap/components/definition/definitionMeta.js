@@ -5,6 +5,10 @@ import { Icon, Touchable, Drawer, Text, View } from '@keg-hub/keg-components'
 import { useThemeHover, useStyle } from '@keg-hub/re-theme'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 
+/**
+ * MetaLabel - React component using ReStyle for custom styles
+ * @type {Object}
+ */
 const MetaLabel = reStyle(Text)(theme => ({
   fontSize: 12,
   fontWeight: 'bold',
@@ -12,6 +16,16 @@ const MetaLabel = reStyle(Text)(theme => ({
   color: theme.tapColors.default,
 }))
 
+/**
+ * MetaToggle - Toggles a definitions meta-data section open and closed 
+ * @param {Object} props
+ * @param {Object} props.styles - Custom styles for displaying the component
+ * @param {Object} props.metaStyles - Custom styles object overrides the style prop
+ * @param {boolean} props.toggled - Current toggled state
+ * @param {function} props.onPress - Method called when the toggle is pressed
+ *
+ * @returns {Component}
+ */
 export const MetaToggle = props => {
   const { metaStyles=noOpObj, toggled, styles=noOpObj, onPress } = props
 
@@ -34,6 +48,15 @@ export const MetaToggle = props => {
   )
 }
 
+/**
+ * MetaExpression - Displays the description key from a definitions the meta data
+ * @param {Object} props
+ * @param {Object} props.meta - Meta-data from a definition
+ * @param {Object} props.styles - Custom styles for displaying the component
+ * @param {Object} props.expression - Metadata of an expression from a definitions match text 
+ *
+ * @returns {Component}
+ */
 const MetaDescription = ({ meta, styles }) => {
   return (meta.description && (
     <View>
@@ -50,6 +73,15 @@ const MetaDescription = ({ meta, styles }) => {
   ))
 }
 
+/**
+ * MetaExpression - Displays the info of an expression from a definitions the meta data
+ * @param {Object} props
+ * @param {Object} props.meta - Meta-data from a definition
+ * @param {Object} props.styles - Custom styles for displaying the component
+ * @param {Object} props.expression - Metadata of an expression from a definitions match text 
+ *
+ * @returns {Component}
+ */
 const MetaExpression = ({ meta, expression, styles=noOpObj }) => {
   const start = "{"
   const end = "}"
@@ -67,6 +99,16 @@ const MetaExpression = ({ meta, expression, styles=noOpObj }) => {
   )
 }
 
+/**
+ * DefinitionMeta - Displays the meta-data of a Step Definition
+ * @param {Object} props
+ * @param {Object} props.styles - Custom styles for displaying the component
+ * @param {Object} props.metaStyles - Custom styles object overrides the style prop
+ * @param {boolean} props.toggled - Current toggled state
+ * @param {Object} props.meta - Meta-data from the step definition
+ *
+ * @returns {Component}
+ */
 export const DefinitionMeta = props => {
   const { metaStyles=noOpObj, styles=noOpObj, toggled, meta=noOpObj } = props
   const drawerStyles = useStyle(styles.drawer, metaStyles.drawer)
