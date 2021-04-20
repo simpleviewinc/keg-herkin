@@ -28,7 +28,7 @@ const useRunAction = (activeFile, editorRef) => {
 
     // save the file first if it has pending changes
     const canRun = content !== testFile.content || hasPending
-      ? await savePendingContent(content, testFile, false)
+      ? await savePendingContent(content, testFile)
       : true
 
     canRun
