@@ -10,27 +10,33 @@ import { removePendingFile } from '../local/removePendingFile'
  *
  * @returns {Object} - {success, fileModel}
  */
-export const saveFile = async (fileToSave=noOpObj) => {
+export const saveFile = async (fileToSave=noOpObj, showToast=true) => {
   const { location, content } = fileToSave
 
   if (!content || !location)
     return devLog(`warn`, 'File content and location are required')
 
-  addToast({
-    type: 'info',
-    message: `Saving file ${fileToSave.name}!`
-  })
+  showToast &&
+    addToast({
+      type: 'info',
+      message: `Saving file ${fileToSave.name}!`
+    })
 
   const result = await saveApiFile(location, content)
 
   if(result?.success){
     removePendingFile(fileToSave)
-    addToast({
-      type: 'success',
-      message: `File ${fileToSave.name} was saved!`
-    })
+    showToast &&
+      addToast({
+        type: 'success',
+        message: `File ${fileToSave.name} was saved!`
+      })
   }
-  else addToast({ type: 'danger', message: `Failed to save file ${fileToSave.name}!` })
+  else showToast &&
+    addToast({
+      type: 'danger',
+      message: `Failed to save file ${fileToSave.name}!`
+    })
   
   return result
 }
