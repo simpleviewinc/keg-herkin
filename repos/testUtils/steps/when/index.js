@@ -9,5 +9,6 @@ module.exports = {
   ...require('./pressKey'),
   ...require('./wait'),
   ...require('./waitForNavigation'),
-  ...require('./waitForState'),
+  ...require('./waitForPageLoad'),
+  ...require('./waitForSelectorState'),
 }

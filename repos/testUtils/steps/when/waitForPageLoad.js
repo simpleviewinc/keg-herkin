@@ -7,12 +7,12 @@ const { getPage } = getBrowserContext()
  * Without specifying any arguments, it by default waits for the load event to fire.
  * Read more here: https://playwright.dev/docs/api/class-page#pagewaitforloadstatestate-options
  */
-const waitForLoadState = async () => {
+const waitForPageLoad = async () => {
   const page = await getPage()
   await page.waitForLoadState()
   return page
 }
 
-When('I wait for the page to load', waitForLoadState)
+When('I wait for the page to load', waitForPageLoad)
 
-module.exports = { waitForLoadState }
+module.exports = { waitForPageLoad }

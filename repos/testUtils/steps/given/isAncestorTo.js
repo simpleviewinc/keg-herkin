@@ -48,10 +48,10 @@ const isAncestorTo = async (ancestorSelector, descendentType, descendentSelector
 }
 
 /**
- * Commenting out step expressions so they don't show in the list of steps in the UI 
- * This requires that the ancestor and descendent be passed in the same step which is a problem (verbosity and awkward step expressions) that was solved in establishing the ancestor using ancestorAbstracted.js and then referencing descendent elements in subsequent steps
- * This essentially does in one step what ancestorAbstracted.js followed by decendent step(s) will do except it just asserts the relationship and doesn't interact with elements
- * Does it matter if the step in a test fails because the element isn't found when the step will fail when trying to interact/evaluate some value when the element isn't found?
+ * Can't think of a good use-case for this over using ancestorAbstracted (isAncestor) > descendent steps
+ * Commenting out steps so they don't show in the list of steps in the UI
+ * This asserts the relationship, locates elements, and sets ancestor/descendent elements in memory
+ * The step verbiage is awkward and verbose since it requires that the ancestor and descendent be passed in the same step.  That problem has been solved by establishing the ancestor using ancestorAbstracted (isAncestor) followed by descendent steps that reference the anscestor established in ancestorAbstracted (isAncestor)
  */
 
 // example: The element ".foo" is parent/ancestor to child/descendent
