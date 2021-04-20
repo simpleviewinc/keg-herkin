@@ -56,54 +56,6 @@ const sortDefinitions = grouped => {
 }
 
 /**
- * Sorts the passed in array of items alphabetically based on each items title property
- * @private
- * @param {Array<Object>} items - Group of objects with a title property
- *
- * @return {Object} - Items sorted alphabetically
- */
-const alphaSort = items => {
-  items.sort(function(a, b) {
-    const textA = a.title.toLowerCase()
-    const textB = b.title.toLowerCase()
-    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
-  })
-
-  return items
-}
-
-/**
- * Sorts each definition group type alphabetically
- * Also sorts the all group by definition type
- * @private
- * @param {Object} grouped - Groups of step definitions separated by type
- *
- * @return {Object} - Sorted Groups of definitions alphabetically and by type 
- */
-const sortDefinitions = grouped => {
-
-  grouped.all.items.sort((a, b) => {
-    const textA = a.title.toLowerCase()
-    const textB = b.title.toLowerCase()
-    const aWhen = textA.startsWith('when')
-    const bThen = textB.startsWith('then')
-    const aThen = textA.startsWith('then')
-    const bWhen = textB.startsWith('when')
-
-    if(aWhen && bThen) return -1
-    if(aThen && bWhen) return 1
-
-    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
-  })
-
-  grouped.given.items = alphaSort(grouped.given.items)
-  grouped.when.items = alphaSort(grouped.when.items)
-  grouped.then.items = alphaSort(grouped.then.items)
-
-  return grouped
-}
-
-/**
  * Maps the definitions to a format that can be loaded by the SimpleList Component
  * Separates them by type, and creates a lookup map
  * @private
