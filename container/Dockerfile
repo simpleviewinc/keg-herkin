@@ -8,7 +8,7 @@ ARG PLAYWRIGHT_IMAGE_FROM=mcr.microsoft.com/playwright:bionic
 ARG KEG_COPY_LOCAL
 
 # Add a FROM for the tap-base image to we can copy content from it
-ARG KEG_BASE_IMAGE=ghcr.io/simpleviewinc/tap:master
+ARG KEG_BASE_IMAGE=ghcr.io/simpleviewinc/tap:develop
 FROM $KEG_BASE_IMAGE as tap-base
 
 # Allows overwriting where the base image is pulled from
