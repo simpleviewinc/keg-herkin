@@ -23,6 +23,7 @@ const buildCmdArgs = params => {
     'jest',
     '--detectOpenHandles',
     '--no-cache',
+    '--runInBand',
   ]
 
   const docTapPath = '/keg/tap'

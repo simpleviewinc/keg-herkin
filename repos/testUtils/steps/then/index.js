@@ -7,5 +7,7 @@ module.exports = {
   ...require('./elementContainsText'),
   ...require('./inputExactText'),
   ...require('./inputContainsText'),
+  ...require('./getCheckedState'),
   ...require('./descendentContainsText'),
+  ...require('./getSelectedOption'),
 }

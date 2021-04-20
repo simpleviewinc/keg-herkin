@@ -10,6 +10,7 @@ const { getPage } = getBrowserContext()
 const inputContainsText = async (selector, data) => {
   const page = await getPage()
   const content = await page.$eval(selector, (el) => el.value)
+  //expect(content).toEqual(expect.stringContaining(data))
   expect(content).toEqual(expect.stringContaining(data))
   return page
 }

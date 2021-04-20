@@ -14,20 +14,19 @@ const states = [
  * @param {string} selector 
  * @param {string} state 
  */
-const waitForState = async (selector, state) => {
+
+const waitForSelectorState = async (selector,state) => {
+  console.log('selector : ' + selector + ' ; state : ' + state)
   if (!states.includes(state)) 
     throw new Error('Invalid Selector State: ' + state)
 
   const page = await getPage()
-  return page.waitForSelector(selector, { 
+  return await page.waitForSelector(selector, { 
     state: `${state}`,
-    timeout: 100
+    timeout: 5000
   })
 }
 
-When('I wait for element {string} to be {string}', (selector, state) => waitForState(selector, state))
+When('I wait for element {string} to be {string}', waitForSelectorState)
 
-
-module.exports = {
-  waitForState
-}
+module.exports = { waitForSelectorState }

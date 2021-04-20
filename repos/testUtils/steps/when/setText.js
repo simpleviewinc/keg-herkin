@@ -10,6 +10,8 @@ const { getPage } = getBrowserContext()
 const setText = async (selector,data) => {
   const page = await getPage()
   await page.click(selector)
+  //clear value before setting otherwise data is appended to end of existing value
+  await page.fill(selector, '')
   await page.type(selector, data)
   return page
 }
