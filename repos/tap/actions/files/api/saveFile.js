@@ -7,37 +7,30 @@ import { removePendingFile } from '../local/removePendingFile'
 /**
  * Save the content to the given file. if no filePath passed in. it will save it on the currently active file
  * @param {Object} fileToSave - fileModel to be saved on the backend
- * @param {boolean} [showToast=true] - Should show toast messages
- * 
+ *
  * @returns {Object} - {success, fileModel}
  */
-export const saveFile = async (fileToSave=noOpObj, showToast=true) => {
+export const saveFile = async (fileToSave=noOpObj) => {
   const { location, content } = fileToSave
 
   if (!content || !location)
     return devLog(`warn`, 'File content and location are required')
 
-  showToast &&
-    addToast({
-      type: 'info',
-      message: `Saving file ${fileToSave.name}!`
-    })
+  addToast({
+    type: 'info',
+    message: `Saving file ${fileToSave.name}!`
+  })
 
   const result = await saveApiFile(location, content)
 
   if(result?.success){
     removePendingFile(fileToSave)
-    showToast &&
-      addToast({
-        type: 'success',
-        message: `File ${fileToSave.name} was saved!`
-      })
-  }
-  else showToast &&
     addToast({
-      type: 'danger',
-      message: `Failed to save file ${fileToSave.name}!`
+      type: 'success',
+      message: `File ${fileToSave.name} was saved!`
     })
+  }
+  else addToast({ type: 'danger', message: `Failed to save file ${fileToSave.name}!` })
   
   return result
 }

@@ -17,7 +17,7 @@ const { SCREENS, CATEGORIES } = Values
 const useRunAction = (activeFile, editorRef) => {
 
   return useCallback(async (event, testFile, testCommand, hasPending) => {
-  
+
     if(!editorRef.current)
       return console.warn(`Editor Reference is not set!`)
 
@@ -28,7 +28,7 @@ const useRunAction = (activeFile, editorRef) => {
 
     // save the file first if it has pending changes
     const canRun = content !== testFile.content || hasPending
-      ? await savePendingContent(content, testFile, false)
+      ? await savePendingContent(content, testFile)
       : true
 
     canRun
