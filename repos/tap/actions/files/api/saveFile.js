@@ -7,7 +7,7 @@ import { removePendingFile } from '../local/removePendingFile'
 /**
  * Save the content to the given file. if no filePath passed in. it will save it on the currently active file
  * @param {Object} fileToSave - fileModel to be saved on the backend
- * 
+ *
  * @returns {Object} - {success, fileModel}
  */
 export const saveFile = async (fileToSave=noOpObj) => {
@@ -33,5 +33,4 @@ export const saveFile = async (fileToSave=noOpObj) => {
   else addToast({ type: 'danger', message: `Failed to save file ${fileToSave.name}!` })
   
   return result
-
 }

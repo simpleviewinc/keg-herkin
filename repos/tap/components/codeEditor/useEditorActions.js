@@ -3,8 +3,7 @@ import { Values } from 'SVConstants'
 import { noOpObj, get } from '@keg-hub/jsutils'
 import { addToast } from 'SVActions/toasts/addToast'
 import { runTests } from 'SVActions/runner/runTests'
-import { saveFile } from 'SVActions/files/api/saveFile'
-import { setActiveFileFromType } from 'SVActions/files/local/setActiveFileFromType'
+import { savePendingContent } from 'SVActions/files/local/savePendingContent'
 
 const { SCREENS, CATEGORIES } = Values
 
@@ -18,7 +17,7 @@ const { SCREENS, CATEGORIES } = Values
 const useRunAction = (activeFile, editorRef) => {
 
   return useCallback(async (event, testFile, testCommand, hasPending) => {
-  
+
     if(!editorRef.current)
       return console.warn(`Editor Reference is not set!`)
 
@@ -26,8 +25,7 @@ const useRunAction = (activeFile, editorRef) => {
       return console.warn(`Can not run tests for this file. It is not a test file!`)
 
     const content = editorRef.current?.editor?.getValue()
-    await savePendingContent(content, testFile)
-    
+
     // save the file first if it has pending changes
     const canRun = content !== testFile.content || hasPending
       ? await savePendingContent(content, testFile)
@@ -71,21 +69,6 @@ const useSaveAction = (activeFile, editorRef, setIsSaving) => {
 
     return false
   }, [ editorRef.current, activeFile, setIsSaving, SCREENS.EDITOR ])
-}
-
-/**
- * Helper to save the file and updates the activeFile and file store
- * @param {string} content 
- * @param {object} activeFile - filemodel
- * 
- * @returns {boolean} - if successful or not
- */
-const savePendingContent = async (content, activeFile) => {
-  // save the file and update active file
-  const saveResult = content && await saveFile({ ...activeFile, content })
-  saveResult
-    ? saveResult?.success && setActiveFileFromType(saveResult?.file, SCREENS.EDITOR)
-    : false
 }
 
 /**

@@ -3,13 +3,13 @@ import { Values } from 'SVConstants'
 import { Rabbit } from 'SVAssets/icons'
 import { useSockr } from '@ltipton/sockr'
 import { useStyle } from '@keg-hub/re-theme'
-import { noOpObj, get, noOp } from '@keg-hub/jsutils'
 import { View, Button, Text } from 'SVComponents'
 import { addToast } from 'SVActions/toasts/addToast'
 import { runTests } from 'SVActions/runner/runTests'
+import { noOpObj, get, noOp } from '@keg-hub/jsutils'
 import { useActiveFile } from 'SVHooks/useActiveFile'
-import { saveFile } from 'SVActions/files/api/saveFile'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { savePendingContent } from 'SVActions/files/local/savePendingContent'
 
 const { SCREENS, CATEGORIES, RUN_ALL_TESTS } = Values
 
@@ -64,7 +64,7 @@ const useRunAction = props => {
   const testCommand = useTestCommand(commands, testFile.fileType)
 
   return useCallback(async event => {
-  
+
     // Call the passed in onRun callback
     // If it returns false, then don't do anything else in this callback
     const shouldContinue = await onRun(
@@ -74,6 +74,7 @@ const useRunAction = props => {
       hasPending,
       runAllTests
     )
+
     if(shouldContinue === false) return
 
     if(!testCommand)
@@ -84,7 +85,7 @@ const useRunAction = props => {
 
     // Save the file first if it has pending changes
     const canRun = hasPending
-      ? await savePendingContent(content, testFile)
+      ? await savePendingContent(content, testFile, false)
       : true
 
     canRun

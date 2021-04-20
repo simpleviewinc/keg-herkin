@@ -1,5 +1,4 @@
 const { apiErr, apiResponse } = require('./handler')
-const { parkin } = require('HerkinParkin/instance')
 const { loadDefinitions, DefinitionsParser } = require('../libs/definitions')
 const { definitionsByType, fileModelArrayToObj } = require('../../shared/utils')
 
