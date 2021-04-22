@@ -13,6 +13,15 @@ const pageTitleIsNot = async (title) => {
   return page
 }
 
-Then('the page title is not {string}', pageTitleIsNot)
+Then('the page title is not {string}', pageTitleIsNot, {
+  description: 'Verifies page title does not match expected string.',
+  expressions: [
+    {
+      type: 'string',
+      description: 'String that does not match page title.',
+      example: 'Simpleville - LuxuryHotelAccommodations',
+    }
+  ]
+})
 
 module.exports = { pageTitleIsNot }

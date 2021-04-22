@@ -12,6 +12,15 @@ const pageTitleIs = async (title) => {
   return page
 }
 
-Then('the page title is {string}', pageTitleIs)
+Then('the page title is {string}', pageTitleIs, {
+  description: 'Verifies page title is expected string.',
+  expressions: [
+    {
+      type: 'string',
+      description: 'Expected page title.',
+      example: 'Simpleville - Hotels',
+    }
+  ]
+})
 
 module.exports = { pageTitleIs }

@@ -27,7 +27,21 @@ const getCheckedState = async (selector, state) => {
     return checkedState
 }
 
-Then(`the element {string} checked state is {string}`, (selector, state) => getCheckedState(selector, state))
+Then(`the element {string} checked state is {string}`, (selector, state) => getCheckedState(selector, state), {
+    description: 'Locates a checkbox element by selector and verifies its checked state, checked or unchecked.',
+    expressions: [
+      {
+        type: 'string',
+        description: 'The selector for the checkbox.  Selector must be specific enough to locate a single element.',
+        example: 'input[name=\'unique_name\']',
+      },
+      {
+        type: 'string',
+        description: 'Valid options are \'checked\' or \'unchecked\' only.',
+        example: 'checked',
+      }
+    ]
+  })
 
 module.exports = {
     getCheckedState

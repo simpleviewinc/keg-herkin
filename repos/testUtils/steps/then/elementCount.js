@@ -14,6 +14,20 @@ const elementCount = async (selector, count) => {
   return page
 }
 
-Then('the count of {string} is/equals {int}', elementCount)
+Then('the count of {string} is/equals {int}', elementCount, {
+  description: 'Locates elements by selector and verifies count.',
+  expressions: [
+    {
+      type: 'string',
+      description: 'The selector for the elements.',
+      example: 'div.listing',
+    },
+    {
+      type: 'int',
+      description: 'Integer.  The count to verify.',
+      example: '5',
+    }
+  ]
+})
 
 module.exports = { elementCount }

@@ -40,7 +40,21 @@ Commenting out the child step expression/definition to see if it comes up but wa
 //   expect(content).toEqual(expect.stringContaining(data))
 // }
 
-Then('the descendent element {string} contains the text {string}', descendentContainsText)
+Then('the descendent element {string} contains the text {string}', descendentContainsText, {
+  description: 'Locates an element by selector and verifies element text.\nThere must be a preceding step that establishes an ancestor.',
+  expressions: [
+    {
+      type: 'string',
+      description: 'The selector for the element.  Selector must be specific enough to locate a single element.',
+      example: '.ef-session-location',
+    },
+    {
+      type: 'string',
+      description: 'The text of the element to verify.',
+      example: 'Main Hall',
+    }
+  ]
+})
 //Then('the child element {string} contains the text {string}', childContainsText)
 
 module.exports = {

@@ -13,7 +13,16 @@ const checkDescendent = async (selector, world) => {
   return checkElement(`${world.meta.ancestorSelector} ${selector}`)
 }
 
-When(`I check the descendent element {string}`, checkElement)
+When(`I check the descendent element {string}`, checkElement, {
+  description: 'Locates a checkbox element by selector and checks the checkbox.\nThere must be a preceding step that establishes an ancestor.',
+  expressions: [
+    {
+      type: 'string',
+      description: 'The selector for the checkbox element.  Selector must be specific enough to locate a single element.',
+      example: 'input[name=\'unique_name\']',
+    }
+  ]
+})
 
 module.exports = {
   checkDescendent
