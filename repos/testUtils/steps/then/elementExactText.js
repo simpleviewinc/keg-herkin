@@ -15,6 +15,20 @@ const elementExactText = async (selector, data) => {
   return page
 }
 
-Then('the element {string} text is {string}', elementExactText)
+Then('the element {string} text is {string}', elementExactText, {
+  description: 'Locates element by selector and verifies element text matches exactly.',
+  expressions: [
+    {
+      type: 'string',
+      description: 'The selector for the element.  Selector must be specific enough to locate only one element.',
+      example: '#search',
+    },
+    {
+      type: 'string',
+      description: 'Text of the element to verify.',
+      example: 'cucumber',
+    }
+  ]
+})
 
 module.exports = { elementExactText }
