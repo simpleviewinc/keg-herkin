@@ -1,3 +1,15 @@
+actions:
+  tap:
+    build:
+      cmds:
+        - yarn web:build
+        - rm -rf {{ envs.DOC_BUILD_PATH }}
+        - cp -R {{ envs.DOC_CORE_PATH }}/web-build {{ envs.DOC_BUILD_PATH }}
+    serve:
+      detached: true
+      cmds:
+        - npx serve {{ envs.DOC_BUILD_PATH }} --cors -n -l {{ envs.KEG_PROXY_PORT }}
+        - node {{ envs.DOC_APP_PATH }}/repos/backend/index.js
 env:
 
   # --- KEG-CLI ENV CONTEXT --- #
@@ -29,10 +41,11 @@ env:
 
   # --- DOCKER ENV CONTEXT --- #
 
-  # Paths within the docker contianer
+  # Paths within the docker container
   # Used when setting up syncs between host and container
   # Should follow the pattern DOC_<name-of-linked-folder>_PATH
   DOC_APP_PATH: /keg/tap
+  DOC_BUILD_PATH: /keg/tap-build
   DOC_CORE_PATH: /keg/tap/node_modules/keg-core
   DOC_COMPONENTS_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/keg-components
   DOC_RETHEME_PATH: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
