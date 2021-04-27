@@ -66,5 +66,4 @@ Given('I navigate to {string}', openUrl, {
   ]
 })
 
-
 module.exports = { openUrl }
