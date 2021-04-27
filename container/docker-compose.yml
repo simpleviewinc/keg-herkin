@@ -19,5 +19,11 @@ services:
       - KEG_DOCKER_EXEC
       - KEG_PROXY_PORT
       - NODE_ENV
+      - API_PORT
+      - NO_VNC_PORT
+      - VNC_SERVER_PORT
     ports:
       - ${API_PORT}:${API_PORT}
+      - ${NO_VNC_PORT}:${NO_VNC_PORT}
+      # Only expose this port if we want to expose the VNC server outside the container
+      # - ${VNC_SERVER_PORT}:${VNC_SERVER_PORT}

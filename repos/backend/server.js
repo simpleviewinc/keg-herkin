@@ -5,6 +5,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const apiEndpoints = require('./endpoints')
 const { sockr } = require('@ltipton/sockr/src/server')
+const proxy = require('express-http-proxy')
 const { getHerkinConfig } = require('HerkinConfigs/getHerkinConfig')
 const { noOpObj, eitherArr, isArr, isObj, exists, isStr } = require('@keg-hub/jsutils')
 
@@ -51,6 +52,29 @@ const addStaticPath = (app, name, loc) => {
  * @returns {void}
  */
 const setupServer = (app, config) => {
+
+  // TODO: instead of using a proxy, install @novnc/novnc npm package instead
+  // Then it can be integrated with this server
+  app.use('/novnc', proxy('http://0.0.0.0:26367', {
+    // proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+    //   console.log(`--------- proxyReqOpts ---------`)
+    //   console.log(proxyReqOpts)
+    //   return proxyReqOpts
+    // },
+    // proxyReqBodyDecorator: function(bodyContent, srcReq) {
+    //   console.log(`--------- bodyContent ---------`)
+    //   console.log(bodyContent.toString())
+    //   return bodyContent
+    // }
+    // userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
+    //   data = proxyResData.toString('utf8')
+
+    //   console.log(`--------- data ---------`)
+    //   console.log(data)
+
+    //   return data
+    // }
+  }))
 
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))

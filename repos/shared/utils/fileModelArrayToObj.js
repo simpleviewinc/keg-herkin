@@ -6,7 +6,8 @@
  */
 const fileModelArrayToObj = (fileModels) => {
   return fileModels && fileModels.reduce((map, fileModel) => {
-    map[fileModel?.location] = fileModel
+    fileModel.location &&
+      (map[fileModel.location] = fileModel)
     return map
   }, {})
 }

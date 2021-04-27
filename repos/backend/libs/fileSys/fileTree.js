@@ -17,8 +17,10 @@ const { resolveTestFileType } = require('../../utils/resolveTestFileType')
 const parentNodeExists = (nodes, parentPath, newItem) => {
   const found = nodes.find((node) => {
     return node.location === parentPath
-      ? Boolean(node.children.push(newItem?.id)) && nodes.push(newItem)
-      : node.children?.length && parentNodeExists(node.children, parentPath, newItem)
+      ? Boolean(node.children.push(newItem.id)) && nodes.push(newItem)
+      : node.children &&
+          node.children.length &&
+          parentNodeExists(node.children, parentPath, newItem)
   })
 
   return Boolean(found)
