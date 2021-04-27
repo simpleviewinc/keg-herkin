@@ -1,4 +1,4 @@
-
+See docs here => https://novnc.com/noVNC/docs/EMBEDDING.html
 
 ### TODO
   * Investigate installing only the following items
