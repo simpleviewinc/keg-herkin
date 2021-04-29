@@ -3,14 +3,14 @@ const { spawnCmd } = require('@keg-hub/spawn-cmd')
 const { chromium, firefox, webkit } = require('playwright')
 const rootDir = path.join(__dirname, '../../../')
 
-// websockify -v --web /usr/share/_novnc 0.0.0.0:26367 0.0.0.0:26370
+// websockify -v --web /usr/share/_novnc 0.0.0.0:26369 0.0.0.0:26370
 const startSockify = async () => {
   return spawnCmd('websockify', {
     args: [
       '-v',
       '--web',
       '/usr/share/_novnc',
-      '0.0.0.0:26367',
+      '0.0.0.0:26369',
       '0.0.0.0:26370'
     ],
     options: { env: process.env },
