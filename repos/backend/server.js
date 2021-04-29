@@ -53,32 +53,12 @@ const addStaticPath = (app, name, loc) => {
  */
 const setupServer = (app, config) => {
 
-  // TODO: instead of using a proxy, install @novnc/novnc npm package instead
-  // Then it can be integrated with this server
-  app.use('/novnc', proxy('http://0.0.0.0:26367', {
-    // proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
-    //   console.log(`--------- proxyReqOpts ---------`)
-    //   console.log(proxyReqOpts)
-    //   return proxyReqOpts
-    // },
-    // proxyReqBodyDecorator: function(bodyContent, srcReq) {
-    //   console.log(`--------- bodyContent ---------`)
-    //   console.log(bodyContent.toString())
-    //   return bodyContent
-    // }
-    // userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
-    //   data = proxyResData.toString('utf8')
-
-    //   console.log(`--------- data ---------`)
-    //   console.log(data)
-
-    //   return data
-    // }
-  }))
+  // Setup the novnc proxy to forward all requests to that server
+  app.use('/novnc', proxy('http://0.0.0.0:26369'))
 
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: true }))
-  
+
   // Setup the static paths of the server for serving files
   isStr(config.static)
     ? app.use(express.static(config.static))
@@ -106,7 +86,7 @@ const initApi = async () => {
   setupServer(app, serverConfig)
   setupCors(app, serverConfig)
   apiEndpoints(app, config)
-  
+
   const server = app.listen(
     serverConfig.port,
     serverConfig.host,

@@ -56,10 +56,8 @@ env:
   # Default port of the app to expose from the container
   KEG_PROXY_PORT: 19006
   API_PORT: 5005
-  NO_VNC_PORT: 26367
-  # TODO: Update to use these ports instead
-  # NO_VNC_PORT: 26369
-  # VNC_SERVER_PORT: 26370
+  NO_VNC_PORT: 26369
+  VNC_SERVER_PORT: 26370
 
   # --- GENERAL CONTEXT ENVs --- #
   KEG_EXEC_CMD: dev

@@ -1,6 +1,7 @@
 version: "3.8"
 services:
   keg-herkin:
+    ipc: host
     privileged: true
     environment:
       - HERKIN_APP_URL
