@@ -1,10 +1,11 @@
 import React from 'react'
 import { 
-  Select as KegSelect, 
-  Option, 
+  Select as KegSelect,
+  Option,
   Label,
   View
 } from '@keg-hub/keg-components'
+import { isObj } from '@keg-hub/jsutils'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 
 
@@ -24,11 +25,12 @@ const ReStyleView = reStyle(
  */
 const generateOptions = (options) => {
   return options.map((option, index) => {
+    const mapped = isObj(option) ? option : { label: option, value: option }
     return (
       <Option
         key={index}
-        label={option?.label}
-        value={option?.value}
+        label={mapped?.label}
+        value={mapped?.value}
       />
     )
   })
@@ -45,6 +47,7 @@ export const Select = (props) => {
   const {
     title='',
     onValueChange,
+    value,
     options=[],
     styles
   } = props
@@ -52,7 +55,10 @@ export const Select = (props) => {
   return (
     <ReStyleView style={styles?.main}>
       <Label>{title}</Label>
-      <KegSelect onValueChange={onValueChange}>
+      <KegSelect
+        value={value}
+        onValueChange={onValueChange}
+      >
         {generateOptions(options)}
       </KegSelect>
     </ReStyleView>

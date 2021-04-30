@@ -19,6 +19,7 @@ export const Values = {
     SIDEBAR: 'sidebar',
     PENDING_FILES: 'pendingFiles',
     TOASTS: 'toasts',
+    RUN_SETTINGS: 'runSettings'
   },
   SUB_CATEGORIES: {
     NODES: 'nodes',
@@ -29,6 +30,7 @@ export const Values = {
   MODAL_TYPES: {
     TEST_SELECTOR: 'testSelectorModal',
     CREATE_FILE: 'createFileModal',
+    TEST_RUN_SETTINGS: 'testRunSettings',
   },
   FILE_TYPES: {
     FEATURE: 'feature',
@@ -89,5 +91,18 @@ export const Values = {
     STD_ERR: 'stdErr',
     CMD_END: 'cmdEnd',
     CMD_FAIL: 'cmdFail',
+  },
+  BROWSER_TYPES: {
+    Chrome: 'chromium',
+    Firefox: 'firefox',
+    Safari: 'webkit',
+    'All Browsers': 'allBrowsers'
+  },
+  DEF_TEST_RUN_SETTINGS: {
+    browser: 'chromium',
+    timeout: 5,
+    speed: 5,
+    height: 1024,
+    width: 1280
   }
 }

@@ -1,4 +1,3 @@
-import { get } from '@keg-hub/jsutils'
 import { dispatch, getStore } from 'SVStore'
 import { addToast } from '../../toasts/addToast'
 import { Values, ActionTypes } from 'SVConstants'

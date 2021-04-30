@@ -1,3 +1,7 @@
+const {
+  KEG_TEST_TIMEOUT,
+  HERKIN_TEST_TIMEOUT,
+} = process.env
 
 const groupOpts = {
   jest: action => ({
@@ -10,7 +14,7 @@ const groupOpts = {
     timeout: {
       description: 'Test timeout in milliseconds. Defaults to no timeout, so that async playwright tasks have sufficient time to complete.',
       example: `${action} --timeout 1000`,
-      default: 5 * 1000 // 5 seconds
+      default: HERKIN_TEST_TIMEOUT || KEG_TEST_TIMEOUT || (5 * 1000) // 5 seconds
     },
     jestConfig: {
       description: 'Path to jest config relative to the root directory',

@@ -5,6 +5,7 @@ import { setActiveSidebar } from 'SVActions/sidebar'
 import { loadTestFile } from './files/api/loadTestFile'
 import { loadBddTests } from './files/api/loadBddTests'
 import { getQueryData } from 'SVUtils/url/getQueryData'
+import { setRunSettings } from './settings/setRunSettings'
 import { setScreenById } from 'SVActions/screens/setScreenById'
 import { getRemoteFileTree } from './files/api/getRemoteFileTree'
 
@@ -40,6 +41,8 @@ const loadInitModal = async queryObj => {
   // display options modal if no valid querystring passed in
   ;(!queryObj || isEmptyColl(queryObj)) &&
     setActiveModal(MODAL_TYPES.TEST_SELECTOR)
+  
+  // setActiveModal(MODAL_TYPES.TEST_RUN_SETTINGS)
 }
 
 /**
@@ -61,6 +64,9 @@ export const init = async () => {
 
   // Setup the sidebar
   setActiveSidebar(SIDEBAR_TYPES.FILE_TREE)
+
+  // Set the initial test run settings
+  setRunSettings(undefined, false)
 
   // Load the init modal
   loadInitModal(queryObj)

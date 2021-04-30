@@ -6,9 +6,11 @@ const { buildReportPath } = require('HerkinTasks/utils/reporter/buildReportPath'
 const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers') 
 const { buildReportTitle } = require('HerkinTasks/utils/reporter/buildReportTitle')
 
-// The env should only be set on the sockr.cmd.sh script
-// This way we know if it's coming from the herkin frontend
-const { HERKIN_RUN_FROM_UI } = process.env
+const {
+  // The env should only be set on the sockr.cmd.sh script
+  // This way we know if it's coming from the herkin frontend
+  HERKIN_RUN_FROM_UI
+} = process.env
 
 /**
  * Builds the arguments that are passed to jest when the test is run
@@ -16,7 +18,7 @@ const { HERKIN_RUN_FROM_UI } = process.env
  *                          See options section of the task definition below
  */
 const buildCmdArgs = params => {
-  const { jestConfig, timeout, bail, context, filter, noTests } = params
+  const { jestConfig, timeout, bail, context, filter, sync, noTests } = params
 
   const cmdArgs = [
     'npx',
@@ -30,6 +32,7 @@ const buildCmdArgs = params => {
   timeout && cmdArgs.push(`--testTimeout=${timeout}`)
   bail && cmdArgs.push('--bail')
   noTests && cmdArgs.push('--passWithNoTests')
+  sync && cmdArgs.push('--runInBand')
 
   // If context is set use that as the only file to run
   context && cmdArgs.push(context)
@@ -105,12 +108,12 @@ const exitProcess = (exitCodes=[], reportPath) => {
  * @return {Object} launchParams - the task params with any updates needed 
  * to be compatible with browser launch params
  */
-const buildLaunchParams = params => ({
-  ...params,
-  slowMo: isNum(params.slowMo)
-    ? params.slowMo * 1000  // seconds to ms conversion
-    : undefined
-})
+const buildLaunchParams = params => {
+  let slowMo = parseInt(exists(HERKIN_TEST_SPEED) ? HERKIN_TEST_SPEED : KEG_TEST_SPEED)
+  slowMo = slowMo || isNum(params.slowMo) ? params.slowMo * 1000 : undefined
+
+  return { ...params, slowMo }
+}
 
 /**
  * Run parkin tests in container
