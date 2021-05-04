@@ -24,7 +24,21 @@ const setText = async (selector,data, world) => {
   return page
 }
 
-When('I set the element {string} text to {string}', setText)
+When('I set the element {string} text to {string}', setText, {
+  description: 'Locates input element by selector and types desired text.\n\nModule : setText',
+  expressions: [
+    {
+      type: 'string',
+      description: 'The selector for the input element.  Selector must be specific enough to locate only one element.',
+      example: '#search',
+    },
+    {
+      type: 'string',
+      description: 'Desired text of the element.\n\nExample : I set the element "input[name=email]" text to "my.name@company.com"',
+      example: 'I desire to type this text.',
+    }
+  ]
+})
 
 module.exports = { setText }
 

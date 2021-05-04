@@ -15,7 +15,7 @@ const elementCount = async (selector, count) => {
 }
 
 Then('the count of {string} is/equals {int}', elementCount, {
-  description: 'Locates elements by selector and verifies count.',
+  description: 'Locates elements by selector and verifies count.\n\nModule : elementCount',
   expressions: [
     {
       type: 'string',

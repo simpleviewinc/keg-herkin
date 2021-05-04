@@ -124,12 +124,17 @@ export const DefinitionMeta = props => {
         className={'def-meta-expressions'}
         style={drawerStyles.expressions}
       >
-        <MetaLabel
-          className={'def-meta-expressions-label'}
-          style={{ marginTop: 10 }}
-        >
-          Expressions
-        </MetaLabel>
+        {meta.expressions
+          ? (
+            <MetaLabel
+              className={'def-meta-expressions-label'}
+              style={{ marginTop: 10 }}
+            >
+              Expressions
+            </MetaLabel>
+          )
+          : null
+        }
         {meta.expressions && meta.expressions.map(expression => {
           return (
             <MetaExpression

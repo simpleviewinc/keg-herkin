@@ -14,7 +14,7 @@ const checkDescendent = async (selector, world) => {
 }
 
 When(`I check the descendent element {string}`, checkElement, {
-  description: 'Locates a checkbox element by selector and checks the checkbox.\nThere must be a preceding step that establishes an ancestor.',
+  description: 'Locates a checkbox element by selector and checks the checkbox.\nThere must be a preceding step that establishes an ancestor.\n\nModule : checkDescendent',
   expressions: [
     {
       type: 'string',

@@ -41,7 +41,7 @@ Commenting out the child step expression/definition to see if it comes up but wa
 // }
 
 Then('the descendent element {string} contains the text {string}', descendentContainsText, {
-  description: 'Locates an element by selector and verifies element text.\nThere must be a preceding step that establishes an ancestor.',
+  description: 'Locates an element by selector and verifies element text.\nThere must be a preceding step that establishes an ancestor.\n\nModule : descendentContainsText',
   expressions: [
     {
       type: 'string',

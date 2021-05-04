@@ -32,7 +32,7 @@ const getSelectedOption = async (selector, data, key) => {
 // })
 
 Then('the select {string} selected option(s) is/are {string} by {string}', getSelectedOption, {
-  description: 'Locates a select element by selector and verifies its selected options.  Can verify options by option label or option value.',
+  description: 'Locates a select element by selector and verifies its selected options.  Can verify options by option label or option value.\n\nModule : getSelectedOption',
   expressions: [
     {
       type: 'string',

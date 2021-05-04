@@ -4,11 +4,11 @@ module.exports = {
   ...require('./checkElement'),
   ...require('./clickDescendent'),
   ...require('./clickElement'),
+  ...require('./fileUpload'),
   ...require('./setSelectOption'),
   ...require('./setText'),
   ...require('./pressKey'),
   ...require('./wait'),
-  ...require('./waitForNavigation'),
   ...require('./waitForPageLoad'),
   ...require('./waitForSelectorState'),
 }

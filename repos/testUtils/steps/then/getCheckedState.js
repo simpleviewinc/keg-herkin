@@ -28,7 +28,7 @@ const getCheckedState = async (selector, state) => {
 }
 
 Then(`the element {string} checked state is {string}`, (selector, state) => getCheckedState(selector, state), {
-    description: 'Locates a checkbox element by selector and verifies its checked state, checked or unchecked.',
+    description: 'Locates a checkbox element by selector and verifies its checked state, checked or unchecked.\n\nModule : getCheckedState',
     expressions: [
       {
         type: 'string',
