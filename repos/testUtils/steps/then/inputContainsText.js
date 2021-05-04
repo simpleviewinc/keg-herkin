@@ -16,7 +16,7 @@ const inputContainsText = async (selector, data) => {
 }
 
 Then('the input {string} contains the text {string}', inputContainsText, {
-  description: 'Locates input element by selector and verifies element text.',
+  description: 'Locates input element by selector and verifies element text.\n\nModule : inputContainsText',
   expressions: [
     {
       type: 'string',

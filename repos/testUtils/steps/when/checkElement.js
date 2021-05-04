@@ -15,7 +15,7 @@ const checkElement = async (action, selector) => {
 }
 
 When(`I {string} the element {string}`, checkElement, {
-  description: 'Locates a select element by selector and either checks or unchecks it.',
+  description: 'Locates a select element by selector and either checks or unchecks it.\n\nModule : checkElement',
   expressions: [
     {
       type: 'string',

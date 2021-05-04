@@ -56,7 +56,7 @@ const openUrl = async (url, world) => {
 }
 
 Given('I navigate to {string}', openUrl, {
-  description: 'Navigates to the given website within the browser.',
+  description: 'Navigates to the given website within the browser.\n\nModule : openUrl',
   expressions: [
     {
       type: 'string',

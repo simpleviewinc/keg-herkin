@@ -16,7 +16,7 @@ const inputExactText = async (selector, data) => {
 }
 
 Then('the input {string} text is {string}', inputExactText, {
-  description: 'Locates input element by selector and verifies element text matches exactly.',
+  description: 'Locates input element by selector and verifies element text matches exactly.\n\nModule : inputExactText',
   expressions: [
     {
       type: 'string',

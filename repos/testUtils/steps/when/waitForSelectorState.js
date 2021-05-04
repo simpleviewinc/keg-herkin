@@ -16,7 +16,7 @@ const states = [
  */
 
 const waitForSelectorState = async (selector,state) => {
-  console.log('selector : ' + selector + ' ; state : ' + state)
+  //console.log('selector : ' + selector + ' ; state : ' + state)
   if (!states.includes(state)) 
     throw new Error('Invalid Selector State: ' + state)
 

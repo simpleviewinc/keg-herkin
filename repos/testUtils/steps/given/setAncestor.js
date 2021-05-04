@@ -40,7 +40,7 @@ const findElSetAsAncestor = async (alias, data, world) => {
 
 //Given('the {word} titled/identifier {string} is found', findElSetAsAncestor, {
 Given('the {word} (titled ){string} is found', findElSetAsAncestor, {
-    description: 'Locates an element by selector AND text.\nEstablishes the element as an ancestor for use by subsequent steps that reference a descendent element.\nThe word "titled" is optional depending on context.  See examples below for usage.',
+    description: 'Locates an element by selector AND text.\nEstablishes the element as an ancestor for use by subsequent steps that reference a descendent element.\nThe word "titled" is optional depending on context.  See examples below for usage.\n\nModule : findElAsAncestor',
     expressions: [
       {
         type: 'word',

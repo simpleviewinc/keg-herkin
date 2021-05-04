@@ -16,7 +16,7 @@ const elementExactText = async (selector, data) => {
 }
 
 Then('the element {string} text is {string}', elementExactText, {
-  description: 'Locates element by selector and verifies element text matches exactly.',
+  description: 'Locates element by selector and verifies element text matches exactly.\n\nModule : elementExactText',
   expressions: [
     {
       type: 'string',
