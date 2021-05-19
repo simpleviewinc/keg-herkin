@@ -56,11 +56,11 @@ const openUrl = async (url, world) => {
 }
 
 Given('I navigate to {string}', openUrl, {
-  description: 'Navigates to the given website within the browser.\n\nModule : openUrl',
+  description: 'Navigates to the given website within the browser.\nRequires an absolute URL but URL can be dynamicly constructed.  See examples below for usage.\nPages that return a status code, even a 404, will pass.  Pages that don\'t return a status code will fail.\n\nModule : openUrl',
   expressions: [
     {
       type: 'string',
-      description: 'URL of the website the browser should navigate to.',
+      description: 'URL/URI of the website the browser should navigate to.\n\nExamples :\nHard-coded URL in feature : I navigate to "https://www.simpleviewinc.com"\nDomain ($world.myURL) defined in world.js and path added to feature : I navigate to "$world.myURL/nav/assets/images"\nDomain ($world.myURL) defined in world.js and query string added to feature : I navigate to "$world.myURL?testUrlParam=1"\nDomain ($world.myURL) defined in world.js and path and query string added to feature : I navigate to "$world.myURL/search?q=cms"',
       example: 'https://my.website.com',
     }
   ]

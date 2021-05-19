@@ -10,4 +10,5 @@ module.exports = {
   ...require('./getCheckedState'),
   ...require('./descendentContainsText'),
   ...require('./getSelectedOption'),
+  ...require('./getAttribute'),
 }
