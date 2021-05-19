@@ -17,13 +17,18 @@ const setSelectOption = async (selector, data, key='label') => {
 
 }
 
-//this step calls the function this way, as opposed to the step below, because there is no 2nd argument so it's injecting world object and where label should be
+// the following step assumes label as the default and therefore doesn't require it be specified
+// since there is no 3rd argument the code is injecting the world object and where label should be
+// commenting out because 
+  // I don't want multiple steps in the steps list that do the same thing with minor differences - at least not until a keyword filter is added to the steps that will assist in locating the desired step.  I'm finding it difficult visually locate desired steps in the wall of grey text.
+  // adding 'by "label"' isn't a big deal to me.
+  // I like the consistency of specifying 'by "label"' or 'by "value"'.
 //When('I set the select {string} to {string}', (selector,data,world) => {
   //return setSelectOption(selector,data,'label',world)
 //})
 
 //this step allows the user to change from label to value
-When('I set the select {string} to {string} by {word}', setSelectOption, {
+When('I set the select {string} to {string} by {string}', setSelectOption, {
   description: 'Locates a select element by selector and selects specified options.  Can specify options by option label or option value.\n\nModule : setSelectOption',
   expressions: [
     {

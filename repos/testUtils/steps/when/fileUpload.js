@@ -15,6 +15,7 @@ const fileUpload = async (selector, filePath, world) => {
   //constricting file path to /tests/bdd/support folder
   const assetsFolder = "/keg/tap/tests/bdd/support"
   const fullFilePath = (filePath.startsWith('/') ? assetsFolder + filePath : assetsFolder + '/' + filePath)
+  //todo : create array of accepted file types
   await handle.setInputFiles(fullFilePath)
 }
 

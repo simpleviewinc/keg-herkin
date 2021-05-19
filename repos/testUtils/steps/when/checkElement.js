@@ -7,7 +7,7 @@ const { getElement } = require('HerkinPlaywright')
  * @param {String} selector - playwright selector string
  */
 const checkElement = async (action, selector) => {
-  //console.log('action : ' + action + ' - selector : ' + selector)
+  console.log('action : ' + action + ' - selector : ' + selector)
   const box = await getElement(selector)
   //await box.check()
   const boxAction = (action === 'check') ? await box.check() : await box.uncheck()
@@ -15,7 +15,7 @@ const checkElement = async (action, selector) => {
 }
 
 When(`I {string} the element {string}`, checkElement, {
-  description: 'Locates a select element by selector and either checks or unchecks it.\n\nModule : checkElement',
+  description: 'Locates an element by selector and either checks or unchecks it.\n\nModule : checkElement',
   expressions: [
     {
       type: 'string',
@@ -24,7 +24,7 @@ When(`I {string} the element {string}`, checkElement, {
     },
     {
       type: 'string',
-      description: 'The element selector.  Selector must be specific enough to locate a single element.  Valid for checkbox and radio inputs.',
+      description: 'The element selector.  Selector must be specific enough to locate a single element.  Valid for checkbox and radio inputs.\n\nExample : I "uncheck" the element "input[name=\'unique_name\']"',
       example: 'input[name=\'unique_name\']',
     },
   ]
