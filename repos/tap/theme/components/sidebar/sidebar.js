@@ -7,7 +7,9 @@ export const sidebar = theme => ({
     position: 'fixed',
     top:0,
     bottom:0,
-    overflowY: 'scroll',
+    overflowY: 'scroll',    
+    paddingBottom: 50,
+    paddingRight:20,
   },
   container: {
     width: 250,
