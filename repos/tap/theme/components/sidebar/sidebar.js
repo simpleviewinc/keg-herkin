@@ -4,12 +4,7 @@ export const sidebar = theme => ({
   main: {
     zIndex: 5,
     left: 250,
-    position: 'fixed',
-    top:0,
-    bottom:0,
-    overflowY: 'scroll',    
-    paddingBottom: 50,
-    paddingRight:20,
+    position: 'fixed',   
   },
   container: {
     width: 250,
@@ -20,7 +15,6 @@ export const sidebar = theme => ({
     shadowColor: tapColors.shadowColor,
     shadowOffset: { width: 1, height: 12 },
     backgroundColor: tapColors.sidebarBackground,
-    overflowY: 'scroll',
   },
   back: {
     left: 0,

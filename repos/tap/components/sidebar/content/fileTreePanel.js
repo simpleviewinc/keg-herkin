@@ -49,7 +49,7 @@ const FileTreeHeader = ({styles, title}) => {
     </View>
   )
 }
-
+const treeScroll = {overflowY: "scroll", height: "100vh", paddingBottom: "9em" }
 /**
  * FileTree
  * @param {Object} props 
@@ -59,13 +59,16 @@ const FileTreeHeader = ({styles, title}) => {
 export const FileTreePanel = (props) => {
   const theme = useTheme()
   const styles = theme.get('sidebar.content')
+  console.log(styles)
   return (
     <View>
       <FileTreeHeader 
         styles={styles?.testFiles}
         title={props?.title}
       />
-      <TreeList {...props}/>
+      <View style={treeScroll}>
+        <TreeList {...props}/>
+      </View>
     </View>
   )
 }
