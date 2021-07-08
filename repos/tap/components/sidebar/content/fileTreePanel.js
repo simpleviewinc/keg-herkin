@@ -2,15 +2,23 @@ import React, { useCallback } from 'react'
 import {
   TreeList,
   Text,
-  View,
   TouchableIcon
 } from 'SVComponents'
+import { View } from '@keg-hub/keg-components'
 import { Values } from 'SVConstants'
 import { NoteAdd } from 'SVAssets/icons'
 import { useTheme } from '@keg-hub/re-theme'
 import { setActiveModal } from 'SVActions/modals'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
 
 const { MODAL_TYPES } = Values
+
+const ScrollingView = reStyle(View)(theme => ({
+  overflowY: 'scroll',
+  height: '100vh',
+  paddingBottom: '9em'
+}))
+
 
 /**
  * Title with Touchable NoteAdd icon
@@ -51,7 +59,7 @@ const FileTreeHeader = ({styles, title}) => {
 }
 
 /**
- * FileTree
+ * FileTree with child elements : header and treelist(with a scrollable wrapper)
  * @param {Object} props 
  * 
  * @returns {Component}
@@ -59,13 +67,16 @@ const FileTreeHeader = ({styles, title}) => {
 export const FileTreePanel = (props) => {
   const theme = useTheme()
   const styles = theme.get('sidebar.content')
+
   return (
     <View>
       <FileTreeHeader 
         styles={styles?.testFiles}
         title={props?.title}
       />
-      <TreeList {...props}/>
+      <ScrollingView>
+        <TreeList {...props}/>
+      </ScrollingView>
     </View>
   )
 }
