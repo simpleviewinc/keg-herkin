@@ -4,7 +4,7 @@ export const sidebar = theme => ({
   main: {
     zIndex: 5,
     left: 250,
-    position: 'fixed',   
+    position: 'fixed',
   },
   container: {
     width: 250,
