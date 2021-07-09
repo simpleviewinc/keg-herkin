@@ -183,6 +183,9 @@ const listItem = theme => {
           }
         }
       },
+      touchable: {
+        maxWidth: '70%'
+      },
       meta: {
         toggle: {
           icon: {
