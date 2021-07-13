@@ -88,21 +88,25 @@ const listItem = theme => {
         main: {
           ...theme.transition([ 'opacity' ], 0.8),
           opacity: 0,
+          position: 'absolute',
+          right: '0',
+          padding: 20
         },
         action: {
           main: {
           },
           touchable: {
-            flD: 'row',
+            flD: 'column',
           },
           icon: {
             icon: {
-              c: tapColors.inactive,
+              c: tapColors?.primary,
               mR: 5,
+              paddingLeft: 5
             },
           },
           name: {
-            ftSz: 12,
+            ftSz: 9,
             ftWt: 'bold',
             c: tapColors.inactive,
           }
@@ -112,6 +116,7 @@ const listItem = theme => {
         flD: 'row',
         alI: 'center',
         ...theme.flex.justify.start,
+        maxWidth: '100%'
       },
       meta: {
         toggle: {
@@ -184,7 +189,7 @@ const listItem = theme => {
         }
       },
       touchable: {
-        maxWidth: '70%'
+        maxWidth: '100%',
       },
       meta: {
         toggle: {
