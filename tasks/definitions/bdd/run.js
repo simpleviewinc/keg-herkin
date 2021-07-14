@@ -27,7 +27,8 @@ const buildCmdArgs = params => {
 
   const docTapPath = '/keg/tap'
   jestConfig && cmdArgs.push(`--config=${path.join(docTapPath, jestConfig)}`)
-  timeout && cmdArgs.push(`--testTimeout=${timeout}`)
+
+  cmdArgs.push(`--testTimeout=${timeout || 10000}`)
   bail && cmdArgs.push('--bail')
   noTests && cmdArgs.push('--passWithNoTests')
 

@@ -9,7 +9,7 @@ import {
   Text,
 } from 'SVComponents'
 import { Values } from 'SVConstants'
-import TreeView from 'react-native-final-tree-view'
+import { TreeView } from './treeView'
 import { ChevronDown } from 'SVAssets/icons'
 import { useActiveFile } from 'SVHooks/useActiveFile'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
@@ -99,6 +99,11 @@ const usePendingContent = (pendingFiles, location) => useMemo(() => {
   pendingFiles
 ])
 
+
+const buildArtifactUrl = ({ name }) => {
+  return `${window.location.origin}/artifacts/${name}`
+}
+
 /**
  * TreeList
  * @param {Object} props 
@@ -114,11 +119,14 @@ export const TreeList = props => {
   const tree = useMemo(() => constructFileTree(rootPaths, nodes), [rootPaths, nodes])
 
   const onItemPress = useCallback( async ({node}) => {
+
     if (node?.type !== 'file')
       return addToast({
         type: 'error',
         message: `Unknown node type selected: ${node.type}`
       })
+    if (node.testType === 'artifact')
+      return window.open(buildArtifactUrl(node), '_blank').focus()
 
     node.testType === 'report'
       ? await setReportFile(node.location)

@@ -1,6 +1,7 @@
 const { deepFreeze } = require('@keg-hub/jsutils')
 
 const {
+  HERKIN_ARTIFACTS_DIR,
   HERKIN_REPORTS_DIR,
   HERKIN_FEATURES_DIR,
   HERKIN_STEPS_DIR,
@@ -13,6 +14,7 @@ const {
  * Constants that define overridable location to test directories
  */
 const dirsFromEnvs = deepFreeze({
+  HERKIN_ARTIFACTS_DIR: HERKIN_ARTIFACTS_DIR || 'artifacts',
   HERKIN_REPORTS_DIR: HERKIN_REPORTS_DIR || 'reports',
   HERKIN_FEATURES_DIR: HERKIN_FEATURES_DIR || 'bdd/features',
   HERKIN_STEPS_DIR: HERKIN_STEPS_DIR || 'bdd/steps',
