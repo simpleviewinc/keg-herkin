@@ -90,7 +90,7 @@ const listItem = theme => {
           opacity: 0,
           position: 'absolute',
           right: '0',
-          padding: 20
+          pR: theme.padding.size,
         },
         action: {
           main: {
@@ -182,14 +182,12 @@ const listItem = theme => {
         action: {
           touchable: {
             c: tapColors?.primary,
+            backgroundColor: '#fff',
           },
           name: {
             c: tapColors?.primary,
           }
         }
-      },
-      touchable: {
-        maxWidth: '100%',
       },
       meta: {
         toggle: {
