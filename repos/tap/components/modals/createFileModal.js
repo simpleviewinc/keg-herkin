@@ -52,6 +52,9 @@ export const CreateFileModal = props => {
     // Update the active file, and auto-set to the editor screen
     await setActiveFileFromType(file, SCREENS.EDITOR)
 
+    //Reset test name so that previously entered name does not remain in the name field
+    setTestName('')
+    
     // Update the screen to be the editor
     setScreenById(SCREENS.EDITOR)
 
