@@ -73,7 +73,7 @@ const listItem = theme => {
         flexWrap: 'nowrap',
         ...theme.transition([ 'backgroundColor', 'border' ], 0.8),
         ...theme.flex.justify.between,
-        pV: padSizeHalf,
+        pV: padSizeThird * 2,
         pH: theme.padding.size,
         ...borderStyle.hide,
       },
@@ -108,7 +108,7 @@ const listItem = theme => {
           name: {
             ftSz: 9,
             ftWt: 'bold',
-            c: tapColors.inactive,
+            c: tapColors?.primary,
           }
         }
       },
@@ -182,10 +182,7 @@ const listItem = theme => {
         action: {
           touchable: {
             c: tapColors?.primary,
-            backgroundColor: '#fff',
-          },
-          name: {
-            c: tapColors?.primary,
+            bgC: theme?.colors?.palette?.white01,
           }
         }
       },
