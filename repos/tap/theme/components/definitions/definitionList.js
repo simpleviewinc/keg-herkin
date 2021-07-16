@@ -73,7 +73,7 @@ const listItem = theme => {
         flexWrap: 'nowrap',
         ...theme.transition([ 'backgroundColor', 'border' ], 0.8),
         ...theme.flex.justify.between,
-        pV: padSizeHalf,
+        pV: padSizeThird * 2,
         pH: theme.padding.size,
         ...borderStyle.hide,
       },
@@ -88,23 +88,27 @@ const listItem = theme => {
         main: {
           ...theme.transition([ 'opacity' ], 0.8),
           opacity: 0,
+          position: 'absolute',
+          right: '0',
+          pR: theme.padding.size,
         },
         action: {
           main: {
           },
           touchable: {
-            flD: 'row',
+            flD: 'column',
           },
           icon: {
             icon: {
-              c: tapColors.inactive,
+              c: tapColors?.primary,
               mR: 5,
+              paddingLeft: 5
             },
           },
           name: {
-            ftSz: 12,
+            ftSz: 9,
             ftWt: 'bold',
-            c: tapColors.inactive,
+            c: tapColors?.primary,
           }
         }
       },
@@ -112,6 +116,7 @@ const listItem = theme => {
         flD: 'row',
         alI: 'center',
         ...theme.flex.justify.start,
+        maxWidth: '100%'
       },
       meta: {
         toggle: {
@@ -177,9 +182,7 @@ const listItem = theme => {
         action: {
           touchable: {
             c: tapColors?.primary,
-          },
-          name: {
-            c: tapColors?.primary,
+            bgC: theme?.colors?.palette?.white01,
           }
         }
       },
