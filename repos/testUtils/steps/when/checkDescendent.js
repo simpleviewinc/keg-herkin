@@ -11,8 +11,6 @@ const { checkForAncestor } = require('HerkinSupport/validate')
  */
 const checkDescendent = async (action, selector, world) => {
   checkForAncestor(world)
-  //const totalLineage = `${world.meta.ancestorSelector} ${selector}`
-  //console.log('totalLineage : ' + totalLineage)
   return checkElement(action, `${world.meta.ancestorSelector} ${selector}`)
 }
 
