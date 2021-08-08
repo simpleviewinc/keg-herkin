@@ -73,10 +73,10 @@ const useDefinitionGroups = definitions => {
           uuid: def.uuid,
           meta: def.meta,
           actions: [{
-            name: 'Copy to Clipboard',
+            name: 'Copy',
             key: `action-copy`,
             iconProps: {
-              size: 14,
+              size: 12,
               Component: Copy,
             },
           }]
