@@ -1,1 +1,3 @@
-export * from './given'
+module.exports = {
+    ...require('./given')
+}
