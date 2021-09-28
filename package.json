@@ -44,9 +44,9 @@
     "web:dev": "cd node_modules/keg-core && yarn web"
   },
   "dependencies": {
-    "@keg-hub/args-parse": "6.2.3",
+    "@keg-hub/args-parse": "6.3.1",
     "@keg-hub/ask-it": "0.0.2",
-    "@keg-hub/jsutils": "8.4.0",
+    "@keg-hub/jsutils": "8.6.0",
     "@keg-hub/spawn-cmd": "0.1.2",
     "@keg-hub/cli-utils": "0.3.0",
     "@ltipton/sockr": "0.0.10",
@@ -56,7 +56,7 @@
     "axios": "0.21.1",
     "body-parser": "1.10.2",
     "express": "4.11.1",
-    "keg-core": "npm:@keg-hub/keg-core@9.0.1",
+    "keg-core": "npm:@keg-hub/keg-core@9.4.0",
     "@ltipton/parkin": "0.5.1",
     "module-alias": "2.2.2",
     "nodemon": "2.0.4",
@@ -69,7 +69,7 @@
     "words-to-numbers": "1.5.1"
   },
   "resolutions": {
-    "@keg-hub/jsutils": "8.4.0"
+    "@keg-hub/jsutils": "8.6.0"
   },
   "devDependencies": {
     "@babel/core": "7.13.15",
