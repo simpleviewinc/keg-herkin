@@ -1,13 +1,14 @@
 const { execSync } = require('child_process')
 const { template, get } = require('@keg-hub/jsutils')
 const { getTapConfig } = require('@keg-hub/cli-utils')
+const nodePath = require('path')
 
 /**
  * @param {String} path - client app path
  * @returns {String} - tap alias for tap at path
  */
 const getAppAlias = path => get(
-  getTapConfig({ path })[0], 
+  getTapConfig({ path: nodePath.resolve(path) })[0], 
   'keg.alias'
 )
 

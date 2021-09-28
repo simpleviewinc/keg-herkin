@@ -4,6 +4,14 @@ const { setMountEnvs } = require('HerkinTasks/utils/envs/setMountEnvs')
 const { validateConfig } = require('HerkinTasks/utils/validation')
 
 /**
+ * @param {String} configPath - path to herkin config file
+ * @returns {String} path without config file
+ */
+const getRootPath = configPath => configPath
+  ? configPath.replace(/herkin.config.js(on)?/g, '')
+  : undefined
+
+/**
  * Starts all the Keg-Herkin services needed to run tests
  * @param {Object} args - arguments passed from the runTask method
  * @param {string} args.command - Root task name
@@ -24,7 +32,7 @@ const startHerkin = async (args) => {
   params.launch && await launchBrowsers(params)
 
   setMountEnvs(herkin, { 
-    path: params.config || process.cwd(), 
+    path: getRootPath(params.config) || process.cwd(), 
     env: params.env 
   })
 
