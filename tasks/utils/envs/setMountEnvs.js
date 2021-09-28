@@ -11,6 +11,7 @@ const getEnvName = env => `HERKIN_` + snakeCase(env).toUpperCase()
  * @param {Object} config - herkin config object
  * @param {Object} options - options
  * @param {string} options.env - current keg environment
+ * @param {string} options.path - path to client project
  */
 const setMountEnvs = (config, options={}) => {
   const [ valid ] = validate({ config, options }, { $default: isObj })
@@ -23,11 +24,9 @@ const setMountEnvs = (config, options={}) => {
   })
 
   // app envs
+  const appUrl = get(config, 'app.url') || 'http://${ alias }-${ branch }.${ env }.keg-hub.io'
   const appUrlEnv = getEnvName('appUrl')
-  const appUrl = get(config, 'app.url')
-  if (appUrl) {
-    process.env[appUrlEnv] = replaceTemplateVars(appUrl, config, options)
-  }
+  process.env[appUrlEnv] = replaceTemplateVars(appUrl, config, options)
 }
 
 module.exports = {

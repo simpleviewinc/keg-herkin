@@ -23,7 +23,10 @@ const startHerkin = async (args) => {
 
   params.launch && await launchBrowsers(params)
 
-  setMountEnvs(herkin, { env: params.env })
+  setMountEnvs(herkin, { 
+    path: params.config || process.cwd(), 
+    env: params.env 
+  })
 
   args.task.cliTask(args)
 }
