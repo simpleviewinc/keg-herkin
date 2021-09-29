@@ -14,7 +14,8 @@ export const results = theme => {
         }, 
         content: {
           fl:1, 
-          minH: 600
+          // TODO: investigate the correct size for this
+          minH: 'calc( 100vh - 210px )'
         }
       },
       header: {

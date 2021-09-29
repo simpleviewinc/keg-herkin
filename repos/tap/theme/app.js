@@ -3,11 +3,10 @@ import { get } from '@keg-hub/jsutils'
 
 export const app = theme => ({
   main: {
-    height: '100%',
     width: '100%',
-    minHeight: '100vh',
     overflow: 'hidden',
     maxWidth: '100%',
+    maxH: `calc( 100vh - 45px )`,
     backgroundColor: tapColors.appBackground,
   }
 })
