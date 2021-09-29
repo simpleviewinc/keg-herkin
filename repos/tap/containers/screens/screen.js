@@ -10,7 +10,7 @@ import { BuilderScreen } from './builderScreen'
 import React, { useMemo, useCallback } from 'react'
 import { setScreenById } from 'SVActions/screens/setScreenById'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { Tasks, Code } from 'SVAssets/icons'
+import { ClipboardCheck, Code } from 'SVAssets/icons'
 
 const { CATEGORIES, SCREENS } = Values
 
@@ -37,7 +37,7 @@ const screenTabs = [
   {
     id: SCREENS.RESULTS,
     View: ResultsScreen,
-    Icon: Tasks,
+    Icon: ClipboardCheck,
     title: `Tests Results`,
   },
   // {
