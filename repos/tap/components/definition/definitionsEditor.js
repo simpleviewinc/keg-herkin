@@ -9,6 +9,7 @@ import { DefinitionTabs } from './definitionTabs'
 import { useSelector } from 'SVHooks/useSelector'
 import { useActiveTab } from 'SVHooks/useActiveTab'
 import { Text } from '@keg-hub/keg-components/text'
+import { useIconProps } from 'SVHooks/useIconProps'
 import { Touchable } from '@keg-hub/keg-components/touchable'
 import { ActiveDefinitionsEditor } from './activeDefinitionsEditor'
 import { getRemoteDefinitions } from 'SVActions/definitions/api/getRemoteDefinitions'
@@ -18,14 +19,15 @@ const { DEFINITION_TABS, CATEGORIES } = Values
 const ReloadDefs = props => {
   const reloadStyles = useStyle('definitions.reload')
   const [ syncRef, syncStyles ] = useThemeHover(reloadStyles.default, reloadStyles.hover)
-
+  const iconProps = useIconProps(props, syncStyles.icon)
+  
   return (
     <Touchable
       ref={syncRef}
       style={syncStyles.main}
       onPress={getRemoteDefinitions}
     >
-      <Sync style={syncStyles.icon} />
+      <Sync {...iconProps} />
       <Text style={syncStyles.text} >
         SYNC
       </Text>

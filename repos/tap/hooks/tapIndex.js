@@ -1,6 +1,7 @@
 export * from './useIds'
 export * from './useDomStyles'
 export * from './useSelector'
+export * from './useIconProps'
 export * from './useTestRunner'
 export * from './usePendingMark'
 export * from './useSetTimeout'

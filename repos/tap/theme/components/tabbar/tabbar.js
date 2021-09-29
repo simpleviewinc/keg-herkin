@@ -37,6 +37,7 @@ const defTabbar = theme => ({
       main: {
         flex: 1,
         margin: 0,
+        flD: 'row',
         cursor: 'pointer',
         alignItems: 'center',
         justifyContent: 'center',
@@ -45,19 +46,29 @@ const defTabbar = theme => ({
         bgC: tapColors.accentBackground,
         ...theme.transition([ 'borderBottomColor', 'backgroundColor' ], 0.8),
       },
+      container: {
+        opacity: 0.8,
+        flD: 'row',
+        ...theme.transition([ 'opacity' ], 0.8),
+      },
       text: {
         marginBottom: 0,
         cursor: 'pointer',
         textAlign: 'center',
         color: tapColors.disabledColor,
-        ...theme.transition([ 'color' ], 0.8),
+        // ...theme.transition([ 'color' ], 0.8),
+        minWidth: 'unset',
       },
       icon: {
         before: {
-          
+          color: tapColors.disabledColor,
+          fontSize: 16,
+          mR: 8,
         },
         after: {
-          
+          color: tapColors.disabledColor,
+          fontSize: 16,
+          mL: 8,
         },
       }
     },
@@ -66,18 +77,40 @@ const defTabbar = theme => ({
         borderBottomColor: tapColors.link,
         bgC: tapColors.sidebarBackground,
       },
+      container: {
+        opacity: 1,
+      },
       text: {
         color: tapColors.link,
       },
+      icon: {
+        before: {
+          color: tapColors.link,
+        },
+        after: {
+          color: tapColors.link,
+        },
+      }
     },
     active: {
       main: {
         borderBottomColor: tapColors.primary,
         bgC: tapColors.sidebarBackground,
       },
+      container: {
+        opacity: 1,
+      },
       text: {
         color: tapColors.primary,
       },
+      icon: {
+        before: {
+          color: tapColors.primary,
+        },
+        after: {
+          color: tapColors.primary,
+        },
+      }
     },
   }
 })

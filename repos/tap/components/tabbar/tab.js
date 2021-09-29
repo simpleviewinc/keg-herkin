@@ -1,16 +1,18 @@
 import React from 'react'
 import { useThemeHover } from '@keg-hub/re-theme'
+import { useIconProps } from 'SVHooks/useIconProps'
 import { isValidComponent } from '@keg-hub/keg-components'
-import { get, isStr, deepMerge, isArr } from '@keg-hub/jsutils'
-import { Label, Icon, Touchable, renderFromType } from 'SVComponents'
+import { Label, Icon, Touchable, renderFromType, View } from 'SVComponents'
+import { get, isStr, deepMerge, isArr, isObj, noOpObj } from '@keg-hub/jsutils'
 
-const TabIcon = ({ icon, location, styles }) => {
+const TabIcon = ({ icon, location, styles, iconProps }) => {
   icon = isStr(icon) ? { name: icon } : icon
+
   return (
     <Icon
       className="tabbar-tab-icon"
-      { ...icon }
-      style={ styles[location] }
+      {...iconProps}
+      { ...icon}
     />
   )
 }
@@ -38,7 +40,7 @@ const BuildChildren = (props) => {
   if(props.children) return renderByType(props.children, props)
 
 
-  const { active, styles, icon, Title, title='' } = props
+  const { active, styles, icon, Icon:IconComp, Title, title='' } = props
   const TitleComp = Title || title
   const Components = []
 
@@ -58,27 +60,30 @@ const BuildChildren = (props) => {
         )
   )
 
-  // If not icon component, just return
-  if(!icon) return Components
+  // If not Icon component, just return
+  if(!IconComp && !icon) return Components
 
+  const iconData = isStr(icon) ? { name: icon } : (icon || noOpObj)
   // Get the location of the icon
   const location = get(icon, 'location', 'before')
+  const iconProps = useIconProps(iconData, styles.icon[location])
+
   // Get the array add method based on the location
   const method = location === 'before' ? 'unshift' : 'push'
-
   // Use the method to add the icon component to the Components array
   Components[method](
-    isValidComponent(icon)
+    isValidComponent(IconComp)
       // If icon is a component, then call it and return 
-      ? (<icon key={ 'icon' } style={ styles.before } />)
+      ? (<IconComp key={'icon'} {...iconProps} />)
       // Otherwise use the KegComponents Icon
-      : (<TabIcon 
-          key={ 'icon' }
-          active={ active }
-          icon={ icon }
-          location={ location }
-          styles={ styles.icon }
-        />)
+      : (
+          <Icon
+            key={'icon'}
+            className="tabbar-tab-icon"
+            {...iconProps}
+            { ...iconData}
+          />
+        )
   )
 
   return Components
@@ -110,10 +115,12 @@ export const Tab = props => {
       style={ mergedStyles.main }
       onPress={() => onTabSelect(id)}
     >
-      <BuildChildren
-        {...props}
-        styles={ mergedStyles }
-      />
+      <View className='tabbar-tap-icon-container' style={mergedStyles.container} >
+        <BuildChildren
+          {...props}
+          styles={ mergedStyles }
+        />
+      </View>
     </Touchable>
   )
 }
