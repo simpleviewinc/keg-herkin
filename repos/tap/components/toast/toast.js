@@ -3,10 +3,10 @@ import { removeToast } from 'SVActions/toasts'
 import { useStyle, useThemeHover, useThemeActive } from '@keg-hub/re-theme'
 import { noOpObj, noPropArr, noOp, isStr } from '@keg-hub/jsutils'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { View, Button, Text } from '@keg-hub/keg-components'
 import React, { useMemo, useEffect, useCallback } from 'react'
 import { Check, Times, Exclamation, Info } from 'SVAssets/icons'
-import { isValidComponent } from 'SVUtils/validate/isValidComponent'
+import { View, Button, Text, isValidComponent } from '@keg-hub/keg-components'
+
 
 const icons = {
   success: Check,

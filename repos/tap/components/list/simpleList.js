@@ -5,13 +5,12 @@ import {
   noPropArr,
   deepMerge,
   noOpObj,
-  isFunc,
   exists
 } from '@keg-hub/jsutils'
 import { ListItem } from './listItem'
 import { ListHeader } from './listHeader'
 import { Grid, Drawer } from 'SVComponents'
-import { renderFromType } from '@keg-hub/keg-components'
+import { renderFromType, isValidComponent } from '@keg-hub/keg-components'
 
 /**
  * Helper to build the toggled values and callbacks based on passed in props
@@ -71,7 +70,7 @@ const RenderListItems = ({ items, renderItem, group, onItemPress, styles }) => {
         ...item
       }
 
-      return isFunc(renderItem)
+      return isValidComponent(renderItem)
         ? renderFromType(renderItem, itemProps)
         : (<ListItem {...itemProps} />)
     })

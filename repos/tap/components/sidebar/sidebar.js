@@ -4,7 +4,7 @@ import { useStyle } from '@keg-hub/re-theme'
 import { SidebarToggle } from './sidebarToggle'
 import { checkCall, noOpObj, noOp } from '@keg-hub/jsutils'
 import { setNativeDriver } from 'SVUtils/helpers/setNativeDriver'
-import { isValidComponent } from 'SVUtils/validate/isValidComponent'
+import { isValidComponent } from '@keg-hub/keg-components'
 import React, { 
   useMemo,
   useState,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { isValidComponent } from '../validate/isValidComponent'
+import { isValidComponent } from '@keg-hub/keg-components'
 
 /**
  * Validates a passed in component, and renders it

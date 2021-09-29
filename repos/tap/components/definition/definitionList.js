@@ -56,6 +56,7 @@ export const DefinitionList = props => {
   }, [listItems, setListItems])
 
   const listStyles = useStyle(`definitions.list`, styles)
+  const definitionListItem = useCallback(props => (<DefinitionListItem {...props} />), [])
 
   return (
     <View
@@ -65,7 +66,7 @@ export const DefinitionList = props => {
       <SimpleList
         styles={listStyles.list}
         items={listItems}
-        renderItem={DefinitionListItem}
+        renderItem={definitionListItem}
         onHeaderPress={onHeaderPress}
         onItemPress={onItemPress}
         HeaderIcon={ChevronDown}

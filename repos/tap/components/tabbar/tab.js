@@ -1,7 +1,8 @@
 import React from 'react'
 import { useThemeHover } from '@keg-hub/re-theme'
+import { isValidComponent } from '@keg-hub/keg-components'
 import { get, isStr, deepMerge, isArr } from '@keg-hub/jsutils'
-import { Label, Icon, Touchable, isValidComponent, renderFromType } from 'SVComponents'
+import { Label, Icon, Touchable, renderFromType } from 'SVComponents'
 
 const TabIcon = ({ icon, location, styles }) => {
   icon = isStr(icon) ? { name: icon } : icon
