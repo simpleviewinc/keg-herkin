@@ -30,9 +30,9 @@ export const useDomStyles = () => {
 
         const classList = classNames.split(' ')
         
-        const styleRules = classNames.endsWith('$')
-          ? `${classNames.replace(/\$/g, '')}${styles}`
-          : `${classNames}${styles}`
+        const styleRules = classList[0].endsWith('$')
+          ? `${classList[0].replace(/\$/g, '')}${styles}`
+          : `${classList[0]}${styles}`
         
         styleRules && DomStyleSheet?.sheet?.insertRule(`@media all {${styleRules}}`)
       })
