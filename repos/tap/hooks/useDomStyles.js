@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Values } from 'SVConstants'
 import { useTheme } from '@keg-hub/re-theme'
 import { createDomNode } from 'SVUtils/helpers/createDomNode'
@@ -26,17 +25,16 @@ export const useDomStyles = () => {
   DomStyleSheet &&
     Object.entries(theme.domStyles)
       .map(([ className, rules ]) => {
-        const { classList, css } = useStyleTag(rules, className)
+        const { classNames, css } = useStyleTag(rules, className)
         const styles = css.all.replace(/^.*{/, '{')
+
+        const classList = classNames.split(' ')
         
         const styleRules = classList[0].endsWith('$')
           ? `${classList[0].replace(/\$/g, '')}${styles}`
           : `${classList[0]}${styles}`
         
         styleRules && DomStyleSheet?.sheet?.insertRule(`@media all {${styleRules}}`)
-        // styleRules &&
-        //   DomStyleSheet && 
-        //   (DomStyleSheet.textContent = `${DomStyleSheet.textContent}\n${styleRules}`)
       })
 }
 
