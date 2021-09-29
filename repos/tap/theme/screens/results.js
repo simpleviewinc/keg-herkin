@@ -13,9 +13,7 @@ export const results = theme => {
           fl:1, 
         }, 
         content: {
-          fl:1, 
-          // TODO: investigate the correct size for this
-          minH: 'calc( 100vh - 210px )'
+          fl:1,
         }
       },
       header: {
@@ -38,6 +36,7 @@ export const results = theme => {
         width: `100%`,
         alI: 'center',
         jtC: 'center',
+        minH: 200,
       },
       loading: {
         color: tapColors.defaultLight,
