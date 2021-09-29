@@ -1,48 +1,47 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Values } from 'SVConstants'
-import { isFunc } from '@keg-hub/jsutils'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
+import { isFunc, noOpObj } from '@keg-hub/jsutils'
 import { createDomNode } from 'SVUtils/helpers/createDomNode'
-import { useStyleTag } from '@keg-hub/re-theme/styleInjector'
-
-const { KEG_DOM_STYLES_ID } = Values
+import { convertToCss } from '@keg-hub/re-theme/styleInjector'
 
 let DomStyleSheet
-let overridesSet = false
+let stylesAdded = false
+const { KEG_DOM_STYLES_ID } = Values
+const isProduction = process.env.NODE_ENV === 'production'
 
 /**
  * Helper hook to added CSS styles to a Stylesheet on the dom
- * Uses helpers from re-theme in a no-standard fashion
+ * Uses convertToCss helper from re-theme in a no-standard fashion
  * @type function
  *
  * @returns {void}
  */
-export const useDomStyles = () => {
-  if(overridesSet) return overridesSet
-  overridesSet = true
+export const useDomStyles = (styles=noOpObj) => {
+  const globalStyles = useStyle('global', `domStyles`, styles)
 
-  const theme = useTheme()
+  return useMemo(() => {
+    if(stylesAdded) return stylesAdded
+    stylesAdded = true
 
-  DomStyleSheet = DomStyleSheet || document.head.querySelector(`#${KEG_DOM_STYLES_ID}`)
+    DomStyleSheet = DomStyleSheet || document.head.querySelector(`#${KEG_DOM_STYLES_ID}`)
 
-  DomStyleSheet &&
-    Object.entries(theme.domStyles)
-      .map(([ className, rules ]) => {
-        const { classNames, css } = useStyleTag(rules, className)
-        const classList = classNames.split(' ')
+    DomStyleSheet &&
+      Object.entries(globalStyles)
+        .map(([ className, rules ]) => {
+          const { blocks } = convertToCss(rules, noOpObj)
+          // Blocks should always be an array with max length of 1
+          // So we can treat it as a string here
+          const validCssStr = blocks.length && `${className}${blocks}`
 
-        const styles = css.all.replace(/^.*{/, '{')
-        
-        const styleRules = classList[0].endsWith('$')
-          ? `${classList[0].replace(/\$/g, '')}${styles}`
-          : `${classList[0]}${styles}`
+          validCssStr && (
+            isProduction
+              ? DomStyleSheet.sheet.insertRule(`@media all {${validCssStr}}`)
+              : (DomStyleSheet.textContent = `${DomStyleSheet.textContent}\n${validCssStr}`)
+          )
+        })
+  }, [])
 
-        styleRules && (
-          isFunc(DomStyleSheet?.sheet?.insertRule)
-            ? DomStyleSheet.sheet.insertRule(`@media all {${styleRules}}`)
-            : (DomStyleSheet.textContent = `${DomStyleSheet.textContent}\n${styleRules}`)
-        )
-      })
 }
 
 
