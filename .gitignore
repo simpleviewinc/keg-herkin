@@ -184,4 +184,5 @@ browser-meta.json
 
 # repos to ignore
 repos/sockr
+repos/testUtils/___*
 
