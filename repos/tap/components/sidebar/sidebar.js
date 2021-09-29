@@ -1,9 +1,9 @@
 import { View } from 'SVComponents'
-import { checkCall } from '@keg-hub/jsutils'
 import { Animated } from 'react-native'
 import { useStyle } from '@keg-hub/re-theme'
 import { SidebarToggle } from './sidebarToggle'
-import { noOpObj, noOp } from 'SVUtils/helpers/noop'
+import { checkCall, noOpObj, noOp } from '@keg-hub/jsutils'
+import { setNativeDriver } from 'SVUtils/helpers/setNativeDriver'
 import { isValidComponent } from 'SVUtils/validate/isValidComponent'
 import React, { 
   useMemo,
@@ -98,7 +98,8 @@ export const Sidebar = props => {
     const animationConfig = config
       ? { ...config, toValue: xPosChanges.to }
       : { toValue: xPosChanges.to }
-    Animated[type](animation, animationConfig).start()
+
+    Animated[type](animation, setNativeDriver(animationConfig)).start()
 
     // Add isToggled as a dep, so anytime it changes, we run the hook code
   }, [isToggled, type, config])

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Values } from 'SVConstants'
+import { isFunc } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { createDomNode } from 'SVUtils/helpers/createDomNode'
 import { useStyleTag } from '@keg-hub/re-theme/styleInjector'
@@ -21,22 +22,26 @@ export const useDomStyles = () => {
   overridesSet = true
 
   const theme = useTheme()
+
   DomStyleSheet = DomStyleSheet || document.head.querySelector(`#${KEG_DOM_STYLES_ID}`)
 
   DomStyleSheet &&
     Object.entries(theme.domStyles)
       .map(([ className, rules ]) => {
-        const { classList, css } = useStyleTag(rules, className)
+        const { classNames, css } = useStyleTag(rules, className)
+        const classList = classNames.split(' ')
+
         const styles = css.all.replace(/^.*{/, '{')
         
         const styleRules = classList[0].endsWith('$')
           ? `${classList[0].replace(/\$/g, '')}${styles}`
           : `${classList[0]}${styles}`
-        
-        styleRules && DomStyleSheet?.sheet?.insertRule(`@media all {${styleRules}}`)
-        // styleRules &&
-        //   DomStyleSheet && 
-        //   (DomStyleSheet.textContent = `${DomStyleSheet.textContent}\n${styleRules}`)
+
+        styleRules && (
+          isFunc(DomStyleSheet?.sheet?.insertRule)
+            ? DomStyleSheet.sheet.insertRule(`@media all {${styleRules}}`)
+            : (DomStyleSheet.textContent = `${DomStyleSheet.textContent}\n${styleRules}`)
+        )
       })
 }
 
