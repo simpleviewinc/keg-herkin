@@ -24,7 +24,7 @@ const setMountEnvs = (config, options={}) => {
   })
 
   // app envs
-  const appUrl = get(config, 'app.url') || 'http://${ alias }-${ branch }.${ env }.keg-hub.io'
+  const appUrl = get(config, 'app.url') || 'http://${ alias }-${ branch }.${ env }.keghub.io'
   const appUrlEnv = getEnvName('appUrl')
   process.env[appUrlEnv] = replaceTemplateVars(appUrl, config, options)
 }
