@@ -15,6 +15,7 @@ services:
       - HERKIN_WAYPOINT_DIR
       - DOC_APP_PATH
       - DOC_BUILD_PATH
+      - DISPLAY
       - ENV
       - KEG_EXEC_CMD
       - KEG_DOCKER_EXEC

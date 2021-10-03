@@ -1,12 +1,11 @@
 See docs here => https://novnc.com/noVNC/docs/EMBEDDING.html
 
-### TODO
-  * Investigate installing only the following items
+### Setup
   ```sh
-    apt-get update && apt-get install -y libnss3 libxss1 fonts-wqy-zenhei gettext nginx supervisor novnc tigervnc-standalone-server openssl libxss1 libxtst6 fonts-noto-color-emoji libasound2 libnss3 && apt-get clean && apt-get autoclean
+    apt-get update && apt-get install -y novnc tigervnc-standalone-server
   ```
 
-### WORKING
+### Run
 * **Websockify**
   * Command => `websockify -v --web /usr/share/novnc 0.0.0.0:26369 0.0.0.0:26370`
   * URL => http://herkin-screen-cast.local.keghub.io:26369/vnc_lite.html

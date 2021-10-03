@@ -58,6 +58,9 @@ env:
   API_PORT: 5005
   NO_VNC_PORT: 26369
   VNC_SERVER_PORT: 26370
+  # Required for VNC to work properly
+  # Needs a display of some type
+  DISPLAY: ":0.0"
 
   # --- GENERAL CONTEXT ENVs --- #
   KEG_EXEC_CMD: dev

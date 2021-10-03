@@ -1,10 +1,11 @@
+const { AppRouter } = require('HerkinAppRouter')
 const { apiErr, apiResponse } = require('./handler')
 const { loadFeatures } = require('../libs/features')
 
-const getFeatures = (app, config) => async (req, res) => {
+const getFeatures = async (req, res) => {
   try {
 
-    const features = await loadFeatures(config)
+    const features = await loadFeatures(req.app.locals.config)
 
     return apiResponse(req, res, features || [], 200)
   }
@@ -14,7 +15,6 @@ const getFeatures = (app, config) => async (req, res) => {
 
 }
 
-module.exports = (app, config) => {
-  app.get('/features', getFeatures(app, config))
-  return app
+module.exports = () => {
+  AppRouter.get('/features', getFeatures)
 }

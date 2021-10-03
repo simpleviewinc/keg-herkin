@@ -21,10 +21,12 @@ ARG DOC_APP_PATH=/keg/tap
 ARG KEG_PROXY_PORT=19006
 
 ENV DOC_APP_PATH=$DOC_APP_PATH \
+    DEBUG=pw:api* \
+    HOME=/root \
     KEG_PROXY_PORT=$KEG_PROXY_PORT \
     PATH=$PATH:/usr/local/share/.config/yarn/global/node_modules/.bin \
     DEBIAN_FRONTEND=noninteractive \
-    # DISPLAY=:0.0 \
+    DISPLAY=:0.0 \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
     LC_ALL=C.UTF-8
@@ -38,12 +40,17 @@ COPY --from=tap-base /keg/. /keg/
 
 # Install the dependecies with yarn setup, then remove the .npmrc
 RUN yarn global add npm-run-all; \
-    apt-get update && apt-get install -y --no-install-recommends \
-    novnc tigervnc-standalone-server; \
+    npx playwright install chrome; \
     rm -rf /var/cache/apk/*; \
     echo fs.inotify.max_user_watches=1048576 | tee -a /etc/sysctl.conf; \
     sysctl -p; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    novnc \
+    tigervnc-standalone-server; \
+    apt-get clean && \
+    apt-get autoclean
 
 # Expose container ports
 EXPOSE $KEG_PROXY_PORT

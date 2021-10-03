@@ -1,17 +1,18 @@
+const { AppRouter } = require('HerkinAppRouter')
 const { apiErr, apiResponse } = require('./handler')
 const { loadFeatures } = require('../libs/features')
 const { loadDefinitions, DefinitionsParser } = require('../libs/definitions')
 const { definitionsByType, fileModelArrayToObj } = require('../../shared/utils')
 
-const loadBddFiles = (app, config) => async (req, res) => {
+const loadBddFiles = async (req, res) => {
   try {
-    const definitions = await loadDefinitions(config)
+    const definitions = await loadDefinitions(req.app.locals.config)
     const definitionTypes = definitionsByType(definitions)
-    const features = await loadFeatures(config, definitionTypes)
+    const features = await loadFeatures(req.app.locals.config, definitionTypes)
 
     return apiResponse(req, res, { 
-      features: fileModelArrayToObj(features), 
-      definitions: fileModelArrayToObj(definitions), 
+      features: fileModelArrayToObj(features),
+      definitions: fileModelArrayToObj(definitions),
       definitionTypes 
     }, 200)
   }
@@ -20,8 +21,6 @@ const loadBddFiles = (app, config) => async (req, res) => {
   }
 }
 
-module.exports = (app, config) => {
-  app.get('/bdd', loadBddFiles(app, config))
-
-  return app
+module.exports = () => {
+  AppRouter.get('/bdd', loadBddFiles)
 }

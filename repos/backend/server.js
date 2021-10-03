@@ -1,76 +1,15 @@
 #!/usr/bin/env node
-
-const path = require('path')
-const express = require('express')
-const bodyParser = require('body-parser')
-const apiEndpoints = require('./endpoints')
+const { getApp } = require('HerkinApp')
+const apiEndpoints = require('HerkinEndpoints')
+const { Logger } = require('@keg-hub/cli-utils')
 const { sockr } = require('@ltipton/sockr/src/server')
-const proxy = require('express-http-proxy')
-const { getHerkinConfig } = require('HerkinConfigs/getHerkinConfig')
-const { noOpObj, eitherArr, isArr, isObj, exists, isStr } = require('@keg-hub/jsutils')
-
-const rootPath = path.join(path.normalize(__dirname), '..')
-
-/**
- * Configures cors for the backend API and websocket
- * Defines the origins that are allow to connect to the API
- * @param {Object} app - Express app object
- * @param {Object} config - Herkin config server property object ( herkinConfig.server )
- *
- * @returns {void}
- */
-const setupCors = (app, config=noOpObj) => {
-  if(!app) return
-
-  const allowedOrigins = !config.origins
-    ? ['*']
-    : eitherArr(config.origins, [config.origins])
-
-  app.use((req, res, next) => {
-    const origin = req.headers.origin
-    const foundOrigin = (allowedOrigins.includes(origin)) ? origin : allowedOrigins[0]
-
-    res.header("Access-Control-Allow-Origin", foundOrigin)
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
-
-    next()
-  })
-
-}
-
-const addStaticPath = (app, name, loc) => {
-  loc
-    ? app.use(name, express.static(path.join(rootPath, loc)))
-    : app.use(express.static(path.join(rootPath, name)))
-}
-
-/**
- * Configures the API and sets static paths based on the config object
- * @param {Object} app - Express app object
- * @param {Object} config - Herkin config server property object ( herkinConfig.server )
- *
- * @returns {void}
- */
-const setupServer = (app, config) => {
-
-  // Setup the novnc proxy to forward all requests to that server
-  app.use('/novnc', proxy('http://0.0.0.0:26369'))
-
-  app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({ extended: true }))
-
-  // Setup the static paths of the server for serving files
-  isStr(config.static)
-    ? app.use(express.static(config.static))
-    : isArr(config.static)
-      ? config.static.map(loc => addStaticPath(app, loc))
-      : isObj(config.static)
-        ? Object.entries(config.static).map(([name, loc]) => addStaticPath(app, name, loc))
-        : app.use(express.static(rootPath))
-
-  ;(!exists(config.nodeModules) || config.nodeModules !== false) &&
-    app.use('/node_modules', express.static(rootPath + '/node_modules'))
-}
+const {
+  setupCors,
+  setupLogger,
+  setupServer,
+  setupStatic,
+  setupVNCProxy,
+} = require('HerkinMiddleware')
 
 /**
  * Starts a express API server, and connects the sockr Websocket
@@ -79,21 +18,30 @@ const setupServer = (app, config) => {
  * @returns {Object} - Express app, server and socket.io socket
  */
 const initApi = async () => {
-  const config = getHerkinConfig()
-  const serverConfig = config.server
-  const app = express()
+  const app = getApp()
 
-  setupServer(app, serverConfig)
-  setupCors(app, serverConfig)
-  apiEndpoints(app, config)
+  setupLogger(app)
+  setupCors(app)
+  setupVNCProxy(app)
+  setupServer(app)
+  setupStatic(app)
+  apiEndpoints(app)
 
+  const { server:serverConf, sockr:sockrConf } = app.locals.config
   const server = app.listen(
-    serverConfig.port,
-    serverConfig.host,
-    () => console.log(new Date() + ` - Listening on ${serverConfig.host}:${serverConfig.port}`)
+    serverConf.port,
+    serverConf.host,
+    () => {
+      const serverUrl = `http://${serverConf.host}:${serverConf.port}`
+
+      Logger.empty()
+      Logger.pair(`Herkin API server listening on`, serverUrl)
+      Logger.empty()
+    }
   )
 
-  const socket = await sockr(server, config.sockr, 'tests')
+
+  const socket = await sockr(server, sockrConf, 'tests')
 
   return { app, server, socket }
 }
