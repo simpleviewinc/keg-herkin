@@ -1,26 +1,26 @@
 const path = require('path')
 const { noOpObj, noPropArr, isArr } = require('@keg-hub/jsutils')
-const { spawnCmd } = require('@keg-hub/spawn-cmd')
+const { create:childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
 const { chromium, firefox, webkit } = require('playwright')
 const rootDir = path.join(__dirname, '../../../')
 const { NO_VNC_PORT=26369, VNC_SERVER_PORT=26370, DISPLAY=':0.0' } = process.env
-
 
 let VNC_PROC
 let SOCK_PROC
 let PW_BROWSER
 
-// Xtigervnc -SecurityTypes None -geometry 1288x804x24 -rfbauth /root/.vnc/passwd -rfbport 26370 -alwaysshared :0
-// Xtigervnc -SecurityTypes None -geometry 1288x804x24 -rfbport 26370 -alwaysshared :0
+/**
+ * Starts tigervnc to allow loading VNC in the browser
+ * @param {Object} config - options for setting up tigervnc
+ *
+ * @example
+ * Xtigervnc -SecurityTypes None -geometry 1288x804x24 -rfbport 26370 -alwaysshared :0
+ * Xtigervnc -SecurityTypes None -geometry 1288x804x24 -rfbauth /root/.vnc/passwd -rfbport 26370 -alwaysshared :0
+ * @returns {Object} - Child process running tigervnc
+ */
 const startTigerVNC = async ({ args=noPropArr, cwd, env=noOpObj }) => {
-  VNC_PROC = VNC_PROC || spawnCmd('Xtigervnc', {
-    cwd: cwd || rootDir,
-    options: {
-      // detached: true,
-      // stdio: 'ignore',
-      stdio: 'pipe',
-      env: { ...process.env, ...env }
-    },
+  VNC_PROC = VNC_PROC || await childProc({
+    cmd: 'Xtigervnc',
     args: [
       '-SecurityTypes',
       'None',
@@ -30,17 +30,32 @@ const startTigerVNC = async ({ args=noPropArr, cwd, env=noOpObj }) => {
       VNC_SERVER_PORT,
       '-alwaysshared',
       DISPLAY,
-      // ':0.0',
       ...args,
     ],
+    options: {
+      // detached: true,
+      // stdio: 'ignore',
+      // stdio: 'pipe',
+      cwd: cwd || rootDir,
+      env: { ...process.env, ...env }
+    },
+    log: true,
   })
 
   return VNC_PROC
 }
 
-// websockify -v --web /usr/share/_novnc 0.0.0.0:26369 0.0.0.0:26370
+/**
+ * Starts websockify to allow loading VNC in the browser
+ * @param {Object} config - options for setting up websockify
+ *
+ * @example
+ * websockify -v --web /usr/share/_novnc 0.0.0.0:26369 0.0.0.0:26370
+ * @returns {Object} - Child process running websockify
+ */
 const startSockify = async ({ args, cwd, env=noOpObj }) => {
-  SOCK_PROC = SOCK_PROC || spawnCmd('websockify', {
+  SOCK_PROC = SOCK_PROC || await childProc({
+    cmd: 'websockify',
     args: (args || [
       '-v',
       '--web',
@@ -51,10 +66,11 @@ const startSockify = async ({ args, cwd, env=noOpObj }) => {
     options: {
       // detached: true,
       // stdio: 'ignore',
-      stdio: 'pipe',
+      // stdio: 'pipe',
+      cwd: cwd || rootDir,
       env: { ...process.env, ...env }
     },
-    cwd: cwd || rootDir,
+    log: true,
   })
 
   return SOCK_PROC
@@ -66,8 +82,8 @@ const screenCast = async ({ vnc=noOpObj, sockify=noOpObj, browser=noOpObj }, exi
   exitListener && handleOnExit()
 
   // Start the VNC server and the websockify server
-  startTigerVNC(vnc)
-  startSockify(sockify)
+  await startTigerVNC(vnc)
+  await startSockify(sockify)
 
   PW_BROWSER = PW_BROWSER || await chromium.launch({
     headless: false,
@@ -87,7 +103,6 @@ const screenCast = async ({ vnc=noOpObj, sockify=noOpObj, browser=noOpObj }, exi
   const context = await PW_BROWSER.newContext()
   const page = await context.newPage()
   await page.goto('https://google.com')
-  await page.pause()
 
   return {
     context,
@@ -124,4 +139,6 @@ const handleOnExit = () => {
   })
 }
 
-require.main === module ? screenCast(noOpObj, true) : (module.exports = { screenCast })
+require.main === module
+  ? screenCast(noOpObj, true)
+  : (module.exports = { screenCast, killScreenCast })

@@ -18,6 +18,11 @@ module.exports = {
     ...sockrCmds,
     ...serverConfig,
   },
+  screenCast: {
+    // vnc: {},
+    // sockify: {},
+    // browser: {},
+  },
   server: serverConfig,
   paths: {
     rootDir: HERKIN_ROOT,
