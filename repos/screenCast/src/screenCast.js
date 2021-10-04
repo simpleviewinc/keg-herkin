@@ -50,7 +50,7 @@ const startTigerVNC = async ({ args=noPropArr, cwd, env=noOpObj }) => {
  * @param {Object} config - options for setting up websockify
  *
  * @example
- * websockify -v --web /usr/share/_novnc 0.0.0.0:26369 0.0.0.0:26370
+ * websockify -v --web /usr/share/novnc 0.0.0.0:26369 0.0.0.0:26370
  * @returns {Object} - Child process running websockify
  */
 const startSockify = async ({ args, cwd, env=noOpObj }) => {

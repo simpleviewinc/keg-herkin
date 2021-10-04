@@ -31,7 +31,7 @@ env:
   # Image to use when running herkin
   # Even if the dockerfile does not use this in the FROM directive
   # It should still be defined as the image used to run the Tap
-  KEG_IMAGE_FROM: ghcr.io/simpleviewinc/keg-herkin:develop
+  KEG_IMAGE_FROM: ghcr.io/simpleviewinc/keg-herkin:browser-inception
 
   # This is a true base image from playwright - Alpine Linux are not supported
   # ref: https://playwright.dev/docs/docker/README/#using-on-ci

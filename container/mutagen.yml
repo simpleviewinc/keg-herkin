@@ -18,7 +18,7 @@ sync:
         - "/reports"
         - "/build"
         - "/repos/example/build"
-        - "repos/messenger"
+        - "/repos/example/tests"
         - "/docs"
         - "/tests"
 actions:
