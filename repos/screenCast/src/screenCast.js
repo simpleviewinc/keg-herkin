@@ -1,48 +1,34 @@
 const { killProc } = require('./killProc')
+const { startVNC, stopVNC } = require('./vnc')
 const { Logger } = require('@keg-hub/cli-utils')
-const { startBrowser } = require('./startBrowser')
-const { startSockify } = require('./startSockify')
-const { startTigerVNC } = require('./startTigerVNC')
+const { startSockify, stopSockify } = require('./sockify')
+const { stopBrowser, startBrowser } = require('./browser')
 const { noOpObj, exists, isObj } = require('@keg-hub/jsutils')
-
-let VNC_PROC
-let SOCK_PROC
-let PW_BROWSER
 
 /**
  * Helper method to kill the running process
  * @function
- * @public
+ * @private
  *
  * @returns {Void}
  */
 const killScreenCast = async () => {
-  PW_BROWSER &&
-    PW_BROWSER.browser &&
-    await PW_BROWSER.browser.close()
-  PW_BROWSER = null
-
-  // Kill sockify and vnc process based on pid
-  killProc(VNC_PROC)
-  VNC_PROC = null
-  killProc(SOCK_PROC)
-  SOCK_PROC = null
+  await stopBrowser()
+  await stopSockify()
+  await stopVNC()
 
   Logger.info(`[ ScreenCast ] Processes have been terminated!\n`)
 }
 
-
 /**
  * Kills and exists the running ScreenCast processes
- *
+ * @function
+ * @private
  * @param {number|string} - Exit status for the current node process
  *
  * @returns {Void}
  */
-const killAndExit = (exitStatus, message, type=`log`) => {
-  // Log a message before killing the processes
-  message && Logger[type](message)
-
+const killAndExit = exitStatus => {
   return killScreenCast()
     .then(() => {
       return 0
@@ -58,7 +44,8 @@ const killAndExit = (exitStatus, message, type=`log`) => {
  * Listen for "(cmd|ctrl) + c" keyboard events, and exit the running process
  * Calling exit should automatically kill all child processes
  * Used when servers are not started in detached mode, must be explicity set
- *
+ * @function
+ * @private
  * @param {string|number} - Exit status of the process
  *
  * @returns {Void}
@@ -87,20 +74,31 @@ const screenCast = async ({ vnc=noOpObj, sockify=noOpObj, browser }, exitListene
 
   Logger.info(`\n[ ScreenCast ] Starting servers...`)
   // Start the VNC server and the websockify server
-  VNC_PROC = await startTigerVNC(vnc)
-  SOCK_PROC = await startSockify(sockify)
-  PW_BROWSER = isObj(browser) ? await startBrowser(browser, PW_BROWSER) : PW_BROWSER
+  const vncProc = await startVNC(vnc)
+  const sockProc = await startSockify(sockify)
+  const pwData = isObj(browser) ? await startBrowser(browser) : noOpObj
 
   Logger.info(`\n[ ScreenCast ] Servers started successfully\n`)
 
   return {
-    ...(PW_BROWSER || noOpObj),
-    vncProc: VNC_PROC,
-    sockProc: SOCK_PROC,
+    ...(pwData),
+    sockProc,
+    vncProc,
   }
 }
 
-
+/**
+ * If the module is called directly, just call screenCast
+ * Otherwise export the screenCase and process methods
+ */
 require.main === module
   ? screenCast(noOpObj, true)
-  : (module.exports = { screenCast, killScreenCast })
+  : (module.exports = {
+      killScreenCast,
+      screenCast,
+      startBrowser,
+      startSockify,
+      stopSockify,
+      startVNC,
+      stopVNC,
+    })

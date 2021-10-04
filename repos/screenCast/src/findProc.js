@@ -3,7 +3,8 @@ const { exec } = require('child_process')
 /**
  * Parses the output of the search command
  * Assumes only a single running process could be found
- *
+ * @function
+ * @private
  * @param {string} procName - The executable name to check
  * @param {string} output - Output of the process search command
  *
@@ -25,22 +26,27 @@ const parseOutput = (procName, output) => {
 
 /**
  * Gets the command used to search for the process based on the platform
+ * @function
+ * @private
  * @param {string} procName The executable name to check
  * @param {string} platform - Name of the platform running the command
  *
  * @returns {string} - Search command to use
  */
 const getPlatformCmd = (procName, platform) => {
+  const proc = `"[${procName[0]}]${procName.substring(1)}"`
   switch (platform) {
     case 'win32' : return `tasklist`
-    case 'darwin' : return `ps -ax | grep "[${procName[0]}]${procName.substring(1)}"`
-    case 'linux' : return `ps -A | grep "[${procName[0]}]${procName.substring(1)}"`
+    case 'darwin' : return `ps -ax | grep ${proc}`
+    case 'linux' : return `ps -A | grep ${proc}`
     default: return false
   }
 }
 
 /**
  * Searches for a currently process by name, and returns it if found
+ * @function
+ * @public
  * @param {string} procName The executable name to check
  *
  * @returns {Object} - Status of the found process
@@ -56,6 +62,8 @@ const findProc = procName => {
     exec(cmd, (err, stdout, stderr) => {
       if(err || stderr) return res({ running: false, name: procName })
 
+      // Finding the pid on windows machine not currently supported
+      // I would need a windows OS to see the tasklist cmd output, to know how to parse it
       const status = platform === 'win32'
         ? { running: stdout.toLowerCase().includes(procName.toLowerCase()), name: procName }
         : parseOutput(procName, stdout)

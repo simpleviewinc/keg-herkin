@@ -8,6 +8,12 @@ const rootDir = path.join(__dirname, '../../../')
 const { VNC_SERVER_PORT=26370, DISPLAY=':0.0' } = process.env
 
 /**
+ * Cache holder for the tigervnc process
+ * @type {Object|undefined}
+ */
+let VNC_PROC
+
+/**
  * Starts tigervnc to allow loading VNC in the browser
  * @param {Object} args - options for setting up tigervnc
  * @param {Array} args.args - Arguments to pass to the Xtigervnc command
@@ -20,18 +26,17 @@ const { VNC_SERVER_PORT=26370, DISPLAY=':0.0' } = process.env
  *
  * @returns {Object} - Child process running tigervnc
  */
-const startTigerVNC = async ({ args=noPropArr, cwd, options=noOpObj, env=noOpObj }) => {
+const startVNC = async ({ args=noPropArr, cwd, options=noOpObj, env=noOpObj }) => {
 
-  let childProc
   const [_, status] = await limbo(findProc('Xtigervnc'))
 
   if(status.pid){
     Logger.pair(`- Tigervnc already running with pid:`, status.pid)
-    return (childProc = status)
+    return (VNC_PROC = status)
   }
 
   Logger.log(`- Starting tigervnc server...`)
-  childProc = await childProc({
+  VNC_PROC = await childProc({
     cmd: 'Xtigervnc',
     args: [
       '-SecurityTypes',
@@ -54,10 +59,29 @@ const startTigerVNC = async ({ args=noPropArr, cwd, options=noOpObj, env=noOpObj
     log: true,
   })
 
-  return childProc
+  return VNC_PROC
 }
 
+/**
+ * Stops the websockify server if it's running
+ * If no reference exists, calls findProc to get a reference to the PID
+ *
+ * @return {Void}
+ */
+const stopVNC = async () => {
+  VNC_PROC
+    ? killProc(VNC_PROC)
+    : checkCall(() => {
+        const [_, status] = await limbo(findProc('Xtigervnc'))
+        status &&
+          status.pid &&
+          killProc(status)
+      })
+
+  VNC_PROC = undefined
+}
 
 module.exports = {
-  startTigerVNC
+  startVNC,
+  stopVNC,
 }
