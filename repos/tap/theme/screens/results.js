@@ -13,8 +13,7 @@ export const results = theme => {
           fl:1, 
         }, 
         content: {
-          fl:1, 
-          minH: 600
+          fl:1,
         }
       },
       header: {
@@ -37,6 +36,7 @@ export const results = theme => {
         width: `100%`,
         alI: 'center',
         jtC: 'center',
+        minH: 200,
       },
       loading: {
         color: tapColors.defaultLight,

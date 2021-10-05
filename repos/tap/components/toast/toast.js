@@ -1,12 +1,12 @@
+import React, { useMemo, useEffect, useCallback } from 'react'
 import { Values } from 'SVConstants'
 import { removeToast } from 'SVActions/toasts'
-import { useStyle, useThemeHover, useThemeActive } from '@keg-hub/re-theme'
-import { noOpObj, noPropArr, noOp, isStr } from '@keg-hub/jsutils'
+import { useIconProps } from 'SVHooks/useIconProps'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
-import { View, Button, Text } from '@keg-hub/keg-components'
-import React, { useMemo, useEffect, useCallback } from 'react'
 import { Check, Times, Exclamation, Info } from 'SVAssets/icons'
-import { isValidComponent } from 'SVUtils/validate/isValidComponent'
+import { noOpObj, noPropArr, noOp, isStr } from '@keg-hub/jsutils'
+import { useStyle, useThemeHover, useThemeActive } from '@keg-hub/re-theme'
+import { View, Button, Text, isValidComponent } from '@keg-hub/keg-components'
 
 const icons = {
   success: Check,
@@ -65,6 +65,7 @@ const RenderToast = props => {
 
   const [ hoverRef, hoverStyles ] = useThemeHover(toastStyle, toastsStyle.hover)
   const [ ref, themeStyles ] = useThemeActive(hoverStyles, toastsStyle.active, { ref: hoverRef })
+  const iconProps = useIconProps(noOpObj, themeStyles.icon)
 
   return (
     <View
@@ -80,7 +81,7 @@ const RenderToast = props => {
         >
           <Icon
             className="toast-icon"
-            style={themeStyles.icon}
+            {...iconProps}
           />
         </View>
       )}

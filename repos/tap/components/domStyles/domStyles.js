@@ -1,17 +1,30 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
+import { noOpObj } from '@keg-hub/jsutils'
 import { useDomStyles } from 'SVHooks/useDomStyles'
-import { checkCall } from '@keg-hub/jsutils'
 
-let __STYLES_SET = false
-
-const ApplyDomStyles = () => {
-  useDomStyles()
+/**
+ * Calls useDomStyles hook with global styles and always returns null
+ * @function
+ * @param {Object} props
+ * @param {Object} props.styles - Styles that should be added to the dom globally
+ *
+ */
+const ApplyDomStyles = React.memo(({ styles }) => {
+  useDomStyles(styles)
   return null
-}
+})
 
-export const DomStyles = () => {
-  if(__STYLES_SET) return null
-  __STYLES_SET = true
+/**
+ * Renders global css styles to the Dom via the useDomStyles hook
+ * Splits call to useDomStyles into separate component to allow conditional call to hook
+ * @function
+ * @param {Object} props
+ * @param {Object} props.styles - Styles that should be added to the dom globally
+ *
+ */
+export const DomStyles = React.memo(({ styles=noOpObj }) => {
+  const styleRef = useRef(false)
+  useEffect(() => (styleRef.current = true))
 
-  return (<ApplyDomStyles />)
-}
+  return !styleRef.current && (<ApplyDomStyles styles={styles} />)
+})

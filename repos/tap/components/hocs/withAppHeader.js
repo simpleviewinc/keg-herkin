@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import { useStyles } from 'SVHooks'
 import { Cog } from 'SVAssets/icons'
 import { setActiveModal } from 'SVActions/modals'
 import { useThemeHover, useStyle } from '@keg-hub/re-theme'

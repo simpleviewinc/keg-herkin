@@ -125,7 +125,7 @@ const listItem = theme => {
             pos: 'relative',
             overflow: 'visible',
             left: padSizeThird * -1,
-            pR: (theme.padding.size - padSizeThird),
+            pR: theme.padding.size,
           },
           icon: {
             fontSize: 12,
@@ -136,11 +136,17 @@ const listItem = theme => {
         },
         drawer: {
           main: {
-
+            bLW: 10,
+            bC: tapColors.border,
+            bgC: theme?.colors?.palette?.white01,
+            pos: 'relative',
+            top: -1,
+            mB: -1,
           },
           content: {
-            p: theme.padding.size,
-            pL: theme.padding.size * 2
+            p: padSizeThird * 2,
+            pB: (padSizeThird * 2) + 2,
+            pL: padSizeThird * 4,
           },
           label: {
             ftSz: 12,
@@ -196,7 +202,7 @@ const listItem = theme => {
     },
     noMeta: {
       main: {
-        pL: (padSizeThird) * 5
+        pL: theme.padding.size * 2
       }
     },
     activeMeta: {
