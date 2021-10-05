@@ -7,7 +7,7 @@ const { create:childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
 const { flatUnion } = require('./utils/flatUnion')
 
 const rootDir = path.join(__dirname, '../../../')
-const { NO_VNC_PORT=26369 } = process.env
+const { NO_VNC_PORT=26369, VNC_SERVER_PORT=26370 } = process.env
 
 /**
  * Cache holder for the websockify process

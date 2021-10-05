@@ -13,6 +13,8 @@ services:
       - HERKIN_UNIT_DIR
       - HERKIN_SUPPORT_DIR
       - HERKIN_WAYPOINT_DIR
+      - HERKIN_PW_SOCKET
+      - HERKIN_USE_VNC
       - DOC_APP_PATH
       - DOC_BUILD_PATH
       - DISPLAY
