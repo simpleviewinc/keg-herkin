@@ -2,8 +2,9 @@ const path = require('path')
 const { findProc } = require('./findProc')
 const { killProc } = require('./killProc')
 const { Logger } = require('@keg-hub/cli-utils')
-const { noOpObj, isArr, limbo, checkCall } = require('@keg-hub/jsutils')
+const { noOpObj, noPropArr, limbo, checkCall, deepMerge } = require('@keg-hub/jsutils')
 const { create:childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
+const { flatUnion } = require('./utils/flatUnion')
 
 const rootDir = path.join(__dirname, '../../../')
 const { NO_VNC_PORT=26369 } = process.env
@@ -27,7 +28,7 @@ let SOCK_PROC
  * websockify -v --web /usr/share/novnc 0.0.0.0:26369 0.0.0.0:26370
  * @returns {Object} - Child process running websockify
  */
-const startSockify = async ({ args, cwd, options=noOpObj, env=noOpObj }) => {
+const startSockify = async ({ args=noPropArr, cwd, options=noOpObj, env=noOpObj }) => {
   if(SOCK_PROC) return SOCK_PROC
 
   const [_, status] = await limbo(findProc('websockify'))
@@ -40,20 +41,19 @@ const startSockify = async ({ args, cwd, options=noOpObj, env=noOpObj }) => {
   Logger.log(`- Starting websockify server...`)
   SOCK_PROC = await childProc({
     cmd: 'websockify',
-    args: (isArr(args) ? args : [
+    args: flatUnion([
       '-v',
       '--web',
       '/usr/share/novnc',
       `0.0.0.0:${NO_VNC_PORT}`,
       `0.0.0.0:${VNC_SERVER_PORT}`
-    ]),
-    options: {
+    ], args),
+    options: deepMerge({
       detached: true,
       stdio: 'ignore',
       cwd: cwd || rootDir,
-      ...options,
-      env: { ...process.env, ...options.env, ...env }
-    },
+      env: { ...process.env }
+    }, options, { env }),
     log: true,
   })
 

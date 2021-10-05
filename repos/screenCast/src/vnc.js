@@ -1,8 +1,10 @@
 const path = require('path')
 const { findProc } = require('./findProc')
 const { Logger } = require('@keg-hub/cli-utils')
-const { noOpObj, noPropArr, limbo, checkCall } = require('@keg-hub/jsutils')
+const { noOpObj, noPropArr, limbo, checkCall, deepMerge } = require('@keg-hub/jsutils')
 const { create:childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
+const { flatUnion } = require('./utils/flatUnion')
+
 
 const rootDir = path.join(__dirname, '../../../')
 const { VNC_SERVER_PORT=26370, DISPLAY=':0.0' } = process.env
@@ -36,9 +38,10 @@ const startVNC = async ({ args=noPropArr, cwd, options=noOpObj, env=noOpObj }) =
   }
 
   Logger.log(`- Starting tigervnc server...`)
+
   VNC_PROC = await childProc({
     cmd: 'Xtigervnc',
-    args: [
+    args: flatUnion([
       '-SecurityTypes',
       'None',
       '-geometry',
@@ -47,15 +50,14 @@ const startVNC = async ({ args=noPropArr, cwd, options=noOpObj, env=noOpObj }) =
       VNC_SERVER_PORT,
       '-alwaysshared',
       DISPLAY,
-      ...args,
-    ],
-    options: {
+      ,
+    ], args),
+    options: deepMerge({
       detached: true,
       stdio: 'ignore',
       cwd: cwd || rootDir,
-      ...options,
-      env: { ...process.env, ...options.env, ...env }
-    },
+      env: { ...process.env }
+    }, options, { env }),
     log: true,
   })
 

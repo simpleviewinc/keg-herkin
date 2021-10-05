@@ -1,6 +1,7 @@
 const playwright = require('playwright')
 const { Logger } = require('@keg-hub/cli-utils')
-const { noOpObj, noPropArr } = require('@keg-hub/jsutils')
+const { noOpObj, noPropArr, deepMerge } = require('@keg-hub/jsutils')
+const { flatUnion } = require('./utils/flatUnion')
 
 /**
  * Cache holder for the launched playwright browser
@@ -46,20 +47,21 @@ const startBrowser = async (browserConf=noOpObj) => {
 
   Logger.log(`- Starting playwright browser ${type || 'chromium'}...`)
   // Reuse or launch the playwright browser
-  PW_BROWSER = PW_BROWSER || await (playwright[type] || playwright.chromium).launch({
-      headless: false,
-      slowMo: 50,
-      devtools: true,
-      channel: type || `chrome`,
-      ...config,
-      args: [
-        `--disable-gpu`,
-        `--disable-dev-shm-usage`,
-        `--no-sandbox`,
-        `--window-position=0,0`,
-        ...args
-      ]
-    })
+  PW_BROWSER = PW_BROWSER ||
+    await (playwright[type] || playwright.chromium).launch(
+      deepMerge({
+        slowMo: 50,
+        devtools: true,
+        headless: false,
+        channel: `chrome`,
+        args: flatUnion([
+          `--disable-gpu`,
+          `--disable-dev-shm-usage`,
+          `--no-sandbox`,
+          `--window-position=0,0`,
+        ], args)
+      }, config)
+    )
 
   PW_CONTEXT = PW_CONTEXT || await PW_BROWSER.newContext()
   // If there's no page set, then recreate it, and goto the passed in url
