@@ -2,7 +2,6 @@
 const { getApp } = require('HerkinApp')
 const apiEndpoints = require('HerkinEndpoints')
 const { Logger } = require('@keg-hub/cli-utils')
-const { screenCast } = require('HerkinScreenCast')
 const { sockr } = require('@ltipton/sockr/src/server')
 const {
   setupCors,
@@ -25,11 +24,6 @@ const initApi = async () => {
     sockr:sockrConf,
     screenCast:screenCastConf
   } = app.locals.config
-
-
-  Logger.info(`Starting ScreenCast...`)
-  await screenCast(screenCastConf)
-  Logger.success(`ScreenCast started`)
 
   setupLogger(app)
   setupCors(app)
