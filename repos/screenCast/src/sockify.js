@@ -71,7 +71,7 @@ const startSockify = async ({ args, cwd, options=noOpObj, env=noOpObj }) => {
 const stopSockify = async () => {
   SOCK_PROC
     ? killProc(SOCK_PROC)
-    : checkCall(() => {
+    : checkCall(async () => {
         const [_, status] = await limbo(findProc('websockify'))
         status &&
           status.pid &&

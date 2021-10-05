@@ -3,6 +3,7 @@
 * Allows accessing the GUI from within the docker container
 * See docs for more information
   * [TigerVNC](https://tigervnc.org/)
+  * [Websockify](https://github.com/novnc/websockify)
   * [NoVNC](https://novnc.com/noVNC/docs/EMBEDDING.html)
 
 ### Setup
@@ -18,8 +19,24 @@
       npx playwright install chrome
       npx playwright install firefox
     ```
+  * Install node_modules from keg-herkin root directory
+    ```sh
+      yarn install
+    ```
 
 ### Run
+* The main exported method is `screenCast`, and be used like this
+  ```js
+    const { screenCast } = require('path/to/screencCast')
+    await screenCast({ ...options })
+  ```
+* This will start the `VNC` and `WebSockify` servers with the default settings
+  * The default settings should would for most use cases, but can be overwritten when needed
+* **IMPORTANT** - Both servers are started with `detached` mode
+  * This means even if the parent node.js process is killed, both servers will continue to run
+  * This is intended, and allows calling screenCast once, then forgetting about it
+  * Helper methods are also exported, to allow killing the servers, either together or individually
+
 * **Websockify**
   * Command => `websockify -v --web /usr/share/novnc 0.0.0.0:26369 0.0.0.0:26370`
   * Example URL => http://herkin-develop.local.keghub.io:26369/vnc_lite.html

@@ -1,4 +1,5 @@
 const playwright = require('playwright')
+const { Logger } = require('@keg-hub/cli-utils')
 const { noOpObj, noPropArr } = require('@keg-hub/jsutils')
 
 /**
@@ -32,7 +33,7 @@ let PW_PAGE
  *
  * @returns {Object} - Contains the page, context, and browser created from playwright
  */
-const startBrowser = async (browserConf) => {
+const startBrowser = async (browserConf=noOpObj) => {
   const {
     args=noPropArr,
     type,

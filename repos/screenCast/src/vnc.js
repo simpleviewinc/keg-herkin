@@ -71,7 +71,7 @@ const startVNC = async ({ args=noPropArr, cwd, options=noOpObj, env=noOpObj }) =
 const stopVNC = async () => {
   VNC_PROC
     ? killProc(VNC_PROC)
-    : checkCall(() => {
+    : checkCall(async () => {
         const [_, status] = await limbo(findProc('Xtigervnc'))
         status &&
           status.pid &&
