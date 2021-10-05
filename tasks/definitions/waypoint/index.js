@@ -1,1 +1,1 @@
-module.exports = require('./wolf')
+module.exports = require('./waypoint')
