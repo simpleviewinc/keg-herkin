@@ -10,10 +10,12 @@ export const cmdOutput = theme => {
     },
     main: {
       p: theme.padding.size,
+      flex: 'unset',
+      display: 'unset',
     },
     row: {
-      h: 350,
-      maxH: 350,
+      h: 450,
+      maxH: 450,
       overflowY: 'auto',
       borderRightWidth: 0,
       p: theme.padding.size,

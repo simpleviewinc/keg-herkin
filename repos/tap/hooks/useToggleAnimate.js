@@ -1,6 +1,7 @@
-import React, { useState, useLayoutEffect, useRef } from 'react'
 import { Animated, Easing } from 'react-native'
 import { checkCall, isObj } from '@keg-hub/jsutils'
+import React, { useState, useLayoutEffect, useRef } from 'react'
+import { setNativeDriver } from 'SVUtils/helpers/setNativeDriver'
 
 /**
  * Default animation config
@@ -34,11 +35,13 @@ const noAnimate = (toggled, current, { from, to }) => (
  * @returns {Object} - Built animation config
  */
 const buildConfig = (config, values) => {
-  return checkCall(config, defConfig, values) || {
-    ...defConfig,
-    ...(isObj(config) ? config : {}),
-    toValue: values.to,
-  }
+  return setNativeDriver(
+    checkCall(config, defConfig, values) || {
+      ...defConfig,
+      ...(isObj(config) ? config : {}),
+      toValue: values.to,
+    }
+  )
 }
 
 /**
@@ -72,7 +75,7 @@ export const useToggleAnimate = props => {
     // Update the animation value to animate from
     animation.setValue(aniChanges.from)
 
-    // Setup and from the animation
+    // Setup and start the animation
     Animated.timing(animation, buildConfig(config, aniChanges))
       .start(() => checkCall(onFinish, props, animation, values))
 
