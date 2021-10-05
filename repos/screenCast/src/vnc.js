@@ -1,7 +1,7 @@
 const path = require('path')
 const { findProc } = require('./findProc')
 const { Logger } = require('@keg-hub/cli-utils')
-const { noOpObj, noPropArr, limbo } = require('@keg-hub/jsutils')
+const { noOpObj, noPropArr, limbo, checkCall } = require('@keg-hub/jsutils')
 const { create:childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
 
 const rootDir = path.join(__dirname, '../../../')
