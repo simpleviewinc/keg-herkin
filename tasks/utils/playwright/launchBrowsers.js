@@ -1,6 +1,7 @@
 const { launchBrowser } = require('./launchBrowser')
 const { getBrowsers } = require('HerkinTasks/utils/task/getBrowsers')
-const { runSeq } = require('@keg-hub/jsutils')
+const { runSeq, noOpObj } = require('@keg-hub/jsutils')
+const { checkShouldUseVNC } = require('../envs/checkShouldUseVNC')
 
 /**
  * @param {Object} params 
@@ -39,7 +40,12 @@ const paramsWithDefaults = params => ({
  *   browsers: the browsers that were launched
  * }
  */
-const launchBrowsers = launchParams => {
+const launchBrowsers = ({ launch, herkinTestsRun, ...launchParams  }) => {
+  // Check if we should use VNC instead of launching the browser via websocket
+  // The herkinTestsRun prop should be be sent when actually running tests
+  const shouldUseVNC = checkShouldUseVNC(!launch && !herkinTestsRun)
+  if(shouldUseVNC) return noOpObj
+
   const { headless, log, ...browserParams } = paramsWithDefaults(launchParams)
 
   const browsers = getBrowsers(browserParams)

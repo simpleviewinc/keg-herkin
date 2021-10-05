@@ -73,3 +73,8 @@ env:
   # Git tap url in github
   GIT_APP_URL: https://github.com/simpleviewinc/keg-herkin.git
   GIT_APP_BRANCH: master
+  
+  # Browser Local vs VNC envs
+  # Defaults to using VNC to display the browser
+  HERKIN_USE_VNC: true
+  HERKIN_PW_SOCKET: false

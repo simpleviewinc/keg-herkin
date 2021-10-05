@@ -4,7 +4,7 @@ const { timedRun } = require('@keg-hub/jsutils')
 
 /**
  * Runs the edit command, and logs out a warning if
- * the user forgot to include `qawolf.create` in their 
+ * the user forgot to include `playwright.create` in their 
  * test file.
  * @param {string} containerName 
  * @param {string} testName 
@@ -12,23 +12,25 @@ const { timedRun } = require('@keg-hub/jsutils')
  * @return {*} result of dockerCmd
  */
 const runEditCmd = async (containerName, testName, expectedMinTime=10000) => {
-  const [ exitCode, duration ] = await timedRun(dockerCmd, containerName, `npx qawolf edit ${testName}`)
-  if (exitCode === 0 && duration < expectedMinTime)
-    console.log(
-      '\x1b[35m%s\x1b[0m', 
-      'The edit process exited quickly! You may have forgotten to mark the edit location in your test file with `await qawolf.create()`'
-    )
-  return exitCode
+  // TODO: Add playwright record edit method to allow editing previously recorded waypoint tests
+  // Updates to use something like playwright.create()
+  // const [ exitCode, duration ] = await timedRun(dockerCmd, containerName, `npx playwright edit ${testName}`)
+  // if (exitCode === 0 && duration < expectedMinTime)
+  //   console.log(
+  //     '\x1b[35m%s\x1b[0m', 
+  //     'The edit process exited quickly! You may have forgotten to mark the edit location in your test file with `await playwright.create()`'
+  //   )
+  // return exitCode
 }
 
 const editTest = async (args) => {
   const { params } = args
-  const { context } = params
+  const { context, launch } = params
 
   // ensure a non-headless chromium instance is running
-  await launchBrowser({ browser: 'chromium', headless: false })
+  await launchBrowser({ browser: 'chromium', headless: false, launch })
 
-  runEditCmd(params.container, context)
+  // runEditCmd(params.container, context)
 }
 
 module.exports = {
@@ -48,6 +50,11 @@ module.exports = {
         example: '--container keg-herkin',
         required: true,
         default: 'keg-herkin',
+      },
+      launch: {
+        description: 'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
+        example: 'start --launch',
+        default: false,
       },
     }
   }

@@ -107,6 +107,7 @@ const exitProcess = (exitCodes=[], reportPath) => {
  */
 const buildLaunchParams = params => ({
   ...params,
+  herkinTestsRun: true,
   slowMo: isNum(params.slowMo)
     ? params.slowMo * 1000  // seconds to ms conversion
     : undefined

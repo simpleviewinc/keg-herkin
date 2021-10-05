@@ -13,7 +13,7 @@ const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers'
  */
 const attachHerkin = async (args) => {
   const { params } = args
-  params.launch && await launchBrowsers(params)
+  await launchBrowsers(params)
 
   return await args.task.cliTask(args)
 }
@@ -30,8 +30,8 @@ module.exports = {
     options: sharedOptions('start', {
       launch: {
         description: 'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
-        example: 'attach --no-launch',
-        default: true,
+        example: 'attach --launch',
+        default: false,
       },
     }, [
       'headless',

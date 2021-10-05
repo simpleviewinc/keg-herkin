@@ -3,12 +3,14 @@ const { launchBrowser } = require('HerkinTasks/utils/playwright/launchBrowser')
 
 const createTest = async args => {
   const { params } = args
-  const { url, name, container } = params
+  const { url, name, container, launch } = params
 
+  // TODO: Update to create a new test file using playwright record functionality
+  // Which allows recording actions in the browser as they happend 
+  
   // ensure a non-headless chromium instance is running
-  await launchBrowser({ browser: 'chromium', headless: false })
-
-  return dockerCmd(container, `npx qawolf create ${url} ${name}`)
+  await launchBrowser({ browser: 'chromium', headless: false, launch })
+  // return dockerCmd(container, ` create ${url} ${name}`)
 }
 
 module.exports = {
@@ -37,6 +39,11 @@ module.exports = {
       device: {
         description: 'Device to run the test on. See device list here => https://github.com/microsoft/playwright/blob/master/src/server/deviceDescriptors.ts',
         example: '--device \"iPad Mini\"',
+      },
+      launch: {
+        description: 'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
+        example: 'start --launch',
+        default: false,
       },
     }
   }

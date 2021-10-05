@@ -9,6 +9,12 @@
 # This is to keep our container running forever
 [[ -z "$KEG_DOCKER_EXEC" ]] && tail -f /dev/null && exit 0;
 
+# Starts the screen cast servers when not using a websocket from the hostmachine
+keg_start_screen_cast(){
+  cd $DOC_APP_PATH
+  yarn sc
+}
+
 # Serve the bundle and also run the backend api
 keg_herkin_serve(){
   cd $DOC_APP_PATH
@@ -16,6 +22,9 @@ keg_herkin_serve(){
   node ./repos/backend/index.js
   exit 0
 }
+
+# Check if the vnc screen-cast servers should be started
+[[ "$HERKIN_USE_VNC" == "true" ]] && keg_start_screen_cast
 
 # Check the NODE_ENV, and use that to know which environment to start
 # For non-development environments, we want to serve the bundle if it exists

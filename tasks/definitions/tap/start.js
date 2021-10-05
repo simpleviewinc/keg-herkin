@@ -51,11 +51,6 @@ module.exports = {
     mergeOptions: true,
     description : 'Starts all services. (Local Webserver and Docker Container)',
     options: sharedOptions('start', {
-        launch: {
-          description: 'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
-          example: 'start --no-launch',
-          default: true,
-        },
         config: {
           description: 'Path to the user herkin.config.js. If omitted, keg-herkin will look in your current working directory for a herkin config.',
           example: 'keg herkin start --config my-repo/herkin.config.js',
@@ -65,6 +60,11 @@ module.exports = {
           description: 'See additional warnings (like for a missing herkin config)',
           example: 'keg herkin start --config my-repo/herkin.config.js --no-warn',
           default: true,
+        },
+        launch: {
+          description: 'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
+          example: 'start --launch',
+          default: false,
         },
     }, [
       'headless',

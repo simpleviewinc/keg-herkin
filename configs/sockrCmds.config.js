@@ -62,7 +62,7 @@ const sockrCmds = {
         },
         waypoint: {
           description: "Run waypoint tests using playwright and jest",
-          cmd: 'wolf',
+          cmd: 'waypoint',
           beforeArgs: [
             'run',
           ],

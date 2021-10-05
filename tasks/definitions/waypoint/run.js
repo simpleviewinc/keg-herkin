@@ -4,7 +4,7 @@ const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
 const { buildArguments } = require('HerkinTasks/utils/task/buildArguments')
 
 /**
- * Builds the QAwolf test command
+ * Builds the Playwright test command
  * @param {Object} params 
  * @returns {Array<string>} - array of cli args
  */
@@ -40,7 +40,8 @@ const runTest = async (args) => {
   await launchBrowsers(params)
   const cmdOptions = buildTestArguments(params)
 
-  return dockerCmd(params.container, [`npx`, `qawolf`, `test`, name, ...cmdOptions])
+  // TODO: Add command to run playwright recorded tests
+  // return dockerCmd(params.container, [`npx`, `playwright`, `test`, name, ...cmdOptions])
 }
 
 module.exports = {
@@ -67,6 +68,11 @@ module.exports = {
         example: '--container keg-herkin',
         required: true,
         default: 'keg-herkin',
+      },
+      launch: {
+        description: 'Launch a playwright websocket to allow remote connections to the browser.\nNot valid in headless mode.',
+        example: 'start --launch',
+        default: false,
       },
     }, [
       'allBrowsers',

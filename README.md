@@ -18,10 +18,6 @@
   * Automates the browser
   * Works on all browsers
   * Provides the base docker container for Keg-Herkin
-* [QAWolf](https://github.com/qawolf/qawolf)
-  * Automatically writes tests based on browser interactions
-  * CLI to create, run, and debug end-to-end tests within a Repl
-  * Wraps Playwright for automation
 * [Jest](https://jestjs.io/)
   * Provides data assertion ([expect](https://jestjs.io/docs/en/expect))
   * Allows running tests in parallel

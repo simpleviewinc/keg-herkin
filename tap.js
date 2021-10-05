@@ -7,7 +7,8 @@ module.exports = {
   keg: {
     envs: {
       'process.env.SERVER_HOST': config.server.host,
-      'process.env.SERVER_PORT': config.server.port
+      'process.env.SERVER_PORT': config.server.port,
+      'process.env.HERKIN_USE_VNC': process.env.HERKIN_USE_VNC,
     },
     cli: {
       link: {
