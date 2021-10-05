@@ -56,7 +56,6 @@ const defTabbar = theme => ({
         cursor: 'pointer',
         textAlign: 'center',
         color: tapColors.disabledColor,
-        // ...theme.transition([ 'color' ], 0.8),
         minWidth: 'unset',
       },
       icon: {
@@ -123,6 +122,5 @@ export const tabbar = theme => {
     screens: screenTabs(theme, builtTabbar),
     results: resultsTabs(theme, builtTabbar),
     definitions: definitionTabs(theme, builtTabbar),
-    
   }
 }
