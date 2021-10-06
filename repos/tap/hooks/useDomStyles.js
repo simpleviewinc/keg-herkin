@@ -1,41 +1,47 @@
+import { useMemo } from 'react'
 import { Values } from 'SVConstants'
-import { useTheme } from '@keg-hub/re-theme'
+import { useStyle } from '@keg-hub/re-theme'
+import { noOpObj } from '@keg-hub/jsutils'
 import { createDomNode } from 'SVUtils/helpers/createDomNode'
-import { useStyleTag } from '@keg-hub/re-theme/styleInjector'
-
-const { KEG_DOM_STYLES_ID } = Values
+import { convertToCss } from '@keg-hub/re-theme/styleInjector'
 
 let DomStyleSheet
-let overridesSet = false
+let stylesAdded = false
+const { KEG_DOM_STYLES_ID } = Values
+const isProduction = process.env.NODE_ENV === 'production'
 
 /**
  * Helper hook to added CSS styles to a Stylesheet on the dom
- * Uses helpers from re-theme in a no-standard fashion
+ * Uses convertToCss helper from re-theme in a no-standard fashion
  * @type function
  *
  * @returns {void}
  */
-export const useDomStyles = () => {
-  if(overridesSet) return overridesSet
-  overridesSet = true
+export const useDomStyles = (styles=noOpObj) => {
+  const globalStyles = useStyle('global', `domStyles`, styles)
 
-  const theme = useTheme()
-  DomStyleSheet = DomStyleSheet || document.head.querySelector(`#${KEG_DOM_STYLES_ID}`)
+  return useMemo(() => {
+    if(stylesAdded) return stylesAdded
+    stylesAdded = true
 
-  DomStyleSheet &&
-    Object.entries(theme.domStyles)
-      .map(([ className, rules ]) => {
-        const { classNames, css } = useStyleTag(rules, className)
-        const styles = css.all.replace(/^.*{/, '{')
+    DomStyleSheet = DomStyleSheet || document.head.querySelector(`#${KEG_DOM_STYLES_ID}`)
 
-        const classList = classNames.split(' ')
-        
-        const styleRules = classList[0].endsWith('$')
-          ? `${classList[0].replace(/\$/g, '')}${styles}`
-          : `${classList[0]}${styles}`
-        
-        styleRules && DomStyleSheet?.sheet?.insertRule(`@media all {${styleRules}}`)
-      })
+    DomStyleSheet &&
+      Object.entries(globalStyles)
+        .map(([ className, rules ]) => {
+          const { blocks } = convertToCss(rules, noOpObj)
+          // Blocks should always be an array with max length of 1
+          // So we can treat it as a string here
+          const validCssStr = blocks.length && `${className}${blocks}`
+
+          validCssStr && (
+            isProduction
+              ? DomStyleSheet.sheet.insertRule(`@media all {${validCssStr}}`)
+              : (DomStyleSheet.textContent = `${DomStyleSheet.textContent}\n${validCssStr}`)
+          )
+        })
+  }, [])
+
 }
 
 

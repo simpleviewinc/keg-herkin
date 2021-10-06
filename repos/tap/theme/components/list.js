@@ -100,6 +100,15 @@ export const list = theme => {
   const sharedStyle = shared(theme)
 
   return {
+    main: {
+      flex: 'unset',
+      display: 'unset',
+    },
+    drawer: {
+      content: {
+        backgroundColor: theme?.tapColors?.backGround,
+      },
+    },
     header: header(theme, sharedStyle),
     item: item(theme, sharedStyle)
   }

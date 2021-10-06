@@ -9,6 +9,7 @@ import { runTests } from 'SVActions/runner/runTests'
 import { noOpObj, get, noOp } from '@keg-hub/jsutils'
 import { useActiveFile } from 'SVHooks/useActiveFile'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { useIconProps } from 'SVHooks/useIconProps'
 import { savePendingContent } from 'SVActions/files/local/savePendingContent'
 
 const { SCREENS, CATEGORIES, RUN_ALL_TESTS } = Values
@@ -121,6 +122,7 @@ export const RunTestsButton = props => {
   const onRun = useRunAction(args)
   
   const builtStyles = useStyle(`buttons.runTests`, styles)
+  const iconProps = useIconProps(props, builtStyles.icon)
 
   return (
     <View
@@ -134,7 +136,7 @@ export const RunTestsButton = props => {
         className={`run-tests-button`}
       >
         <Rabbit
-          style={builtStyles.icon}
+          {...iconProps}
           className={`run-tests-button-icon`}
         />
         <Text

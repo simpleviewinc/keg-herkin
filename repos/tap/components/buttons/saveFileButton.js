@@ -4,6 +4,7 @@ import { Save } from 'SVAssets/icons'
 import { useStyle } from '@keg-hub/re-theme'
 import { noOpObj, get, noOp } from '@keg-hub/jsutils'
 import { View, Button, Text } from 'SVComponents'
+import { useIconProps } from 'SVHooks/useIconProps'
 import { useActiveFile } from 'SVHooks/useActiveFile'
 import { saveFile } from 'SVActions/files/api/saveFile'
 
@@ -46,6 +47,7 @@ export const SaveFileButton = props => {
 
   const onSave = useSaveAction(args)
   const builtStyles = useStyle(`buttons.saveFile`, styles)
+  const iconProps = useIconProps(props, builtStyles.icon)
 
   return (
     <View
@@ -60,7 +62,7 @@ export const SaveFileButton = props => {
         className={`save-file-button`}
       >
         <Save
-          style={builtStyles.icon}
+          {...iconProps}
           className={`save-file-button-icon`}
         />
         <Text
