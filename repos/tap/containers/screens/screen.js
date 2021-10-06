@@ -2,12 +2,12 @@ import { Values } from 'SVConstants'
 import { View, Tabbar } from 'SVComponents'
 import { EmptyScreen } from './emptyScreen'
 import { useTheme } from '@keg-hub/re-theme'
-import { RunnerScreen } from './runnerScreen'
+import { ScreencastScreen } from './screencastScreen'
 import { ResultsScreen } from './resultsScreen'
 import { EditorScreen } from './editorScreen'
 import { BuilderScreen } from './builderScreen'
 import React, { useMemo, useCallback } from 'react'
-import { ClipboardCheck, Code } from 'SVAssets/icons'
+import { ClipboardCheck, Code, Desktop } from 'SVAssets/icons'
 import { useScreenSelect } from 'SVHooks/useScreenSelect'
 import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { deepMerge, isEmpty, exists } from '@keg-hub/jsutils'
@@ -36,10 +36,10 @@ const screenTabs = [
     title: `Code Editor`,
   },
   {
-    id: SCREENS.RUNNER,
-    View: RunnerScreen,
-    Icon: Code,
-    title: `Tests Runner`,
+    id: SCREENS.SCREENCAST,
+    View: ScreencastScreen,
+    Icon: Desktop,
+    title: `Screencast`,
   },
   {
     id: SCREENS.RESULTS,

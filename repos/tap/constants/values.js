@@ -53,8 +53,8 @@ export const Values = {
     EDITOR: 'editor',
     // BUILDER: 'builder',
     EMPTY: 'empty',
-    RUNNER: 'runner',
     RESULTS: 'results',
+    SCREENCAST: 'screencast',
   },
   EDITOR_TABS: {
     BDD_SPLIT: { id: 'bddSplit', title: `Split` },

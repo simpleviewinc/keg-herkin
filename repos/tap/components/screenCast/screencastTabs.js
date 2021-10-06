@@ -38,7 +38,7 @@ const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
 
 }, [ tab, setTab, onTabSelect ])
 
-export const RunnerTabs = props => {
+export const ScreencastTabs = props => {
 
   const { activeTab, onTabSelect, onRun } = props
 
