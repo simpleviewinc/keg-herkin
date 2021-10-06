@@ -2,14 +2,16 @@ const { sharedOptions } = require('HerkinTasks/utils/task/sharedOptions')
 const { launchBrowsers } = require('HerkinTasks/utils/playwright/launchBrowsers')
 const { setMountEnvs } = require('HerkinTasks/utils/envs/setMountEnvs')
 const { validateConfig } = require('HerkinTasks/utils/validation')
+const { get } = require('@keg-hub/jsutils')
+const nodePath = require('path')
 
 /**
  * @param {String} configPath - path to herkin config file
  * @returns {String} path without config file
  */
-const getRootPath = configPath => configPath
-  ? configPath.replace(/herkin.config.js(on)?/g, '')
-  : undefined
+const getRootPath = config => nodePath.resolve(
+  get(config, ['paths', 'rootDir'])
+)
 
 /**
  * Starts all the Keg-Herkin services needed to run tests
@@ -32,7 +34,7 @@ const startHerkin = async (args) => {
   params.launch && await launchBrowsers(params)
 
   setMountEnvs(herkin, { 
-    path: getRootPath(params.config) || process.cwd(), 
+    path: getRootPath(herkin) || process.cwd(), 
     env: params.env 
   })
 
