@@ -1,77 +1,58 @@
 import { Tab } from './tab'
 import { Values } from 'SVConstants'
-import { useStyle } from '@keg-hub/re-theme'
-import { checkCall, mapColl, } from '@keg-hub/jsutils'
-import React, { useMemo, useCallback, useState, useLayoutEffect } from 'react'
-import { View, isValidComponent, renderFromType } from '@keg-hub/keg-components'
+import { TabChildren } from './tabChildren'
 import { TabbarPortal } from './tabbarPortal'
+import { useStyle } from '@keg-hub/re-theme'
+import { checkCall, noPropArr } from '@keg-hub/jsutils'
+import React, { useMemo, useCallback, useState, useEffect } from 'react'
+import { View } from '@keg-hub/keg-components'
 
 const { CATEGORIES } = Values
 
-const useTabSelect = (tabs, activeTab, onTabSelect, setActiveId) => useCallback((id) => {
+/**
+ * Hooks to Set the active tab id when a tab is selected
+ * Calls the onTabSelect method when it exists
+ * If onTabSelect returns true, updating the active tab ID is skipped
+ * @param {Array} tabs - Tab Objects that can be selected
+ * @param {function} onTabSelect - Callback for when a tab is selected
+ * @param {function} setActiveId - Method to update the active Tab ID
+ *
+ * @returns {function} - Callback function for when a tab is clicked
+ */
+const useTabSelect = (tabs, onTabSelect, setActiveId) => useCallback(id => {
   if(!tabs) return
 
   // Call the event hook, and if it returns true, then skip the state update
   const skip = checkCall(onTabSelect, id, tabs)
-
   // If nothing is returned, then update the tab id
-  !skip && setActiveId(id)
+  skip !== true && setActiveId(id)
 
-}, [tabs, activeTab, onTabSelect, setActiveId])
+}, [tabs, onTabSelect])
 
+/**
+ * Finds the active tab object from the passed in activeTab id
+ * @param {Array} tabs - Tab Objects that can be selected
+ * @param {string|number} activeId - The active tabs ID
+ *
+ * @returns {Object} - Found activeTab Object
+ */
 const useCurrentTab = (tabs, activeId) => useMemo(() =>
   tabs.find(tab => tab.id === activeId),
   [tabs, activeId]
 )
 
-const useCheckActiveTab = (activeTab, activeId, setActiveId) => useLayoutEffect(() => 
+/**
+ * Finds the active tab object from the passed in activeTab id
+ * @param {Array} tabs - Tab Objects that can be selected
+ * @param {string|number} activeId - The active tabs ID
+ * @param {function} setActiveId - Method to update the active Tab ID
+ *
+ * @returns {Void}
+ */
+const useCheckActiveTab = (activeTab, activeId, setActiveId) => useEffect(() => 
   { activeTab !== activeId && setActiveId(activeTab) },
   [activeTab, activeId, setActiveId]
 )
-
-const Bar = ({ children, styles }) => {
-  return (
-    <View
-      className='tabbar'
-      style={ styles }
-    >
-      { children }
-    </View>
-  )
-}
-
-const Tabs = ({ activeId, tabs, styles, onTabSelect }) => {
-
-  return mapColl(tabs, (index, tab) => {
-    const { Tab:Component, tab:component, id, key, title, disableTab, ...tabProps } = tab
-
-    const keyId = key || id || index
-    return !Component && !component && !title
-      ? null
-      : (
-          <Tab
-            disabled={disableTab}
-            className='tabbar-tab'
-            key={ keyId }
-            id={ id }
-            { ...tabProps }
-            title={title}
-            styles={ styles }
-            onTabSelect={ onTabSelect }
-            active={ activeId === id }
-          >
-            { renderFromType(Component || component) }
-          </Tab>
-        )
-  })
-}
-
-const ActiveTabView = ({ tab, styles }) => {
-  const ViewComponent = tab && (tab.View || tab.view)
-  return isValidComponent(ViewComponent)
-    ? (<ViewComponent { ...tab } styles={ styles } />)
-    : null
-}
 
 /**
  * 
@@ -93,62 +74,27 @@ export const Tabbar = props => {
     tabs,
     type,
   } = props
-  
-  const addMethod = location === 'bottom' ? 'unshift' : 'push'
 
   const barStyles = useStyle(`tabbar.default`, `tabbar.${type}`)
-  const mainStyles = useStyle(
-    fixed && { ...barStyles.fixed.main, ...barStyles.fixed[location] },
-    barStyles.bar.main,
-    barStyles.bar[location],
-  )
-
-  const [ activeId, setActiveId ] = useState(activeTab)
+  const [activeId, setActiveId] = useState(activeTab)
   const CurrentTab = useCurrentTab(tabs, activeId)
-  const tabSelectEvent = useTabSelect(tabs, activeId, onTabSelect, setActiveId)
+  const onSelectTab = useTabSelect(tabs, onTabSelect, setActiveId)
 
   useCheckActiveTab(activeTab, activeId, setActiveId)
 
-  const TabComponents = []
-
-  tabs && TabComponents.push(
-    <Bar
-      className='tabbar-bar'
-      key={'tabbar'}
-      styles={mainStyles}
-    >
-    { tabs && (
-      <Tabs
-        tabs={ tabs }
-        activeId={ activeId }
-        styles={ barStyles.tab }
-        onTabSelect={ tabSelectEvent }
-      />
-    )}
-    </Bar>
-  )
-
-  tabs &&
-    CurrentTab &&
-    (CurrentTab.View || CurrentTab.view) &&
-    TabComponents[addMethod](
-      <View
-        className='tabview-main'
-        key='tabview-main'
-        style={barStyles.tabview}
-      >
-        <ActiveTabView tab={ CurrentTab } styles={ barStyles } />
-      </View>
-    )
-
   return (
     <View className='tabbar-main' style={ barStyles.main } >
-      { location === 'bottom' ? (
-        <TabbarPortal>
-          { TabComponents }
-        </TabbarPortal>
-      ): TabComponents }
-      
+      {tabs && (
+        <TabChildren
+          tabs={tabs}
+          fixed={fixed}
+          activeId={activeId}
+          location={location}
+          barStyles={barStyles}
+          CurrentTab={CurrentTab}
+          onSelectTab={onSelectTab}
+        />
+      )}
     </View>
   )
 

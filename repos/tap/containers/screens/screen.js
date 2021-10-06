@@ -1,16 +1,17 @@
 import { Values } from 'SVConstants'
 import { View, Tabbar } from 'SVComponents'
 import { EmptyScreen } from './emptyScreen'
-import { deepMerge } from '@keg-hub/jsutils'
 import { useTheme } from '@keg-hub/re-theme'
 import { RunnerScreen } from './runnerScreen'
 import { ResultsScreen } from './resultsScreen'
 import { EditorScreen } from './editorScreen'
 import { BuilderScreen } from './builderScreen'
 import React, { useMemo, useCallback } from 'react'
-import { setScreenById } from 'SVActions/screens/setScreenById'
-import { useStoreItems } from 'SVHooks/store/useStoreItems'
 import { ClipboardCheck, Code } from 'SVAssets/icons'
+import { useScreenSelect } from 'SVHooks/useScreenSelect'
+import { useStoreItems } from 'SVHooks/store/useStoreItems'
+import { deepMerge, isEmpty, exists } from '@keg-hub/jsutils'
+import { setScreenById } from 'SVActions/screens/setScreenById'
 
 const { CATEGORIES, SCREENS } = Values
 
@@ -55,9 +56,7 @@ const screenTabs = [
  *
  * @returns {Object} screenTab - screenModel and screenTab objects merged
  */
-const useScreenTab = id => {
-  const screenModels = useStoreItems(CATEGORIES.SCREENS)
-
+const useScreenTab = (id, screenModels) => {
   return useMemo(() => {
     // If an id is passed use that for finding the screen, otherwise use the active 
     const foundTab = screenTabs.find(item => (
@@ -69,7 +68,7 @@ const useScreenTab = id => {
       ? deepMerge(screenModels[foundTab.id], foundTab)
       : screenTabs[0]
 
-  }, [id, screenModels, screenTabs])
+  }, [id, screenModels])
 }
 
 /**
@@ -80,21 +79,11 @@ const useScreenTab = id => {
 export const Screen = props => {
 
   const theme = useTheme()
-  const screenTab = useScreenTab(props?.activeScreen)
+  const screenModels = useStoreItems(CATEGORIES.SCREENS)
+  const screenTab = useScreenTab(props?.activeScreen, screenModels)
+  const onTabSelect = useScreenSelect(screenTab, screenModels)
 
-  const onTabSelect = useCallback(screenId => {
-    if(screenId === screenTab?.id) return
-    
-    screenId === SCREENS.RESULTS
-      ? setScreenById(screenId, screenTab)
-      : setScreenById(screenId)
-
-    return true
-  }, [ SCREENS, screenTab.id, setScreenById ])
-
-  if(!screenTab) return null
-
-  return (
+  return screenTab && (
     <View
       className={`screen-parent-main`}
       style={theme?.screens?.parent?.main}
@@ -108,6 +97,6 @@ export const Screen = props => {
         onTabSelect={onTabSelect}
       />
     </View>
-  )
+  ) || null
 
 }
