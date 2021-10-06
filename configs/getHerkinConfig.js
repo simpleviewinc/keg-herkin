@@ -3,26 +3,11 @@ const path = require('path')
 const defaultConfig = require('./herkin.default.config.js')
 const pkgConfig = require('../package.json')
 const { deepMerge, get, isStr, isFunc, noOpObj } = require('@keg-hub/jsutils')
+const { tryRequireSync } = require('@keg-hub/jsutils/src/node')
 
 const { KEG_HERKIN_CONFIG_PATH } = process.env
 
 let __HERKIN_CONFIG
-
-/**
- * TODO: replace with jsutils' tryRequireSync once its PR is merged in
- * Tries to require the path, returning null if unable to.
- * Does not throw.
- * @param {string} path 
- */
-const tryRequireSync = path => {
-  try {
-    return fs.existsSync(path) 
-      ? require(path)
-      : null
-  } catch (err) {
-    return null
-  }
-}
 
 /**
  * Tries to find the herkin.config.js(on) file at `cwd`
@@ -73,7 +58,7 @@ const loadCustomConfig = (runtimeConfigPath) => {
 
   try {
     const customConfig = configPath
-      ? require(path.join(__dirname, `../`, configPath))
+      ? require(path.resolve(configPath))
       : findConfig()
 
     return isFunc(customConfig)
