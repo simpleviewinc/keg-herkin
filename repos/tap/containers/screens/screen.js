@@ -35,16 +35,17 @@ const screenTabs = [
     title: `Code Editor`,
   },
   {
+    id: SCREENS.RUNNER,
+    View: RunnerScreen,
+    Icon: Code,
+    title: `Tests Runner`,
+  },
+  {
     id: SCREENS.RESULTS,
     View: ResultsScreen,
     Icon: ClipboardCheck,
     title: `Tests Results`,
   },
-  // {
-  //   id: SCREENS.RUNNER,
-  //   View: RunnerScreen,
-  //   title: `Tests Runner`,
-  // },
 ]
 
 /**

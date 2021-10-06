@@ -36,9 +36,9 @@ const parseOutput = (procName, output) => {
 const getPlatformCmd = (procName, platform) => {
   const proc = `"[${procName[0]}]${procName.substring(1)}"`
   switch (platform) {
-    case 'win32' : return `tasklist`
-    case 'darwin' : return `ps -ax | grep ${proc}`
-    case 'linux' : return `ps -A | grep ${proc}`
+    case 'linux':
+    case 'darwin': return `ps -A | grep ${proc}`
+    case 'win32': return `tasklist`
     default: return false
   }
 }

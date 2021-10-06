@@ -39,9 +39,12 @@ const useOnTabSelect = (tab, setTab, onTabSelect) => useCallback(newTab => {
 }, [ tab, setTab, onTabSelect ])
 
 export const RunnerTabs = props => {
+
   const { activeTab, onTabSelect, onRun } = props
+
   const [tab, setTab] = useState(activeTab)
-  const tabSelect = useOnTabSelect(tab, setTab, onTabSelect)
+
+  const onSelectTab = useOnTabSelect(tab, setTab, onTabSelect)
   
   useEffect(() => {
     isFunc(onTabSelect) &&
@@ -52,10 +55,10 @@ export const RunnerTabs = props => {
   return (
     <Tabbar
       type='code'
-      tabs={[ ...tabs, { onRun, id: `test-actions`, Tab: TestActions }]}
       activeTab={tab}
       location='bottom'
-      onTabSelect={tabSelect}
+      onTabSelect={onSelectTab}
+      tabs={[ ...tabs, { onRun, id: `test-actions`, Tab: TestActions }]}
     />
   )
   

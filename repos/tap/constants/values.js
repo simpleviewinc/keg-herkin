@@ -53,7 +53,7 @@ export const Values = {
     EDITOR: 'editor',
     // BUILDER: 'builder',
     EMPTY: 'empty',
-    // RUNNER: 'runner',
+    RUNNER: 'runner',
     RESULTS: 'results',
   },
   EDITOR_TABS: {
