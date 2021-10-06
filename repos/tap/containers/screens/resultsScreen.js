@@ -58,18 +58,16 @@ export const ResultsScreen = props => {
   const activeFile = useActiveFile(SCREENS.RESULTS)
   const reportFile = useAltActiveFile(SCREENS.RESULTS, FILE_TYPES.REPORT)
 
-  const { fileType } = activeFile
-  const hasActiveFile = Boolean(fileType)
   const reportUrl = useReportsUrl(reportFile, activeFile)
   const onExternalOpen = useWindowOpen(reportUrl)
 
-  return !reportFile && !hasActiveFile
+  return !reportFile && !activeFile?.fileType
     ? (<EmptyScreen message={'No file selected!'} />)
     : (<View
         className={`results-screen`}
         style={builtStyles.main}
       >
-        { hasActiveFile && (
+        { activeFile?.fileType && (
           <CmdOutput activeFile={activeFile} />
         )}
         { reportUrl && (

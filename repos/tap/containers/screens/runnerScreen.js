@@ -6,11 +6,13 @@ import { View } from '@keg-hub/keg-components'
 import { Runner } from 'SVComponents/runner/runner'
 import { useActiveFile } from 'SVHooks/useActiveFile'
 import { CmdOutput } from 'SVComponents/cmdOutput/cmdOutput'
+import { Values } from 'SVConstants'
 
+const { SCREENS, FILE_TYPES } = Values
 
 export const RunnerScreen = props => {
   const builtStyles = useStyle(`screens.runner`)
-  const activeFile = useActiveFile(props.id)
+  const activeFile = useActiveFile(SCREENS.RUNNER)
 
   return !activeFile?.fileType
     ? (<EmptyScreen message={'No file selected!'} />)
@@ -19,12 +21,14 @@ export const RunnerScreen = props => {
           className={`runner-screen`}
           style={builtStyles.main}
         >
-          <CmdOutput activeFile={activeFile} />
+          {activeFile?.fileType && (
+            <CmdOutput activeFile={activeFile} />
+          )}
           <Runner
-            activeFile={activeFile}
-            tests={activeFile?.modified || activeFile?.content || ''}
-            title={capitalize(activeFile?.fileType || '')}
             parentMethods={null}
+            activeFile={activeFile}
+            title={capitalize(activeFile?.fileType || '')}
+            tests={activeFile?.modified || activeFile?.content || ''}
           />
         </View>
       )
