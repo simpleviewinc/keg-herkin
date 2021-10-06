@@ -10,8 +10,8 @@ import { Values } from 'SVConstants'
 
 const { SCREENS } = Values
 
-export const ScreencastScreen = props => {
-  const builtStyles = useStyle(`screens.screencast`)
+export const ScreencastScreen = ({ styles, ...props}) => {
+  const builtStyles = useStyle(`screens.screencast`, styles)
   const activeFile = useActiveFile(SCREENS.SCREENCAST)
 
   return !activeFile?.fileType
@@ -27,7 +27,7 @@ export const ScreencastScreen = props => {
             activeFile={activeFile}
             title={capitalize(activeFile?.fileType || '')}
             tests={activeFile?.modified || activeFile?.content || ''}
-            styles={builtStyles}
+            styles={builtStyles?.screencast}
           />
         </View>
       )

@@ -8,10 +8,7 @@ import {
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 
 
-const ReStyleView = reStyle(
-  View,
-  'style'
-)((__, props) => ({
+const ReStyleView = reStyle(View)((__, props) => ({
   ...props?.style,
   padding: 8,
 }))
