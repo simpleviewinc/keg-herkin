@@ -21,6 +21,7 @@ export const Values = {
     SIDEBAR: 'sidebar',
     PENDING_FILES: 'pendingFiles',
     TOASTS: 'toasts',
+    BROWSER_OPTIONS: 'browserOptions'
   },
   SUB_CATEGORIES: {
     NODES: 'nodes',
@@ -98,5 +99,8 @@ export const Values = {
     PORT: process.env.NO_VNC_PORT || 26369,
     VNC_ACTIVE: toBool(process.env.HERKIN_USE_VNC),
     SOCKET_ACITVE: toBool(process.env.HERKIN_PW_SOCKET),
+  },
+  BROWSER_OPTIONS: {
+    // TODO: Add browser optiosn here
   }
 }

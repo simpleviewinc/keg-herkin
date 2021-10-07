@@ -4,9 +4,11 @@ import { isFunc } from '@keg-hub/jsutils'
 import { useStyle } from '@keg-hub/re-theme'
 import { View, Button } from '@keg-hub/keg-components'
 import React, { useCallback, useEffect, useState } from 'react'
+import { startBrowser } from 'SVActions/screencast/api/startBrowser'
 
 const tabs = []
 
+// TODO: Add browser actions and button here
 const TestActions = props => {
   const styles = useStyle('runner.tabs')
 
@@ -25,6 +27,15 @@ const TestActions = props => {
           Run
         </Button>
       </View>
+      <View className='runner-tab-action-run' style={styles.actions.run} >
+        <Button
+          onClick={() => startBrowser()}
+        >
+          Start Browser
+        </Button>
+      </View>
+      
+      
     </View>
   )
 }

@@ -80,7 +80,6 @@ const screencast = async ({ vnc=noOpObj, sockify=noOpObj }, exitListener) => {
   Logger.info(`\n[ ScreenCast ] Servers started successfully\n`)
 
   return {
-    ...(pwData),
     sockProc,
     vncProc,
   }
