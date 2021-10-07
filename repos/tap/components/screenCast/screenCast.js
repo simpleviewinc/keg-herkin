@@ -6,7 +6,7 @@ import { Surface } from 'SVComponents/surface'
 import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
 import { Values } from 'SVConstants'
 import { ScreencastTabs } from './screencastTabs'
-import { useStyle } from '@keg-hub/re-theme'
+import { useStyle, useDimensions } from '@keg-hub/re-theme'
 import { Resizable } from 're-resizable'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
 
@@ -29,6 +29,15 @@ const ScreenCastFrame = reStyle(Iframe, 'styles')((theme, props) => {
       src={`http://0.0.0.0:5005/novnc/vnc_lite.html?host=0.0.0.0&port=26367`}
  
 */
+
+const useResizeDimensions = () => {
+  const dims = useDimensions()
+  console.log(`---------- dims ----------`)
+  console.log(dims)
+  return useMemo(() => {
+    
+  }, [dims])
+}
 
 const useTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
   activeTab !== tab && setActiveTab(tab)

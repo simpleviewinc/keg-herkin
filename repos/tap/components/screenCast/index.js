@@ -1,1 +1,1 @@
-export * from './screenCast'
+export * from './screencast'
