@@ -25,16 +25,16 @@
     ```
 
 ### Run
-* The main exported method is `screenCast`, and be used like this
+* The main exported method is `screencast`, and be used like this
   ```js
-    const { screenCast } = require('path/to/screencCast')
-    await screenCast({ ...options })
+    const { screencast } = require('path/to/screencCast')
+    await screencast({ ...options })
   ```
 * This will start the `VNC` and `WebSockify` servers with the default settings
   * The default settings should would for most use cases, but can be overwritten when needed
 * **IMPORTANT** - Both servers are started with `detached` mode
   * This means even if the parent node.js process is killed, both servers will continue to run
-  * This is intended, and allows calling screenCast once, then forgetting about it
+  * This is intended, and allows calling screencast once, then forgetting about it
   * Helper methods are also exported, to allow killing the servers, either together or individually
 
 * **Websockify**

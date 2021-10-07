@@ -1,4 +1,5 @@
 module.exports = {
+  ...require('./browser'),
   ...require('./findProc'),
-  ...require('./screenCast'),
+  ...require('./screencast'),
 }

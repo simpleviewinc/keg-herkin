@@ -41,15 +41,13 @@ COPY --from=tap-base /keg/. /keg/
 # Install the dependecies with yarn setup, then remove the .npmrc
 RUN yarn global add npm-run-all; \
     npx playwright install chrome; \
-    npx playwright install firefox
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
+    npx playwright install firefox; \
+    apt-get update && apt-get install -y --no-install-recommends \
     novnc \
     tigervnc-standalone-server; \
     apt-get clean && \
-    apt-get autoclean
-
-RUN rm -rf /var/cache/apk/*; \
+    apt-get autoclean; \
+    rm -rf /var/cache/apk/*; \
     echo fs.inotify.max_user_watches=1048576 | tee -a /etc/sysctl.conf; \
     sysctl -p; \
     /bin/sed -i '1s|.*|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd

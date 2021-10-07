@@ -26,6 +26,7 @@ services:
       - API_PORT
       - NO_VNC_PORT
       - VNC_SERVER_PORT
+      - PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD
     ports:
       - ${API_PORT}:${API_PORT}
       - ${NO_VNC_PORT}:${NO_VNC_PORT}

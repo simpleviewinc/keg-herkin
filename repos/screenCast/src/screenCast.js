@@ -2,7 +2,7 @@ const { killProc } = require('./killProc')
 const { startVNC, stopVNC } = require('./vnc')
 const { Logger } = require('@keg-hub/cli-utils')
 const { startSockify, stopSockify } = require('./sockify')
-const { stopBrowser, startBrowser } = require('./browser')
+const { stopBrowser } = require('./browser')
 const { noOpObj, exists, isObj } = require('@keg-hub/jsutils')
 
 /**
@@ -67,7 +67,7 @@ const handleOnExit = (exitStatus) => {
  *
  * @returns {Object} - Contains the browser, context, page, and child process of the servers 
  */
-const screenCast = async ({ vnc=noOpObj, sockify=noOpObj, browser }, exitListener) => {
+const screencast = async ({ vnc=noOpObj, sockify=noOpObj }, exitListener) => {
 
   // Setup listener to kill process on exit
   exitListener && handleOnExit()
@@ -76,7 +76,6 @@ const screenCast = async ({ vnc=noOpObj, sockify=noOpObj, browser }, exitListene
   // Start the VNC server and the websockify server
   const vncProc = await startVNC(vnc)
   const sockProc = await startSockify(sockify)
-  const pwData = isObj(browser) ? await startBrowser(browser) : noOpObj
 
   Logger.info(`\n[ ScreenCast ] Servers started successfully\n`)
 
@@ -88,15 +87,14 @@ const screenCast = async ({ vnc=noOpObj, sockify=noOpObj, browser }, exitListene
 }
 
 /**
- * If the module is called directly, just call screenCast
+ * If the module is called directly, just call screencast
  * Otherwise export the screenCase and process methods
  */
 require.main === module
-  ? screenCast(noOpObj, true)
+  ? screencast(noOpObj, true)
   : (module.exports = {
       killScreenCast,
-      screenCast,
-      startBrowser,
+      screencast,
       startSockify,
       stopSockify,
       startVNC,

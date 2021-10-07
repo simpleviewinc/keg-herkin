@@ -22,7 +22,6 @@ const initApi = async () => {
   const {
     server:serverConf,
     sockr:sockrConf,
-    screenCast:screenCastConf
   } = app.locals.config
 
   setupLogger(app)

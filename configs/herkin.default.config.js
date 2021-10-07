@@ -18,10 +18,19 @@ module.exports = {
     ...sockrCmds,
     ...serverConfig,
   },
-  screenCast: {
-    // vnc: {},
-    // sockify: {},
-    // browser: {},
+  screencast: {
+    // Proxy settings, for connecting the backend API to the noVNC server
+    proxy: {
+      host: serverConfig.host || '0.0.0.0',
+      port: process.env.NO_VNC_PORT || 26369,
+      path: '/novnc',
+    },
+    // Default playwright browser launch settings
+    browser: {},
+    // Default tigervnc server settings
+    vnc: {},
+    // Default websockify server settings
+    sockify: {},
   },
   server: serverConfig,
   paths: {

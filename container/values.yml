@@ -38,6 +38,9 @@ env:
   # includes node v 14.15.3
   # When building the keg-herkin image, this acts as the parent image
   PLAYWRIGHT_IMAGE_FROM: mcr.microsoft.com/playwright:bionic
+  # Since the browsers are downloaded manually
+  # Tell yarn install to skip browser download
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
   # --- DOCKER ENV CONTEXT --- #
 

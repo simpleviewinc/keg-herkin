@@ -14,7 +14,7 @@ const aliases = deepFreeze({
   HerkinApp: path.join(HERKIN_ROOT, 'repos/backend/app/app.js'),
   HerkinPaths: path.join(HERKIN_ROOT, 'repos/backend/utils/paths.js'),
   HerkinBackConstants: path.join(HERKIN_ROOT, 'constants', 'backend'),
-  HerkinScreenCast: path.join(HERKIN_ROOT, 'repos/screenCast/index.js'),
+  HerkinScreenCast: path.join(HERKIN_ROOT, 'repos/screencast/index.js'),
   HerkinEndpoints: path.join(HERKIN_ROOT, 'repos/backend/endpoints'),
   HerkinMiddleware: path.join(HERKIN_ROOT, 'repos/backend/middleware'),
   HerkinAppRouter: path.join(HERKIN_ROOT, 'repos/backend/appRouter.js'),

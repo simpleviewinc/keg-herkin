@@ -4,6 +4,7 @@ const definitionsApi = require('./definitions')
 const bddApi = require('./bdd')
 const filesApi = require('./files')
 const reportsApi = require('./reports')
+const screencastApi = require('./screencast')
 
 
 module.exports = (...args) => {
@@ -13,4 +14,5 @@ module.exports = (...args) => {
   filesApi(...args)
   rootApi(...args)
   reportsApi(...args)
+  screencastApi(...args)
 }
