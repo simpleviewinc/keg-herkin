@@ -1,43 +1,30 @@
 import React, { useCallback, useState, useMemo } from "react"
-import { noOp } from '@keg-hub/jsutils'
-import { getBaseApiUrl } from 'SVUtils/api'
-import { Iframe } from 'SVComponents/iframe/iframe'
-import { Surface } from 'SVComponents/surface'
-import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
+import { View } from 'SVComponents'
 import { Values } from 'SVConstants'
-import { ScreencastTabs } from './screencastTabs'
-import { useStyle, useDimensions } from '@keg-hub/re-theme'
+import { noOp } from '@keg-hub/jsutils'
 import { Resizable } from 're-resizable'
+import { Surface } from 'SVComponents/surface'
+import { ScreencastTabs } from './screencastTabs'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
+import { Iframe } from 'SVComponents/iframe/iframe'
+import { useResizeProps } from 'SVHooks/useResizeProps'
+import { useStyle, useDimensions } from '@keg-hub/re-theme'
+import { useScreenCastUrl } from 'SVHooks/useScreenCastUrl'
+import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
 
-const { SCREENS } = Values
+const { SCREENS, VERTICAL_BAR_HEIGHTS } = Values
 
-
-// TODO: Resize Style updates
-const ScreenCastFrame = reStyle(Iframe, 'styles')((theme, props) => {
-  return {
-  // Max height minus the top and bottom tab-bars
-  // maxHeight: `calc(100vh - 215px)`
-  }
+const SCContainer = reStyle(View)({
+  height: `calc(100vh - ${VERTICAL_BAR_HEIGHTS}px)`,
 })
 
-/**
- * TODO: Create a new tab for viewing the browser in a iframe
- * Or Investigate some type of slide out that shows the iframe
- * src={`http://0.0.0.0:5005/novnc/vnc_auto.html?host=0.0.0.0&port=26369`}
- 
-      src={`http://0.0.0.0:5005/novnc/vnc_lite.html?host=0.0.0.0&port=26367`}
- 
-*/
-
-const useResizeDimensions = () => {
-  const dims = useDimensions()
-  console.log(`---------- dims ----------`)
-  console.log(dims)
-  return useMemo(() => {
-    
-  }, [dims])
-}
+const SCSurface = reStyle(Surface, 'styles')({
+  main: {
+    height: '100%',
+    width: '100%',
+    overflow: 'hidden',
+  }
+})
 
 const useTabSelect = (activeTab, setActiveTab) => useCallback(tab => {
   activeTab !== tab && setActiveTab(tab)
@@ -60,50 +47,32 @@ export const Screencast = props => {
   const scStyles = useStyle('screencast', styles)
   const [tab, setTab] = useState(activeTab)
   const tabSelect = useTabSelect(tab, setTab)
-  // TODO: update to make novnc url dynamic
-  // Add endpoint to api to allow starting the browser
+  const resizeProps = useResizeProps({ diffHeight: VERTICAL_BAR_HEIGHTS })
+
+  // TODO: Add endpoint to api to allow starting the browser
   // Add actions to ScreencastTabs to call endpoints
-  const screencastUrl = `http://0.0.0.0:5005/novnc/vnc_auto.html?host=0.0.0.0&port=26369`
+  const screencastUrl = useScreenCastUrl()
 
   return (
-    <Resizable
-      defaultSize={{
-        // TODO: Resize Style updates
-        // height: `calc(100vh - 215px)`,
-        // height: '100%',
-        // height: 'auto',
-        // height: '50%',
-        // TODO: Make this 800 dynamic via RN Dimensions API
-        height: 800,
-        width: '100%',
-      }}
-    >
-      <Surface
-        prefix={'Screencast'}
-        capitalize={false}
-        title={'Test Runner'}
-        styles={{
-          // TODO: Resize Style updates
-          // Move styles to theme or restyles
-          ...scStyles?.surface,
-          main: {
-            height: '100%',
-            width: '100%',
-            // maxHeight: `calc(100vh - 215px)`,
-            overflow: 'hidden',
-          }
-        }}
-        className={`runner-surface-screen-cast`}
-      >
-        <ScreenCastFrame
-          src={screencastUrl}
-          styles={scStyles?.iFrame}
+    <SCContainer>
+      <Resizable {...resizeProps}>
+        <SCSurface
+          prefix={'Screencast'}
+          capitalize={false}
+          title={'Test Runner'}
+          styles={scStyles?.surface}
+          className={`runner-surface-screen-cast`}
+        >
+          <Iframe
+            src={screencastUrl}
+            styles={scStyles?.iFrame}
+          />
+        </SCSurface>
+        <ScreencastTabs
+          activeTab={tab}
+          onTabSelect={tabSelect}
         />
-      </Surface>
-      <ScreencastTabs
-        activeTab={tab}
-        onTabSelect={tabSelect}
-      />
-    </Resizable>
+      </Resizable>
+    </SCContainer>
   )
 }

@@ -1,3 +1,5 @@
+import { toBool } from '@keg-hub/jsutils'
+
 export const Values = {
   CATEGORIES: {
     STEPS: 'steps',
@@ -89,5 +91,12 @@ export const Values = {
     STD_ERR: 'stdErr',
     CMD_END: 'cmdEnd',
     CMD_FAIL: 'cmdFail',
+  },
+  VERTICAL_BAR_HEIGHTS: 170,
+  VNC_CONFIG: {
+    HOST: process.env.SERVER_HOST,
+    PORT: process.env.NO_VNC_PORT || 26369,
+    VNC_ACTIVE: toBool(process.env.HERKIN_USE_VNC),
+    SOCKET_ACITVE: toBool(process.env.HERKIN_PW_SOCKET),
   }
 }
