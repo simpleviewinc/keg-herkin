@@ -78,6 +78,7 @@ const startServer = async (browserConf=noOpObj) => {
     devtools: true,
     headless: false,
     channel: `chrome`,
+    downloadsPath: ``,
     args: flatUnion([
       `--disable-gpu`,
       `--disable-dev-shm-usage`,

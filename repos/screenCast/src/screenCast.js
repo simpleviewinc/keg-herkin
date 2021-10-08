@@ -1,9 +1,17 @@
-const { killProc } = require('./killProc')
-const { startVNC, stopVNC } = require('./vnc')
+const { killProc } = require('./proc')
 const { Logger } = require('@keg-hub/cli-utils')
-const { startSockify, stopSockify } = require('./sockify')
-const { stopBrowser, startServer, stopServer } = require('./playwright')
 const { noOpObj, exists, isObj } = require('@keg-hub/jsutils')
+const {
+  stopBrowser,
+  startServer,
+  stopServer
+} = require('./playwright')
+const {
+  startSockify,
+  stopSockify,
+  startVNC,
+  stopVNC,
+} = require('./vnc')
 
 /**
  * Helper method to kill the running process

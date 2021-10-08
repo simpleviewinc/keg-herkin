@@ -1,12 +1,11 @@
 const path = require('path')
-const { findProc } = require('./findProc')
-const { killProc } = require('./killProc')
 const { Logger } = require('@keg-hub/cli-utils')
-const { noOpObj, noPropArr, limbo, checkCall, deepMerge } = require('@keg-hub/jsutils')
+const { findProc, killProc } = require('../proc')
+const { flatUnion } = require('../utils/flatUnion')
 const { create:childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
-const { flatUnion } = require('./utils/flatUnion')
+const { noOpObj, noPropArr, limbo, checkCall, deepMerge } = require('@keg-hub/jsutils')
 
-const rootDir = path.join(__dirname, '../../../')
+const rootDir = path.join(__dirname, '../../../../')
 const { NO_VNC_PORT=26369, VNC_SERVER_PORT=26370 } = process.env
 
 /**

@@ -58,7 +58,7 @@ const save = async (type, endpoint, launchOptions) => {
     }
   }
 
-  const [err, _] await writeFile(META_PATH, JSON.stringify(nextMetadata, null, 2))
+  const [err, _] = await writeFile(META_PATH, JSON.stringify(nextMetadata, null, 2))
 
   err && Logger.error(err)
 }
