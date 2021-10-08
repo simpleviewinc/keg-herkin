@@ -23,7 +23,7 @@ let PW_CONTEXT
 let PW_PAGE
 
 /**
- * Starts new browser using the Playwright API
+ * Starts new browser by connecting to an existing browser server websocket
  * @function
  * @private
  * @param {string} browserType - Name of the browser to launch
@@ -32,7 +32,7 @@ let PW_PAGE
  *
  * @returns {Object} - Contains the browser reference created from playwright
  */
-const newBrowser = async (browserType, args=noPropArr, config=noOpObj) => {
+const newBrowserConnect = async (browserType, args=noPropArr, config=noOpObj) => {
   if(!browserType || browserType === 'chrome') browserType = 'chromium'
  
   const { pid } = await getServerStatus(browserType)
@@ -46,6 +46,40 @@ const newBrowser = async (browserType, args=noPropArr, config=noOpObj) => {
   )
 
   return { browser: (PW_BROWSER = browser) }
+}
+
+/**
+ * Starts new browser using the Playwright API
+ * @function
+ * @private
+ * @param {string} type - Name of the browser to launch
+ * @param {Array} args - Arguments to pass to the browser on launch
+ * @param {Object} config - Options to pass to the browser on launch
+ *
+ * @returns {Object} - Contains the browser reference created from playwright
+ */
+const newBrowser = async (browserType='chromium', args=noPropArr, config=noOpObj) => {
+  if(!browserType || browserType === 'chrome') browserType = 'chromium'
+
+  Logger.log(`- Starting playwright browser ${browserType}...`)
+  // Reuse or launch the playwright browser
+  PW_BROWSER = PW_BROWSER ||
+    await playwright[browserType].launch(
+      deepMerge({
+        slowMo: 50,
+        devtools: true,
+        headless: false,
+        channel: `chrome`,
+        args: flatUnion([
+          `--disable-gpu`,
+          `--disable-dev-shm-usage`,
+          `--no-sandbox`,
+          `--window-position=0,0`,
+        ], args)
+      }, config)
+    )
+    
+  return { browser: PW_BROWSER }
 }
 
 /**

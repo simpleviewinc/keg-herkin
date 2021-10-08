@@ -5,6 +5,7 @@ import { useStyle } from '@keg-hub/re-theme'
 import { View, Button } from '@keg-hub/keg-components'
 import React, { useCallback, useEffect, useState } from 'react'
 import { startBrowser } from 'SVActions/screencast/api/startBrowser'
+import { restartBrowser } from 'SVActions/screencast/api/restartBrowser'
 
 const tabs = []
 
@@ -34,7 +35,13 @@ const TestActions = props => {
           Start Browser
         </Button>
       </View>
-      
+      <View className='runner-tab-action-restart' style={styles.actions.run} >
+        <Button
+          onClick={() => restartBrowser()}
+        >
+          Restart Browser
+        </Button>
+      </View>
       
     </View>
   )

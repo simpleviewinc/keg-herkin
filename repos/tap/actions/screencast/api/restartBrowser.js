@@ -7,7 +7,7 @@ import { apiRequest } from 'SVUtils/api/apiRequest'
 
 const { HttpMethods, CATEGORIES } = Values
 
-export const startBrowser = async (options=noOpObj) => {
+export const restartBrowser = async (options=noOpObj) => {
 
   const { items } = getStore()?.getState()
   if(!items)
@@ -17,12 +17,12 @@ export const startBrowser = async (options=noOpObj) => {
 
   addToast({
     type: 'info',
-    message: `Starting Browser...`
+    message: `Restarting Browser...`
   })
 
   const resp = await apiRequest({
-    url: '/screencast/browser/start',
-    method: HttpMethods.GET,
+    url: '/screencast/browser/restart',
+    method: HttpMethods.POST,
     params: {...storeOpts, ...options},
   }, 'object')
   
