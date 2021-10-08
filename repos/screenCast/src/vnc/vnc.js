@@ -1,10 +1,9 @@
 const path = require('path')
-const { findProc } = require('../proc/findProc')
 const { Logger } = require('@keg-hub/cli-utils')
+const { findProc, killProc } = require('../proc')
 const { flatUnion } = require('../utils/flatUnion')
 const { create:childProc } = require('@keg-hub/spawn-cmd/src/childProcess')
 const { noOpObj, noPropArr, limbo, checkCall, deepMerge } = require('@keg-hub/jsutils')
-
 
 const rootDir = path.join(__dirname, '../../../../')
 const { VNC_SERVER_PORT=26370, DISPLAY=':0.0' } = process.env
@@ -73,8 +72,8 @@ const startVNC = async ({ args=noPropArr, cwd, options=noOpObj, env=noOpObj }) =
 const stopVNC = async () => {
   VNC_PROC
     ? killProc(VNC_PROC)
-    : checkCall(async () => {
-        const [_, status] = await limbo(findProc('Xtigervnc'))
+    : await checkCall(async () => {
+        const [err, status] = await limbo(findProc('Xtigervnc'))
         status &&
           status.pid &&
           killProc(status)

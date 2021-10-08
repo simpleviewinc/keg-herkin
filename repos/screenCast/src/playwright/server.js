@@ -1,14 +1,25 @@
 const metadata = require('./metadata')
 const playwright = require('playwright')
+const { findProc, killProc } = require('../proc')
 const { Logger } = require('@keg-hub/cli-utils')
 const { flatUnion } = require('../utils/flatUnion')
-const { noOpObj, noPropArr, deepMerge } = require('@keg-hub/jsutils')
+const { noOpObj, noPropArr, deepMerge, limbo, checkCall } = require('@keg-hub/jsutils')
 
 /**
  * Cache holder for the launched playwright browser
  * @type {Object|undefined}
  */
 let PW_SERVER
+
+/**
+ * Maps the browser types to the process names
+ * @type {Object|undefined}
+ */
+const browserTypeMap = {
+  chromium: 'chrome',
+  chrome: 'chrome',
+  firefox: 'firefox',
+}
 
 /**
  * Gets the browser server wesocket endpoint and caches it along with the type and launchParams
@@ -49,6 +60,16 @@ const newSever = async (type, launchParams=noOpObj) => {
   return PW_SERVER
 }
 
+
+const getServerStatus = async (type) => {
+  const browser = browserTypeMap[type]
+  if(!browser) throw new Error(`A browser type is required`)
+
+  const [err, status] = await limbo(findProc(browser))
+
+  return status
+}
+
 /**
  * Starts browser-server using playwright
  * See {@link https://playwright.dev/docs/api/class-browsertype#browser-type-launch-server|Playwright Docs} for more info
@@ -72,6 +93,14 @@ const startServer = async (browserConf=noOpObj) => {
   } = browserConf
 
   if(type === 'chrome') type = 'chromium'
+  
+  const status = await getServerStatus(type)
+
+  if(status.pid){
+    Logger.pair(`- Browser ${type} server already running with pid:`, status.pid)
+    return (PW_SERVER = status)
+  }
+
 
   const launchParams = deepMerge({
     slowMo: 50,
@@ -113,8 +142,27 @@ const getServerMetadata = async type => {
  */
 const stopServer = async () => {
   // Wrap the close method incase something happens
-  // We still want to reset the browser reference
-  try { PW_SERVER && await PW_SERVER.close() }
+  // We still want to reset the browser reference and meta data
+  try {
+    if(PW_SERVER){
+      PW_SERVER.pid && killProc(PW_SERVER)
+      PW_SERVER.close && await PW_SERVER.close()
+    }
+    else {
+      await checkCall(async () => {
+        // Kill both chrome and firefox
+        const [errChrome, statusChrome] = await limbo(findProc('chrome'))
+        statusChrome &&
+          statusChrome.pid &&
+          killProc(statusChrome)
+
+        const [errFF, statusFF] = await limbo(findProc('firefox'))
+        statusFF &&
+          statusFF.pid &&
+          killProc(statusFF)
+      })
+    }
+  }
   catch(err){ Logger.error(err.message) }
 
   await metadata.remove()

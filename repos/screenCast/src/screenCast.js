@@ -1,6 +1,9 @@
+require('../../../configs/aliases.config').registerAliases()
 const { killProc } = require('./proc')
+const { daemonize } = require('./utils/daemonize')
 const { Logger } = require('@keg-hub/cli-utils')
 const { noOpObj, exists, isObj } = require('@keg-hub/jsutils')
+const { killAll } = require('@keg-hub/spawn-cmd/src/childProcess')
 const {
   stopBrowser,
   startServer,
@@ -60,7 +63,37 @@ const killAndExit = exitStatus => {
  * @returns {Void}
  */
 const handleOnExit = (exitStatus) => {
-  process.on("SIGINT", () => killAndExit(exitStatus))
+  Array.from([
+    'exit',
+    'SIGBREAK',
+    'SIGINT',
+    'SIGUSR1',
+    'SIGUSR2',
+    'uncaughtException',
+    'SIGTERM'
+  ])
+  .map(type => process.on(type, exitCode => killScreenCast(exitCode || exitStatus || 0)))
+}
+
+/**
+ * Check if we should daemonize the process
+ * Look for -d || --daemon in the args passed to the script
+ */
+const checkIfDaemon = () => {
+  const args = process.argv.slice(2)
+  const asDaemon = Boolean(args.find(arg => (arg === '-d' || arg === '--daemon')))
+
+  return asDaemon && daemonize()
+}
+
+/**
+ * Check if we should kill the running processes
+ * Look for -k || --kill in the args passed to the script
+ */
+const checkKill = async () => {
+  const args = process.argv.slice(2)
+  const shouldKill = Boolean(args.find(arg => (arg === '--kill-all-screencast')))
+  shouldKill && await killAndExit()
 }
 
 /**
@@ -76,10 +109,15 @@ const handleOnExit = (exitStatus) => {
  *
  * @returns {Object} - Contains the browser, context, page, and child process of the servers 
  */
-const screencast = async ({ vnc=noOpObj, sockify=noOpObj, browser=noOpObj }, exitListener) => {
+const screencast = async ({ vnc=noOpObj, sockify=noOpObj, browser=noOpObj }, exitListener, skipDaemon) => {
+  // Check if we should kill the screencast child processes
+  await checkKill()
+
+  // Check if we should daemonize the process
+  ;(!exists(skipDaemon) || !skipDaemon) && checkIfDaemon()
 
   // Setup listener to kill process on exit
-  exitListener && handleOnExit()
+  ;exitListener && handleOnExit()
 
   Logger.info(`\n[ ScreenCast ] Starting servers...`)
   // Start the VNC, websockify, playwright servers

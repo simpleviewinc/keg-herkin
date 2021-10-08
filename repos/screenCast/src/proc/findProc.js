@@ -18,8 +18,8 @@ const parseOutput = (procName, output) => {
   return {
     tty,
     time,
-    name,
     running,
+    name: name.replace('\n', ''),
     pid: parseInt(pid, 10),
   }
 }

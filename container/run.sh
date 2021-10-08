@@ -12,7 +12,7 @@
 # Starts the screen cast servers when not using a websocket from the hostmachine
 keg_start_screen_cast(){
   cd $DOC_APP_PATH
-  yarn sc
+  yarn sc:daemon
 }
 
 # Serve the bundle and also run the backend api
