@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { reduceObj, deepClone } from '@keg-hub/jsutils'
-import { Copy } from 'SVAssets/icons'
+import { Copy, Edit } from 'SVAssets/icons'
 
 /**
  * Default group object for splitting up step definitions
@@ -82,16 +82,28 @@ export const useDefinitionGroups = (definitions, props) => {
           title: `${def.type} ${def.name}`,
           uuid: def.uuid,
           meta: def.meta,
-          actions: [{
-            ...props?.actions?.copy,
-            name: 'Copy',
-            key: `action-copy`,
-            iconProps: {
-              ...props?.actions?.copy.iconProps,
-              size: 12,
-              Component: Copy,
+          actions: [
+            {
+              ...props?.actions?.copy,
+              name: 'Copy',
+              key: `action-copy`,
+              iconProps: {
+                ...props?.actions?.copy.iconProps,
+                size: 12,
+                Component: Copy,
+              },
             },
-          }]
+            {
+              ...props?.actions?.edit,
+              name: 'Edit',
+              key: `action-edit`,
+              iconProps: {
+                ...props?.actions?.edit.iconProps,
+                size: 12,
+                Component: Edit,
+              },
+            }
+          ]
         }
         grouped[key].items.push(itemProps)
         grouped.all.items.push(itemProps)

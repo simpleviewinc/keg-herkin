@@ -87,9 +87,14 @@ const item = (theme, shared) => {
         color: tapColors.inactive,
       },
       actions: {
-        main: {},
+        main: {
+          d: 'flex',
+          flD: 'row',
+        },
         action: {
-          main: {},
+          main: {
+            mL: theme.margin.size,
+          },
         }
       }
     }
