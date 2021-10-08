@@ -9,7 +9,7 @@ import { reStyle } from '@keg-hub/re-theme/reStyle'
 import { Iframe } from 'SVComponents/iframe/iframe'
 import { useResizeProps } from 'SVHooks/useResizeProps'
 import { useStyle, useDimensions } from '@keg-hub/re-theme'
-import { useScreenCastUrl } from 'SVHooks/useScreenCastUrl'
+import { useScreencastUrl } from 'SVHooks/useScreencastUrl'
 import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
 
 const { SCREENS, VERTICAL_BAR_HEIGHTS } = Values
@@ -51,7 +51,7 @@ export const Screencast = props => {
 
   // TODO: Add endpoint to api to allow starting the browser
   // Add actions to ScreencastTabs to call endpoints
-  const screencastUrl = useScreenCastUrl()
+  const screencastUrl = useScreencastUrl()
 
   return (
     <SCContainer>

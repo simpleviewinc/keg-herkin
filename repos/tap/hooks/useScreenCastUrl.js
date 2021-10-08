@@ -10,7 +10,7 @@ const { HOST, PORT, VNC_ACTIVE } = Values.VNC_CONFIG
  *
  * @returns {string} - Built novnc url
  */
-export const useScreenCastUrl = () => {
+export const useScreencastUrl = () => {
   return useMemo(() => {
     // TODO: move this to a utility helper
     return VNC_ACTIVE
