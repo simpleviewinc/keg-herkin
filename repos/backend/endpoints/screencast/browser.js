@@ -34,6 +34,22 @@ const browserStart = async (req, res) => {
 }
 
 /**
+ * Checks if a browser is already running
+ *
+ */
+const browserRunning = async (req, res) => {
+  try {
+    const { params } = req
+  
+    return apiResponse(req, res, {}, 200)
+  }
+  catch(err){
+    return apiErr(req, res, err, 400)
+  }
+}
+
+
+/**
  * Stops a Browser if its running
  *
  */
@@ -49,6 +65,7 @@ const browserStop = async (req, res) => {
 }
 
 module.exports = () => {
+  AppRouter.get('/screencast/browser/running', browserRunning)
   AppRouter.get('/screencast/browser/start', browserStart)
   AppRouter.post('/screencast/browser/stop', browserStop)
 }

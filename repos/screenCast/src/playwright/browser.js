@@ -1,6 +1,6 @@
 const playwright = require('playwright')
 const { Logger } = require('@keg-hub/cli-utils')
-const { flatUnion } = require('./utils/flatUnion')
+const { flatUnion } = require('../utils/flatUnion')
 const { noOpObj, noPropArr, deepMerge } = require('@keg-hub/jsutils')
 
 /**
@@ -51,7 +51,7 @@ const newBrowser = async (type='chromium', args=noPropArr, config=noOpObj) => {
         ], args)
       }, config)
     )
-  
+    
   return { browser: PW_BROWSER }
 }
 

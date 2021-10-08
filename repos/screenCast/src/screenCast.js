@@ -2,7 +2,7 @@ const { killProc } = require('./killProc')
 const { startVNC, stopVNC } = require('./vnc')
 const { Logger } = require('@keg-hub/cli-utils')
 const { startSockify, stopSockify } = require('./sockify')
-const { stopBrowser } = require('./browser')
+const { stopBrowser, startServer, stopServer } = require('./playwright')
 const { noOpObj, exists, isObj } = require('@keg-hub/jsutils')
 
 /**
@@ -14,6 +14,7 @@ const { noOpObj, exists, isObj } = require('@keg-hub/jsutils')
  */
 const killScreenCast = async () => {
   await stopBrowser()
+  await stopServer()
   await stopSockify()
   await stopVNC()
 
@@ -67,19 +68,20 @@ const handleOnExit = (exitStatus) => {
  *
  * @returns {Object} - Contains the browser, context, page, and child process of the servers 
  */
-const screencast = async ({ vnc=noOpObj, sockify=noOpObj }, exitListener) => {
+const screencast = async ({ vnc=noOpObj, sockify=noOpObj, browser=noOpObj }, exitListener) => {
 
   // Setup listener to kill process on exit
   exitListener && handleOnExit()
 
   Logger.info(`\n[ ScreenCast ] Starting servers...`)
-  // Start the VNC server and the websockify server
+  // Start the VNC, websockify, playwright servers
   const vncProc = await startVNC(vnc)
   const sockProc = await startSockify(sockify)
-
-  Logger.info(`\n[ ScreenCast ] Servers started successfully\n`)
+  const pwServer = await startServer(browser)
+  Logger.info(`[ ScreenCast ] Servers started successfully\n`)
 
   return {
+    pwServer,
     sockProc,
     vncProc,
   }
@@ -94,6 +96,8 @@ require.main === module
   : (module.exports = {
       killScreenCast,
       screencast,
+      stopServer,
+      startServer,
       startSockify,
       stopSockify,
       startVNC,
