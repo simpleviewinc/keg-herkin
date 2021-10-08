@@ -14,7 +14,12 @@ export const startBrowser = async (options=noOpObj) => {
     return console.warn(`No items set in the store`)
   
   const storeOpts = items[CATEGORIES.BROWSER_OPTIONS]
-  
+
+  addToast({
+    type: 'info',
+    message: `Starting screencast...`
+  })
+
   const resp = await apiRequest({
     url: '/screencast/browser/start',
     method: HttpMethods.GET,
@@ -23,4 +28,12 @@ export const startBrowser = async (options=noOpObj) => {
   
   console.log(`---------- resp ----------`)
   console.log(resp)
+  
+  // error &&
+  //   error.message &&
+  //   addToast({
+  //     type: 'danger',
+  //     message: error.message
+  //   })
+
 }

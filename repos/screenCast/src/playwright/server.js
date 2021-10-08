@@ -32,12 +32,7 @@ const browserTypeMap = {
  */
 const configureWebsocket = async (type, launchParams) => {
   Logger.log(`- Configuring browser ${type} websocket...`)
-
-  const wsEndpoint = PW_SERVER.wsEndpoint()
-  // Save the playwright browser metadata to the <os-temp>/browser-meta.json, to be used for future connections
-  await metadata.save(type, wsEndpoint, launchParams)
-
-  return wsEndpoint
+  return PW_SERVER.wsEndpoint()
 }
 
 /**
@@ -55,8 +50,11 @@ const newSever = async (type, launchParams=noOpObj) => {
   PW_SERVER = await playwright[type].launchServer(launchParams)
 
   // Save the server info to the metadata file
-  await configureWebsocket(type, launchParams)
-  
+  const wsEndpoint = await configureWebsocket(type, launchParams)
+
+  // Save the playwright browser metadata to the <os-temp>/browser-meta.json, to be used for future connections
+  await metadata.save(type, wsEndpoint, launchParams)
+
   return PW_SERVER
 }
 
@@ -100,7 +98,6 @@ const startServer = async (browserConf=noOpObj) => {
   } = browserConf
 
   if(type === 'chrome') type = 'chromium'
-  
   const status = await getServerStatus(type)
 
   if(status.pid){
@@ -179,5 +176,6 @@ const stopServer = async () => {
 module.exports = {
   stopServer,
   startServer,
+  getServerStatus,
   getServerMetadata,
 }

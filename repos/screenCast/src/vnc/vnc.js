@@ -55,7 +55,6 @@ const startVNC = async ({ args=noPropArr, cwd, options=noOpObj, env=noOpObj }) =
       VNC_SERVER_PORT,
       '-alwaysshared',
       DISPLAY,
-      ,
     ], args),
     options: deepMerge({
       detached: true,
