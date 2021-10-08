@@ -60,7 +60,14 @@ const newSever = async (type, launchParams=noOpObj) => {
   return PW_SERVER
 }
 
-
+/**
+ * Gets the current running status of browser server the process
+ * @function
+ * @throws
+ * @param {string} type - Name of the browser server to get the status for
+ *
+ * @return {Object} - Process Status object
+ */
 const getServerStatus = async (type) => {
   const browser = browserTypeMap[type]
   if(!browser) throw new Error(`A browser type is required`)
@@ -101,7 +108,6 @@ const startServer = async (browserConf=noOpObj) => {
     return (PW_SERVER = status)
   }
 
-
   const launchParams = deepMerge({
     slowMo: 50,
     devtools: true,
@@ -115,7 +121,7 @@ const startServer = async (browserConf=noOpObj) => {
       `--window-position=0,0`,
     ], args)
   }, config)
-  
+
   PW_SERVER = PW_SERVER || await newSever(type, launchParams)
 
   return PW_SERVER

@@ -64,7 +64,6 @@ const killAndExit = exitStatus => {
  */
 const handleOnExit = (exitStatus) => {
   Array.from([
-    'exit',
     'SIGBREAK',
     'SIGINT',
     'SIGUSR1',
