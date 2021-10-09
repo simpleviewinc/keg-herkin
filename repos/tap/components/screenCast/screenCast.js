@@ -1,16 +1,17 @@
-import React, { useCallback, useState, useMemo } from "react"
+import React, { useCallback, useState, useMemo, useEffect, useRef } from "react"
 import { View } from 'SVComponents'
 import { Values } from 'SVConstants'
-import { noOp } from '@keg-hub/jsutils'
+import { noOp, noOpObj } from '@keg-hub/jsutils'
 import { Resizable } from 're-resizable'
 import { Surface } from 'SVComponents/surface'
 import { ScreencastTabs } from './screencastTabs'
 import { reStyle } from '@keg-hub/re-theme/reStyle'
-import { Iframe } from 'SVComponents/iframe/iframe'
 import { useResizeProps } from 'SVHooks/useResizeProps'
 import { useStyle, useDimensions } from '@keg-hub/re-theme'
 import { useScreencastUrl } from 'SVHooks/useScreencastUrl'
 import { PrefixTitleHeader } from 'SVComponents/labels/prefixTitleHeader'
+import { Canvas } from './canvas'
+import { useNoVnc } from 'SVHooks/useNoVnc'
 
 const { SCREENS, VERTICAL_BAR_HEIGHTS } = Values
 
@@ -49,9 +50,14 @@ export const Screencast = props => {
   const tabSelect = useTabSelect(tab, setTab)
   const resizeProps = useResizeProps({ diffHeight: VERTICAL_BAR_HEIGHTS })
 
-  // TODO: Add endpoint to api to allow starting the browser
-  // Add actions to ScreencastTabs to call endpoints
+  const canvasRef = useRef(null)
   const screencastUrl = useScreencastUrl()
+
+  const { noVnc } = useNoVnc(
+    canvasRef && canvasRef.current,
+    screencastUrl,
+    noOpObj
+  )
 
   return (
     <SCContainer>
@@ -63,13 +69,15 @@ export const Screencast = props => {
           styles={scStyles?.surface}
           className={`runner-surface-screen-cast`}
         >
-          <Iframe
-            src={screencastUrl}
-            styles={scStyles?.iFrame}
+          <Canvas
+            ref={canvasRef}
+            style={scStyles?.canvas}
           />
         </SCSurface>
         <ScreencastTabs
+          noVnc={noVnc}
           activeTab={tab}
+          canvasRef={canvasRef}
           onTabSelect={tabSelect}
         />
       </Resizable>

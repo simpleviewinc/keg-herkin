@@ -13,8 +13,11 @@ const { HOST, PORT, VNC_ACTIVE } = Values.VNC_CONFIG
 export const useScreencastUrl = () => {
   return useMemo(() => {
     // TODO: move this to a utility helper
-    return VNC_ACTIVE
-      ? `${getBaseApiUrl()}/novnc/vnc_auto.html?host=${HOST}&port=${PORT}`
-      : ``
+    if(!VNC_ACTIVE) return ``
+    
+    const base = getBaseApiUrl()
+    const { host, protocol } = new URL(base)
+
+    return `${protocol === 'https' ? 'wss' : 'ws' }://${host}/novnc`
   }, [])
 }

@@ -26,10 +26,10 @@ const initApi = async () => {
 
   setupLogger(app)
   setupCors(app)
-  setupVNCProxy(app)
   setupServer(app)
   setupStatic(app)
   apiEndpoints(app)
+  const wsProxy = setupVNCProxy(app)
 
   const server = app.listen(
     serverConf.port,
@@ -43,6 +43,7 @@ const initApi = async () => {
     }
   )
 
+  server.on('upgrade', wsProxy.upgrade)
 
   const socket = await sockr(server, sockrConf, 'tests')
 
