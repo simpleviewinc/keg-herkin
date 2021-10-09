@@ -12,6 +12,16 @@
 # Starts the screen cast servers when not using a websocket from the hostmachine
 keg_start_screen_cast(){
   cd $DOC_APP_PATH
+  # TODO: Move this to the Dockerfile,
+  # Or come up with a better way to overwrite the file
+  # Maybe able to use the novnc node_moduel, and set the --web path when starting the noview websockify server
+  if [[ -f "/keg/tap/repos/screencast/src/vnc/novnc/vnc_auto.html" ]]; then
+    if [[ -f "/usr/share/novnc/vnc_auto.html" ]]; then
+      rm -rf /usr/share/novnc/vnc_auto.html
+    fi
+    rm -rf /usr/share/novnc/vnc_auto.html; cp /keg/tap/repos/screencast/src/vnc/novnc/vnc_auto.html /usr/share/novnc/vnc_auto.html
+  fi
+  
   yarn sc:daemon
 }
 

@@ -88,7 +88,7 @@ actions:
       privileged: true
       cmds:
         - rm -rf /keg/tap/node_modules/@keg-hub/jsutils/build
-        - cp -R /keg/tap/node_modules/@keg-hub/jsutils/build /keg/tap/node_modules/@keg-hub/jsutils/build
+        - cp -R /keg/tap/node_modules/@keg-hub/jsutils/build /keg/tap/node_modules/keg-core/node_modules/@keg-hub/jsutils/build
   retheme:
     install:
       location: /keg/tap/node_modules/keg-core/node_modules/@keg-hub/re-theme
