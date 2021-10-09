@@ -1,7 +1,7 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Values } from 'SVConstants'
 import { useStyle } from '@keg-hub/re-theme'
-import { isFunc, noOpObj } from '@keg-hub/jsutils'
+import { noOpObj } from '@keg-hub/jsutils'
 import { createDomNode } from 'SVUtils/helpers/createDomNode'
 import { convertToCss } from '@keg-hub/re-theme/styleInjector'
 
