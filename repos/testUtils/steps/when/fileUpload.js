@@ -12,7 +12,7 @@ const { getPage } = getBrowserContext()
 const fileUpload = async (selector, filePath, world) => {
   const page = await getPage()
   const handle = await page.$(selector)
-  //constricting file path to /tests/bdd/support folder
+  //restricting file path to /tests/bdd/support folder
   const assetsFolder = "/keg/tap/tests/bdd/support"
   const fullFilePath = (filePath.startsWith('/') ? assetsFolder + filePath : assetsFolder + '/' + filePath)
   //todo : create array of accepted file types

@@ -1,7 +1,6 @@
 const { Then } = require('HerkinParkin')
-const { containsText } = require('./containsText')
+const { exactText } = require('./exactText')
 const { checkForAncestor } = require('HerkinSupport/validate')
-
 
 /**
  * For the element matching `selector`, descendent of the registered ancestor, expects its text content to equal `data`
@@ -9,13 +8,13 @@ const { checkForAncestor } = require('HerkinSupport/validate')
  * @param {string} data 
  * @param {Object} world 
  */
-const descendentContainsText = async (selector, data, world) => {
+const descendentExactText = async (selector, data, world) => {
   checkForAncestor(world)
-  return containsText(`${world.meta.ancestorSelector} ${selector}`, data)
+  return exactText(`${world.meta.ancestorSelector} ${selector}`, data)
 }
 
-Then('the descendent element {string} contains the text {string}', descendentContainsText, {
-  description: 'Locates an element by selector and verifies element contains text.\nThere must be a preceding step that establishes an ancestor.\n\nModule : descendentContainsText',
+Then('the descendent element {string} text is {string}', descendentExactText, {
+  description: 'Locates an element by selector and verifies element text matches exactly.\nThere must be a preceding step that establishes an ancestor.\n\nModule : descendentExactText',
   expressions: [
     {
       type: 'string',
@@ -31,6 +30,6 @@ Then('the descendent element {string} contains the text {string}', descendentCon
 })
 
 module.exports = {
-  descendentContainsText
+  descendentExactText
 }
 

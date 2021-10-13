@@ -39,14 +39,14 @@ const findElSetAsAncestor = async (alias, data, world) => {
 }
 
 Given('the {word} titled/identifier {string} is found', findElSetAsAncestor, {
-// the following given line errors due to the optional word next to the expression.  the error says that selectorAlias isn't a function.  There is a ticket for this.
+// the given line below errors due to the optional word next to the expression.  the error says that selectorAlias isn't a function.  A ticket has been created for this (ZEN-618).  The descriptions and example below are how the step will be used once ZEN-618 is resolved.
 //Given('the {word} (titled ){string} is found', findElSetAsAncestor, {
     description: 'Locates an element by selector AND text.\nEstablishes the element as an ancestor for use by subsequent steps that reference a descendent element.\nThe word "titled" is optional depending on context.  See examples below for usage.\n\nModule : findElAsAncestor',
     expressions: [
       {
         type: 'word',
         description: 'The alias for the selector OR the word selector if no alias exists.',
-        example: 'Using alias (listing) : Given the listing titled "The Simpleville Hotel" is found.\nNo alias : Given the selector ".item[data-type=\'listings\']:has(a:text(\'The Simpleville Hotel\'))" is found',
+        example: 'Alias Example (listing) : Given the listing titled "The Simpleville Hotel" is found.\nSelector Example : Given the selector ".item[data-type=\'listings\']:has(a:text(\'The Simpleville Hotel\'))" is found',
       },
       {
         type: 'string',

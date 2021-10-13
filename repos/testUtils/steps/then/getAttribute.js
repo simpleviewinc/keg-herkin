@@ -10,9 +10,12 @@ const { getPage } = getBrowserContext()
  */
 const getAttribute = async (selector, attribute, value) => {
   const page = await getPage()
+  
   //get attribute value
   let attVal = await page.getAttribute(selector, attribute).then(val => {return val})
-  console.log('attribute : ' + attVal + '; type of : ' + typeof attVal)
+  //console.log('attribute : ' + attVal + '; type of : ' + typeof attVal)
+
+  //use-case 01 : validate state of pagination arrows on first page load when there are multiple pages of data
 
   //on load pagination back arrow has disabled attribute, this is disabled = true
   //returns type of string
@@ -23,24 +26,28 @@ const getAttribute = async (selector, attribute, value) => {
   //returns type of object
   //value of object is null (this is because 'disabled' attribute doesn't have a value assigned - if attribute had value assigned the value would be returned)
   if (typeof attVal === "object" && attVal === null) {attVal = "false"}
+
   expect(attVal).toEqual(value)
   //return page
 }
 
 Then('the element {string} attribute {string} is {string}', getAttribute, {
-  description: 'Locates elements by selector and verifies attribute value.\n\nModule : getAttribute',
+  description: 'Locates element by selector and verifies the expected attribute value.\n\nModule : getAttribute',
   expressions: [
     {
       type: 'string',
-      description: 'The selector for the element.'
+      description: 'The element selector.',
+      example: 'button.pageBackward',
     },
     {
       type: 'string',
-      description: 'The attribute value for the element.'
+      description: 'The element attribute.',
+      example: 'disabled',
     },
     {
       type: 'string',
-      description: 'The expected attribute value.'
+      description: 'The expected attribute value.',
+      example: 'true',
     }
   ]
 })

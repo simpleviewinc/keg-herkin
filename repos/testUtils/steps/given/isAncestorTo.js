@@ -26,6 +26,7 @@ const getDescendentElement = async (ancestorSelector, descendentSelector, { deep
  * @param {string} descendentSelector 
  * @param {string} world 
  */
+
 const isAncestorTo = async (ancestorSelector, descendentType, descendentSelector, world) => {
   const page = await getPage()
 
@@ -48,10 +49,11 @@ const isAncestorTo = async (ancestorSelector, descendentType, descendentSelector
 }
 
 /**
- * Can't think of a good use-case for this over using ancestorAbstracted (isAncestor) > descendent steps
- * Commenting out steps so they don't show in the list of steps in the UI
- * This asserts the relationship, locates elements, and sets ancestor/descendent elements in memory
- * The step verbiage is awkward and verbose since it requires that the ancestor and descendent be passed in the same step.  That problem has been solved by establishing the ancestor using ancestorAbstracted (isAncestor) followed by descendent steps that reference the anscestor established in ancestorAbstracted (isAncestor)
+  * This asserts the relationship, locates elements, and sets ancestor/descendent elements in memory.
+  * Can't think of a use-case for this that can't be handled using setAncestor > descendent steps but maybe the step verbiage is keeping me from thinking of one.
+  * Commenting out steps so steps don't show in the list of steps in the UI.
+  * The step requires that the ancestor and descendent be passed in the same step and the verbiage is awkward.
+  * One of the reasons for establishing the ancestor is one step and then allowing the subsequent descendent steps reference the set ancestor was to keep from having to pass both in the same step.
  */
 
 // example: The element ".foo" is parent/ancestor to child/descendent
@@ -78,6 +80,5 @@ const isAncestorTo = async (ancestorSelector, descendentType, descendentSelector
 //   'the element {string} is ancestor to {string}', 
 //   (selector, descendentSelector, world) => isAncestorTo(selector, 'descendent', descendentSelector, world)
 // )
-
 
 //module.exports = { isAncestorTo }

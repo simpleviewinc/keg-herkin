@@ -10,7 +10,9 @@ const { getPage } = getBrowserContext()
  */
 const pressKey = async key => {
   const page = await getPage()
-  await page.keyboard.press(capitalize(key))
+  //step fails when capitalize is called.
+  //await page.keyboard.press(capitalize(key))
+  await page.keyboard.press(key)
   return page
 }
 
@@ -19,8 +21,8 @@ When('I press the key {string}', pressKey, {
   expressions: [
     {
       type: 'string',
-      description: 'The element selector.  Selector must be specific enough to locate a single element.  Valid for checkbox and radio inputs.\n\nExamples : \n\nSingle char : I press the key "a"\nShortcut combination : I press the key "Control+c"',
-      example: 'a',
+      description: 'The keyboard key.\n\nExamples : \n\nSingle key : I press the key "PageDown"\nShortcut combination : I press the key "Control+a"',
+      example: 'PageDown',
     },
   ]
 })
