@@ -1,4 +1,4 @@
-const { isObj } = require('@keg-hub/jsutils')
+const { isObj, noOp } = require('@keg-hub/jsutils')
 const defaultConfig = require('HerkinConfigs/herkin.default.config.js')
 const fs = require('fs')
 const path = require('path')
@@ -22,18 +22,26 @@ class HerkinConfigError extends Error {
  * @param {string?} relativeTo - if defined, a path to the expected parent directory,
  * if null - the function will consider `path` an absolute path
  */
-const missingFileError = (key, path, relativeTo=null) => { 
+const missingFileError = (key, loc, relativeTo=null) => { 
   const pathType = relativeTo ? "Relative" : "Absolute"
   const relativeMessage = relativeTo ? `relative to:` : ''
   throw new HerkinConfigError(
     `${pathType} path "${key}"
-      at "${path}" 
+      at "${loc}" 
       does not exist ${relativeMessage}
       ${relativeTo || ''}
     `
   )
 }
 
+
+/**
+ * TODO: Update chechFilePaths to follow these rules
+ * If a folder path is not defined, then use the default path
+ * If a folder path is not defined, and a folder already exists at the default path, use that folder
+ * If a folder does not exist at the default path, then create and use it
+ * If a folder path is defined, and does not exist, then create it at that path, and use it
+ */
 /**
  * Checks that the paths in herkinConfig.paths are valid
  * @param {Object} paths - paths object
@@ -53,8 +61,7 @@ const checkFilePaths = (paths, expectedPaths) => {
     .map(([key, testPath]) => {
       const fullPath = path.join(testsRoot, testPath)
 
-      if (!fs.existsSync(fullPath)) 
-        missingFileError(key, testPath, testsRoot)
+      if(!fs.existsSync(fullPath)) fs.mkdir(fullPath, noOp)
 
       if (!expectedPaths.includes(key))
         throw new HerkinConfigError(

@@ -1,11 +1,12 @@
+const { AppRouter } = require('HerkinAppRouter')
 const { apiErr, apiResponse } = require('./handler')
 const { loadDefinitions, DefinitionsParser } = require('../libs/definitions')
 const { definitionsByType, fileModelArrayToObj } = require('../../shared/utils')
 
-const getDefinitions = (app, config) => async (req, res) => {
+const getDefinitions = async (req, res) => {
   try {
 
-    const definitions = await loadDefinitions(config)
+    const definitions = await loadDefinitions(req.app.locals.config)
     const definitionTypes = definitionsByType(definitions)
 
     return apiResponse(req, res, {
@@ -20,7 +21,5 @@ const getDefinitions = (app, config) => async (req, res) => {
 }
 
 module.exports = (app, config) => {
-  app.get('/definitions', getDefinitions(app, config))
-
-  return app
+  AppRouter.get('/definitions', getDefinitions)
 }

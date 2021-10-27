@@ -1,8 +1,10 @@
+const { AppRouter } = require('HerkinAppRouter')
 const { apiErr, apiResponse } = require('./handler')
 
-const apiRoot = (app, config) => (req, res) => {
+const apiRoot = (req, res) => {
 
   try {
+    const config = req.app.locals.config
     return apiResponse(req, res, {
       host: config.server.host,
       port: config.server.port
@@ -14,8 +16,6 @@ const apiRoot = (app, config) => (req, res) => {
 
 }
 
-module.exports = (app, config) => {
-  app.get('/', apiRoot(app, config))
-
-  return app
+module.exports = () => {
+  AppRouter.get('/', apiRoot)
 }

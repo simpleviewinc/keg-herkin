@@ -21,7 +21,6 @@
 [] create test 
   * this drops them into the qa-wolf REPL for creating
   * they can then decide what to do using that REPL -- record, or do something else
-  * user can explicitly write the `qawolf.create()` call to define where the recording begins
   * parameters
     * context: name of test
     * url: url that test will be run on (could use default env)

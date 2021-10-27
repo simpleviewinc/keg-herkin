@@ -1,12 +1,9 @@
-const qawolf = require('qawolf')
 const metadata = require('HerkinTasks/utils/playwright/metadata')
 const { chromium, firefox, webkit } = require('playwright')
 const { isStr } = require('@keg-hub/jsutils')
 
-// QAW_BROWSER is a qawolf-set env, dependent on parameters like --all-browsers or --firefox
 // HOST_BROWSER is set by the task `keg herkin bdd run`
-const BROWSER = process.env.QAW_BROWSER
-  || process.env.HOST_BROWSER
+const BROWSER = process.env.HOST_BROWSER
   || 'chromium'
 
 /**
@@ -24,7 +21,7 @@ const getBrowser = (type) => {
 
 /**
  * Initializes tests by connecting to the browser loaded at the websocket
- * endpoint, creating a new browser context, and registering qawolf.
+ * endpoint, creating a new browser context.
  * @param {Function} done - jest function called when all asynchronous ops are complete
  * @return {boolean} - true if init was successful
  */
@@ -38,8 +35,8 @@ const initialize = async () => {
 
     global.browser = await getBrowser(type).connect({ wsEndpoint })
     global.context = await browser.newContext()
-
-    await qawolf.register(context)
+    // TODO: Update to use playwright video record start
+    // TODO: investigate to see if we other changes for the context 
   }
   catch (err) {
     console.error(err.message)
@@ -60,7 +57,7 @@ const initialize = async () => {
  */
 const cleanup = async () => {
   if (!global.browser) return false
-  await qawolf.stopVideos()
+  // TODO: Update to use playwright video record end
   await browser.close()
   delete global.browser
   delete global.context
@@ -88,7 +85,7 @@ const getBrowserContext = () => ({ getPage })
 
 /**
  * Helper that calls the jest beforeAll and afterAll
- * functions for setup and teardown. Called in the qa-wolf template.
+ * functions for setup and teardown. Called in the waypoint templates template.
  */
 const setupTestEnvironment = () => {
   beforeAll(initialize)

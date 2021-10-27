@@ -31,13 +31,16 @@ env:
   # Image to use when running herkin
   # Even if the dockerfile does not use this in the FROM directive
   # It should still be defined as the image used to run the Tap
-  KEG_IMAGE_FROM: ghcr.io/simpleviewinc/keg-herkin:develop
+  KEG_IMAGE_FROM: ghcr.io/simpleviewinc/keg-herkin:browser-inception
 
   # This is a true base image from playwright - Alpine Linux are not supported
   # ref: https://playwright.dev/docs/docker/README/#using-on-ci
   # includes node v 14.15.3
   # When building the keg-herkin image, this acts as the parent image
   PLAYWRIGHT_IMAGE_FROM: mcr.microsoft.com/playwright:bionic
+  # Since the browsers are downloaded manually
+  # Tell yarn install to skip browser download
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
   # --- DOCKER ENV CONTEXT --- #
 
@@ -56,6 +59,11 @@ env:
   # Default port of the app to expose from the container
   KEG_PROXY_PORT: 19006
   API_PORT: 5005
+  NO_VNC_PORT: 26369
+  VNC_SERVER_PORT: 26370
+  # Required for VNC to work properly
+  # Needs a display of some type
+  DISPLAY: ":0.0"
 
   # --- GENERAL CONTEXT ENVs --- #
   KEG_EXEC_CMD: dev
@@ -68,3 +76,8 @@ env:
   # Git tap url in github
   GIT_APP_URL: https://github.com/simpleviewinc/keg-herkin.git
   GIT_APP_BRANCH: master
+  
+  # Browser Local vs VNC envs
+  # Defaults to using VNC to display the browser
+  HERKIN_USE_VNC: true
+  HERKIN_PW_SOCKET: false

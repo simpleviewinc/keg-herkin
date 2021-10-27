@@ -1,5 +1,4 @@
-const fs = require('fs')
-const path = require('path')
+const { AppRouter } = require('HerkinAppRouter')
 const { apiErr, apiResponse } = require('./handler')
 const { treeNodeModel } = require('HerkinModels')
 const {
@@ -15,18 +14,15 @@ const {
   getRootPaths,
 } = require('../libs/fileSys/fileTree')
 
-
 /**
  * Creates new file based on file type within the docker mounted test root folder
- * @param {Object} app - Express application object
- * @param {object} config - Herkin server config
  * 
  * @returns {Object} - response object model containing the saved fileModel
  */
-const createFile = (app, config) => async (req, res) => {
+const createFile = async (req, res) => {
   try {
     const { name, type } = req.body
-    const meta = await createTestFile(config, name, type)
+    const meta = await createTestFile(req.app.locals.config, name, type)
 
     return apiResponse(req, res, meta, 200)
   }
@@ -38,12 +34,10 @@ const createFile = (app, config) => async (req, res) => {
 
 /**
  * Saves a file to a location within the docker mounted test root folder
- * @param {Object} app - Express application object
- * @param {object} config - Herkin server config
  * 
  * @returns {Object} - response object model containing the saved fileModel
  */
-const saveFile = (app, config) => async (req, res) => {
+const saveFile = async (req, res) => {
   try {
     const location = req.body.path
     if (!location)
@@ -55,7 +49,7 @@ const saveFile = (app, config) => async (req, res) => {
       )
 
     const content = req.body.content
-    const meta = await saveTestFile(config, location, content)
+    const meta = await saveTestFile(req.app.locals.config, location, content)
     return apiResponse(req, res, meta || {}, 200)
   }
   catch(err){
@@ -65,15 +59,13 @@ const saveFile = (app, config) => async (req, res) => {
 
 /**
  * Loads a file from within the docker mounted test root folder
- * @param {Object} app - Express application object
- * @param {object} config - Herkin server config
  * 
  * @returns {Object} - response object model containing the loaded fileModel
  */
-const loadFile = (app, config) => async (req, res) => {
+const loadFile = async (req, res) => {
   try {
     const filePath = req.query.path
-    const meta = await getTestFile(config, filePath)
+    const meta = await getTestFile(req.app.locals.config, filePath)
 
     return apiResponse(req, res, meta || {}, 200)
   }
@@ -84,15 +76,13 @@ const loadFile = (app, config) => async (req, res) => {
 
 /**
  * Deletes an file located within the docker mounted test root folder
- * @param {Object} app - Express application object
- * @param {object} config - Herkin server config
  * 
  * @returns {Object} - response object model
  */
-const deleteFile = (app, config) => async (req, res) => {
+const deleteFile = async (req, res) => {
   try {
     const file = req.params.file
-    const meta = await deleteTestFile(config, file)
+    const meta = await deleteTestFile(req.app.locals.config, file)
 
     return apiResponse(req, res, meta || {}, 200)
   }
@@ -104,15 +94,13 @@ const deleteFile = (app, config) => async (req, res) => {
 /**
  * Iterates through the docker mounted volume of the test root folder
  * Returns a tree like structure of all the folders/files found within
- * @param {Object} app - Express application object
- * @param {object} config - Herkin server config
  * 
  * @returns {Object} - { rootPaths: array of root paths, nodes: array of all valid node object }
  */
-const getTree = (app, config) => async (req, res) => {
+const getTree = async (req, res) => {
   try {
 
-    const {nodes, rootPaths} = await buildFileTree(config, req.params)
+    const {nodes, rootPaths} = await buildFileTree(req.app.locals.config, req.params)
 
     return apiResponse(req, res, { 
       nodes,
@@ -124,12 +112,10 @@ const getTree = (app, config) => async (req, res) => {
   }
 }
  
-module.exports = (app, config) => {
-  app.get('/files/tree', getTree(app, config))
-  app.get('/files/load', loadFile(app, config))
-  app.post('/files/save', saveFile(app, config))
-  app.post('/files/create', createFile(app, config))
-  app.delete('/files/delete', deleteFile(app, config))
-
-  return app
+module.exports = () => {
+  AppRouter.get('/files/tree', getTree)
+  AppRouter.get('/files/load', loadFile)
+  AppRouter.post('/files/save', saveFile)
+  AppRouter.post('/files/create', createFile)
+  AppRouter.delete('/files/delete', deleteFile)
 }

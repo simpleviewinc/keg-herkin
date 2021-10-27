@@ -1,6 +1,7 @@
 version: "3.8"
 services:
   keg-herkin:
+    ipc: host
     privileged: true
     environment:
       - HERKIN_APP_URL
@@ -12,12 +13,22 @@ services:
       - HERKIN_UNIT_DIR
       - HERKIN_SUPPORT_DIR
       - HERKIN_WAYPOINT_DIR
+      - HERKIN_PW_SOCKET
+      - HERKIN_USE_VNC
       - DOC_APP_PATH
       - DOC_BUILD_PATH
+      - DISPLAY
       - ENV
       - KEG_EXEC_CMD
       - KEG_DOCKER_EXEC
       - KEG_PROXY_PORT
       - NODE_ENV
+      - API_PORT
+      - NO_VNC_PORT
+      - VNC_SERVER_PORT
+      - PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD
     ports:
       - ${API_PORT}:${API_PORT}
+      - ${NO_VNC_PORT}:${NO_VNC_PORT}
+      # Only expose this port if we want to expose the VNC server outside the container
+      # - ${VNC_SERVER_PORT}:${VNC_SERVER_PORT}

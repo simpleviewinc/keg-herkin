@@ -17,9 +17,5 @@ export const setScreenById = (screenId, screenModel) => {
   const { items } = getStore().getState()
   screenModel = screenModel || items[CATEGORIES.SCREENS][screenId]
 
-  const { activeFile, altActiveFile } = (screenModel || defFileProps)
-
-  return screenId === SCREENS.RESULTS
-    ? setResultsScreen(activeFile, altActiveFile)
-    : setScreen(screenId, screenModel)
+  return setScreen(screenId, screenModel)
 }

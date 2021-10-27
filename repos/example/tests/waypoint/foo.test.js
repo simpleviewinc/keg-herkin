@@ -1,4 +1,3 @@
-const qawolf = require('qawolf')
 const { setupTestEnvironment } = require('HerkinRepos/testUtils/playwright/setupTestEnvironment')
 
 setupTestEnvironment()

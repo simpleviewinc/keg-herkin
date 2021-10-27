@@ -1,38 +1,39 @@
 const { Then } = require('HerkinParkin')
-const { evalElement } = require('HerkinPlaywright')
+const { containsText } = require('./containsText')
 const { checkForAncestor } = require('HerkinSupport/validate')
 
+
 /**
- * For the element matching `selector`, descendent of the registered ancestor,
- * expects its text content to equal `data`
- * @param {string} selector 
- * @param {string} data 
+ * For the element matching `selector`, descendent of the registered ancestor, expects its text content to equal `data`
+ * @param {string} selector - valid playwright selector
+ * @param {string} data - text to compare to descendent selector value/textContent
  * @param {Object} world 
  */
 const descendentContainsText = async (selector, data, world) => {
   checkForAncestor(world)
-  const content = await evalElement(`${world.meta.ancestorSelector} ${selector}`, elem => elem.textContent)
-  expect(content).toEqual(expect.stringContaining(data))
+  return containsText(`${world.meta.ancestorSelector} ${selector}`, data)
 }
 
-/**
- * For the element matching `selector`, child of the registered ancestor,
- * expects its text content to equal `data`
- * @param {string} selector 
- * @param {string} data 
- * @param {Object} world 
- */
-const childContainsText = async (selector, data, world) => {
-  checkForAncestor(world)
-  const content = await world.meta.ancestor.$eval(selector, elem => elem.textContent)
-  expect(content).toEqual(expect.stringContaining(data))
-}
+Then('the descendent element {string} contains the text {string}', descendentContainsText, {
+  description: `Locates an element by selector and verifies element contains text.
+There must be a preceding step that establishes an ancestor.
 
-Then('the descendent {string} contains the text {string}', descendentContainsText)
-Then('the child {string} contains the text {string}', childContainsText)
+Module : descendentContainsText`,
+  expressions: [
+    {
+      type: 'string',
+      description: `The selector for the element.  Selector must be specific enough to locate a single element.`,
+      example: '.ef-session-location',
+    },
+    {
+      type: 'string',
+      description: `The text of the element to verify.`,
+      example: 'Main Hall',
+    }
+  ]
+})
 
 module.exports = {
-  childContainsText,
   descendentContainsText
 }
 

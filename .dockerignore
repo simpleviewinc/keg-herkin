@@ -13,6 +13,7 @@ npm-debug.*
 web-build/
 web-report/
 yarn-error.log
+*.log
 reports/
 core/base/assets/index.js
 # macOS
@@ -24,3 +25,8 @@ node_modules
 logs
 **/.git
 **/.DS_Store
+temp
+.temp
+browser-meta.json
+tests
+repos/example

@@ -36,7 +36,7 @@ const getWindowHeight = () => {
  * @param {string} props.src - url src to load into iframe
  * @param {object} props.styles - Styles for the iframe element
  */
-export const Iframe = (props) => {
+export const Iframe = React.forwardRef((props, ref) => {
   const {
     src,
     styles,
@@ -59,12 +59,12 @@ export const Iframe = (props) => {
     window.addEventListener('message', onMessage)
     // If the ref is set, then just return
     if(iframeHeight.current) return
-    
+
     // Get the current window height and save it to state
     const currentHeight = getWindowHeight()
     frameStyle.main.height !== currentHeight &&
       setFrameStyle({ main: { height: currentHeight }})
-    
+
     // Remove the listener on unmount
     return () => window.removeEventListener('message', onMessage)
   }, [])
@@ -73,7 +73,8 @@ export const Iframe = (props) => {
   return (
     <iframe 
       {...props}
+      ref={ref}
       style={mainStyles?.main} 
     />
   )
-}
+})

@@ -1,4 +1,5 @@
 const { isObj } = require(`@keg-hub/jsutils`)
+const { Logger } = require(`@keg-hub/cli-utils`)
 const { loadTemplate } = require(`../templates/loadTemplate`)
 
 const page404Data = {
@@ -6,18 +7,7 @@ const page404Data = {
   body: '<h4>Page not found!<h4>'
 }
 
-const logError = (error) => console.error(error)
-
-const logResponse = (req, res) => {
-  const message = {
-    request: `${req.method} ${req.url}`,
-    host: req.hostname,
-    body: req.body,
-    query: req.query,
-    params: req.query
-  }
-  console.log(`REQUEST: ${message.request}`)
-}
+const logError = (error) => Logger.error(error)
 
 const handleApiErr = (req, res, err, status) => {
   const error = {
@@ -34,7 +24,6 @@ const handleApiErr = (req, res, err, status) => {
 
 const handleApiResponse = (req, res, data, status) => {
   res.statusCode = status || 200
-  logResponse(req, res)
 
   return res.json({
     data,
@@ -44,7 +33,6 @@ const handleApiResponse = (req, res, data, status) => {
 
 const handleHtmlResponse = (req, res, html, status) => {
   res.statusCode = status || 200
-  logResponse(req, res)
 
   res.set('Content-Type', 'text/html')
   res.send(html)

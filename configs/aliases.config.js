@@ -6,11 +6,18 @@ const path = require('path')
 // aliases shared by jest and module-alias
 const aliases = deepFreeze({
   HerkinRoot: HERKIN_ROOT,
+  HerkinTemp: path.join(HERKIN_ROOT, 'temp'),
   HerkinRepos: path.join(HERKIN_ROOT, 'repos'),
   HerkinConfigs: path.join(HERKIN_ROOT, 'configs'),
   HerkinTasks: path.join(HERKIN_ROOT, 'tasks'),
   HerkinModels: path.join(HERKIN_ROOT, 'repos/shared/models'),
+  HerkinApp: path.join(HERKIN_ROOT, 'repos/backend/app/app.js'),
+  HerkinPaths: path.join(HERKIN_ROOT, 'repos/backend/utils/paths.js'),
   HerkinBackConstants: path.join(HERKIN_ROOT, 'constants', 'backend'),
+  HerkinScreenCast: path.join(HERKIN_ROOT, 'repos/screencast/index.js'),
+  HerkinEndpoints: path.join(HERKIN_ROOT, 'repos/backend/endpoints'),
+  HerkinMiddleware: path.join(HERKIN_ROOT, 'repos/backend/middleware'),
+  HerkinAppRouter: path.join(HERKIN_ROOT, 'repos/backend/appRouter.js'),
   HerkinFrontConstants: path.join(HERKIN_ROOT, 'constants', 'frontend'),
   HerkinParkin: path.join(TEST_UTILS_PATH, 'parkin'),
   HerkinSetup: path.join(TEST_UTILS_PATH, 'playwright', 'setupTestEnvironment'),

@@ -13,6 +13,7 @@ const getTestTypes = (testsRoot, pathEnvs) => {
   if(__TEST_TYPES) return __TEST_TYPES
 
   const {
+    HERKIN_ARTIFACTS_DIR,
     HERKIN_FEATURES_DIR,
     HERKIN_REPORTS_DIR,
     HERKIN_SUPPORT_DIR,
@@ -22,6 +23,11 @@ const getTestTypes = (testsRoot, pathEnvs) => {
   } = pathEnvs
 
   __TEST_TYPES = {
+    artifact: {
+      type: 'artifact',
+      ext: '*',
+      location: path.join(testsRoot, HERKIN_ARTIFACTS_DIR),
+    },
     feature: {
       type: 'feature',
       ext: 'feature',

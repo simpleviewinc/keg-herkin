@@ -1,17 +1,16 @@
+const { AppRouter } = require('HerkinAppRouter')
 const { apiResponse, htmlResponse, htmlErr } = require('./handler')
 const { getTestReportHtml } = require('../utils/getTestReportHtml')
 
 /**
  * Responds with the parkin report html as string
- * @param {Object} app - express ap
- * @param {Object} config - api config
  */
-const getReportList = (app, config) => async (req, res) => {
+const getReportList = async (req, res) => {
   // TODO: add list of all current reports based on fileType
   return apiResponse(req, res, { success: true } || {}, 200)
 }
 
-const getTestReport = (app, config) => async (req, res) => {
+const getTestReport = async (req, res) => {
   try {
     const { fileType, reportName } = req.params
     // Removes .html from the name if it exists
@@ -27,8 +26,7 @@ const getTestReport = (app, config) => async (req, res) => {
   }
 }
 
-module.exports = (app, config) => {
-  app.get('/reports/:fileType/list', getReportList(app, config))
-  app.get('/reports/:fileType/:reportName', getTestReport(app, config))
-  return app
+module.exports = () => {
+  AppRouter.get('/reports/:fileType/list', getReportList)
+  AppRouter.get('/reports/:fileType/:reportName', getTestReport)
 }

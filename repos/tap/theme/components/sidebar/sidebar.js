@@ -48,7 +48,7 @@ export const sidebar = theme => ({
       bgC: tapColors.defaultDark,
       shadowColor: tapColors.shadowColor,
       shadowOffset: { width: 2, height: 2 },
-      transitionDuration: '0.8s',
+      transitionDuration: '0.4s',
       transitionProperty: 'width height background-color',
     },
     content: {},
@@ -57,7 +57,7 @@ export const sidebar = theme => ({
       pos: 'relative',
       left: -1,
       c: theme.colors.palette.white01,
-      transitionDuration: '0.8s',
+      transitionDuration: '0.4s',
       transitionProperty: 'width height transform stroke color',
     },
     text: {

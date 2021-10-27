@@ -80,12 +80,14 @@ export const CreateFileModal = props => {
           title={'Name'}
           onChange={onNameChange}
           value={testName}
+          className={'modal-create-file-field-name'}
         />
         <Select
           options={options}
           title={'Type'}
           onValueChange={onTypeChange}
           styles={builtStyles?.form?.select}
+          className={'modal-create-file-field-type'}
         />
         <Button
           themePath='button.contained.primary'

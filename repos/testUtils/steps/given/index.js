@@ -1,5 +1,5 @@
 module.exports = {
   ...require('./openUrl'),
-  ...require('./isAncestor'),
+  ...require('./setAncestor'),
   ...require('./isAncestorTo'),
 }

@@ -2,8 +2,8 @@ import { empty } from './empty'
 import { editors } from './editors'
 import { feature } from './feature'
 import { parent } from './parent'
-import { runner } from './runner'
 import { results } from './results'
+import { screencast } from './screencast'
 
 
 export const screens = theme => ({
@@ -12,5 +12,5 @@ export const screens = theme => ({
   feature: feature(theme),
   parent: parent(theme),
   results: results(theme),
-  runner: runner(theme),
+  screencast: screencast(theme),
 })
