@@ -21,7 +21,7 @@ const ReStyleView = reStyle(
  * @param {Array<{label:string, value:string}>} props.options - options to display
  * @returns
  */
-export const Input = ({ onChange, styles, title='', value, inputRef }) => {
+export const Input = ({ onChange, styles, title='', value, inputRef, className }) => {
 
   const valueRef = useRef(value)
   inputRef = inputRef || useRef(null)
@@ -44,6 +44,7 @@ export const Input = ({ onChange, styles, title='', value, inputRef }) => {
         ref={inputRef}
         onChange={onChange}
         value={value}
+        className={className}
       />
     </ReStyleView>
   )

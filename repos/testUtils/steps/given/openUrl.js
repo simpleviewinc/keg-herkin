@@ -9,20 +9,40 @@ const { get, isStr } = require('@keg-hub/jsutils')
  * @param {Object} world 
  * @return {string} - updated url
  */
+
 const parseUrl = (url, world) => {
   if (!url.startsWith(`$world`)) return url
 
-  const [ _, ...worldPath ] = url.split('.')
+  //isolate query string
+  const [baseUrl,urlParams] = url.split('?')
+  //console.log('baseUrl : ' + baseUrl + ' , urlParams : ' + urlParams)
+  
+  //isolate path
+  const urlPath = (baseUrl.includes('/') ? baseUrl.substring(baseUrl.indexOf('/'), baseUrl.length) : '')
+  //console.log('urlPath : ' + urlPath)
+
+  //isolate domain
+  const urlDomain = (baseUrl.includes('/') ? baseUrl.substring(0,baseUrl.indexOf('/')) : baseUrl)
+  //console.log('urlDomain : ' + urlDomain)
+
+  const [ _, ...worldPath ] = urlDomain.split('.')
+  //console.log('worldPath : ' + worldPath) 
+
   const parsed = get(world, worldPath)
+  //console.log('parsed : ' + parsed)
+
+  const domainAndPath = (urlPath ? parsed.concat(urlPath) : parsed)
+  const urlConstruct = (urlParams ? domainAndPath + '?' + urlParams : domainAndPath)
+
   if (!parsed) 
     throw new Error(`No url found at world path ${url}.`)
 
-  return parsed
+  return urlConstruct
 }
 
 /**
  * Opens the url in a playwright browser
- * @param {string} url 
+ * @param {string} url - url to load in the browser
  * @param {object} world 
  */
 const openUrl = async (url, world) => {
@@ -32,21 +52,27 @@ const openUrl = async (url, world) => {
 
   const page = await getPage()
   await page.goto(site)
-  return page
 }
 
-Given('I am on the site/url/uri {string}', openUrl, {
-  description: 'Navigates to the given website within the browser.',
+Given('I navigate to {string}', openUrl, {
+  description: `Navigates to the given website within the browser.
+Requires an absolute URL but the URL can be dynamicly constructed. See examples below for usage.
+Pages that return a status code, even a 404, will pass.  Pages that don\'t return a status code will fail.
+
+Module: openUrl`,
   expressions: [
     {
       type: 'string',
-      description: 'URL of the website the browser should navigate to',
+      description: `URL/URI of the website the browser should navigate to.
+
+Examples:
+  Hard-coded URL in feature: I navigate to "https://www.simpleviewinc.com"
+  Domain ($world.myURL) defined in world.js and path added to feature: I navigate to "$world.myURL/nav/assets/images"
+  Domain ($world.myURL) defined in world.js and query string added to feature: I navigate to "$world.myURL?testUrlParam=1"
+  Domain ($world.myURL) defined in world.js and path and query string added to feature : I navigate to "$world.myURL/search?q=cms"`,
       example: 'https://my.website.com',
     }
   ]
 })
-Given('I open the site/url/uri {string}', openUrl)
-Given('the page/site url/uri is {string}', openUrl)
-Given('the user navigates to {string}', openUrl)
 
 module.exports = { openUrl }

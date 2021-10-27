@@ -1,14 +1,13 @@
 
 module.exports = {
-  ...require('./containsText'),
-  ...require('./inputContainsText'),
+  ...require('./elementCount'),
   ...require('./pageTitleIs'),
   ...require('./pageTitleIsNot'),
-  ...require('./isAttached'),
-  ...require('./isDetached'),
-  ...require('./isHidden'),
-  ...require('./isVisible'),
-  ...require('./assertElementCount'),
+  ...require('./containsText'),
+  ...require('./exactText'),
+  ...require('./getCheckedState'),
   ...require('./descendentContainsText'),
-  ...require('./inputContainsText'),
+  ...require('./descendentExactText'),
+  ...require('./getSelectedOption'),
+  ...require('./getAttribute'),
 }

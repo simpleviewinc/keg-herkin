@@ -15,7 +15,7 @@ const IconComponent = ({ styles, size, stroke, fill }) => {
         fill={fill}
         style={styles.icon}
       />
-      <Text style={styles.text} >
+      <Text style={styles.text} className='keg-settings'>
         SETTINGS
       </Text>
     </View>
